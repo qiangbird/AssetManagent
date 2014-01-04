@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<authorities>
+    <role name="employee">
+        <authority>Asset:view_own</authority>
+        <authority>Asset:view_project</authority>
+        <authority>Asset:export</authority>
+        <authority>Asset:apply_asset</authority>
+    </role>
+    
+    <role name="special_role">
+        <authority>Asset:view_own</authority>
+        <authority>Asset:view_project</authority>
+        <authority>Asset:export</authority>
+        <authority>Asset:assign_asset</authority>
+    </role>
+    
+    <role name="manager">
+        <authority>Asset:view_own</authority>
+        <authority>Asset:view_project</authority>
+        <authority>Asset:export</authority>
+        <authority>Asset:assign_asset</authority>
+        <authority>Asset:check_in_asset</authority>
+        <authority>Asset:check_out_asset</authority>
+    </role>
+    
+    <role name="IT">
+        <authority>Asset:view_all</authority>
+        <authority>Asset:export</authority>
+        <authority>Asset:assign_asset</authority>
+        <authority>Asset:check_in_asset</authority>
+        <authority>Asset:check_out_asset</authority>
+        <authority>Asset:create</authority>
+        <authority>Asset:check_inventory</authority>
+        <authority>Asset:import_asset</authority>
+        <authority>TransferLog:*</authority>
+    </role>
+    
+    <role name="system_admin">
+        <authority>Asset:view_all</authority>
+        <authority>Asset:export</authority>
+        <authority>Asset:assign_asset</authority>
+        <authority>Asset:check_in_asset</authority>
+        <authority>Asset:check_out_asset</authority>
+        <authority>Asset:create</authority>
+        <authority>Asset:check_inventory</authority>
+        <authority>Asset:import_asset</authority>
+        <authority>OperationLog:*</authority>
+        <authority>User:*</authority>
+    </role>
+</authorities>

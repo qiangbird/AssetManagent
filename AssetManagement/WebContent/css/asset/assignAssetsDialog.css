@@ -1,0 +1,116 @@
+@CHARSET "UTF-8";
+
+.ui-dialog .ui-widget-header {
+	border: 1px solid #71B3D6;
+	background: #71B3D6;
+	height: 40px;
+}
+
+.ui-dialog .ui-dialog-title {
+	margin-top: 5px;
+}
+
+.ui-autocomplete {
+	max-height: 135px;
+	overflow: auto;
+}
+
+#dialog_assign {
+	display: none;
+}
+
+#dialog_assign {
+	margin-top: 30px;
+}
+
+#dialog_assign {
+	margin-left: 26px;
+}
+
+#dialog_assign div {
+	height: 40px;
+	width: 390px;
+	text-align: center;
+	line-height: 40px;
+}
+
+#dialog_assign div label {
+	text-align: center;
+	line-height: 35px;
+	vertical-align: middle;
+}
+
+#label_CustomerName {
+	margin-left: 40px;
+}
+
+#label_ProjectName {
+	margin-left: 58px;
+}
+
+#label_UserName {
+	margin-left: 73px;
+}
+
+#dialog_assign div input[type="text"] {
+	height: 33px;
+	width: 250px;
+	font-family: Arial;
+	font-size: 12pt;
+}
+
+#dialog_assign div span {
+	color: #FF0000;
+	position: absolute;
+	left: 60px;
+	top: 10px;
+}
+
+.assign_asset_button {
+	display: inline;
+}
+
+#confirm_assign {
+	left: 143px;
+	top: 15px;
+}
+
+#confirm_assign, #label_ConfirmAssign{
+	cursor: pointer;
+}
+
+#cancel_assign {
+	width: 80px;
+    height: 30px;
+    background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+	margin-left: 5px;
+	cursor: pointer;
+	font-family: Arial;
+	font-size: 18px;
+	position: absolute;
+	top: 142px;
+	left: 263px;
+}
+
+#tip_message {
+	display: none;
+}
+
+#tip_message div {
+	font-family: Arial;
+	font-size: 12pt;
+	margin-top: 25px;
+}
+
+#tip_message input {
+	width: 80px;
+    height: 30px;
+    background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+	margin-left: 5px;
+	cursor: pointer;
+	font-family: Arial;
+	font-size: 18px;
+	position: absolute;
+	top: 111px;
+	left: 155px;
+}

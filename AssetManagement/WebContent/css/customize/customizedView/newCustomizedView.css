@@ -1,0 +1,566 @@
+*:focus {
+	outline: none;
+}
+
+.customizedView {
+	width: 960px; 
+	margin-left: auto; 
+	margin-right: auto;
+}
+
+.viewName{
+    float: left;
+    margin-left: 0px;
+    margin-bottom: 20px;
+    height: 19px;
+}
+
+.viewNameText {
+	float: left;
+	width: 168px;
+	color: #7A7373;
+	font-family: arial;
+	font-size: 15px;
+}
+
+.filterSetText {
+	float: left;
+	width: 168px;
+	color: #7A7373;
+	font-family: arial;
+	font-size: 15px;
+}
+
+.columnNameText {
+	float: left;
+    width: 168px;
+	color: #7A7373;
+	font-family: arial;
+	font-size: 15px;
+}
+
+.customizedViewItem {
+	float: left;
+	width: 150px;
+	margin-left: 0px;
+	margin-bottom: 30px;
+	margin-top: -5px;
+}
+
+.marginLeft {
+	 margin-left: 18px;;
+}
+
+.addToFilter {
+	float: left;
+	width: auto;
+	margin-top: -6px;
+	margin-left: 140px;
+}
+
+.inTextForViewName {
+    width: 245px;
+    height: 28px;
+	padding-left: 6px;
+	font: normal 14px/ 24px arial;
+	border-radius: 3px;
+	box-shadow: inset 0 0 5px #BFBFBF;
+	border: 1px solid #BFBFBF;
+	margin-top: -5px;
+	font-family: arial;
+	color: #7A7373;
+}
+
+.inText {
+	width: 150px;
+	height: 28px;
+	padding-left: 6px;
+	font: normal 14px/ 24px arial;
+	border-radius: 2px;
+	box-shadow: inset 0 0 0px #FDFAFA;
+	border: 1px solid #BFBFBF;
+	font-family: arial;
+	color: #7A7373;
+}
+
+.boardLine {
+	margin-bottom: 20px;
+	margin-top: 5px;
+}
+
+.select-type {
+	cursor: pointer;
+    border-radius: 3px;
+    box-shadow: inset 0 0 5px #BFBFBF;
+    background: url("../../../image/customize/customizedView/icon_arrow_down.png") 133px 15px no-repeat, 
+    			url("../../../image/customize/customizedView/icon_arrow_top.png") 133px 5px no-repeat;
+}
+
+.datepic {
+	cursor: pointer;
+    border-radius: 3px;
+    box-shadow: inset 0 0 5px #BFBFBF;
+    background: #fff url("../../../image/customize/customizedView/ICN_Calendar_26x26.png") right center no-repeat;
+}
+
+.submit-save {
+    background: url("../../../image/customize/customizedView/BTN_Create_80x30.png") no-repeat;
+    float: left;
+    cursor: pointer;
+    font-weight: bold;
+    color:#FFFFFF;
+    border: 0px;
+    width: 80px;
+    height: 30px;
+    margin-top: 30px;
+    margin-left: 350px;
+    font-size: 14px;
+}
+
+.create-new {
+	background: url("../../../image/customize/customizedView/BTN_Create_80x30.png") no-repeat;
+    float: left;
+    cursor: pointer;
+    font-weight: bold;
+    color:#FFFFFF;
+    border: 0px;
+    width: 80px;
+    height: 30px;
+    font-size: 14px;
+}
+
+.submit-save:HOVER {
+    background: url("../../../image/customize/customizedView/BTN_Create_Hover_80x30.png") no-repeat;
+}
+
+.create-new:HOVER {
+    background: url("../../../image/customize/customizedView/BTN_Create_Hover_80x30.png") no-repeat;
+}
+
+.submit-cancel:HOVER {
+    background: url("../../../image/customize/customizedView/BTN_Cancel_Hover_80x30.png") no-repeat;
+}
+
+.submit-cancel {
+    background: url("../../../image/customize/customizedView/BTN_Cancel_80x30.png") no-repeat;
+    float: left;
+    cursor: pointer;
+    font-weight: bold;
+    color: #505050;
+    border: 0px;
+    width: 80px;
+    height: 30px;
+    margin-top: 30px;
+    margin-left: 30px;
+    font-size: 14px;
+}
+
+.list-cancel:HOVER {
+    background: url("../../../image/customize/customizedView/BTN_Cancel_Hover_80x30.png") no-repeat;
+}
+
+.list-cancel {
+    background: url("../../../image/customize/customizedView/BTN_Cancel_80x30.png") no-repeat;
+    float: left;
+    cursor: pointer;
+    font-weight: bold;
+    color: #505050;
+    border: 0px;
+    width: 80px;
+    height: 30px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.addToFilter-button:HOVER {
+	background: url("../../../image/customize/customizedView/BTN_90x30_Secondary_Action_Active.png") no-repeat;
+}
+
+.addToFilter-button {
+	background: url("../../../image/customize/customizedView/BTN_90x30_Secondary_Action_Disabled.png") no-repeat;
+	cursor: pointer;
+    font-weight: bold;
+    color: #505050;
+	width: 90px;
+	height: 30px;
+	font-size: 10pt;
+	border: 0px;
+}
+
+
+.filter {
+	float: left;
+    margin-top: 0px;
+    height: 19px;
+    margin-bottom: 20px;
+}
+
+#filterContent {
+	float: left;
+	margin-bottom: 30px;
+}
+
+.filterHead {
+	margin-top: 10px;
+	height: 30px;
+    margin-left:auto;
+    margin-right:auto;
+    width: 960px;
+    overflow: auto;
+    background-color: #71B3D6;
+    border-radius:3px;
+}
+
+.filterHead .columnElement {
+    font:normal 14px/24px arial;
+    font-family: "Arial", "Verdana", "sans-serif";
+    float:left;
+    text-align:center;
+    color: #FFFFFF;
+    font-weight: bold;
+    line-height: 30px;
+    background: url("../../../image/customize/customizedView/bg_line.png") right no-repeat;
+}
+
+.columnData{
+    float:left;
+    padding-top:3px;
+    height: 26px;
+}
+
+.columnNameTitleHead {
+    width: 180px;
+}
+
+.viewNameTitleHead {
+    width: 180px;
+}
+
+.columnNameTitle {
+    width: 180px;
+}
+.criteriaTitle {
+    width: 180px;
+}
+
+.valueTitle {
+    width: 180px;
+}
+
+.viewNameTitle {
+    width: 180px;
+}
+
+.sequence {
+	padding-left: 0px;
+	width: 0px;
+}
+
+.editButton {
+	width: 24px;;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-right: 3px;
+	float: right;
+}
+
+.deleteButton {
+	width: 24px;
+	padding-left: 8px;
+	padding-right: 0px;
+	margin-right: 9px;
+	float: right;
+}
+
+
+
+.filterInfo {
+    font:normal 14px/24px arial;
+    font-family: "Arial", "Verdana", "sans-serif";
+    height: 29px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #CBCBCB;
+    border-top:0px;
+    background-color: #F5F5F5;
+    width: 958px;
+    border-radius:3px;
+}
+
+.filterInfo:HOVER {
+    background-color: #BCDFF1;
+}
+
+.valueInputHover {
+	border: 0px;
+	text-align: center;
+	background-color: #BCDFF1;
+}
+
+.columnData p{
+    text-align:center;
+    margin-top: 1px;
+    padding: 2px,5px;
+    margin-bottom: 0px;
+    
+}
+
+.editPosition {
+	padding-top: 0px;
+}
+
+.deletePosition {
+	padding-top: 0px;
+}
+
+.select-panel {
+    height: 28px;
+    width: 150px;
+    cursor: pointer;
+    position: relative;
+	margin-top: -28px;
+	margin-left: -4px;
+}
+
+.message-div {
+    height: 28px;
+    width: 150px;
+    line-height: 28px;
+    color: #A0A0A0;
+    text-indent: 9px;
+    background: url("../../../img/IPX_300x30_Empty.png") no-repeat;
+}
+
+.filter ul li {
+    height: 25px;
+    line-height: 25px;
+    color: #555555;
+    text-indent: 6px;
+    background: #F5F5F5;
+    margin-bottom: 1px;
+    font-family: Arial;
+    overflow: hidden;
+    margin-left: -40px;
+}
+.filter ul li:hover {
+    background: #23A5E3;
+    color: #FFFFFF;
+}
+.filter ul li p{
+    width: 262px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	height:25px;
+	margin: 0px;
+	font-size: 16px;
+}
+
+.valueInput {
+	border: 0px;
+	text-align: center;
+	background-color: #F5F5F5;
+}
+
+.valueInputNew {
+	border: -1px;
+    width: 153px;
+    height: 22px;
+	padding-left: 5px;
+	padding-top: 0px;
+	font: normal 14px/ 24px arial;
+	border-radius: 3px;
+	box-shadow: inset 0 0 2px #BFBFBF;
+	border: 1px solid #BFBFBF;
+	text-align: center;
+	/* margin-top: 10px; */
+}
+
+.viewName .image-span {
+	display: block;
+	position: relative;
+	top: -23px;
+	left: 212px;
+	height: 20px;
+	width: 25px;
+	background: url(../../../img/ICN_Correct_Disabled_25x20.png) no-repeat;
+}
+
+/* .errorNotice {
+	width: 245px;
+	height: 28px;
+	background: url(../../../image/customize/customizedView/bg_viewname_left.png) -3px no-repeat,
+				url(../../../image/customize/customizedView/bg_viewname_middle.png) 203px repeat-x ,
+				url(../../../image/customize/customizedView/bg_viewname_right.png) 200px no-repeat;
+} */
+
+.error-box-viewName {
+	display: none;
+}
+
+.error-box-dipaly {
+	display: block;
+}
+
+.error-left-viewName {
+	margin-top: -33px;
+	margin-left: 163px;
+	width: 9px;
+	height: 38px;
+	background: url(../../../image/customize/customizedView/bg_viewname_left.png) no-repeat;
+}
+
+.error-middle-viewName {
+	margin-top: -38px;
+	margin-left: 172px;
+	width: 237px;
+	height: 38px;
+	background: url(../../../image/customize/customizedView/bg_viewname_middle.png) repeat-x;
+}
+
+.error-right-viewName {
+	margin-top: -38px;
+	margin-left: 409px;
+	width: 9px;
+	height: 38px;
+	background: url(../../../image/customize/customizedView/bg_viewname_right.png) no-repeat;
+}
+
+.error-box-valueInput {
+	display: none;
+}
+
+.error-left-valueInput {
+	margin-top: -30px;
+	margin-left: 8px;
+	width: 9px;
+	height: 38px;
+	background: url(../../../image/customize/customizedView/bg_viewname_left.png) no-repeat;
+}
+
+.error-middle-valueInput {
+	margin-top: -38px;
+	margin-left: 17px;
+	width: 145px;
+	height: 38px;
+	background: url(../../../image/customize/customizedView/bg_viewname_middle.png) repeat-x;
+}
+
+.error-right-valueInput {
+	margin-top: -38px;
+	margin-left: 162px;
+	width: 9px;
+	height: 38px;
+	background: url(../../../image/customize/customizedView/bg_viewname_right.png) no-repeat;
+}
+
+.viewName .error-image-span {
+	display: block;
+	position: relative;
+	top: -27px;
+	left: 417px;
+	height: 20px;
+	width: 25px;
+	background: url(../../../image/customize/customizedView/icon_wrong.png) no-repeat;
+}
+
+.valueInColumn .value-error-image-span {
+	display: block;
+	position: relative;
+	top: -28px;
+	left: 169px;
+	height: 20px;
+	width: 25px;
+	background: url(../../../image/customize/customizedView/icon_wrong.png) no-repeat;
+}
+
+.deleteLink {
+	display: block;
+	width: 24px;
+	height: 24px;
+	background: url(../../../image/customize/customizedView/icon_delete_normal.png) no-repeat;
+}
+
+.deleteLink:HOVER {
+	cursor: pointer;
+	background: url(../../../image/customize/customizedView/icon_delete_hover.png) no-repeat;
+}
+
+.eidtLink {
+	display: block;
+	width: 24px;
+	height: 24px;
+	background: url(../../../image/customize/customizedView/icon_edit_normal.png) no-repeat;
+}
+
+.eidtLink:HOVER {
+	cursor: pointer;
+	background: url(../../../image/customize/customizedView/icon_edit_hover.png) no-repeat;
+}
+
+.radioCheckOn {
+	margin-left: 25px;
+	margin-right: 5px;
+    width: 14px;
+    height: 14px;
+    display: block;
+    float: right;
+    cursor:pointer;
+    background: url(../../../image/customize/customizedView/icn_radio_active_14x14.png) no-repeat;
+}
+.radioCheckOff {
+    margin-left: 25px;
+	margin-right: 5px;
+    width: 14px;
+    height: 14px;
+    display: block;
+    float: right;
+    cursor:pointer;
+    background: url(../../../image/customize/customizedView/icn_radio_14x14.png) no-repeat;
+}
+
+.radioBoxes {
+	color: #7A7373;
+	font-family: arial;
+	font-size: 15px;
+}
+
+.match-any {
+	display: block;
+	float: right;
+	margin-right: 15px;
+	margin-top: -1px;
+}
+
+.match-all {
+	display: block;
+	float: right;
+	margin-top: -1px;
+}
+
+.valueInputHidden {
+	display: none;
+	text-align: center;
+}
+
+.valueSpan {
+	text-align: center;
+}
+
+.typeInColumn, .searchColumnInColumn, .realTableInColumn, #datepic, #updateToFilter {
+	display: none;
+}
+
+#addView {
+	clear: both;
+	border-top: 2px solid #71B3D6;
+}
+
+#list-cancel {
+	float: left;
+	margin-left: 30px;
+}
+
+.create-new-button {
+	float: left;
+}

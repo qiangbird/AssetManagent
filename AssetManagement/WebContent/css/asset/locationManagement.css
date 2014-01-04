@@ -1,0 +1,23 @@
+body{
+	width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    color: #555555;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#listAll{
+	width: 1000px;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    color: #555555;
+    margin-left: auto;
+    margin-right: auto;
+}
+td{
+	width: 100px;
+	text-align:center;
+}

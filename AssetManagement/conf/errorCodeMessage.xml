@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<errorMessages>
+
+	<!-- **************** 
+	   Notice: 01XXXXX delegates AuthoirtyException,
+	           02XXXXX delegates DataException, 
+	           03XXXXX delegates ParameterException
+	******************** -->
+	
+	<!-- **************** 
+	   Notice: 0101XXX delegates this exception is AuthoirtyException and this errorCode belong to asset,
+	           0102XXX delegates this exception is AuthoirtyException and this errorCode belong to user
+	***************** -->
+	<!-- **************** 
+       Notice: 0101001 delegates this exception is AuthoirtyException and this errorCode belong to asset and concrete errorCode is 00l,
+               0102001 delegates this exception is AuthoirtyException and this errorCode belong to user and concrete errorCode is 001
+    ***************** -->
+    
+    <!-- **************** 
+       Notice: 0201XXX delegates this exception is DataException and this errorCode belong to asset,
+               0202XXX delegates this exception is DataException and this errorCode belong to user
+    ***************** -->
+    <!-- **************** 
+       Notice: 0201001 delegates this exception is DataException and this errorCode belong to asset and concrete errorCode is 00l,
+               0202001 delegates this exception is DataException and this errorCode belong to user and concrete errorCode is 001
+    ***************** -->
+    
+    <!-- **************** 
+       Notice: 0301XXX delegates this exception is ParameterException and this errorCode belong to asset,
+               0302XXX delegates this exception is ParameterException and this errorCode belong to user
+    ***************** -->
+    <!-- **************** 
+       Notice: 0301001 delegates this exception is ParameterException and this errorCode belong to asset and concrete errorCode is 00l,
+               0302001 delegates this exception is ParameterException and this errorCode belong to user and concrete errorCode is 001
+    ***************** -->
+    
+    <!-- **************** 
+       Notice: "%placeHolder0%" is a place holder for keyword, it will be replaced by error message key,
+                If you have multi-placeHolder, you can use as "%placeHolder0%","%placeHolder1%","%placeHolder2%"...
+    ***************** -->
+    	
+	<!-- **************** The error code about user authority exception ******************** -->
+	<errorCode id="0102001">
+		<errorType>AuthoirtyException</errorType>
+		<errorMessage>Error-0102001: User has no authority to visit system, user name is :"%placeHolder0%", and userId is: "%placeHolder1%" </errorMessage>
+	</errorCode>
+
+	<!-- **************** The error code about asset data exception ******************** -->
+	<errorCode id="0201001">
+		<errorType>DataException</errorType>
+		<errorMessage>Error-0201001: Can not save asset</errorMessage>
+	</errorCode>
+	
+	<!-- **************** The error code about user data exception ******************** -->
+    <errorCode id="0202001">
+        <errorType>DataException</errorType>
+        <errorMessage>Error-0202001: Can not save user</errorMessage>
+    </errorCode>
+    
+    <!-- **************** The error code about role data exception ******************** -->
+    <errorCode id="0203001">
+        <errorType>DataException</errorType>
+        <errorMessage>Error-0203001: Can not get role by roleName: "%placeHolder0%"</errorMessage>
+    </errorCode>
+    
+     <!-- **************** The error code about IAP data exception ******************** -->
+    <errorCode id="0204001">
+        <errorType>DataException</errorType>
+        <errorMessage>Error-0204001: Can not get request info from IAP</errorMessage>
+    </errorCode>
+    <errorCode id="0204002">
+        <errorType>DataException</errorType>
+        <errorMessage>Error-0204002: Can not get response from IAP</errorMessage>
+    </errorCode>
+    <errorCode id="0204003">
+        <errorType>DataException</errorType>
+        <errorMessage>Error-0204003: Can not get response info from IAP by requestType: "%placeHolder0%"</errorMessage>
+    </errorCode>
+
+	<!-- **************** The error code about asset parameter exception ******************** -->
+	<errorCode id="0301001">
+		<errorType>ParameterException</errorType>
+		<errorMessage>Error-0301001: Can not get asset entity by asset id: "%placeHolder0%"</errorMessage>
+	</errorCode>
+  
+    <!-- **************** The error code about user parameter exception ******************** -->
+    <errorCode id="0302001">
+        <errorType>ParameterException</errorType>
+        <errorMessage>Error-0302001: Can not covert Json to userVo, the Json is: "%placeHolder0%"</errorMessage>
+    </errorCode>
+    
+     <!-- **************** The error code about unknown exception ******************** -->
+    <errorCode id="0401001">
+        <errorType>UnknownException</errorType>
+        <errorMessage>Error-0401001: Sorry server has error</errorMessage>
+    </errorCode>
+    
+    <!-- **************** The error code about unknown exception ******************** -->
+	<errorCode id="0501001">
+        <errorType>CustomizeViewException</errorType>
+        <errorMessage>Error-0501001: Can not get customize view by id: "%placeHolder0%"</errorMessage>
+    </errorCode>
+</errorMessages>

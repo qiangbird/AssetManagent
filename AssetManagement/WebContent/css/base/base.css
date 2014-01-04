@@ -1,0 +1,353 @@
+@CHARSET "UTF-8";
+/*
+Be careful to use, each page will load it, and keep clean.
+*/
+
+.clear{
+    clear: both;
+}
+
+a:FOCUS, span:FOCUS, DIV:FOCUS{
+    outline: none;
+}
+
+.content{
+    width: 960px;
+    background: url("../../image/common/IMG_Background_4x4.png") transparent;
+    position: relative;
+    margin: 0 auto;
+}
+
+input[type=text], textarea {
+    border-color: #BFBFBF;
+    border-width: 1px;
+    border-style: solid;
+    outline: none;
+    -webkit-box-shadow: inset 0 0 5px #BFBFBF;
+    -webkit-border-radius: 2px;
+    -moz-box-shadow: inset 0 0 5px #BFBFBF;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    box-shadow: inset 0 0 5px #BFBFBF;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.input_txt{
+    width: 335px;
+    height: 30px; /* height = font-size+2, line-height = height+1, real_height = padding-top+padding-button+2+height*/
+    line-height: 17px;
+    padding: 6px 2px;
+}
+
+a.decoration_hover:hover{
+    text-decoration: underline;
+}
+
+.notice_font{
+    font-size: 12px;
+    color: #808080;
+}
+
+a.a_action_button .middle {
+    width: 117px;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+a.a_action_button span{
+    height: 28px;
+    line-height: 30px;
+    color: #808080;
+    text-shadow: 1px -1px 28px #FFFFFF;
+}
+
+a.a_action_button_hover{
+     width: 122px;;
+    height: 29px;
+    background: url("../../image/buttonIMG/BTN_MoreActions_123x30.png") transparent no-repeat;
+    border-width: 1px;
+    border-style: dotted;
+}
+
+a.a_action_button_hover span{
+    height: 27px;
+    line-height: 30px;
+    color: #808080;
+    text-shadow: 1px -1px 27px #FFFFFF;
+}
+
+a.a_planCourse_action_button{
+    width: 123px;;
+    height: 30px;
+    background: url("../../image/buttonIMG/BTN_MoreActions_123x30.png") transparent no-repeat;
+}
+
+a:hover.a_planCourse_action_button{
+    width: 123px;;
+    height: 30px;
+    background: url("../../image/buttonIMG/BTN_MoreActions_Hover_123x30.png") transparent no-repeat;
+}
+
+a.a_planCourse_action_button span{
+    height: 28px;
+    line-height: 30px;
+    color: #808080;
+    text-shadow: 1px -1px 28px #FFFFFF;
+}
+
+a.a_planCourse_action_button_hover{
+     width: 122px;;
+    height: 29px;
+    background: url("../../image/buttonIMG/BTN_MoreActions_123x30.png") transparent no-repeat;
+    border-width: 1px;
+    border-style: dotted;
+}
+
+a.a_planCourse_action_button_hover span{
+    height: 27px;
+    line-height: 30px;
+    color: #808080;
+    text-shadow: 1px -1px 27px #FFFFFF;
+}
+
+/* thirty px white and green buttons*/
+a.a_common_button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    -webkit-user-select: none;
+}
+a.a_common_button span {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    font-weight: bold;
+    float: left;
+}
+
+/* white button */
+a.white_button_thirty {
+    color: #808080 !important;
+    text-shadow: 1px -1px 28px #FFFFFF;
+}
+a.white_button_thirty .left {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Normal_Left_3x30.png") transparent no-repeat;
+}
+.white_button_thirty .middle {
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Normal_Middle_1x30.png") transparent repeat;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 54px;
+}
+a.white_button_thirty .right {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Normal_Right_3x30.png") transparent no-repeat;
+}
+a.white_button_thirty:hover .left {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Hover_Left_3x30.png") transparent no-repeat;
+}
+.white_button_thirty:hover .middle {
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Hover_Middle_1x30.png") transparent repeat;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 54px;
+}
+a.white_button_thirty:hover .right {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Hover_Right_3x30.png") transparent no-repeat;
+}
+a.white_button_thirty:active .left {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Pressed_Left_3x30.png") transparent no-repeat;
+}
+.white_button_thirty:active .middle {
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Pressed_Middle_1x30.png") transparent repeat;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 54px;
+}
+a.white_button_thirty:active .right {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_White_Pressed_Right_3x30.png") transparent no-repeat;
+}
+
+/* green button */
+a.green_button_thirty {
+    color: #FFFFFF !important;
+    text-shadow: 1px 1px 28px #419025;
+}
+a.green_button_thirty .left {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Normal_Left_3x30.png") transparent no-repeat;
+}
+.green_button_thirty .middle {
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Normal_Middle_1x30.png") transparent repeat;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 54px;
+}
+a.green_button_thirty .right {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Normal_Right_3x30.png") transparent no-repeat;
+}
+a.green_button_thirty:hover .left {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Hover_Left_3x30.png") transparent no-repeat;
+}
+.green_button_thirty:hover .middle {
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Hover_Middle_1x30.png") transparent repeat;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 54px;
+}
+a.green_button_thirty:hover .right {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Hover_Right_3x30.png") transparent no-repeat;
+}
+a.green_button_thirty:active .left {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Pressed_Left_3x30.png") transparent no-repeat;
+}
+.green_button_thirty:active .middle {
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Pressed_Middle_1x30.png") transparent repeat;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 54px;
+}
+a.green_button_thirty:active .right {
+    width: 3px;
+    background: url("../../image/buttonIMG/BTN_30pxButton_Green_Pressed_Right_3x30.png") transparent no-repeat;
+}
+
+
+/* 20px buttons */
+a.twenty_common_button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    overflow: hidden;
+    -webkit-user-select: none;
+    font-family: Arial;
+    font-size: 12px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: bold;
+}
+a.twenty_common_button span {
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    font-weight: bold;
+    float: left;
+}
+a.twenty_common_button .middle {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+a.twenty_common_button  .left, a.twenty_common_button  .right {
+    width: 3px;
+}
+/* 20px white button*/
+a.white_button_twenty {
+    color: #808080;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+a.white_button_twenty .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Normal_Left_3x20.png") transparent no-repeat;
+}
+.white_button_twenty .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Normal_Middle_1x20.png") transparent repeat;
+
+}
+a.white_button_twenty .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Normal_Right_3x20.png") transparent no-repeat;
+}
+
+a.white_button_twenty:hover .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Hover_Left_3x20.png") transparent no-repeat;
+}
+.white_button_twenty:hover .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Hover_Middle_1x20.png") transparent repeat;
+}
+a.white_button_twenty:hover .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Hover_Right_3x20.png") transparent no-repeat;
+}
+a.white_button_twenty:active .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Pressed_Left_3x20.png") transparent no-repeat;
+}
+.white_button_twenty:active .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Pressed_Middle_1x20.png") transparent repeat;
+}
+a.white_button_twenty:active .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Pressed_Right_3x20.png") transparent no-repeat;
+}
+/* 20px white button disabled */
+a.white_button_twenty_disable {
+    color: #808080;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+    cursor: default;
+}
+a.white_button_twenty_disable .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Disable_Left_3x20.png") transparent no-repeat;
+}
+.white_button_twenty_disable .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Disable_Middle_1x20.png") transparent repeat;
+    color: #bfbfbf;
+}
+a.white_button_twenty_disable .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_White_Disable_Right_3x20.png") transparent no-repeat;
+}
+
+/* 20px green button */
+a.green_button_twenty {
+    color: #FFF;
+    text-shadow: 1px 1px 1px rgba(65, 144, 37, 0.75);
+}
+a.green_button_twenty .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Normal_Left_3x20.png") transparent no-repeat;
+}
+.green_button_twenty .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Normal_Middle_1x20.png") transparent repeat;
+}
+a.green_button_twenty .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Normal_Right_3x20.png") transparent no-repeat;
+}
+
+a.green_button_twenty:hover .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Hover_Left_3x20.png") transparent no-repeat;
+}
+.green_button_twenty:hover .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Hover_Middle_1x20.png") transparent repeat;
+}
+a.green_button_twenty:hover .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Hover_Right_3x20.png") transparent no-repeat;
+}
+a.green_button_twenty:active .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Pressed_Left_3x20.png") transparent no-repeat;
+}
+.green_button_twenty:active .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Pressed_Middle_1x20.png") transparent repeat;
+}
+a.green_button_twenty:active .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Pressed_Right_3x20.png") transparent no-repeat;
+}
+/* 20px green button disabled */
+a.green_button_twenty_disable {
+    color: #FFF;
+    text-shadow: 1px 1px 1px rgba(65, 144, 37, 0.75);
+    cursor: default;
+}
+a.green_button_twenty_disable .left {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Disable_Left_3x20.png") transparent no-repeat;
+}
+.green_button_twenty_disable .middle {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Disable_Middle_1x20.png") transparent repeat;
+}
+a.green_button_twenty_disable .right {
+    background: url("../../image/buttonIMG/BTN_20pxButton_Green_Disable_Right_3x20.png") transparent no-repeat;
+}

@@ -1,0 +1,80 @@
+package com.augmentum.ams.service.asset.impl;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.augmentum.ams.dao.asset.CustomerDao;
+import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.service.asset.CustomerService;
+
+@Service("customerService")
+public class CustomerServiceImpl implements CustomerService {
+
+    private static Logger logger = Logger.getLogger(CustomerServiceImpl.class);
+
+    @Autowired
+    private CustomerDao customerDao;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.service.asset.CustomerService#getCustomer(java.lang
+     * .String)
+     */
+    @Override
+    public Customer getCustomer(String customerCode) {
+        String hql = "from Customer customer where customer.customerCode=?";
+        Customer customer = customerDao.getUnique(hql, customerCode);
+        logger.info("Get customer by customer code:" + customerCode);
+        return customer;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.service.asset.CustomerService#SaveCustomer(com.augmentum
+     * .ams.model.asset.Customer)
+     */
+    @Override
+    public void saveCustomer(Customer customer) {
+        customerDao.save(customer);
+    }
+
+    @Override
+    public void saveCustomer(List<Customer> customers) {
+        List<Customer> saveCustomers = new ArrayList<Customer>();
+        for (Customer customer : customers) {
+            Customer existCustomer = this.getCustomer(customer.getCustomerCode());
+            if (existCustomer == null) {
+                customer.setCreatedTime(new Date());
+                customer.setUpdatedTime(new Date());
+                saveCustomers.add(customer);
+            }
+        }
+        customerDao.saveOrUpdateAll(saveCustomers);
+    }
+
+    @Override
+    public Customer getCustomerByCode(String customerCode) {
+        return customerDao.getCustomerByCode(customerCode);
+    }
+
+    @Override
+    public Customer getCustomerByName(String customername) {
+        return customerDao.getCustomerByName(customername);
+    }
+
+    @Override
+    public List<Customer> getCustomerByGroup(String groupId) {
+        String hql = "from Customer customer where customer.customerGroup.id=?";
+        return customerDao.find(hql,groupId);
+    }
+
+}

@@ -1,0 +1,259 @@
+.locationListContent {
+	background-image: url("../../image/common/IMG_Background.png");
+	background-repeat: repeat;
+	margin-left: auto;
+	margin-right: auto;
+	width: 1000px;
+}
+
+.roleAddContent {
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+	padding-bottom: 20px;
+}
+
+#autoText {
+	margin-top: 15px;
+	height: 55px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#employeeName {
+	width: 389px;
+	max-height: 57px;
+	line-height: 57px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: auto !important;
+	cursor: text;
+	font-size: 14px;
+	font-family: Arial;
+	color: #555;
+	min-height: 1px;
+	z-index: 999;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	list-style-type: none;
+	clear: left;
+	border-color: #BFBFBF;
+	border-width: 1px;
+	border-style: solid;
+	outline: none;
+	-webkit-box-shadow: inset 0 0 5px #BFBFBF;
+	-webkit-border-radius: 2px;
+	-moz-box-shadow: inset 0 0 5px #BFBFBF;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	box-shadow: inset 0 0 5px #BFBFBF;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+}
+#checxboxOperate {
+	margin-left: 30px;
+}
+
+#operateButton {
+	margin-top: 20px;
+	float: right;
+}
+
+#checkboxOperate label {
+	background-repeat: no-repeat;
+	cursor: pointer;
+	text-align: center;
+	padding-left: 20px;
+	padding-top: 20px;
+	vertical-align: bottom;
+	margin-left: 25px;
+}
+
+#checkboxOperate p {
+	font: normal 14px/24px arial;
+	font-family: "Arial", "Verdana", "sans-serif";
+	vertical-align: bottom;
+	margin-bottom: 20px;
+	display: inline-block;
+}
+
+.roleUnChecked {
+	background-image: url("../../image/user/Unchecked.png");
+}
+
+.roleChecked {
+	background-image: url("../../image/user/Checked.png");
+}
+
+.roleCheckBox {
+	display: none;
+}
+
+#operateButton input {
+	margin-left: 15px;
+	cursor: pointer;
+	margin-top: 4px;
+	font-size: 14px;
+	width: 90px;
+	height: 30px;
+	font-weight: bold;
+	text-align: center;
+	border-radius: 3px;
+	border-width: 0px;
+	font-family: "Arial", "Verdana", "sans-serif";
+}
+
+#addButton,#saveButton {
+	background-color: white;
+	color: #FFFFFF;
+	background-image: url("../../image/common/BTN_Primary-Action_90x30.png");
+}
+
+#addButton:hover,#saveButton:hover {
+	color: #FFFFFF;
+	background-image: url("../../image/common/BTN_Primary-Action_90x30.png");
+}
+
+#resetButton {
+	background-color: white;
+	color: #8A8A8A;
+	background-image: url("../../image/common/BTN_Table_BK_90x30.png");
+}
+
+#resetButton:hover {
+	color: #8A8A8A;
+	background-image: url("../../image/common/BTN_Table_BK_90x30.png");
+}
+
+.rowHead {
+	height: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 960px;
+	background-color: #71B3D6;
+	border-radius: 3px;
+}
+
+.columnElement {
+	font: normal 14px/24px arial;
+	font-family: "Arial", "Verdana", "sans-serif";
+	text-align: center;
+	color: #FFFFFF;
+	font-weight: bold;
+	line-height: 30px;
+	display: inline-block;
+}
+
+.sequenceElement {
+	width: 20%;
+}
+
+.employeeInfoElement {
+	width: 19.9%;
+}
+
+.operateElement {
+	width: 14%;
+}
+
+.employeeRoleInfo {
+	/*height: 29px;*/
+	height:auto;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #CBCBCB;
+	border-top: 0px;
+	background-color: #FFFFFF;
+	width: 960px;
+	overflow: auto;
+	border-radius: 3px;
+}
+.employeeRoleInfo .items{
+	/* height:30px; */
+}
+.columnData {
+	font: normal 14px/24px arial;
+	font-family: "Arial", "Verdana", "sans-serif";
+	text-align: center;
+	display: inline-block;
+}
+
+.operateCheckbox {
+	width: 14%;
+}
+
+.operateCheckbox label {
+	background-repeat: no-repeat;
+	cursor: pointer;
+	padding-left: 20px;
+}
+
+.removeElement {
+	width: 14%;
+}
+
+.removeElement span {
+	width: 14%;
+	background-image: url("../../image/user/Delete.png");
+	background-repeat: no-repeat;
+	height: 22px;
+	width: 20px;
+	display: inline-block;
+}
+
+.removeElement span:hover {
+	background-image: url("../../image/user/Delete_Hover.png");
+	background-repeat: no-repeat;
+	height: 22px;
+	width: 20px;
+	display: inline-block;
+}
+
+.rowEven {
+	background-color: #F5F5F5;
+}
+
+.rowHover {
+    background-color: #DDF1F8;
+}
+.rowHead span{
+	text-align: center;
+}
+#delelteLocation{
+	margin-top: -24px;
+margin-left: 110px;
+width: 30px;
+height: 20px;
+	background: url("../../image/user/Delete.png") no-repeat;
+}
+#editLocation{
+	margin-top: -24px;
+margin-left: 110px;
+width: 30px;
+height: 20px;
+background: url("../../image/self/ICN_Edit_22x24.png") no-repeat;
+}
+.submit-div{
+	position: absolute;
+margin-top: 110px;
+margin-left: 110px;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+position: absolute;
+right: .3em;
+top: 50%;
+width: 19px;
+margin: -10px 0 0 0;
+padding: 1px;
+height: 18px;
+background: #505050;
+}
+.hightLight{
+	background: url("../../img/IMG_List_Acitve_1x30.png");
+}
+.normalBg{
+	background: url("../../img/IMG_List_1x30.png");
+}

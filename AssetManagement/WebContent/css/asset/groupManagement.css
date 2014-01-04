@@ -1,0 +1,129 @@
+.columnData {
+	float: left;
+	width: 160px;
+	height: 30px;
+	margin-left: 0px;
+}
+
+.groupDispaly {
+	width: 960px;
+	margin: 0px auto;
+}
+
+.groupListContent {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.editIcon {
+	display: block;
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	background: url("../../image/common/Edit.png") no-repeat;
+}
+
+.removeIcon {
+	display: block;
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	background: url("../../image/common/Delete.png") no-repeat;
+}
+
+.submit-div {
+	position: absolute;
+	margin-top: 110px;
+	margin-left: 110px;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	position: absolute;
+	right: .3em;
+	top: 50%;
+	width: 19px;
+	margin: -10px 0 0 0;
+	padding: 1px;
+	height: 18px;
+	background: #505050;
+}
+
+.hightLight {
+	background: url("../../img/IMG_List_Acitve_1x30.png");
+}
+
+.normalBg {
+	background: url("../../img/IMG_List_1x30.png");
+}
+
+.ui-dialog-title-dialog {
+	margin-left: 100px;
+}
+
+.addGroup {
+	margin: 10px auto;
+	display: none;
+}
+
+#autoText {
+	margin-top: 15px;
+	height: 55px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#customerName {
+	width: 389px;
+	max-height: 57px;
+	line-height: 57px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: auto !important;
+	cursor: text;
+	font-size: 14px;
+	font-family: Arial;
+	color: #555;
+	min-height: 1px;
+	z-index: 999;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	list-style-type: none;
+	clear: left;
+	border-color: #BFBFBF;
+	border-width: 1px;
+	border-style: solid;
+	outline: none;
+	-webkit-box-shadow: inset 0 0 5px #BFBFBF;
+	-webkit-border-radius: 2px;
+	-moz-box-shadow: inset 0 0 5px #BFBFBF;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	box-shadow: inset 0 0 5px #BFBFBF;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+#groupDetail {
+	margin-top: 15px;
+	margin-left: 30px;
+	float: left;
+	width: 300px;
+	height: 40px;
+	padding-top: 20px;
+	color: #A7A1A1;
+}
+
+.editIcon,.removeIcon {
+	cursor: pointer;
+}
+
+.groupName {
+	cursor: pointer;
+	color: rgb(41, 184, 211);
+}
+.roleAddContent #autoText .token-input-list-facebook{
+width: 300px;
+max-height: 55px;
+min-height: 55px;
+}

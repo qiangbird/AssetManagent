@@ -1,0 +1,876 @@
+#main input {
+	outline: none;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	top: 10px;
+	height: 30px;
+}
+
+#main select {
+	position: absolute;
+	top: 10;
+	left: 140px;
+	width: 300px;
+	top: 10px;
+	height: 30px
+}
+
+#main {
+	width: 1000px;
+	height: auto;
+	padding: 0;
+	margin: 0;
+	color: #555555;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#picPosition {
+	padding-left: 15px;
+	position: relative;
+	right: 0px;
+	text-align: center;
+	top: 0px;
+	float: right;
+	margin-right: 85px;
+}
+
+#mainTop {
+	width: 40px;
+	color: #555555;
+	font-size: 18px;
+	border: 0;
+	margin: -10px auto;
+	z-index: -1;
+	height: 30px;
+}
+
+#picDiv {
+	float: left;
+	top: 20px;
+	position: relative;
+	left: 200px;
+}
+
+#uploadIcon {
+	float: right;
+	position: relative;
+	left: 40px;
+}
+
+#mainTop input[type=button] {
+	position: relative;
+	bottom: 0;
+	top: 100px;
+	left: 460px;
+	height: 30px;
+	width: 40px;
+	padding-top: 6px;
+	background: url("../../image/asset/create/uploadFile-icon.png")
+		no-repeat;
+	padding: 0;
+	border: 0;
+}
+
+#aphoto {
+	width: 240px;
+	height: 141px;
+}
+
+.file {
+	height: 30px;
+	z-index: 1;
+	width: 40px;
+	opacity: 0;
+	position: relative;
+	left: 460px;
+	margin-top: 60px;
+}
+
+.asset-input-info {
+	height: 455px;
+}
+
+div.asset-input-details {
+	height: auto;
+	clear: both;
+}
+
+div.type-details {
+	height: auto;
+	margin-top: 40px;
+}
+
+.asset-input-info  strong {
+	display: block;
+	height: 40px;
+	font-size: 18px;
+}
+
+.asset-input-left {
+	float: left;
+	margin-left: 20px;
+	width: 440px;
+}
+
+html .ui-autocomplete {
+	width: 294px;
+}
+
+.asset-input-right {
+	float: right;
+	width: 440px;
+	margin-right: auto;
+	margin-top: 0px;
+}
+
+.common-asset-input-right {
+	float: right;
+	width: 440px;
+	margin-right: auto;
+	margin-top: -35px;
+}
+
+.asset-input-panel p {
+	position: relative;
+	margin-bottom: -10px;
+	height: 30px;
+}
+
+.asset-input-panel p .select-panel {
+	height: 30px;
+	width: 300px;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.asset-input-panel p .message-div {
+	height: 30px;
+	width: 300px;
+	line-height: 30px;
+	color: #A0A0A0;
+	text-indent: 9px;
+	background: url("../../image/IPX_300x30_Empty.png") no-repeat;
+}
+
+.asset-input-panel p.p-textarea {
+	height: 70px;
+}
+
+.asset-input-panel p span {
+	color: #FF0000;
+	position: absolute;
+	top: 10px;
+	left: 0;
+}
+
+.asset-input-panel p label {
+	width: 125px;
+	position: absolute;
+	top: 6px;
+	left: 10px;
+}
+
+.asset-input-panel p input {
+	display: block;
+	height: 20px;
+	width: 300px;
+	padding: 8px 0 10px 10px;
+	border: 0;
+	position: relative;
+	top: 10px;
+	left: 140px;
+	height: 30px;
+	font-size: 14px;
+	color: #555555;
+}
+
+.asset-input-panel p .p-textarea-span {
+	position: absolute;
+	top: 0;
+	left: 130px;
+	display: block;
+	height: 70px;
+	width: 300px;
+	padding: 10px;
+}
+
+.asset-input-panel p textarea {
+	height: 70px;
+	width: 300px;
+	border: 2;
+	font-size: 14px;
+	color: #555555;
+	font-family: Arial;
+	overflow: hidden;
+	/* background: url("../../image/asset/create/IPX_300x70_Normal.png")
+		no-repeat; */
+}
+
+.l-text {
+	background: url("../../image/asset/create/IPX_300x30_Normal.png")
+		no-repeat;
+}
+.l-text-hover {
+    background: url("../../image/asset/create/IPX_300x30_Hover.png")
+        no-repeat;
+}
+.l-text-error{
+	background: url("../../image/asset/create/IPX_300x30_Error.png")
+        no-repeat;
+}
+
+
+
+#projectSelect {
+	background:
+		url("../../image/asset/create/IPX_300x30_Dropdown_Disabled.png")
+		no-repeat;
+}
+
+#locationSelect {
+	background:
+		url("../../image/asset/create/IPX_300x30_Dropdown_Disabled.png")
+		no-repeat;
+}
+
+.l-select {
+	background: url("../../img/select_normal_background.png") no-repeat;
+	cursor: pointer;
+}
+
+.l-select-hover {
+	background: url("../../img/select_click_background.png") no-repeat;
+	/* cursor: pointer; */
+}
+
+.l-select-error {
+	background: url("../../img/select_error_background.png") no-repeat;
+	cursor: pointer;
+}
+
+.asset-input-panel p input.l-select {
+	padding-right: 30px;
+	width: 300px;
+}
+
+.l-date {
+	background:
+		url("../../image/asset/create/IPX_300x30_Calendar_Normal.png")
+		no-repeat;
+}
+
+.l-date-error {
+	background:
+		url("../../image/asset/create/IPX_300x30_Calendar_Error.png")
+		no-repeat;
+}
+
+.asset-input-left p .bar-code-mess {
+	position: absolute;
+	top: 17px;
+	left: 165px;
+	color: #555555;
+}
+
+.l-textarea {
+	outline: none;
+	resize: none;
+	padding: 8px 0 10px 10px;
+	background: url("../../img/IPX_300x70_Normal.png")
+        no-repeat;
+}
+
+.l-textarea-hover {
+    outline: none;
+    resize: none;
+    padding: 8px 0 10px 10px;
+    background: url("../../img/IPX_300x70_Hover.png")
+        no-repeat;
+}
+
+.asset-input-panel p input.l-checkbox {
+	opacity: 0;
+	filter: alpha(opacity =           0);
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	top: 7px;
+	left: 0;
+}
+
+#main input {
+	outline: none;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+#main span.checkbox-panel {
+	display: block;
+	position: absolute;
+	left: 140px;
+	top: 20px;
+	height: 15px;
+	width: 15px;
+	background:
+		url("../../image/asset/create/Checkbox_15x15_Unchecked.png" )
+		no-repeat;
+}
+
+.p-file .l-text {
+	z-index: 1;
+}
+
+.p-file span.blank-span {
+	top: 0;
+	left: 165px;
+	display: block;
+	height: 30px;
+	width: 337px;
+	z-index: 2;
+	background: url("../../image/asset/create/IPX_300x30_Empty.png") left;
+}
+
+.asset-batch-create {
+	float: left;
+	margin-top: 40px;
+	height: 30px;
+	width: 1000px;
+	position: relative;
+	clear: both;
+}
+
+#main .asset-batch-create span.checkbox-panel {
+	left: 415px;
+}
+/*
+#mainTop input[type=button] {
+    position: relative;
+    bottom: 0;
+    left: 142px;
+    height: 30px;
+    width: 140px;
+    padding-top: 6px;
+    color: #555555;
+    font-size: 18px;
+    background: url("../img/BTN_140x30_Secondary_Action_Normal.png") no-repeat;
+    padding: 0;
+    border: 0;
+}
+*/
+.upload-file {
+	height: 30px;
+	z-index: 9999;
+	width: 140px;
+	opacity: 0;
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+.asset-batch-create label {
+	position: relative;
+	left: 430px;
+	top: -22px;
+	text-indent: 15px;
+}
+
+.asset-batch-create input[type="text"] {
+	height: 20px;
+	width: 140px;
+	border: 0;
+	padding: 8px 0 2px 10px;
+	/* background: url("../img/IPX_150x30_Disabled.png") no-repeat; */
+	position: absolute;
+	top: 0;
+	left: 545px;
+	font-size: 14px;
+	font-family: Arial;
+	color: #555555;
+}
+
+.operation {
+	height: 30px;
+	width: 960px;
+	margin: auto;
+	clear: both;
+}
+
+.operation_location {
+	width: 230px;
+	height: 30px;
+	margin: 0 auto;
+}
+
+.operation input {
+	height: 30px;
+	width: 100px;
+	border: 0;
+	font-size: 18px;
+	font-family: Arial;
+	margin: 0;
+}
+
+.operation .submit-button {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png");
+	no-repeat;
+	float: left;
+	width: 80px;
+	cursor: pointer;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.operation .submit-button:hover {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png");
+	no-repeat;
+}
+
+.operation .cancel-button {
+	background:
+		url("../../image/customize/customizedView/BTN_Cancel_80x30.png");
+	no-repeat;
+	width: 80px;
+	color: #8A8A8A;
+	float: right;
+	margin-left: 20px;
+	text-index: -7px;
+	left: -30px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.operation .cancel-button:hover {
+	background:
+		url("../../image/customize/customizedView/BTN_Cancel_Hover_80x30.png");
+	no-repeat;
+}
+
+.asset-input-info ul li {
+	height: 25px;
+	line-height: 25px;
+	color: #555555;
+	text-indent: 6px;
+	background: #F5F5F5;
+	margin-bottom: 1px;
+	font-family: Arial;
+	overflow: hidden;
+}
+
+.asset-input-info ul li:hover {
+	background: #23A5E3;
+	color: #FFFFFF;
+}
+
+.asset-input-info ul li p {
+	width: 262px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	height: 25px;
+}
+
+.asset-input-panel p .image-span {
+	display: block;
+	position: absolute;
+	top: 5px;
+	left: 445px;
+	height: 20px;
+	width: 25px;
+}
+
+.asset-batch-create .image-span {
+	display: block;
+	position: absolute;
+	top: 5px;
+	left: 700px;
+	height: 20px;
+	width: 25px;
+}
+
+.current-operation-title {
+	font-size: 14px;
+	color: #555555;
+	font-family: Arial;
+	font-weight: bold;
+	background: url("../../img/IMG_Body-Header_1280x45.png") no-repeat;
+}
+
+.breadCrum {
+	font-size: 14px;
+	color: #555555;
+	font-family: Arial;
+	font-weight: bold;
+}
+
+.commons {
+	font-size: 16px;
+	color: #555555;
+	height: 10px;
+	font-family: Arial;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.common-property {
+	margin-left: 15px;
+	margin-top: 20px;
+}
+
+#createAssetContent {
+	width: 960px;
+	height: auto;
+	padding: 0;
+	margin: 0px;
+	color: #555555;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.form-control {
+	width: 300px;
+}
+
+.bath-create-asset {
+	position: relative;
+	left: 430px;
+	top: 16px;
+	text-indent: 15px;
+}
+
+.detail-as-select {
+	position: relative;
+	top: 30px;
+}
+
+.detail-as-select-left {
+	float: left;
+	margin-left: 0px;
+	width: 460px;
+}
+
+.detail-as-select-right {
+	float: right;
+	width: 460px;
+	margin-right: auto;
+	margin-top: 0px;
+}
+
+.common-requirement-property {
+	height: 420px;
+}
+
+#uploadPhoto input {
+	height: 30px;
+	width: 100px;
+	border: 0;
+	font-size: 18px;
+	font-family: Arial;
+	margin: 0;
+}
+
+#uploadPhoto .upload-button {
+	background:
+		url("../../image/asset/create/BTN_Secondary-Action_100x30.png")
+		no-repeat;
+	color: #555555;
+	float: right;
+	margin-left: 20px;
+	text-index: -7px;
+	left: -30px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.showElement,.machineType,.showEntity,.showAssetStatus,.showOwnership,.showLocation,.showAssetTypes,.showProject
+	{
+	border: 1px solid #23a5e3;
+	width: 298px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	display: none;
+	position: absolute;
+	z-index: 10;
+	margin: 20px 140px;
+	height: auto;
+	/*height: 200px;*/
+}
+
+.abab {
+	position: relative;
+}
+
+.showElement li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.machineType li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.showEntity li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.showAssetStatus li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.showOwnership li { /*
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+	*/
+	border: 1px solid white;
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.showLocation li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.showAssetTypes li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.showProject li {
+	height: 30px;
+	background: #F5F5F5;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-indent: 6px;
+	vertical-align: middle;
+	margin: 0;
+}
+
+#barCodeCkBox {
+	margin: -10px;
+	margin-left: -145;
+}
+
+#batchCreatCkBox {
+	position: relative;
+	top: -10px;
+	left: 420px;
+}
+
+.showCust {
+	
+}
+
+.showAsSelfDefine {
+	position: relative;
+	margin-top: 150px;
+	display: none;
+}
+
+li {
+	list-style-type: none
+}
+
+.css-form input.ng-invalid.ng-dirty {
+	background-color: #FA787E;
+}
+
+.css-form input.ng-valid.ng-dirty {
+	background-color: #78FA89;
+}
+
+.AddBorderColorForInput {
+	border: solid 1px #FA787E;
+}
+
+#showBatch {
+	margin-left: -500px;
+	margin-top: -18px;
+	display: none;
+	width: 150px;
+	/* background: url("../../img/IPX_150x30_Normal.png"); */
+}
+
+.showBatchNormal {
+	margin-left: -500px;
+	margin-top: -18px;
+	display: none;
+	background: url("../../img/IPX_150x30_Normal.png");
+}
+
+.showBatchError {
+	margin-left: -500px;
+	margin-top: -18px;
+	display: none;
+	background: url("../../img/IPX_150x30_Error.png");
+}
+
+.showBatchHovered {
+	margin-left: -500px;
+	margin-top: -18px;
+	display: none;
+	background: url("../../img/IPX_150x30_Hovered.png");
+}
+
+#employeeNameForCreateAsset {
+	width: 389px;
+	max-height: 57px;
+	line-height: 57px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: auto !important;
+	cursor: text;
+	font-size: 14px;
+	font-family: Arial;
+	color: #555;
+	min-height: 1px;
+	z-index: 999;
+	margin: 0;
+	padding: 0;
+	background-color: #fff;
+	list-style-type: none;
+	clear: left;
+	border-color: #BFBFBF;
+	border-width: 1px;
+	border-style: solid;
+	outline: none;
+	-webkit-box-shadow: inset 0 0 5px #BFBFBF;
+	-webkit-border-radius: 2px;
+	-moz-box-shadow: inset 0 0 5px #BFBFBF;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	box-shadow: inset 0 0 5px #BFBFBF;
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
+#label_AssetGenerateBarCode {
+	width: 200px;
+	top: auto;
+}
+
+.home {
+	margin-top: -20px;
+	margin-bottom: 10px;
+}
+
+.home a {
+	text-decoration: NONE;
+	color: rgb(90, 149, 196);
+}
+
+.ui-autocomplete li {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border: 1px solid white;
+}
+
+.ui-widget-content {
+	border: 1px solid #23a5e3;
+	background: #F5F5F5;
+	color: #555555;
+}
+/* #selectCurrentProject{
+width: 300px;
+height: 30px;
+margin-top: 3px;
+margin-left: 130px;
+} */
+#selectCurrentProject {
+	background: none;
+	margin-left: 0px;
+	margin-top: 0px;
+}
+
+.dropDownList {
+	margin: 0px;
+	width: 298px;
+	height: 30px;
+	position: absolute;
+	top: 9px;
+	left: 140px;
+}
+
+#assetType,#selectedStatus,#selectedEntity,#selectedLocation {
+	display: none;
+}
+
+p .dropDownList .dropDownList_text {
+	padding-left: 10px;
+	margin-top: -10px;
+	color: #555555;
+}
+
+p .dropDownList .dropDownList_icon {
+	margin-top: -10px;
+	margin-left: 278px;
+}
+
+.dropDownList_div ul {
+	background: #F5F5F5;
+	border: 1px solid #23a5e3;
+	cursor: pointer;
+}
+
+.dropDownList_div ul li {
+	border: 1px solid white
+}
