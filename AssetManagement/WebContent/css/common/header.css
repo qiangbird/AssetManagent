@@ -1,0 +1,276 @@
+*:focus {
+	outline: none;
+}
+
+#header_top {
+    position: relative;
+    margin: 0 auto;
+    width: 1000px;
+    height: 60px;
+    background: url("../../image/home/IMG_Head_1000x60.png");
+}
+
+#header_logo {
+    position: relative;
+    float: left;
+    margin: 15px 12px 0 20px;
+    width: 209px;
+    height: 36px;
+    background: url("../../image/home/IMG_Augmentum_Logo_209x36.png")
+        no-repeat;
+}
+
+#header_text {
+    position: relative;
+    float: left;
+    margin: 34px 0 0 0;
+}
+
+#header_text a {
+	font-family: arial;
+    float: left;
+    font-weight: bold;
+    color: #418FB5;
+    text-shadow: 1px -1px 14px #FFFFFF;
+}
+
+#header_top_right {
+    float: right;
+    font-size: 12px;
+    color: #418FB5;
+    height: 60px;
+    text-shadow: 1px -1px 12px #FFFFFF;
+}
+
+#header_login {
+    height: 20px;
+    margin: 10px 25px 0 0;
+}
+
+#header_login_name {
+    height: 20px;
+    margin: 0;
+    font-family: arial;
+}
+
+#loginUser {
+	font-size: 13px;
+	font-weight: bold;
+}
+
+#header_login_control {
+    height: 20px;
+    margin: 0 20px 0 28px;
+    padding: 0 5px 0 0;
+    display: none;
+}
+
+#header_i18n {
+    height: 30px;
+    width: 120px;
+    float: right;
+    font-family: arial;
+	font-size: 13px;
+}
+
+#header_i18n a {
+    cursor: pointer;
+    margin: 5px 20px 0 0;
+}
+
+.cursor_hand {
+    cursor: pointer;
+    width: 90px;
+    height: 33px;
+}
+
+.cursor_hand a {
+    display: block;
+    width: 90px;
+}
+
+#header_i18n a {
+    float: right;
+    margin: 5px 20px 0 0;
+    padding: 0 5px 0 0;
+    color: #418FB5
+}
+
+body,ul {
+	margin: 0;
+}
+
+#navigator {
+	height: 40px;
+	background-image: url("../../image/home/IMG_Navigation_1000x40.png");
+	width: 1000px;
+	margin: 0 auto;
+	font-family: arial;
+}
+
+a {
+	cursor: pointer;
+}
+
+.headerNavigationStart {
+	float: left;
+	position: relative;
+	width: 20px;
+}
+
+.menuCotent {
+	float: left;
+}
+
+.firstMenuUl {
+	margin-left: -28px;
+	list-style: none;
+	height: 40px;
+}
+
+.menuLi {
+	padding-left: 10px;
+	padding-right: 10px;
+	float: left;
+}
+
+.menuLi:hover {
+	padding-left: 10px;
+	padding-right: 10px;
+	float: left;
+	background-color: #3F8FB5;
+}
+
+.menuLi a {
+	text-decoration: none;
+	color: #FFFFFF;
+	font-size: 16px;
+	line-height: 35px;
+	font-weight: bold;
+}
+
+.sencndMenuUl {
+	position: absolute;
+	z-index: 10;
+	margin-left: -50px;
+	list-style: none;
+	display: none;
+}
+
+.sencndMenuUl li {
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: #71b3d6;
+	height: 25px;
+}
+
+.sencndMenuUl li:hover {
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: #418fb5;
+	height: 25px;
+}
+
+.sencndMenuUl a {
+	font-size: 14px;
+	line-height: 25px;
+	font-weight: bold;
+}
+
+.headerNavigationEnd {
+	width: 120;
+	height: 27px;
+	margin-top: 5px;
+	padding-left: 10px;
+	background-image: url("../../image/home/BTN_CreateNew_120x27.png");
+	background-repeat: no-repeat;
+	float: right;
+	background-image: url("../../image/home/BTN_CreateNew_120x27.png");
+	padding-right: 10px;
+}
+
+.headerNavigationEnd:hover {
+	background-image: url("../../image/home/BTN_CreateNew_Hover_120x27.png");
+}
+
+.headerNavigationEnd a {
+	line-height: 28px;
+	text-decoration: none;
+	color: #FFFFFF;
+	margin-left: -5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.headerNavigationEnd:hover {
+	float: right;
+}
+
+.operationUl {
+	margin-top: -1px;
+	position: absolute;
+	margin-left: -50px;
+	list-style: none;
+	width: 120px;
+	display: none;
+}
+
+.operationUl li {
+	background-color: #cfe6bb;
+	position: relative;
+	z-index: 2;
+}
+
+.operationUl li:hover {
+	background-color: #c2ddb6;
+}
+
+.operationUl a {
+	margin-left: 3px;
+	font-size: 13px;
+	word-spacing: -5px;
+	color: #65a64b;
+}
+
+#headerCrumbs {
+	height: 20px;
+	margin: 0 auto;
+	color: #418FB5;
+	font-family: Arial;
+	font-size: 14px;
+	padding-top: 5px;
+}
+
+.linkCrumb {
+	cursor: pointer;
+	text-decoration: none;
+	color: #418FB5;
+	font-family: Arial;
+	font-size: 14px;
+}
+
+.lastCrumb {
+	font-weight: bold;
+	color: #555555;
+	cursor: default;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.header {
+	height: 30px;
+	width: 960px;
+	margin: 0 auto;
+}
+
+.header a {
+	color: rgb(90, 149, 196)
+}
+
+.menuLi .sencndMenuUl li span {
+	color: #FF0000;
+	position: relative;
+	/* top: 30px;
+	left: 42; */
+}
+

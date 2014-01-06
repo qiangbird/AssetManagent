@@ -56,5 +56,20 @@ public class Constant {
     public static final String GREATER_OR_EQUAL = "greater or equal";
     public static final String TRUE = "true";
     public static final String FALSE = "false";
+    
+    //Constant of the Audit
+    public static final String OPERATOR = "operator";
+    public static final String OPERATION_TIME = "operationTime";
+    public static final String FILE_NAME = "fileName";
+    public static final String PERCENT_NUMBER = "percentNum";
+    public static final String S_ECHO = "sEcho";
+    public static final String I_DISPLAY_START = "iDisplayStart";
+    public static final String I_DISPLAY_LENGTH = "iDisplayLength";
+    public static final String I_TOTAL_RECORDS = "iTotalRecords";
+    public static final String I_TOTAL_DISPLAY_RECORDS = "iTotalDisplayRecords";
+    public static final String AA_DATA = "aaData";
+    public static final String AUDIT = "audit";
+    public static final String UNAUDIT = "unAudit";
+    public static final String INCONSISTENT = "incons";
 
 }

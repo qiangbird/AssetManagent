@@ -207,7 +207,7 @@ function AddTable(flagTable){
 	else if(flagTable==="unAudit"){
 		table.attr("id","unauditTable");
 	}
-	table.append("<thead> <tr>  <th style='text-indent:-50px; text-align:right'>ID</th>    <th text-indent:-5px>Bar-code</th>    <th>Name</th>    <th>Type</th>    </tr></thead>");
+	table.append($("#tableTitleTemplate").html());
 	table.append("<tbody ></tbody>");
 }
 function AddInconsTable(){
@@ -216,11 +216,11 @@ function AddInconsTable(){
 	contentPanel.append("<table cellspacing='0' frame='void' class='table' id='unauditTable')></table>");
 	var table=contentPanel.find("table");
 	table.attr("id","inconsTable");
-	table.append("<thead> <tr>  <th style='text-indent:-50px; text-align:right'>ID</th>    <th ext-indent:-5px>Bar-code</th>    <th>Name</th>    <th>Type</th>    </tr></thead>");
+	table.append($("#tableTitleTemplate").html());
 	table.append("<tbody ></tbody>");
 }
 
-//upto done
+//up to done
 function upToDone(object) {
 	ShowMsg("Are you sure to done this file?",function(yes){
 	      if (yes) {
@@ -237,7 +237,7 @@ function removeAuditFile(object) {
 	ShowMsg("Are you sure to remove this file?",function(yes){
 	      if (yes) {
 	    	  var auditFileName=$("#fileName").val();
-	    	  var url = "auditFile/redirectAuditList";
+	    	  var url = "auditFile/inventoryList";
 	    	  removeAuditFileImpl(auditFileName, url);
 	      }else{
 	          return;

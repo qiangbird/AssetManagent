@@ -23,7 +23,7 @@ String basePath = request.getScheme() + "://"
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
 </head>
 <body>
-<jsp:include page="../home/head.jsp"></jsp:include>
+<jsp:include page="../common/header.jsp"></jsp:include>
 
 	<%-- <form action="location/update/${location.id }" method="put"> --%>
 	<form:form action="location/update/${location.id }" method="put">
@@ -43,6 +43,6 @@ String basePath = request.getScheme() + "://"
 		</div>
 		</form:form>
 	<%-- </form> --%>
-
+<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
 </html>

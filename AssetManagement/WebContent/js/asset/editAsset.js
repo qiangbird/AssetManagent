@@ -1,7 +1,7 @@
 ﻿$(document).ready(function() {
    $("#selectedStatus").DropDownList({
        multiple : false,
-       header : false,
+       header : false
   });
    $("#ownership").click(
    function() {
@@ -29,7 +29,7 @@
    $("#selectedEntity").DropDownList({
        multiple : false,
        header : false,
-       noneSelectedText: 'Select entity',
+       noneSelectedText: 'Select entity'
   });
    $("#selectedLocation").DropDownList({
        multiple : false,

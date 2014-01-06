@@ -5,17 +5,18 @@ $(document).ready(function(){
 	$("#dialog").dialog({
         autoOpen:false,
         closeOnEscape: true,
-        draggable: true,
-        height: 300,
-        width: 400,
-        show: "scale",
-        hide: "scale",
+        draggable: false,
+        height: 280,
+        width: 500,
+        show: "blind",
+        hide: "blind",
         modal: true,
         position: "center",
-        resizable: true,
+        resizable: false,
         title: "Group operation",
         bgiframe: true
     });
+	
     $("#addButton").click(function(){
 //    	$("#groupId").empty();
         $("#dialog").dialog("open");

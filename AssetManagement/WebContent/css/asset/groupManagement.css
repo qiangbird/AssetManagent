@@ -37,7 +37,7 @@
 	margin-left: 110px;
 }
 
-.ui-dialog .ui-dialog-titlebar-close {
+/* .ui-dialog .ui-dialog-titlebar-close {
 	position: absolute;
 	right: .3em;
 	top: 50%;
@@ -46,7 +46,7 @@
 	padding: 1px;
 	height: 18px;
 	background: #505050;
-}
+} */
 
 .hightLight {
 	background: url("../../img/IMG_List_Acitve_1x30.png");

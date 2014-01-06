@@ -20,13 +20,4 @@ public class CommonUtil {
         }
         return returnStr;
     }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static List getProcessTypes() {
-        List processTypes = new ArrayList();
-        for (int i = 0; i < ProcessTypeEnum.values().length; i++) {
-            processTypes.add(ProcessTypeEnum.values()[i]);
-        }
-        return processTypes;
-    }
 }

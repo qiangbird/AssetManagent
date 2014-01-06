@@ -32,9 +32,9 @@ public class AuditFileController extends BaseController {
     @Autowired
     private AuditFileService auditFileService;
 
-    @RequestMapping(value = "/redirectAuditList")
+    @RequestMapping(value = "/inventoryList")
     public String redirectAuditList() {
-        return "audit/checkInventory";
+        return "audit/inventoryList";
     }
 
     @RequestMapping(value = "/getProcessingAuditList")

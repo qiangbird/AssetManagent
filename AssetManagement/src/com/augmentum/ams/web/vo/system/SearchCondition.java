@@ -23,7 +23,7 @@ public class SearchCondition {
     private String toTime;
     
     private String customizedViewId;
-
+    
     public String getCustomizedViewId() {
         return customizedViewId;
     }

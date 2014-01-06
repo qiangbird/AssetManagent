@@ -53,7 +53,7 @@ function upToDone(object) {
 	ShowMsg("Are you sure to done this file?",function(yes){
 	      if (yes) {
 	    	  var auditFileName=$(object).parents(".process-panel").find("a").text();
-	    	  var url = "auditFile/redirectAuditList";
+	    	  var url = "auditFile/inventoryList";
 	    	  upToDoneImpl(auditFileName, url);
 	      }else{
 	          return;
@@ -65,7 +65,7 @@ function removeAuditFile(object) {
 	ShowMsg("Are you sure to remove this file?",function(yes){
 	      if (yes) {
 	    	  var auditFileName=$(object).parents(".process-panel").find("a").text();
-	    	  var url = "auditFile/redirectAuditList";
+	    	  var url = "auditFile/inventoryList";
 	    	  removeAuditFileImpl(auditFileName, url);
 	      }else{
 	          return;
@@ -123,7 +123,7 @@ function showProcessAudits(data) {
     var length = data.processAudits.length;
     $(".audit-file-no-data").html("");
     if (length == 0) {
-        $(".audit-file-no-data").html("没有正在盘点的资产文件，请从  <a href='asset/redirectSearchAsset'>资产列表</a> 选取生成。");
+        $(".audit-file-no-data").html("没有正在盘点的资产文件，请从  <a href='asset/allAssets'>资产列表</a> 选取生成。");
     } else {
         $("#dataTable .audit-process-tr").css("display", "block");
         for (var i = 0; i < length; i++) {

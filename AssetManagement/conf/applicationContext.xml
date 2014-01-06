@@ -85,6 +85,7 @@
             <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
             <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
             <tx:method name="list*" propagation="REQUIRED" read-only="true"  />
+            <tx:method name="add*" propagation="REQUIRED"/>
         </tx:attributes>
     </tx:advice>
 
@@ -125,10 +126,12 @@
 				/tansferLog/** = authc,perms[TransferLog:*]
 				/operationLog/** = authc,perms[OperationLog:*]
 				/user/** = authc,perms[User:*]
+				/location/** = authc,perms[Location:*]
                 
             </value>
         </property>
     </bean>
     
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
 </beans>

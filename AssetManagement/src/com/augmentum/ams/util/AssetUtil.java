@@ -12,6 +12,7 @@ import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.model.enumeration.MachineSubtypeEnum;
+import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
 import com.augmentum.ams.model.enumeration.StatusEnum;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 
@@ -37,7 +38,6 @@ public class AssetUtil {
             assetVo.setWarrantyTime(UTCTimeUtil.formatDateToUTCString(asset.getWarrantyTime(),
                     timeOffset));
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Asset to assetVo error!", e);
         }
     }
@@ -113,7 +113,17 @@ public class AssetUtil {
         for (Location location : list) {
             locationList.add(location.getSite() + location.getRoom());
         }
+        
         return locationList;
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static List getProcessTypes() {
+        List processTypes = new ArrayList();
+        for (int i = 0; i < ProcessTypeEnum.values().length; i++) {
+            processTypes.add(ProcessTypeEnum.values()[i]);
+        }
+        return processTypes;
     }
 
 }

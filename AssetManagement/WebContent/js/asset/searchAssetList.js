@@ -235,7 +235,7 @@ var dataListInfo = {
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
-    url : 'asset/searchAsset',
+    url : 'asset/allAssetsList',
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {
@@ -432,15 +432,10 @@ $("#userName").blur(function() {
 // get all checkbox active asset ids
 function getActivedAssetIds() {
     var assetIds = [];
-    var assetIdsStr = "";
     $('.row .dataList-checkbox-active').each(function(){
         assetIds.push(($(this).attr('pk')));
     });
-    
-    for (var i = 0; i < assetIds.length; i++) {
-        assetIdsStr = (assetIdsStr + assetIds[i]) + (((i + 1) == assetIds.length) ? '':','); 
-    }
-    return assetIdsStr;
+    return assetIds.toString();
 }
 
 // check checkbox actived asset
@@ -456,51 +451,44 @@ function checkActivedAssetIds() {
 // check acticed assets status for assign
 function checkActivedAssetsStatusForAssign() {
     var flag = true;
+    var lineNum = "";
     $('.row .dataList-checkbox-active').each(function(){
-        if ($(this).siblings(".Status").html() == "ASSIGNING") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Assigning asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_CUSTOMER") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to customer asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_IT") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to IT asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNED") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returned asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "BORROWED") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Borrowed asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "IDLE") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Idle asset can not be assigned");
+        var status = $(this).siblings(".Status").html();
+       
+        if (status == "ASSIGNING" || status == "RETURNING_TO_CUSTOMER"
+            || status == "RETURNING_TO_IT" || status == "RETURNED"
+                || status == "BORROWED" || status == "IDLE") {
+            
+            lineNum += $(this).siblings(".w-30").html() + ", ";
             flag = false;
         } 
     });
+    
+    if (!flag) {
+        ShowMsg("Line " + lineNum.substring(0, lineNum.length - 2) + ": illegal status asset can not be assigned");
+    }
     return flag;
 }
 
 // check actived assets status and ownership for return to customer
 function checkActivedAssetsStatusForReturn() {
     var flag = true;
+    var lineNum = "";
     $('.row .dataList-checkbox-active').each(function(){
-        if ($(this).siblings(".Status").html() == "ASSIGNING") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Assigning asset can not be returned");
+        var status = $(this).siblings(".Status").html();
+        
+        if (status == "ASSIGNING" || status == "RETURNING_TO_CUSTOMER"
+            || status == "RETURNING_TO_IT" || status == "RETURNED"
+                || $(this).siblings(".Ownership").html() == "Augmentum") {
+            
+            lineNum += $(this).siblings(".w-30").html() + ", ";
             flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_CUSTOMER") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to customer asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_IT") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to IT asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNED") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returned asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Ownership").html() == "Augmentum") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Ownership is Augmentum, asset can not be returned to customer");
-            flag = false;
-        }
+        } 
     });
+    
+    if (!flag) {
+        ShowMsg("Line " + lineNum.substring(0, lineNum.length - 2) + ": illegal status asset can not be returned");
+    }
     return flag;
 }
 

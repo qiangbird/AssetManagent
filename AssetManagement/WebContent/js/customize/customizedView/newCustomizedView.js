@@ -222,7 +222,7 @@ function setForm(){
 	});
 	
 	$(".valueInColumn").each(function(index){
-		values[index] = $(this).find("#valueInput").val();
+		values[index] = $(this).text();
 	});
 	
 	$(".itemIdInColumn").each(function(index){

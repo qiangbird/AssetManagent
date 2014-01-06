@@ -19,7 +19,8 @@ function checkInventory(Obj, flag) {
     var index = p.lastIndexOf(".");
     var newP = p.substring(index+1, p.length).toLowerCase();
     if(newP != "csv") {
-    	$.alert(msg.prop('Error'),msg.prop("uploadMess"));
+//    	$.alert(msg.prop('Error'),msg.prop("uploadMess"));
+        alert("文件格式错误");
         return false;
     }
     var tx = $(Obj).next().val();  
@@ -56,7 +57,7 @@ function closeCheckingNote(inId) {
 }
 
 function changeNoteLis(lis) {
-    i = 0;
+    var i = 0;
     var inId = setInterval(function() {
         if (i == 0) {
             $(lis[i]).css("background", "url('img/ICN_Checking-Active_24x24.png') no-repeat");
@@ -81,6 +82,6 @@ function changeNoteLis(lis) {
             i = -1;
         }
         i++;  
-    }, 500);
+    }, 50);
     return inId;
 }

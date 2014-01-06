@@ -44,7 +44,7 @@ public class PropertyTemplateController extends BaseController{
     
     @RequestMapping("/selfProperty")
     public String roleList() {
-        return "customize/customizedProperty/selfProperty";
+        return "customized/customizedProperty/customizedPropertyList";
     }
 
     @RequestMapping("/getCustomerAndAssetType")

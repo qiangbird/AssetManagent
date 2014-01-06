@@ -28,7 +28,7 @@ public class CustomerGroupController {
         List processTypeList = AssetUtil.getProcessTypes();
         modelAndView.addObject("groupList", groupList);
         modelAndView.addObject("processTypeList",processTypeList);
-        modelAndView.setViewName("asset/groupManagement");
+        modelAndView.setViewName("asset/groupList");
         return modelAndView;
     }
     
@@ -76,6 +76,6 @@ public class CustomerGroupController {
     @RequestMapping(value="manageGroupCustomer")
     public ModelAndView manageGroupCustomer(String id,HttpServletRequest request){
         CustomerGroup customerGroup = customerGroupService.getCustomerGroupById(id);
-        return new ModelAndView("/asset/groupCustomerManagement","customerGroup",customerGroup);
+        return new ModelAndView("/asset/groupDetail","customerGroup",customerGroup);
     }
 }

@@ -1,14 +1,18 @@
 package com.augmentum.ams.service.asset.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
@@ -58,6 +62,7 @@ import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.AssetVo;
+import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.user.UserVo;
 
@@ -297,9 +302,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             String locationAddr = assetVo.getLocation();
             Location location = null;
             try {
-                location = locationService.getLocationBySiteAndRoom(
-                        locationAddr.trim().substring(0, 6),
-                        locationAddr.trim().substring(6, locationAddr.length()));
+                location = locationService.getLocationBySiteAndRoom(locationAddr.trim().substring(
+                        0, 6), locationAddr.trim().substring(6, locationAddr.length()));
             } catch (Exception e) {
                 logger.error("Get location error!", e);
             }
@@ -337,9 +341,15 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
      */
 
     @Override
-    public void itAssignAssets(String userId, String assetIds, String projectName,
-            String projectCode, String customerName, String customerCode, HttpServletRequest request)
+    public void itAssignAssets(AssignAssetCondition condition, HttpServletRequest request)
             throws ExceptionHelper {
+        
+        String userId = condition.getUserId();
+        String assetIds = condition.getAssetIds();
+        String projectName = condition.getProjectName();
+        String projectCode = condition.getProjectCode();
+        String customerCode = condition.getCustomerCode();
+        String customerName = condition.getCustomerName();
 
         if (null == assetIds || "".equals(assetIds)) {
             logger.error("The param assetIds is null when it/manager assign assets!");
@@ -375,7 +385,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             if (null != userId && !"".equals(userId)) {
 
                 userVo = remoteEmployeeService.getRemoteUserById(userId, request);
-                
+
                 if (null == userService.getUserByUserId(userId)) {
                     userService.saveUserAsUserVo(userVo);
                 }
@@ -398,8 +408,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 } else {
 
                     if (!AssetStatusOperateUtil.canITAssignAsset(asset)) {
-                        logger.error("asset status is invalid when IT assign assets, asset status is: "
-                                + asset.getStatus());
+                        logger
+                                .error("asset status is invalid when IT assign assets, asset status is: "
+                                        + asset.getStatus());
                         throw new ExceptionHelper(ErrorCodeUtil.ASSET_ASSIGN_STATUS_INVALID);
                     } else {
 
@@ -443,7 +454,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                         throw new ExceptionHelper(ErrorCodeUtil.DATA_ASSET_NOT_EXIST);
                     } else {
                         if (!AssetStatusOperateUtil.canITReturnToCustomer(asset)) {
-                            logger.error("asset status is invalid when IT return assets to customer");
+                            logger
+                                    .error("asset status is invalid when IT return assets to customer");
                             throw new ExceptionHelper(
                                     ErrorCodeUtil.ASSET_RETURNING_TO_CUSTOMER_STATUS_INVALID);
                         } else {
@@ -568,5 +580,34 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 }
             }
         }
+    }
+
+    @Override
+    public void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request,
+            HttpServletResponse response) {
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        // request.getSession().getServletContext().getRealPath("C:/AMS/upload");
+        //TODO create upload Utils
+        String fileName = file.getOriginalFilename();
+        File targetFile = new File(path, fileName);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        try {
+            file.transferTo(targetFile);
+        } catch (Exception e) {
+            logger.error("Upload image error!",e);
+        }
+        String pathName = request.getContextPath() + "/upload/" + fileName;
+        // File f=new File("C:/AMS/upload"+fileName);
+        StringBuilder sbmsg = new StringBuilder(request.getScheme());
+        sbmsg.append("://").append(request.getServerName()).append(":")
+                .append(request.getServerPort()).append(pathName);
+        try {
+            response.getWriter().print(sbmsg);
+        } catch (IOException e) {
+            logger.error("Get image error!",e);
+        }
+        
     }
 }

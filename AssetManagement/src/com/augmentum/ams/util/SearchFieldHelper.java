@@ -9,7 +9,7 @@ package com.augmentum.ams.util;
 public class SearchFieldHelper {
 
     public static String[] getAssetFields() {
-        String[] fieldNames = new String[16];
+        String[] fieldNames = new String[18];
         fieldNames[0] = "assetId";
         fieldNames[1] = "assetName";
         fieldNames[2] = "user.userName";
@@ -26,6 +26,8 @@ public class SearchFieldHelper {
         fieldNames[13] = "status";
         fieldNames[14] = "type";
         fieldNames[15] = "vendor";
+        fieldNames[16] = "location.site";
+        fieldNames[17] = "location.room";
         
         return fieldNames;
     }

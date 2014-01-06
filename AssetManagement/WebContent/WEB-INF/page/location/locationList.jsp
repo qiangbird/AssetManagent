@@ -1,147 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%
-request.setCharacterEncoding("UTF-8");
-response.setCharacterEncoding("UTF-8");
 String path = request.getContextPath();
-String basePath = request.getScheme() + "://"
-        + request.getServerName() + ":" + request.getServerPort()
-        + path + "/"; 
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <html>
 <head>
 <base href="<%=basePath%>">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Location Management</title>
-<link rel="stylesheet" type="text/css" href="css/asset/locationList.css">
-<link rel="stylesheet" type="text/css" href="css/common/filterBox.css">
-<!-- <link rel="stylesheet" type="text/css" href="css/common/dataList.css"> -->
-<link rel="stylesheet" type="text/css" href="css/common/search.css">
-<link rel="stylesheet" type="text/css" href="css/common/jquery-ui.css">
-<link rel="stylesheet" href="css/asset/locationManagement.css" type="text/css">
+<title>Asset List</title>
+<link rel="stylesheet" type="text/css" href="css/base/base.css">
+<link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
+<link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
+<link rel="stylesheet" type="text/css" href="searchList/css/dataList.css">
+<link rel="stylesheet" type="text/css" href="css/common/commonList.css">
+<link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
+<link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
+<link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
+<link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="css/asset/locationManagement.css">
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
-
-
-
-<script type="text/javascript">
-            $(document).ready(function(){
-                    
-                $("#dialog").dialog({
-                    autoOpen:false,//是否自动打开
-                    
-                   // buttons: {"确定":function(){$(this).dialog("close");},"取消":function(){$(this).dialog("close");}},//添加按钮
-                    closeOnEscape: true,//按ESC键时，是否可关闭dialog  true为可关闭，false为不可关闭
-                    draggable: true,//是否可拖动
-                    height: 300,
-                    width: 400,
-                    show: "scale",//打开dialog的效果
-                    hide: "scale",//关闭dialog的效果
-                    modal: true,//true表示为模式dialog
-                    position: "center",//显示dialog的位置
-                    resizable: true,//是否可调整大小
-                    title: "Add new locatoin",
-                    bgiframe: true
-                });
-                $("#addButton").click(function(){
-                    $("#dialog").dialog("open");
-                });
-                
-            })
-            
-        </script>
-
-
 </head>
 <body>
-<jsp:include page="../home/head.jsp"></jsp:include>
-<%-- <div id="listAll">
-<table>
-<tr>
-<th>Room</th>
-<th>Site</th>
-<th>Operation</th>
-</tr>
-<c:forEach items="${locationList }" var="location">
-<tr>
-<td>${location.site }</td>
-<td>${location.room }</td>
-<td>
-<span href="location/list/${location.id }/delete" class="aa" onclick="deleteRow('${location.id }', 'location/list/${location.id }/delete', this)">Delete</span>/
-<a href="location/${location.id }/delete">Delete</a>/
-<!-- <a id="aa">ddddd</a> -->
-<a href="location/${location.id }/editLocation">Edit</a>
-</td>
-</tr>
-</c:forEach>
-</table>
-<a href="location/create">create</a>
-</div> --%>
-
-
- <div class="locationListContent">
-     <div class="roleAddContent">
-        <span id="autoText">
-            <input id="employeeName" name="employeeName" type="text"/>
-        </span>
-        <span id="operateButton">
-            <input type="button" value="Add" id="addButton"></input>
-            <input type="button" value="Save" ng-click="saveEmployeeRole()" id="saveButton"></input>
-            <input type="button" value="Reset" ng-click="resetEmployeeRole()" id="resetButton"></input> 
-        </span>
-      </div>
-      <div class="rowHead">
-          <div id="showError"></div>
-          <span class="columnElement sequenceElement">Sequence</span>
-          <span class="columnElement employeeInfoElement">Site</span>
-          <span class="columnElement employeeInfoElement">Room</span>
-          <span class="columnElement operateElement">Operation</span>
-          <!-- <span class="columnElement operateElement">Update</span>
-          <span class="columnElement operateElement">Remove</span>    --> 
-     </div>
-     
-     <div>
-         <div class="employeeRoleInfo">
-     <c:forEach items="${locationList }" var="location" >
-     <div class="items">
-            <span class="columnData employeeInfoElement">111</span>
-            <span class="columnData employeeInfoElement">${location.site }</span>
-            <span class="columnData employeeInfoElement">${location.room }</span>
-          <!-- <span class="columnData sequenceElement">{{$index+1}}</span>
-          <span class="columnData employeeInfoElement">{{employeeRole.employeeId}}</span>
-          <span class="columnData employeeInfoElement">{{employeeRole.employeeName}}</span> -->
-          <span class="columnData employeeInfoElement">
-          <a href="location/edit/${location.id }"><!-- <div id="editLocation"></div> -->Edit</a>/
-          <div id="delelteLocation" onclick="deleteRow('${location.id }', 'location/delete/', this)"></div>
-          </span>
-          <!-- <span class="columnData operateCheckbox">
-              <label ng-class="{roleChecked:employeeRole.systemAdminRole,roleUnChecked:!employeeRole.systemAdminRole}" ng-click="changeSystemAdminRole($index)"></label>
-          </span>
-          <span class="columnData removeElement">
-              <span ng-click="removeEmployeeRole($index)"></span>
-          </span>     -->
-          </div>
-          </c:forEach>
-        </div>
-   </div>
-</div>
-
-
-
-
-       <table>
+	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id ="messageBar"></div>
+    <div class="content">
+    <!-- 核心入口 -->
+    	<div class="dataList">
+    		<div id="searchCondition">
+			<input type="hidden" id="keyword_content" value="">
+			<div id="searchInputTipDiv" class="inputTipDiv"><span id="label_KeywordPlaceholder"></span></div>
+			<input id="keyword" class="input_txt" name="" type="text" value="">
+			<div class="filterDiv filterDiv_common">
+				<button class="filterBtn filter_no_dropDown">
+				</button>
+				<span class="existedFlag"></span>
+				<div class="filterBox">
+					<div class="single_condition">
+						<div class="condition_title"><label id="label_SearchBy"></label></div>
+						<div class="condition_optional" id="searchFields">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllFields"></label></p>
+							<p><input type="checkBox" name="field" value="assetId"/><label id="label_AssetId"></label></p>
+							<p><input type="checkBox" name="field" value="assetName"/><label id="label_AssetName"></label></p>
+			                <p><input type="checkBox" name="field" value="user.userName"/><label id="label_User"></label></p>
+			                <p><input type="checkBox" name="field" value="project.projectName"/><label id="label_Project"></label></p>
+			                <p><input type="checkBox" name="field" value="customer.customerName"/><label id="label_Customer"></label></p>
+			                <p><input type="checkBox" name="field" value="poNo"/><label id="label_PoNo"></label></p>
+			                <p><input type="checkBox" name="field" value="barCode"/><label id="label_BarCode"></label></p>
+			        	</div>
+					</div>
+					<div class="single_condition">
+						<div class="condition_title"><label id="label_AssetType"></label></div>
+						<div class="condition_optional" id="assetType">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllTypes"></label></p>
+							<p><input type="checkBox" name="field" value="MACHINE" /><label id="label_Machine"></label></p>
+							<p><input type="checkBox" name="field" value="MONITOR" /><label id="label_Monitor"></label></p>
+							<p><input type="checkBox" name="field" value="DEVICE" /><label id="label_Device"></label></p>
+							<p><input type="checkBox" name="field" value="SOFTWARE" /><label id="label_Software"></label></p>
+							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label id="label_OtherAssets"></label></p>
+			            </div>
+			        </div>
+			        <div class="single_condition">
+						<div class="condition_title"><label id="label_AssetStatus"></label></div>
+						<div class="condition_optional" id="assetStatus">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllStatus"></label></p>
+							<p><input type="checkBox" name="field" value="AVAILABLE" /><label id="label_Available"></label></p>
+							<p><input type="checkBox" name="field" value="IN_USE" /><label id="label_InUse"></label></p>
+							<p><input type="checkBox" name="field" value="IDLE" /><label id="label_Idle"></label></p>
+							<p><input type="checkBox" name="field" value="RETURNED" /><label id="label_Returned"></label></p>
+			            </div>
+			        </div>
+			        <div class="single_condition">
+						<div class="condition_title"><label id="label_CheckInTime"></label></div>
+						<div class="condition_optional" id="checkInTime">
+							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
+                            <span class="dateLine">-</span>
+                            <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>
+			            </div>
+			        </div>
+			        <a class="reset" href="javascript:void(0);"><label id="label_SearchConditionReset"></label></a>
+				</div>
+			</div> 
+			<a id="searchButton" class="a_common_button green_button_thirty">
+	        	<span class="left"></span>
+	        	<span class="middle" ><label id="label_SearchButton"></label> </span>
+	        	<span class="right"></span>
+	        </a>
+	        <a id="addButton">Add</a>
+	    </div>
+    	</div>
+    </div>
+    
+    
+    <div id="dialog_location">
+     <table>
             <tr>
             
             <td valign="top">
                <form action="location/save" method="post" id="dialog">
-               <table>
+               <table  id="location_table">
         <div class="create-table">
             <div>
-                <tr><td>Site</td><td><input type="text" name="site" value="${location.site }"/><td/></tr>
+                <tr><td>Site</td><td><input type="text" name="site" id="site" value="${location.site }"/><td/></tr>
             </div>
             <div>
-                <tr><td>Room</td><td><input type="text" name="room" value="${location.room }" /></td></tr>
+                <tr><td>Room</td><td><input type="text" name="room" id="name" value="${location.room }" /></td></tr>
             </div>
         </div>
         
@@ -149,8 +115,8 @@ String basePath = request.getScheme() + "://"
             <%-- <c:if test="${!isCreatePage }">
                 <input type="hidden" name="_method" value="put" />
             </c:if> --%>
-            <input class="input-80-30" type="submit" value="submit" />
-            <input class="input-80-30" type="reset" value="Reset" />
+            <input class="input-80-30 submit-button" type="submit" value="submit" />
+            <input class="input-80-30 reset-button" type="reset" value="Reset" />
             </tr>
         </div>
         </table>
@@ -159,9 +125,25 @@ String basePath = request.getScheme() + "://"
             
             </tr>
         </table>
-
-
-
-<script type="text/javascript" src="js/location/location.js"></script>
+    </div>
+    
+     <div id="dialog-confirm" title="Operation confirm">
+   		<p id="confirm-message-body"></p>
+ 	</div>
+ 	<div id="dialog-warning" title="Warning">
+  		<p id="warning-message-body"></p>
+ 	</div>
+ 	
+    <input type="hidden" id="categoryFlag" value="1"/>
+    <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
+    <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
+<script type="text/javascript" src="js/common/common.js"></script>
+<script type="text/javascript" src="js/search/searchCommon.js"></script>
+<script type="text/javascript" src="searchList/js/DataList.js"></script>
+<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
+<script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
+<script type="text/javascript" src="js/location/location.js"></script>
+<script type="text/javascript" src="dropDownList/dropDownList.js"></script>
+<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 </html>

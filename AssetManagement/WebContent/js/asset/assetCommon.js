@@ -1,5 +1,10 @@
 ﻿$(document).ready(function(){
 //about i18n
+	// for warning or confirm prop information
+//	function i18nProp(message) {
+//		return $.i18n.prop(message);
+//	};
+	
    function AddI18n(message) {
 	      $("#label_" + message).html(msg(message));
    }
@@ -83,10 +88,7 @@
    success : function(data) {
        console.log(data);
        location.reload();
-   },
-   error : function() {
-       alert("error");
-           }
+   }
        });
    });
 
@@ -99,10 +101,7 @@
    success : function(data) {
        console.log(data);
        location.reload();
-   },
-   error : function() {
-       alert("error");
-           }
+   }
        });
    });
    

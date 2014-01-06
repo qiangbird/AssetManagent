@@ -78,6 +78,7 @@ $(document).ready(function() {
            AddI18n('Idle');
            AddI18n('Returned');
            AddI18n('CheckInTime');
+           AddI18n('Operation_Warning');
         }
      });
      
@@ -217,10 +218,10 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg("You select none asset");
+				ShowMsg(i18nProp('None_Select_Asset'));
 				return;
 			}else{
-				ShowMsg("Do this operation?",function(yes){
+				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
 					 if (yes) {
 						 $.ajax({
 							  type: 'POST',
@@ -242,7 +243,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg("Line:"+line+" have illegle status");
+			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
 			return;
 		}
 	});
@@ -266,11 +267,11 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg("You select none asset");
+				ShowMsg(i18nProp('None_Select_Asset'));
 				return;
 			}else{
 				//do i18n for all show message
-				ShowMsg("Do this operation?",function(yes){
+				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
 					 if (yes) {
 						 alert($("#customerCode").val());
 						 alert(assetsId);
@@ -295,7 +296,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg("Line:"+line+" have illegle status");
+			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
 			return;
 		}
 		
@@ -319,7 +320,7 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assignIds == ""){
-				ShowMsg("You select none asset");
+				ShowMsg(i18nProp('None_Select_Asset'));
 				return;
 			}else{
 			$("#dialog").dialog("open");
@@ -330,50 +331,13 @@ $(document).ready(function(){
 			  });
 			}
 		}else{
-			ShowMsg("Line:"+line+" have illegle status");
+			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
 			return;
 		}
 		
 		
 	});
-	
-	// select employee as project
-/*	$("#user").click(function(){
-		projectCode = $("#DropList").val();
-		if(projectCode != ""){
-	      $.ajax({
-	          type : 'GET',
-	          contentType : 'application/json',
-	          url : 'user/getEmployeeAsProject',
-	          dataType : 'json',
-	          data:{projectCode:projectCode},
-	          success : function(data) {
-	             console.log(data);
-	             length = data.employeeInfo.length;
-	             employeeName = [];
-	             employeeValue = [];
-	             for ( var i = 0; i < length; i++) {
-	                employeeName[i] = data.employeeInfo[i].label;
-	                employeeValue[i] = data.employeeInfo[i].value;
-	             }
-	             userArray = employeeName;
-	             $("#assertUser").autocomplete(
-	                         {
-	                       	 minLength: 0,
-	                            source : employeeName,
-	                         });
-	             
-	          },
-	          error : function() {
-	             alert("error");
-	          }
-	               });
-		}
-	});*/
-	
-	
-	
-	
+
 	//select all employee below customer
 	$("#user").click(function(){
 		customerCode = $("#customerCode").val();
@@ -399,13 +363,8 @@ $(document).ready(function(){
                        	 minLength: 0,
                          source : employeeName,
                          select : function(e,ui) {
-                        	 console.log(ui.item.label);
-                        	 console.log(employeeCode);
-                        	 console.log(getIndexInArr(employeeName,ui.item.label));
-                        	 console.log(employeeCode[getIndexInArr(employeeName,ui.item.label)]);
-                        	 
  	                       $("#assetUserCode").val(employeeCode[getIndexInArr(employeeName,ui.item.label)]);
- 	                     },
+ 	                     }
                          
                          });
 	          },
@@ -413,14 +372,11 @@ $(document).ready(function(){
 	             alert("error");
 	          }
 	      });
-//	      $("#userCode").val(userCode);
 	});
 	
 	$(".submit-button").click(function(){
-//		alert(assignIds.toString());
 		$("#ids").val(assignIds.toString());
-	})
-	
+	});
 	$("#returnToIT").click(function(){
 		assetsId=new Array();
 		flag=true;
@@ -438,38 +394,43 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg("You select none asset");
+				ShowMsg(i18nProp('None_Select_Asset'));
 				return;
 			}else{
-				ShowMsg("Do this operation?",function(yes){
-					 if (yes) {
-						 $.ajax({
-							  type: 'POST',
-							  url: "customerAsset/changeStatus/"+"RETURNING_TO_IT",
-							  data: {
-								  _method: 'PUT',
-								  customerCode:$("#customerCode").val(),
-								  assetsId:assetsId.toString()
-								  },
-							  dataType : 'json',
-							  success: function(data){
-								  dataList.search();
-							  }
-							});
-		                }else{
-		                	return;
-		                }
+				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				 if (yes) {
+					 $.ajax({
+						  type: 'POST',
+						  url: "customerAsset/changeStatus/"+"RETURNING_TO_IT",
+						  data: {
+							  _method: 'PUT',
+							  customerCode:$("#customerCode").val(),
+							  assetsId:assetsId.toString()
+							  },
+						  dataType : 'json',
+						  success: function(data){
+							  dataList.search();
+						  }
+						});
+	                }else{
+	                	return;
+	                }
 				});
 			}
 		}else{
-			ShowMsg("Line:"+line+" have illegle status");
+			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
 			return;
 		}
-		
-		
 	});
 });
 
+//function i18nProp(message,line) {
+//	if(line==""||line==null){
+//		return $.i18n.prop(message);
+//	}else{
+//		return $.i18n.prop(message,line.substr(0,line.length-1));
+//	}
+//}
 function checkInArr(Arr, ele) {
     console.log(Arr);
     for ( var i = 0; i < Arr.length; i++) {

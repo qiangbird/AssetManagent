@@ -16,7 +16,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
-<jsp:include page="../home/head.jsp" />
+<jsp:include page="../common/header.jsp" />
  <div class="roleListContent">
      <div class="roleAddContent">
      	<div class="customerName">
@@ -69,6 +69,7 @@
 	  
 	  <jsp:include page="userInfoTips.jsp" />
 </div>
+<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/user/userInfoTips.js"></script>
 <script type="text/javascript" src="js/user/specialRoleList.js"></script>
 <script type="text/javascript" src="js/common/autocomplete.js"></script>

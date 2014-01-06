@@ -1,11 +1,11 @@
 package com.augmentum.ams.web.controller.home;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -14,7 +14,9 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.model.asset.Customer;
@@ -28,6 +30,7 @@ import com.augmentum.ams.web.vo.user.UserVo;
 @Controller("homeController")
 @RequestMapping(value = "/home")
 public class HomeController extends BaseController {
+    
     @Autowired
     private RemoteCustomerService remoteCustomerService;
     @Autowired
@@ -39,58 +42,91 @@ public class HomeController extends BaseController {
 
     @RequestMapping("/index")
     public String index(HttpServletRequest request) {
+        
+        logger.info("index() start... ");
+        
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
         UserVo userVo = (UserVo) session.getAttribute("userVo");
-        System.out.println(userVo.toString());
-        List<CustomerVo> list = null;
-        try {
-            list = remoteCustomerService.getCustomerByEmployeeId(userVo.getEmployeeId(), request);
-        } catch (DataException e) {
-            logger.error("Get customer by employeeId[ " + userVo.getEmployeeId()
-                    + " ] from IAP error", e);
+        
+        logger.info("userVo in index() of homeController" + userVo.toString()); 
+        
+        // Avoid repeat get data from IAP each time when refresh the page.
+        if(null == session.getAttribute("customerList")){
+            logger.info(userVo.getEmployeeId() + " has already sign in"); 
+            List<CustomerVo> list = null;
+            
+            try {
+                list = remoteCustomerService.getCustomerByEmployeeId(userVo.getEmployeeId(), request);
+            } catch (DataException e) {
+                logger.error("Get customer by employeeId[ " + userVo.getEmployeeId()
+                        + " ] from IAP error", e);
+            }
+            // Get the list of customer shown in subMenu
+            List<Customer> customerVisibleList = customerAssetService.findVisibleCustomerList(userVo,
+                    list);
+            String userRole = userService.getUserRole(userVo);
+            session.setAttribute("userRole",userRole);
+            session.setAttribute("customerList", customerVisibleList);
+            
+            getLocaleLanguage(request);
+            
+            logger.info("index() start... ");
         }
-        // get the list of customer shown in subMenu
-        List<Customer> customerVisibleList = customerAssetService.findVisibleCustomerList(userVo,
-                list);
-        String userRole = userService.getUserRole(userVo);
-        session.setAttribute("userRole",userRole);
-        session.setAttribute("customerList", customerVisibleList);
-        return "home/head";
+        
+        return "common/header";
     }
 
-    @RequestMapping(value = "/getLanguage")
-    @ResponseBody
-    public JSONObject getLanguage(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        JSONObject jsonObject = new JSONObject();
-        String language = "";
-        if (null == session.getAttribute("i18n")) {
-            language = "en";
-            session.setAttribute("i18n", "en");
+    private void getLocaleLanguage(HttpServletRequest request) {
+        
+        logger.info("getLocaleLanguage() start... ");
+        
+        //Get locale of browser
+        String locale = request.getLocale().getLanguage();
+        setLocaleToSession(request, locale);
+        
+        logger.info("getLocaleLanguage() end... ");
+    }
+    
+    @RequestMapping(value = "/changeLocale")
+    public void changeLocale(@RequestParam("locale") String newLocale, HttpServletRequest request,
+            HttpServletResponse response){
+        
+        setLocaleToSession(request, newLocale);
+    }
+    
+    private void setLocaleToSession(HttpServletRequest request, String newLocale){
+        
+        logger.info("setLocaleToSession() start... ");
+        logger.info("newLocale: " + newLocale);
+        logger.info("SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME: " + 
+        request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME));
+        
+        Locale locale =  null;
+        //Check the locale
+        if("en".equals(newLocale)){
+            locale = new Locale("en", "US");
+            request.getSession().setAttribute("localeLanguage", locale);
         } else {
-            language = (String) session.getAttribute("i18n");
+            locale = new Locale("zh", "CN");
+            request.getSession().setAttribute("localeLanguage", locale);
         }
-        jsonObject.put("i18n", language);
-        return jsonObject;
-    }
-
-    @RequestMapping(value = "/changeLanguage")
-    @ResponseBody
-    public void changeLanguage(HttpServletRequest request, String newlanguage) {
-        HttpSession session = request.getSession();
-        session.setAttribute("i18n", newlanguage);
-
+        logger.info("setLocaleToSession() end... ");
     }
 
     @RequestMapping("/getTimeOffset")
     @ResponseBody
     public String getTimeOffset(String timeOffset, HttpSession session) {
 
+        logger.info("getTimeOffset() start... ");
+        logger.info("timeOffset: " + timeOffset);
+        
         if (session.getAttribute("timeOffset") == null) {
             session.setAttribute("timeOffset", timeOffset);
         }
+        
         logger.info("client browser timeOffset: " + session.getAttribute("timeOffset"));
+        logger.info("getTimeOffset() end... ");
         return null;
     }
 }

@@ -3,7 +3,10 @@ package com.augmentum.ams.service.asset;
 import java.text.ParseException;
 import java.util.List;
 
+import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Location;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 public interface LocationService {
     /**
@@ -74,4 +77,21 @@ public interface LocationService {
      * @return
      */
     Location getLocationById(String id);
+    /**
+     * 
+     * @description TODO
+     * @author Jay.He
+     * @time Jan 4, 2014 5:34:45 PM
+     * @param searchCondition
+     * @return
+     */
+    Page<Location> findAllLocationBySearchCondition(SearchCondition searchCondition);
+    /**
+     * 
+     * @description TODO
+     * @author Jay.He
+     * @time Jan 6, 2014 8:43:20 AM
+     * @param classes
+     */
+    void createIndexForLocation(Class<Location>... classes);
 }

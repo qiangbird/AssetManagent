@@ -29,5 +29,6 @@
 	  	 <span id="managerNameTips" class="tipsContent"></span>
 	  	</div>
 	  </div>
+	  <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
 </html>

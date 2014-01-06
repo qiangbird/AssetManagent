@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import net.sf.json.JSONArray;
 
+import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 
@@ -70,6 +71,37 @@ public class SearchCommonUtil {
             }
             arrays.add(array);
         }
+        return arrays;
+    }
+    
+    
+    /**
+     * 
+     * @description TODO
+     * @author Jay.He
+     * @time Jan 3, 2014 4:04:07 PM
+     * @param assetVoList
+     * @param userCustomColumnList
+     * @return
+     */
+    public static JSONArray formatLocationListTOJSONArray(List<Location> locationList) {
+        JSONArray arrays = new JSONArray();
+
+        for (Location location : locationList) {
+            JSONArray array = new JSONArray();
+            array.add(location.getId());
+                String value = "";
+                value = location.getSite();
+                array.add(value);
+                value = location.getRoom();
+//                value = "<a class='location_room_" + location.getRoom()
+//                      + "' style='color: #418FB5'>"
+//                      + "</a>";
+                array.add(value);
+                value = "<div class='editLocationIcon'></div>/<div class='deleteLocationIcon'></div>";
+                array.add(value);
+                  arrays.add(array);
+              }
         return arrays;
     }
 }

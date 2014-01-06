@@ -4,12 +4,16 @@ import java.text.ParseException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.web.vo.asset.AssetVo;
+import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.system.Page;
 
 public interface AssetService {
@@ -130,16 +134,10 @@ public interface AssetService {
 
     /**
      * @author Geoffrey.Zhao
-     * @param userId
-     * @param assetIds
-     * @param projectName
-     * @param projectCode
-     * @param customerName
-     * @param customerCode
+     * @param condition
      * @throws ExceptionHelper
      */
-    void itAssignAssets(String userId, String assetIds, String projectName, String projectCode,
-            String customerName, String customerCode, HttpServletRequest request)
+    void itAssignAssets(AssignAssetCondition condition, HttpServletRequest request)
             throws ExceptionHelper;
 
     /**
@@ -147,28 +145,36 @@ public interface AssetService {
      * @param assetIds
      */
     void returnAssetsToCustomer(String assetIds) throws ExceptionHelper;
-    
+
     /**
      * @author Geoffrey.Zhao
      * @param assetIds
      */
     void changeAssetsToFixed(String assetIds) throws ExceptionHelper;
-    
+
     /**
      * @author Geoffrey.Zhao
      * @param assetIds
      */
     void changeAssetsToNonFixed(String assetIds) throws ExceptionHelper;
-    
+
     /**
      * @author Geoffrey.Zhao
      * @param assetIds
      */
-    void addAssetsToAuditForSelected (String assetIds);
-    
+    void addAssetsToAuditForSelected(String assetIds);
+
     /**
      * @author Geoffrey.Zhao
      * @param page
      */
-    void addAssetsToAuditForSearchResult (Page<Asset> page);
+    void addAssetsToAuditForSearchResult(Page<Asset> page);
+    /**
+     * @author Jay.He
+     * @time Jan 3, 2014 9:54:09 AM
+     * @param file
+     * @param request
+     * @param response
+     */
+    void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request, HttpServletResponse response);
 }

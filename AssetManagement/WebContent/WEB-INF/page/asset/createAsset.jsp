@@ -22,7 +22,7 @@ String basePath = request.getScheme() + "://"
 
 </head>
 <body>
-<jsp:include page="../home/head.jsp"></jsp:include>
+<jsp:include page="../common/header.jsp"></jsp:include>
 <div id="main">
    <div class="home">
         <span class="root-back"><a href="#"><label id="label_Home"></a></span>
@@ -139,7 +139,7 @@ String basePath = request.getScheme() + "://"
        </div>
    <div class="common-asset-input-right asset-input-panel">
    <p>
-           <!-- <label><label id="label_AssertPhoto"></label></label> -->
+           <!-- <label><label id="label_AssetPhoto"></label></label> -->
            <form:hidden path="photoPath" readonly="true"
                placeholder="Please select a photo" class="truePhotoName"/>
    
@@ -170,13 +170,13 @@ String basePath = request.getScheme() + "://"
                 <form:hidden path="user.userId" id="userId"/>
         </p>
         <p>
-            <label><label id="label_AssertManufacture"></label></label>
+            <label><label id="label_AssetManufacture"></label></label>
             <form:input path="manufacturer" maxlength="36" cssClass="l-text"
                 placeholder="Please input manufacturer" />
         </p>
    
        <p>
-          <label><label id="label_AssertWarranty"></label></label>
+          <label><label id="label_AssetWarranty"></label></label>
            <form:input path="warrantyTime" id="assetWarranty"
                cssClass="l-date" readonly="true"
                placeholder="Please select assetWarranty" />
@@ -345,7 +345,7 @@ String basePath = request.getScheme() + "://"
    </form:form>
 <input type="hidden" id="localeCode" name="localeCode" value="${sessionScope.i18n }">
 </div>
-
+<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
 <script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>

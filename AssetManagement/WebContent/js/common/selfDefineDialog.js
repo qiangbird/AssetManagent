@@ -12,6 +12,7 @@ function ShowMsg(msg, callback) {
 };
 
 $(function() {
+//	var No = $.i18n.prop('Cancel');
 	//confirm  dialog
 	$("#dialog-confirm").dialog({
 		autoOpen : false,
@@ -21,6 +22,7 @@ $(function() {
 		draggable: false,
 		position : ["center",130],
 		modal : true,
+		title : 'Confirm',
 		buttons : {
 			"Yes" : function() {
 				$(this).dialog("close");
@@ -38,6 +40,8 @@ $(function() {
 		height : 170,
 		width : 390,
 		modal : true,
+//		title : $.i18n.prop('Operation_Warning'),
+		title : 'Warning',
 		draggable: false,
 		resizable : false,
 		position : ["center",130],
@@ -48,3 +52,11 @@ $(function() {
 		}
 	});
   });
+
+function i18nProp(message,line) {
+	if(line==""||line==null){
+		return $.i18n.prop(message);
+	}else{
+		return $.i18n.prop(message,line.substr(0,line.length-1));
+	}
+}

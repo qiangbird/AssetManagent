@@ -3,6 +3,7 @@
  */
 package com.augmentum.ams.service.search.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -13,7 +14,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
@@ -90,7 +90,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
 
         // if keyword is null or "", search condition is "*", it will search all
         // the value based on some one field
-        if (null == keyWord || "".equals(keyWord)) {
+        if (StringUtils.isBlank(keyWord)) {
             Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
             query.add(defaultQuery, Occur.MUST);
         } else {
@@ -100,32 +100,27 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             // judge if keyword contains space, if yes, search keyword as a
             // sentence
             if (-1 != keyWord.indexOf(" ")) {
-                String[] sentenceFields = SearchFieldHelper.getSentenceFields();
-                query = getSentenceQuery(qb, sentenceFields, keyWord);
-            } else {
-
-                // if keyword doesn't contain space, search keyword as tokenized
-                // index string and prefix query for keyword
-                BooleanQuery bq = new BooleanQuery();
-
-                Query parseQuery = null;
-
-                try {
-                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord,
-                            fieldNames, clauses, new IKAnalyzer());
-                } catch (ParseException e) {
-                    // TODO Auto-generated catch block
-                    logger.error("parse keyword error", e);
-                }
-                bq.add(parseQuery, Occur.SHOULD);
-
-                for (int i = 0; i < fieldNames.length; i++) {
-                    Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
-                    bq.add(keyWordPrefixQuery, Occur.SHOULD);
-                }
-
-                query.add(bq, Occur.MUST);
+                query = getSentenceQuery(qb, fieldNames, keyWord);
             }
+            BooleanQuery bq = new BooleanQuery();
+
+            Query parseQuery = null;
+
+            try {
+                parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord, fieldNames,
+                        clauses, new IKAnalyzer());
+            } catch (ParseException e) {
+                logger.error("parse keyword error", e);
+            }
+            bq.add(parseQuery, Occur.SHOULD);
+
+            for (int i = 0; i < fieldNames.length; i++) {
+
+                Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
+                bq.add(keyWordPrefixQuery, Occur.SHOULD);
+            }
+
+            query.add(bq, Occur.MUST);
         }
 
         // create filter based on advanced search condition, it used for further
@@ -271,8 +266,8 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         try {
             baseHibernateDao.createIndex(classes);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error(e);
         }
     }
+    
 }

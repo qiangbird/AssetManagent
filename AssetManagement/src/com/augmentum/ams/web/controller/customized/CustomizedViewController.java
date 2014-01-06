@@ -1,6 +1,5 @@
 package com.augmentum.ams.web.controller.customized;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.json.JSONArray;
@@ -35,17 +34,21 @@ public class CustomizedViewController extends BaseController {
 
     @RequestMapping(value = "/goToNewCustomizedView")
     public String goToNewCustomizedView() {
-        return "customize/customizedView/newCustomizedView";
+        return "customized/customizedView/createCustomizedView";
     }
 
     @RequestMapping(value = "/newCustomizedView", method = RequestMethod.POST)
     public ModelAndView saveCustomizedViewAndItem(CustomizedViewVo customizedViewVo)
             throws ParameterException, DataException {
 
-        RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
-        ModelAndView modelAndView = new ModelAndView(redirectView);
-
-        customizedViewItemService.saveCustomizedViewItem(customizedViewVo);
+    	RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
+    	ModelAndView modelAndView = new ModelAndView(redirectView);
+    	
+    	customizedViewVo.setCreatorId(getUserIdByShiro());
+    	customizedViewVo.setCreatorName(getUserNameByShiro());
+    	
+    	customizedViewItemService.saveCustomizedViewItem(customizedViewVo);
+    	
         return modelAndView;
     }
 
@@ -76,7 +79,7 @@ public class CustomizedViewController extends BaseController {
     public ModelAndView findCustomizedViewByUserForManagement() {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customize/customizedView/customizedViewList");
+        modelAndView.setViewName("customized/customizedView/customizedViewList");
         String creatorId = getUserIdByShiro();
 
         List<CustomizedView> customizedViews = customizedViewService
@@ -102,7 +105,7 @@ public class CustomizedViewController extends BaseController {
     public ModelAndView getCustomizedViewDetail(String customizedViewId) throws BaseException {
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("customize/customizedView/newCustomizedView");
+        modelAndView.setViewName("customized/customizedView/createCustomizedView");
         CustomizedView customizedView = customizedViewService
                 .getCustomizedViewById(customizedViewId);
 

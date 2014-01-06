@@ -15,8 +15,9 @@ public class FormatUtil {
 
     public static String formatKeyword(String keyword) {
 
+        keyword = keyword.trim().toLowerCase();
         String flags[] = { "\\", "+", "-", "&", "|", "!", "(", ")", "{", "}", "[", "]", "~", "^",
-                ":", "\"", "AND", "OR", "NOT" };
+                ":", "\"", "AND", "OR", "NOT", ".", ",", "_", "/" };
         for (String flag : flags) {
             keyword = keyword.replace(flag, "\\" + flag);
         }

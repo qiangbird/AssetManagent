@@ -22,7 +22,7 @@ String basePath = request.getScheme() + "://"
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
 </head>
 <body>
-<jsp:include page="../home/head.jsp"></jsp:include>
+<jsp:include page="../common/header.jsp"></jsp:include>
 	<form action="location/save" method="post">
 		<div class="create-table">
 			<div>
@@ -39,6 +39,6 @@ String basePath = request.getScheme() + "://"
 			<input class="input-80-30" type="submit" value="submit" />
 		</div>
 	</form>
-
+<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
 </html>

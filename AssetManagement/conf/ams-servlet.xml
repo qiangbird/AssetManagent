@@ -42,30 +42,18 @@
          <property name="maxInMemorySize" value="4096"></property>
     </bean>
  
-<!--  <bean id="urlMapping" 
-  class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">        
- <property name="mappings">            
-  <props>                
-  <prop key="/upload.htm">uploadController</prop>            
-  </props>        
- </property>    
- </bean>
-     <bean id="uploadController" class="FileUploadController">
-      <property name="commandClass"><value>FileUploadBean</value></property>
-      <property name="uploadDir"><value>E:/</value></property>
-      <property name="formView"><value>fail</value></property>
-  <property name="successView"><value>confirmation</value></property>
-</bean>    -->
-
-
-<!-- support i18n -->
+	<!-- support i18n -->
    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-        <property name="basename">
-            <value>resources</value>
-        </property>
+        <property name="basename" value="message"></property>
     </bean>
-    <bean id="localeResolver"  
-        class="org.springframework.web.servlet.i18n.SessionLocaleResolver">  
-    </bean>
+    <!-- Get locale --> 
+   <bean id="localeResolver"  class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/> 
+   <mvc:interceptors>  
+        <!-- Changes the locale when a 'locale' request parameter is sent; e.g. /?locale=de -->   
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />   
+   </mvc:interceptors>
+<!-- support Restful -->
+<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>   
+<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>  
 
 </beans>

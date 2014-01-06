@@ -38,7 +38,7 @@ public class User extends BaseModel {
 	 * The name of a user, e.g: Grylls Xu
 	 */
 	@Column(name = "user_name", nullable = false, length = 32)
-	@Field(name = "userName", index = Index.UN_TOKENIZED, store = Store.YES)
+	@Field(name = "userName", index = Index.TOKENIZED, store = Store.YES)
 	private String userName;
 
 	/**

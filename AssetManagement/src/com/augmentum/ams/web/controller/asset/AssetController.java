@@ -1,7 +1,5 @@
 package com.augmentum.ams.web.controller.asset;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,6 +47,7 @@ import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.AssetVo;
+import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.SiteVo;
 import com.augmentum.ams.web.vo.system.Page;
@@ -184,7 +182,7 @@ public class AssetController extends BaseController {
                 logger.error("Number format error!", e);
             }
         }
-        modelAndView.setViewName("redirect:/asset/redirectSearchAsset");
+        modelAndView.setViewName("redirect:/asset/allAssets");
         return modelAndView;
     }
 
@@ -241,22 +239,25 @@ public class AssetController extends BaseController {
         }
         assetService.setAssetCustomer(asset, custCode, cust);
     }
-
-    @RequestMapping(value = "/redirectSearchAsset")
-    public String redirect() {
-        return "asset/searchAssetList";
+    
+    @RequestMapping(value="/allAssets")
+    public String redirectPage() {
+        return "asset/allAssetsList";
     }
 
     // TODO get asset data list
-    @RequestMapping(value = "/searchAsset")
+    @RequestMapping(value = "/allAssetsList", method = RequestMethod.GET)
     public ModelAndView findAllAssetsBySearchCondition(SearchCondition searchCondition,
             HttpSession session) throws BaseException {
 
+        if (null == searchCondition) {
+            searchCondition = new SearchCondition();
+        }
         Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(searchCondition);
         pageForAudit = page;
         String clientTimeOffset = (String) session.getAttribute("timeOffset");
-        List<AssetListVo> list = FormatEntityListToEntityVoList.formatAssetListToAssetVoList(
-                page.getResult(), clientTimeOffset);
+        List<AssetListVo> list = FormatEntityListToEntityVoList.formatAssetListToAssetVoList(page
+                .getResult(), clientTimeOffset);
         List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                 .findUserCustomColumns("asset", getUserIdByShiro());
         JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList);
@@ -280,36 +281,8 @@ public class AssetController extends BaseController {
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
     public void uploadFile(@RequestParam(value = "file", required = false) MultipartFile file,
             AssetVo assetVo, HttpServletRequest request, HttpServletResponse response) {
-        aaaa(file, request, response);
+        assetService.uploadAndDisplayImage(file, request,response);
     }
-
-    private void aaaa(MultipartFile file, HttpServletRequest request, HttpServletResponse response) {
-        String path = request.getSession().getServletContext().getRealPath("upload");
-        // String path =
-        // request.getSession().getServletContext().getRealPath("C:/AMS/upload");
-        //TODO create upload Utils
-        String fileName = file.getOriginalFilename();
-        File targetFile = new File(path, fileName);
-        if (!targetFile.exists()) {
-            targetFile.mkdirs();
-        }
-        try {
-            file.transferTo(targetFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String pathName = request.getContextPath() + "/upload/" + fileName;
-        // File f=new File("C:/AMS/upload"+fileName);
-        StringBuilder sbmsg = new StringBuilder(request.getScheme());
-        sbmsg.append("://").append(request.getServerName()).append(":")
-                .append(request.getServerPort()).append(pathName);
-        try {
-            response.getWriter().print(sbmsg);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @RequestMapping("/getCustomerInfo")
     public ModelAndView getCustomerInfo(HttpServletRequest request) throws DataException {
         ModelAndView modelAndView = new ModelAndView();
@@ -355,7 +328,7 @@ public class AssetController extends BaseController {
         // get self-defined properties
         getSelfDefinedProperties(asset, modelAndView, "view");
         modelAndView.addObject("asset", assetVo);
-        modelAndView.setViewName("asset/viewAsset");
+        modelAndView.setViewName("asset/assetDetail");
         return modelAndView;
     }
 
@@ -380,7 +353,7 @@ public class AssetController extends BaseController {
         } catch (Exception e) {
             logger.error("Update asset error!", e);
         }
-        modelAndView.setViewName("redirect:/asset/redirectSearchAsset");
+        modelAndView.setViewName("redirect:/asset/allAssets");
         return modelAndView;
     }
 
@@ -403,18 +376,16 @@ public class AssetController extends BaseController {
             ParseException {
         ModelAndView modelAndView = new ModelAndView();
         assetService.deleteAssetById(id);
-        modelAndView.setViewName("redirect:/asset/redirectSearchAsset");
+        modelAndView.setViewName("redirect:/asset/allAssets");
         return modelAndView;
     }
 
     @RequestMapping(value = "/itAssignAssets")
     @ResponseBody
-    public String itAssignAssets(String userId, String assetIds, String projectName,
-            String projectCode, String customerName, String customerCode, HttpServletRequest request) {
+    public String itAssignAssets(AssignAssetCondition condition, HttpServletRequest request) {
 
         try {
-            assetService.itAssignAssets(userId, assetIds, projectName, projectCode, customerName,
-                    customerCode, request);
+            assetService.itAssignAssets(condition, request);
         } catch (ExceptionHelper e) {
             logger.info(e);
         }
@@ -461,14 +432,14 @@ public class AssetController extends BaseController {
     public String addAssetsToAuditForSearchResult() {
 
         assetService.addAssetsToAuditForSearchResult(pageForAudit);
-        return "redirect:/auditFile/redirectAuditList";
+        return "redirect:/auditFile/inventoryList";
     }
 
     @RequestMapping(value = "/addAssetsToAuditForSelected")
     public String addAssetsToAuditForSelected(String assetIds) {
 
         assetService.addAssetsToAuditForSelected(assetIds);
-        return "redirect:/auditFile/redirectAuditList";
+        return "redirect:/auditFile/inventoryList";
     }
 
 }

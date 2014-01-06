@@ -78,8 +78,7 @@ public class CustomerAssetController extends BaseController {
                 request);
         request.setAttribute("customer", customer);
         request.setAttribute("projectList", projectList);
-        System.out.println(customerCode);
-        return "asset/listCustomerAsset";
+        return "asset/customerAssetList";
     }
 
     @RequestMapping(value = "assginAssets", method = RequestMethod.PUT)
@@ -96,7 +95,7 @@ public class CustomerAssetController extends BaseController {
 
     @RequestMapping(value = "changeStatus/{status}", method = RequestMethod.PUT)
     @ResponseBody
-    public String returnToIT(@PathVariable String status, String assetsId, String customerCode) {
+    public String returnToOperation(@PathVariable String status, String assetsId, String customerCode) {
         customerAssetService.returnCustomerAsset(status, assetsId);
         return null;
     }

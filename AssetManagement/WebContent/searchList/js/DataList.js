@@ -244,9 +244,6 @@
                     if($self.opts.updateShowField.url && $self.opts.updateShowField.callback){
                         var customization = [];
                         var showDefault = [];
-                     // Transfer array to string
-                        var customizationStr = "";
-                        var showDefaultStr = "";
                      // Get all checkbox value and related headerId value
                         $('.dataList-a-field-checkbox,.dataList-a-field-checkbox-active-disable', $self.$data).each(function(i){
                             if(!$(this).hasClass('dataList-a-field-checkbox_all')) {
@@ -258,17 +255,13 @@
                                 }
                             }
                         });
-                        for (var i = 0; i < customization.length; i++) {
-                            customizationStr = (customizationStr + customization[i]) + (((i + 1) == customization.length) ? '':','); 
-                            showDefaultStr = (showDefaultStr + showDefault[i]) + (((i + 1) == showDefault.length) ? '':','); 
-                        }
                         $.ajax({
                             type : 'POST',
                             url : $self.opts.updateShowField.url,
                             dataType : 'json',
                             data : {
-                                'customization' : customizationStr,
-                                'showDefault' : showDefaultStr
+                                'customization' : customization.toString(),
+                                'showDefault' : showDefault.toString()
                             },
                             success : function(data){
                                 $self.opts.updateShowField.callback(data);
@@ -551,7 +544,8 @@
                 $('.dataList-div-sort-style').removeClass('dataList-div-sort-style');
             }
             for(var key in criteria){
-                data[this.opts.backendFieldName + '.' + key] = criteria[key];
+//                data[this.opts.backendFieldName + '.' + key] = criteria[key];
+                data[key] = criteria[key];
             }
             $('.dataList-input-go',$self.$data).removeClass('dataList-error').val('');
             $.ajax({
@@ -559,19 +553,7 @@
                 contentType : 'application/json',
                 dataType : 'json',
                 url: this.opts.url,
-                data : {
-                        pageNum:criteria.pageNum,
-                        pageSize:criteria.pageSize,
-                        sortName:criteria.sortName,
-                        sortSign:criteria.sortSign,
-                        keyWord:criteria.keyWord,
-                        searchFields:criteria.searchFields,
-                        assetType:criteria.assetType,
-                        assetStatus:criteria.assetStatus,
-                        fromTime:criteria.fromTime,
-                        toTime:criteria.toTime,
-                        customizedViewId:criteria.customizedViewId
-                        },
+                data : data,
                 error: function(){
                     alert("search failed");
                 },

@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -30,8 +31,10 @@ public class PropertyParser {
         URL url = Thread.currentThread().getContextClassLoader().getResource("ams.properties");
         try {
             if(null!=url){
-            fis = new FileInputStream(url.getPath()); 
-            p.load(fis);
+                String replacePath = url.getPath().replaceFirst("/", "");
+                String path = java.net.URLDecoder.decode(replacePath, "utf-8");
+                fis = new FileInputStream(path); 
+                p.load(fis);
             }
         } catch (FileNotFoundException e) {
             logger.error(e);
@@ -52,9 +55,16 @@ public class PropertyParser {
         OutputStream fos = null;
     	Properties p=new Properties();
     	URL url = Thread.currentThread().getContextClassLoader().getResource("ams.properties");
-    	String 	file=url.getPath();
-    	if(null!=file){
-    	File file3 = new File(file);
+    	String replacePath = url.getPath().replaceFirst("/", "");
+    	String path = null;
+    	
+        try {
+            path = java.net.URLDecoder.decode(replacePath, "utf-8");
+        } catch (UnsupportedEncodingException e1) {
+            logger.error("Decode path of file ams.properties fail!", e1);
+        }
+    	if(null!=path){
+    	File file3 = new File(path);
     	try {
             fis = new FileInputStream(file3);
             p.load(fis);

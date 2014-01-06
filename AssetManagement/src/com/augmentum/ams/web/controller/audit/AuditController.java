@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.augmentum.ams.model.audit.AuditFile;
 import com.augmentum.ams.service.audit.AuditFileService;
 import com.augmentum.ams.service.audit.AuditService;
+import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.audit.AuditVo;
 
@@ -31,21 +32,21 @@ public class AuditController extends BaseController{
     @RequestMapping("/showAuditDetails")
     public ModelAndView showAuditDetails(AuditVo auditVo) throws Exception{
         
-        ModelAndView modelAndView = new ModelAndView("audit/inventoryDetails");
+        ModelAndView modelAndView = new ModelAndView("audit/inventoryDetail");
         int percentNumTemp = auditService.getAuditPercentage(auditVo.getAuditFileName());
         String percentNum = String.valueOf(percentNumTemp);
         AuditFile auditFile = auditFileService.getByFileName(auditVo.getAuditFileName());
         
         if(null == auditFile || null == auditFile.getOperator()){
-            modelAndView.addObject("operator", null);
-            modelAndView.addObject("operationTime", null);
+            modelAndView.addObject(Constant.OPERATOR, null);
+            modelAndView.addObject(Constant.OPERATION_TIME, null);
         }else{
-            modelAndView.addObject("operator", 
+            modelAndView.addObject(Constant.OPERATOR, 
                     auditFileService.getEmployeeNameByFileName(auditVo.getAuditFileName()));
-            modelAndView.addObject("operationTime", auditFile.getOperationTime());
+            modelAndView.addObject(Constant.OPERATION_TIME, auditFile.getOperationTime());
         }
-        modelAndView.addObject("fileName", auditVo.getAuditFileName());
-        modelAndView.addObject("percentNum", percentNum);
+        modelAndView.addObject(Constant.FILE_NAME, auditVo.getAuditFileName());
+        modelAndView.addObject(Constant.PERCENT_NUMBER, percentNum);
         
         return modelAndView;
     }
@@ -72,17 +73,17 @@ public class AuditController extends BaseController{
         JSONObject jsonObject = new JSONObject();
 
         int countAudit=this.getAuditedAssetsCount(auditVo);
-        int  sEcho=Integer.parseInt(servletRequest.getParameter("sEcho"));
-        int iDisplayStart=Integer.parseInt(servletRequest.getParameter("iDisplayStart"));
-        int iDisplayLength=Integer.parseInt(servletRequest.getParameter("iDisplayLength"));
+        int  sEcho=Integer.parseInt(servletRequest.getParameter(Constant.S_ECHO));
+        int iDisplayStart=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_START));
+        int iDisplayLength=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_LENGTH));
         
-        jsonObject.put("sEcho", sEcho);
-        jsonObject.put("iTotalRecords", countAudit);
-        jsonObject.put("iTotalDisplayRecords",countAudit);
+        jsonObject.put(Constant.S_ECHO, sEcho);
+        jsonObject.put(Constant.I_TOTAL_RECORDS, countAudit);
+        jsonObject.put(Constant.I_TOTAL_DISPLAY_RECORDS,countAudit);
         
         JSONArray audits= auditService.findAudited(auditVo.getAuditFileName(),
                 iDisplayStart, iDisplayLength);
-        jsonObject.put("aaData", audits);
+        jsonObject.put(Constant.AA_DATA, audits);
         
         return jsonObject;
     }
@@ -94,18 +95,35 @@ public class AuditController extends BaseController{
         
         JSONObject jsonObject = new JSONObject();
         int countUnAudit=this.getUnAuditedAssetsCount(auditVo);
-        int  sEcho=Integer.parseInt(servletRequest.getParameter("sEcho"));
-        int iDisplayStart=Integer.parseInt(servletRequest.getParameter("iDisplayStart"));
-        int iDisplayLength=Integer.parseInt(servletRequest.getParameter("iDisplayLength"));
+        int  sEcho=Integer.parseInt(servletRequest.getParameter(Constant.S_ECHO));
+        int iDisplayStart=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_START));
+        int iDisplayLength=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_LENGTH));
         
-        jsonObject.put("sEcho", sEcho);
-        jsonObject.put("iTotalRecords", countUnAudit);
-        jsonObject.put("iTotalDisplayRecords",countUnAudit );
+        jsonObject.put(Constant.S_ECHO, sEcho);
+        jsonObject.put(Constant.I_TOTAL_RECORDS, countUnAudit);
+        jsonObject.put(Constant.I_TOTAL_DISPLAY_RECORDS,countUnAudit );
         
         JSONArray unAudits= auditService.findUnAudited(auditVo.getAuditFileName(),
                 iDisplayStart, iDisplayLength);
-        jsonObject.put("aaData", unAudits);
+        jsonObject.put(Constant.AA_DATA, unAudits);
         
         return jsonObject;
      }
+    
+/*    @RequestMapping("/viewInventory")
+    @ResponseBody
+    public String viewInventory(AuditVo auditVo) throws Exception {
+        User loginUser = (User) session.get("user");
+        String showField = null;
+        String flag = auditVo.getFlag();
+        if(flag.equals("audit")||flag.equals("unAudit")){
+            showField= Format.showFieldsToString(userService.getCommonColumnByUser(loginUser, CommonTableName.audit.toString()));
+        }
+        else if(flag.equals("incons")){
+            showField= Format.showFieldsToString(userService.getCommonColumnByUser(loginUser, CommonTableName.inconsistent.toString()));
+        }
+        request.put("showFields", showField);
+        System.out.println("flag"+flag);
+        return SUCCESS;
+    }*/
 }

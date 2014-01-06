@@ -88,7 +88,7 @@ public class UserCustomColumnsServiceImpl implements UserCustomColumnsService {
         List<UserCustomColumn> userCustomColumns = userCustomColumnDao.getUserCustomColumns(
                 CategoryTypeEnum.ASSET.getCategoryType(), userId);
 
-        if (!(null != userCustomColumns && userCustomColumns.size()>0)) {
+        if (null == userCustomColumns || 0 == userCustomColumns.size()) {
             List<CustomizedColumn> customizedColumns = customizedColumnDao.findAllColumns();
             User user = userDao.getUserByUserId(userId);
             Date currentTime = UTCTimeUtil.localDateToUTC();
