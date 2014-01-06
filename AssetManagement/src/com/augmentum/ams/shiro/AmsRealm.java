@@ -44,25 +44,31 @@ public class AmsRealm extends AuthorizingRealm {
     @Autowired
     private RemoteEmployeeService remoteEmployeeService;
 
-    /* (non-Javadoc)
-     * @see org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache.shiro.subject.PrincipalCollection)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache
+     * .shiro.subject.PrincipalCollection)
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        //User user = (User) principles.fromRealm(getName()).iterator().next();
+        // User user = (User) principles.fromRealm(getName()).iterator().next();
         System.out.println("AmsRealm +++++   doGetAuthorizationInfo");
         User user = (User) principals.fromRealm(getName()).iterator().next();
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        //        List<String> roles = userService.getUserRoleByUserId(user.getUserId());
+        // List<String> roles =
+        // userService.getUserRoleByUserId(user.getUserId());
         //
-        //        for (String roleName : roles) {
-        //            List<String> authorityNames = null;
-        //            authorityNames = roleService.getAuthoritiesByRoleName(RoleEnum.getRoleEnum(roleName));
+        // for (String roleName : roles) {
+        // List<String> authorityNames = null;
+        // authorityNames =
+        // roleService.getAuthoritiesByRoleName(RoleEnum.getRoleEnum(roleName));
         //
-        //            info.addStringPermissions(authorityNames);
-        //        }
+        // info.addStringPermissions(authorityNames);
+        // }
 
         List<Role> roles = user.getRoles();
         for (Role role : roles) {
@@ -75,12 +81,16 @@ public class AmsRealm extends AuthorizingRealm {
         return info;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.shiro.realm.AuthenticatingRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.shiro.realm.AuthenticatingRealm#doGetAuthenticationInfo(org
+     * .apache.shiro.authc.AuthenticationToken)
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+            throws AuthenticationException {
         System.out.println("AmsRealm ------   doGetAuthenticationInfo");
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         Subject subject = SecurityUtils.getSubject();
@@ -97,17 +107,14 @@ public class AmsRealm extends AuthorizingRealm {
             User user = userService.validateEmployee(userVo);
             SecurityUtils.getSubject().getSession().setTimeout(600000000);
             SecurityUtils.getSubject().getSession().setAttribute("userVo", userVo);
-            try{
+            try {
                 return new SimpleAuthenticationInfo(user, userAccountName, getName());
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         return null;
     }
-
-
 
 }

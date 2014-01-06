@@ -15,9 +15,9 @@ import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 
 public class SearchCommonUtil {
-    
+
     static Logger logger = Logger.getLogger(SearchCommonUtil.class);
-    
+
     private static String getAssetListVoValueByProperty(AssetListVo assetListVo, String fieldName) {
         PropertyDescriptor pd = null;
         Object obj = null;
@@ -25,7 +25,7 @@ public class SearchCommonUtil {
             pd = new PropertyDescriptor(fieldName, assetListVo.getClass());
         } catch (IntrospectionException e) {
             // TODO Auto-generated catch block
-            logger.error("TODO",e);
+            logger.error("TODO", e);
         }
         Method method = pd.getReadMethod();
 
@@ -33,13 +33,13 @@ public class SearchCommonUtil {
             obj = method.invoke(assetListVo);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
-            logger.error("TODO",e);
+            logger.error("TODO", e);
         } catch (IllegalAccessException e) {
             // TODO Auto-generated catch block
-            logger.error("TODO",e);
+            logger.error("TODO", e);
         } catch (InvocationTargetException e) {
             // TODO Auto-generated catch block
-            logger.error("TODO",e);
+            logger.error("TODO", e);
         }
 
         if (null == obj) {
@@ -73,8 +73,7 @@ public class SearchCommonUtil {
         }
         return arrays;
     }
-    
-    
+
     /**
      * 
      * @description TODO
@@ -90,18 +89,15 @@ public class SearchCommonUtil {
         for (Location location : locationList) {
             JSONArray array = new JSONArray();
             array.add(location.getId());
-                String value = "";
-                value = location.getSite();
-                array.add(value);
-                value = location.getRoom();
-//                value = "<a class='location_room_" + location.getRoom()
-//                      + "' style='color: #418FB5'>"
-//                      + "</a>";
-                array.add(value);
-                value = "<div class='editLocationIcon'></div>/<div class='deleteLocationIcon'></div>";
-                array.add(value);
-                  arrays.add(array);
-              }
+            String value = "";
+            value = location.getSite();
+            array.add(value);
+            value = location.getRoom();
+            array.add(value);
+            value = "<div class='editLocationIcon'></div>/<div class='deleteLocationIcon'></div>";
+            array.add(value);
+            arrays.add(array);
+        }
         return arrays;
     }
 }

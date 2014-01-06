@@ -257,3 +257,11 @@ background: #505050;
 .normalBg{
 	background: url("../../img/IMG_List_1x30.png");
 }
+
+.editLocationIcon{
+display: block;
+width: 30px;
+height: 30px;
+margin: 0 auto;
+background: url("../../image/common/Edit.png") no-repeat;
+}
