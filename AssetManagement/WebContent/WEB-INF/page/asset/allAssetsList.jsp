@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
     <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -28,7 +29,7 @@
     	<div class="dataList">
     		<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
-			<div id="searchInputTipDiv" class="inputTipDiv"><span id="label_KeywordPlaceholder"></span></div>
+			<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
 			<input id="keyword" class="input_txt" name="" type="text" value="">
 			<div class="filterDiv filterDiv_common">
 				<button class="filterBtn filter_no_dropDown">
@@ -36,53 +37,53 @@
 				<span class="existedFlag"></span>
 				<div class="filterBox">
 					<div class="single_condition">
-						<div class="condition_title"><label id="label_SearchBy"></label></div>
+						<div class="condition_title"><label><spring:message code="searchBy" /></label></div>
 						<div class="condition_optional" id="searchFields">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllFields"></label></p>
-							<p><input type="checkBox" name="field" value="assetId"/><label id="label_AssetId"></label></p>
-							<p><input type="checkBox" name="field" value="assetName"/><label id="label_AssetName"></label></p>
-			                <p><input type="checkBox" name="field" value="user.userName"/><label id="label_User"></label></p>
-			                <p><input type="checkBox" name="field" value="project.projectName"/><label id="label_Project"></label></p>
-			                <p><input type="checkBox" name="field" value="customer.customerName"/><label id="label_Customer"></label></p>
-			                <p><input type="checkBox" name="field" value="poNo"/><label id="label_PoNo"></label></p>
-			                <p><input type="checkBox" name="field" value="barCode"/><label id="label_BarCode"></label></p>
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="assetId"/><label><spring:message code="asset.assetId"/></label></p>
+							<p><input type="checkBox" name="field" value="assetName"/><label><spring:message code="asset.name"/></label></p>
+			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="asset.user"/></label></p>
+			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="asset.project"/></label></p>
+			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="asset.customer"/></label></p>
+			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.poNo" /></label></p>
+			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.barcode"/></label></p>
 			        	</div>
 					</div>
 					<div class="single_condition">
-						<div class="condition_title"><label id="label_AssetType"></label></div>
+						<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
 						<div class="condition_optional" id="assetType">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllTypes"></label></p>
-							<p><input type="checkBox" name="field" value="MACHINE" /><label id="label_Machine"></label></p>
-							<p><input type="checkBox" name="field" value="MONITOR" /><label id="label_Monitor"></label></p>
-							<p><input type="checkBox" name="field" value="DEVICE" /><label id="label_Device"></label></p>
-							<p><input type="checkBox" name="field" value="SOFTWARE" /><label id="label_Software"></label></p>
-							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label id="label_OtherAssets"></label></p>
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="MACHINE" /><label>Machine</label></p>
+							<p><input type="checkBox" name="field" value="MONITOR" /><label>Monitor</label></p>
+							<p><input type="checkBox" name="field" value="DEVICE" /><label>Device</label></p>
+							<p><input type="checkBox" name="field" value="SOFTWARE" /><label>Software</label></p>
+							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label>OtherAssets</label></p>
 			            </div>
 			        </div>
 			        <div class="single_condition">
-						<div class="condition_title"><label id="label_AssetStatus"></label></div>
+						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
 						<div class="condition_optional" id="assetStatus">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllStatus"></label></p>
-							<p><input type="checkBox" name="field" value="AVAILABLE" /><label id="label_Available"></label></p>
-							<p><input type="checkBox" name="field" value="IN_USE" /><label id="label_InUse"></label></p>
-							<p><input type="checkBox" name="field" value="IDLE" /><label id="label_Idle"></label></p>
-							<p><input type="checkBox" name="field" value="RETURNED" /><label id="label_Returned"></label></p>
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><spring:message code="checkAll"/></p>
+							<p><input type="checkBox" name="field" value="AVAILABLE" />Available</p>
+							<p><input type="checkBox" name="field" value="IN_USE" />In Use</p>
+							<p><input type="checkBox" name="field" value="IDLE" />Idle</p>
+							<p><input type="checkBox" name="field" value="RETURNED" />Returned</p>
 			            </div>
 			        </div>
 			        <div class="single_condition">
-						<div class="condition_title"><label id="label_CheckInTime"></label></div>
+						<div class="condition_title"><spring:message code="asset.checkInDate"/></div>
 						<div class="condition_optional" id="checkInTime">
 							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
                             <span class="dateLine">-</span>
                             <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>
 			            </div>
 			        </div>
-			        <a class="reset" href="javascript:void(0);"><label id="label_SearchConditionReset"></label></a>
+			        <a class="reset" href="javascript:void(0);"><spring:message code="reset"/></a>
 				</div>
 			</div>
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
-	        	<span class="middle" ><label id="label_SearchButton"></label> </span>
+	        	<span class="middle" ><spring:message code="search" /></span>
 	        	<span class="right"></span>
 	        </a>
 	        <div id="customizedViewButton">
@@ -96,13 +97,13 @@
 	            </ul>
             </div>
 	        <div class="operation_assets_list">
-		        <a class="a_operations_assets_list">Operation</a>
+		        <a class="a_operations_assets_list"><spring:message code="operation" /></a>
 	        	<ul>
-	        		<li><label id="assignAssetsButton">Assign</label></li>
-	        		<li><label id="returnAssetsToCustomer">ReturnToCustomer</label></li>
-	        		<li><label id="changeToFixed">ChangeToFixedAsset</label></li>
-	        		<li><label id="changeToNonFixed">ChangeToNonFixedAsset</label></li>
-	        		<li><label id="addToAudit">AddToAudit</label></li>
+	        		<li><label><a><spring:message code="assign"/></a></label></li>
+	        		<li><label><a><spring:message code="returnToCustomer"/></a></label></li>
+	        		<li><label><a><spring:message code="changeToFixedAsset"/></a></label></li>
+	        		<li><label><a><spring:message code="changeToNonFixedAsset"/></a></label></li>
+	        		<li><label><a><spring:message code="addToAudit"/></a></label></li>
 	        	</ul>
 	        </div>
 	        
@@ -145,7 +146,7 @@
  	</div>
  	
     <input type="hidden" id="categoryFlag" value="1"/>
-    <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
+    <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
 <script type="text/javascript" src="js/common/common.js"></script>
