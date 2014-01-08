@@ -55,7 +55,7 @@ function initCriteria(categoryFlag) {
     criteria.sortSign = 'desc';
     dataListInfo.criteria = criteria;
     
-    dataListInfo.language = $("#language").val().substring(0, 2).toUpperCase();
+    dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
 }
 
 //change pic in brief style and content handle
