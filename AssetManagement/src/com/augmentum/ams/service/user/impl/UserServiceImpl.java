@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService {
 
         // Before save user and role info in database, clear user_role table
         // records.
-    	// this.deleteUserRole();
         List<User> users = new ArrayList<User>();
         Date date = UTCTimeUtil.localDateToUTC();
 
@@ -60,15 +59,14 @@ public class UserServiceImpl implements UserService {
             User user = null;
             User existUser = userDao.getUserByUserId(userVo.getEmployeeId());
 
-            // If user is saved in database already in database, then assign it to user
+            // If user was already saved in database, then assign it to user
             // If user is not save in database, then initialize user base info from userVo
             if (existUser != null) {
                 user = existUser;
                 if(Boolean.TRUE == userVo.isDelete()){
                 	userDao.deleteUserRoleById(user.getId());
-                	user.setExpired(Boolean.TRUE);
                 	users.add(user);
-                	break;
+                	continue;
                 }
             } else {
                 user = new User();
