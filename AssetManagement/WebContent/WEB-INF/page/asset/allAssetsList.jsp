@@ -40,8 +40,8 @@
 						<div class="condition_title"><label><spring:message code="searchBy" /></label></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="assetId"/><label><spring:message code="asset.assetId"/></label></p>
-							<p><input type="checkBox" name="field" value="assetName"/><label><spring:message code="asset.name"/></label></p>
+							<p><input type="checkBox" name="field" value="assetId" /><label><spring:message code="asset.assetId"/></label></p>
+							<p><input type="checkBox" name="field" value="assetName" /><label><spring:message code="asset.name"/></label></p>
 			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="asset.user"/></label></p>
 			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="asset.project"/></label></p>
 			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="asset.customer"/></label></p>
@@ -53,21 +53,21 @@
 						<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
 						<div class="condition_optional" id="assetType">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="MACHINE" /><label>Machine</label></p>
-							<p><input type="checkBox" name="field" value="MONITOR" /><label>Monitor</label></p>
-							<p><input type="checkBox" name="field" value="DEVICE" /><label>Device</label></p>
-							<p><input type="checkBox" name="field" value="SOFTWARE" /><label>Software</label></p>
-							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label>OtherAssets</label></p>
+							<p><input type="checkBox" name="field" value="MACHINE" /><label><spring:message code="asset.machine"/></label></p>
+							<p><input type="checkBox" name="field" value="MONITOR" /><label><spring:message code="asset.monitor"/></label></p>
+							<p><input type="checkBox" name="field" value="DEVICE" /><label><spring:message code="asset.device"/></label></p>
+							<p><input type="checkBox" name="field" value="SOFTWARE" /><label><spring:message code="asset.software"/></label></p>
+							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label><spring:message code="asset.otherAssets"/></label></p>
 			            </div>
 			        </div>
 			        <div class="single_condition">
 						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
 						<div class="condition_optional" id="assetStatus">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><spring:message code="checkAll"/></p>
-							<p><input type="checkBox" name="field" value="AVAILABLE" />Available</p>
-							<p><input type="checkBox" name="field" value="IN_USE" />In Use</p>
-							<p><input type="checkBox" name="field" value="IDLE" />Idle</p>
-							<p><input type="checkBox" name="field" value="RETURNED" />Returned</p>
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="AVAILABLE" /><label><spring:message code="asset.available"/></label></p>
+							<p><input type="checkBox" name="field" value="IN_USE" /><label><spring:message code="asset.inUse"/></label></p>
+							<p><input type="checkBox" name="field" value="IDLE" /><label><spring:message code="asset.idle"/></label></p>
+							<p><input type="checkBox" name="field" value="RETURNED" /><label><spring:message code="asset.returned"/></label></p>
 			            </div>
 			        </div>
 			        <div class="single_condition">
@@ -87,54 +87,54 @@
 	        	<span class="right"></span>
 	        </a>
 	        <div id="customizedViewButton">
-		        <a id="customizedView" >Customized View</a>
+		        <a id="customizedView" ><spring:message code="customizedView"/></a>
 		        <ul id="viewUlTemplate">
 	                <li><a id="" class="existCustomizedView" ></a></li>
 	            </ul>
 		        <ul id="viewUl">
-	                <li><a href="customizedView/goToNewCustomizedView">Create View</a></li>
-	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement">Management View </a></li>
+	                <li><a href="customizedView/goToNewCustomizedView"><spring:message code="createView"/></a></li>
+	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
 	            </ul>
             </div>
 	        <div class="operation_assets_list">
 		        <a class="a_operations_assets_list"><spring:message code="operation" /></a>
 	        	<ul>
-	        		<li><label><a><spring:message code="assign"/></a></label></li>
-	        		<li><label><a><spring:message code="returnToCustomer"/></a></label></li>
-	        		<li><label><a><spring:message code="changeToFixedAsset"/></a></label></li>
-	        		<li><label><a><spring:message code="changeToNonFixedAsset"/></a></label></li>
-	        		<li><label><a><spring:message code="addToAudit"/></a></label></li>
+	        		<li><label id="assignAssetsButton"><a><spring:message code="assign"/></a></label></li>
+	        		<li><label id="returnAssetsToCustomer"><a><spring:message code="returnToCustomer"/></a></label></li>
+	        		<li><label id="changeToFixed"><a><spring:message code="changeToFixedAsset"/></a></label></li>
+	        		<li><label id="changeToNonFixed"><a><spring:message code="changeToNonFixedAsset"/></a></label></li>
+	        		<li><label id="addToAudit"><a><spring:message code="addToAudit"/></a></label></li>
 	        	</ul>
 	        </div>
 	        
 	    </div>
     	</div>
     </div>
-    <div id="dialog_assign">
+    <div id="dialog_assign" title="<spring:message code='itAssign.dialog.title'/>">
 	      <div>
 	          <span>*</span>
-	          <label id="label_CustomerName">Customer</label>
-	          <input id="customerName" type="text" name="customerName" placeholder="Please enter customer name"/>
+	          <label id="label_CustomerName"><spring:message code="asset.customer"/></label>
+	          <input id="customerName" type="text" name="customerName" placeholder="<spring:message code='dialog.placeholder.customer'/>"/>
 	          <input type="hidden" id="customerCode" />
 	      </div>
 	      <div>
-	          <label id="label_ProjectName">Project</label>
-	          <input id="projectName" type="text"  name="projectName" placeholder="Please enter project name"/>
+	          <label id="label_ProjectName"><spring:message code="asset.project"/></label>
+	          <input id="projectName" type="text"  name="projectName" placeholder="<spring:message code='dialog.placeholder.project'/>"/>
 	          <input type="hidden" id="projectCode" />
 	          
 	      </div>
 	      <div>
-	          <label id="label_UserName">User</label>
-	          <input id="userName" type="text" name="userName" placeholder="Please enter receiver name"/>
+	          <label id="label_UserName"><spring:message code="asset.user"/></label>
+	          <input id="userName" type="text" name="userName" placeholder="<spring:message code='dialog.placeholder.user'/>"/>
 	          <input type="hidden" id="userId">
 	      </div>
 	          <a id="confirm_assign" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
-	        	<span class="middle" ><label id="label_ConfirmAssign">Confirm</label> </span>
+	        	<span class="middle" ><label id="label_ConfirmAssign"><spring:message code="confirm"/></label> </span>
 	        	<span class="right"></span>
 	          </a>
 	          <p>
-		          <input type="button" id="cancel_assign" value="Cancel">
+		          <input type="button" id="cancel_assign" value="<spring:message code='cancel'/>">
 	          <p>
     </div>
     
@@ -144,6 +144,10 @@
  	<div id="dialog-warning" title="Warning">
   		<p id="warning-message-body"></p>
  	</div>
+ 	
+ 	<input type="hidden" id="message_confirm_asset_addToAudit" value="<spring:message code='message.confirm.asset.addToAudit'/>"/>
+ 	<input type="hidden" id="message_warn_asset_assign" value="<spring:message code='message.warn.asset.assign'/>"/>
+ 	<input type="hidden" id="message_warn_asset_return" value="<spring:message code='message.warn.asset.return'/>"/>
  	
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
