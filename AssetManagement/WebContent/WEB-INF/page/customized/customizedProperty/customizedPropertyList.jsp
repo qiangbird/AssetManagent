@@ -50,7 +50,7 @@
                  </div>
                  <label class="shortLeftText">
                      <span class="propertyRequired" >*</span>
-                     <span class="propertyText">property.enName</span>
+                     <span class="propertyText"></span>
                  </label>
                  <input type="text" value="" class="inputText" maxlength="36"/>
                  <div>
@@ -95,7 +95,7 @@
                     </li>
                     <li id="textAreaType" class="propertyTypeLi">
                         <img class="propertyTypeImg" src="image/self/textarea.png">
-                        <div class="propertyTypeTextArea"><spring:message code="customized.property.textArea" />TextArea</div>
+                        <div class="propertyTypeTextArea"><spring:message code="customized.property.textArea" /></div>
                     </li>
                 </ul>
             </div>

@@ -55,13 +55,21 @@ $(document).ready(function() {
     });
     
     $("#filterContent").delegate(".deleteLink","click",function(){
-    	var itemId = $(this).parents(".filterInfo").find("#itemId").val();
-    	if("" == itemId){
-    		$(this).parents(".filterInfo").remove();
-    	}else{
-    		$(this).parents(".filterInfo").css("display", "none");
-    		$(this).parents(".filterInfo").find("#isDelete").val("yes");
-    	}
+    	var object = this;
+    	ShowMsg(i18nProp('message_confirm_customizedView_delete_filter'),function(yes){
+		      if (yes) {
+			    	var itemId = $(object).parents(".filterInfo").find("#itemId").val();
+			      	if("" == itemId){
+			      		$(object).parents(".filterInfo").remove();
+			      	}else{
+			      		$(object).parents(".filterInfo").css("display", "none");
+			      		$(object).parents(".filterInfo").find("#isDelete").val("yes");
+			      	}
+		      }else{
+		          return;
+		      }
+		    });
+    	
     });
     
     $("#filterContent").delegate(".eidtLink", "click",function(){
@@ -70,6 +78,8 @@ $(document).ready(function() {
     	//change the button to 'Update'
     	$("#addToFilter").hide();
     	$("#updateToFilter").show();
+    	
+    	addNoticeBound();
     	
     	var parent = $(this).parents(".filterInfo");
     	var columnType = parent.find(".typeInColumn").text();
@@ -125,6 +135,21 @@ $(document).ready(function() {
     	}
     });
 });
+
+function addNoticeBound(){
+	$("#columnName").addClass("notice-bound");
+	$("#searchCondition").addClass("notice-bound");
+	$("#value").addClass("notice-bound");
+	$("#datepic").addClass("notice-bound");
+	setTimeout("removeNoticeBound()", 5000);
+}
+
+function removeNoticeBound(){
+	$("#columnName").removeClass("notice-bound");
+	$("#searchCondition").removeClass("notice-bound");
+	$("#value").removeClass("notice-bound");
+	$("#datepic").removeClass("notice-bound");
+}
 
 function updateTheFilter(){
 	

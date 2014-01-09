@@ -16,15 +16,20 @@ $(document).ready(function() {
 		
 		//delete role
 		if("deleteLink" == $(this).attr("class")){
-			var isNew = parent.find("#isNew").text();
-			if("true" == isNew){
-				parent.remove();
-				specialRoles.splice(index - 1, 1);
-			}else{
-//				isDeletes.push("true");
-				parent.css("display", "none");
-				specialRoles[index - 1].isDelete = "true";
-			}
+	    	ShowMsg(i18nProp('message_confirm_rolelist_delete_role'),function(yes){
+			      if (yes) {
+						var isNew = parent.find("#isNew").text();
+						if("true" == isNew){
+							parent.remove();
+							specialRoles.splice(index - 1, 1);
+						}else{
+							parent.css("display", "none");
+							specialRoles[index - 1].isDelete = "true";
+						}
+			      }else{
+			          return;
+			      }
+			});
 		}
 	});
 	

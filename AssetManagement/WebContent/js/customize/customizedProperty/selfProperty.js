@@ -57,35 +57,48 @@ $(document).ready(function() {
     	propertyItems.push(propertyPropertyItem);
     });
     $(".addSelectItem").delegate(".deleteItem", "click", function (){
-    	var index = $(this).parents(".itemContent").index();
-    	propertyItems.splice(index, 1);
-    	$(this).parent().remove();
+    	var object = this;
+    	ShowMsg(i18nProp('message_confirm_customizedView_delete_property'),function(yes){
+		      if (yes) {
+		    	  var index = $(object).parents(".itemContent").index();
+		      	  propertyItems.splice(index, 1);
+		      	  $(object).parent().remove();
+		      }else{
+		          return;
+		      }
+		});
     });
     $(".properties").delegate(".editProperty", "click", function (index){
     	doEditOpertion(this);
     });
     $(".properties").delegate(".deleteProperty", "click", function (index){
-    	var id = $(this).parents(".dragDiv").find("input:hidden[id='id']").val();
-    	var isNew = $(this).parents(".dragDiv").find("input:hidden[id='isNew']").val();
-    	if("no" == isNew){
-    		for(var i = 0; i< properties.length; i++){
-    			if(id == properties[i].id){
-    				properties[i].isDelete = true;
-    			}else{
-    				properties[i].isDelete = false;
-    			}
-    		}
-    	}else{
-    		for(var i = 0; i< properties.length; i++){
-    			if(id == properties[i].id){
-    				properties.splice(i, 1);
-    			}else{
-    				properties.splice(i, 1);
-    			}
-    		}
-    	}
-    	$(this).parents(".dragDiv").remove();
-    	
+    	var object = this;
+    	ShowMsg(i18nProp('message_confirm_customizedView_delete_property'),function(yes){
+		      if (yes) {
+		    	    var id = $(object).parents(".dragDiv").find("input:hidden[id='id']").val();
+			      	var isNew = $(object).parents(".dragDiv").find("input:hidden[id='isNew']").val();
+			      	if("no" == isNew){
+			      		for(var i = 0; i< properties.length; i++){
+			      			if(id == properties[i].id){
+			      				properties[i].isDelete = true;
+			      			}else{
+			      				properties[i].isDelete = false;
+			      			}
+			      		}
+			      	}else{
+			      		for(var i = 0; i< properties.length; i++){
+			      			if(id == properties[i].id){
+			      				properties.splice(i, 1);
+			      			}else{
+			      				properties.splice(i, 1);
+			      			}
+			      		}
+			      	}
+			      	$(object).parents(".dragDiv").remove();
+		      }else{
+		          return;
+		      }
+		});
     });
     $("#sortableLeft, #sortableRight").sortable({
 	    tolerance : "pointer",

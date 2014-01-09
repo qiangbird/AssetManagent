@@ -12,12 +12,9 @@
 <head>
 	<base href="<%=basePath%>">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/common/tip-green/tip-green.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/audit/inventoryDetails.css" />
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/asset/assignAssetsDialog.css" />
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css" />
     <title></title>
 </head>
 
@@ -120,18 +117,11 @@
        <!--  <div id="viewMoreDetails" style="min-height: 540px">
    		</div> -->
         </div>
-         <div id="dialog-confirm" title="Operation confirm">
-		   <p id="confirm-message-body"></p>
-		 </div>
-		
-		 <div id="dialog-warning" title="Warning">
-		  <p id="warning-message-body"></p>
-		 </div>
         
     <jsp:include page="inventoryProcessbar.jsp"></jsp:include>
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-    <script type="text/javascript" src="<%=basePath%>/js/common/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/js/common/jquery-ui-1.8.18.custom.min.js"></script>
+<%--     <script type="text/javascript" src="<%=basePath%>/js/common/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/common/jquery-ui-1.8.18.custom.min.js"></script> --%>
     <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryDetails.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryCommonOperation.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.form.js"></script>

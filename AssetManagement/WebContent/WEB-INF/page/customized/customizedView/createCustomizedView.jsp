@@ -10,7 +10,7 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<link rel="stylesheet" type="text/css" href="css/customize/customizedView/newCustomizedView.css" />
+<link rel="stylesheet" type="text/css" href="css/customize/customizedView/createCustomizedView.css" />
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
@@ -114,7 +114,7 @@
   </div>
  </div>
  <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
- <script type="text/javascript" src="js/customize/customizedView/newCustomizedView.js"></script>
+ <script type="text/javascript" src="js/customize/customizedView/createCustomizedView.js"></script>
  <script type="text/javascript" src="js/common/validate.js"></script>
  </body>
  </html>

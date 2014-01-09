@@ -564,3 +564,13 @@
 .create-new-button {
 	float: left;
 }
+
+.notice-bound{
+	border: 2px solid RGB(115,179,66);
+}
+
+#dialog-confirm {
+	width: auto;
+	min-height: 0px;
+	height: auto;
+}

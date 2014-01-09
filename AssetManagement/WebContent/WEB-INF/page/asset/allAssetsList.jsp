@@ -18,8 +18,6 @@
 <link rel="stylesheet" type="text/css" href="css/common/commonList.css">
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
 <link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
-<link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
-<link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="css/asset/assignAssetsDialog.css">
 </head>
 <body>
