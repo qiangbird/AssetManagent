@@ -33,11 +33,11 @@ $(document).ready(function() {
 		if("roleCheckBoxOff" == $(this).attr("class")){
 			$(this).removeClass("roleCheckBoxOff");
 			$(this).addClass("roleCheckBoxOn");
-			setValueOfRole(this, "true", attrId, itValueId, adminValueId, null);
+			setValueOfRole(this, true, attrId, itValueId, adminValueId, null);
 		}else{
 			$(this).removeClass("roleCheckBoxOn");
 			$(this).addClass("roleCheckBoxOff");
-			setValueOfRole(this, "false", attrId, itValueId, adminValueId, null);
+			setValueOfRole(this, false, attrId, itValueId, adminValueId, null);
 		}
 	});
 	
@@ -103,28 +103,52 @@ $(document).ready(function() {
 function isAtLeastOneITAndAdmin(currentEmployeeId){
 	var employeeIdForIT = "";
 	var employeeIDFroAdmin = "";
+	var hasBothRole = false;
+	
 	//check employeeIdForIT
 	for(var i = 0; i < usersRoleInfo.length; i++){
-		if(true == usersRoleInfo[i].itRole){
+		if(true == usersRoleInfo[i].itRole && 
+				usersRoleInfo[i].employeeId != currentEmployeeId){
+			
 			employeeIdForIT = usersRoleInfo[i].employeeId;
+			
+			hasBothRole = checkBothRole(hasBothRole, usersRoleInfo[i].systemAdminRole);
 			break;
 		}
 	}
 	//check employeeIDFroAdmin
 	for(var i = 0; i < usersRoleInfo.length; i++){
-		if("true"== usersRoleInfo[i].systemAdminRole){
+		if(true== usersRoleInfo[i].systemAdminRole &&
+				usersRoleInfo[i].employeeId != currentEmployeeId &&
+				employeeIdForIT != usersRoleInfo[i].employeeId){
+			
 			employeeIDFroAdmin = usersRoleInfo[i].employeeId;
+			
+			hasBothRole = checkBothRole(hasBothRole, usersRoleInfo[i].itRole);
 			break;
 		}
 	}
 	
+	if(hasBothRole && ("" != employeeIDFroAdmin || "" != employeeIdForIT)){
+		return true;
+	}
+	
 	//compare employeeIdForIT with employeeIDFroAdmin and currentEmployeeId
-	if(employeeIdForIT != employeeIDFroAdmin && employeeIdForIT != currentEmployeeId
-			&& employeeIDFroAdmin != currentEmployeeId){
+	if(employeeIdForIT != employeeIDFroAdmin && 
+			"" != employeeIDFroAdmin && 
+			"" != employeeIdForIT){
 		return true;
 	}else{
 		return false;
 	}
+}
+
+function checkBothRole(hasBothRole, roleValue){
+	
+	if(true== roleValue){
+		hasBothRole = true;
+	}
+	return hasBothRole;
 }
 
 function showUnderLineByCheckIsNew(object){
@@ -265,6 +289,7 @@ function saveOperation(usersRoleInfo){
 			"usersRoleInfo":JSON.stringify(usersRoleInfo)
 		},
 		success: function(){
+			window.location.reload(true);
 			alert("Save successfully!");
 		},
 		dataType: 'json',

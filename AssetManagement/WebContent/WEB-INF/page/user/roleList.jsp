@@ -2,6 +2,9 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %> 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
@@ -24,12 +27,12 @@
         <div id="checkboxOperate">
         	<input type="hidden" id="itValue" value="false" >
         	<input type="hidden" id="adminValue" value="false" />
-            <a id="it" class="roleCheckBoxOff" ><span>IT</span></a>
-    		<a id="admin" class="roleCheckBoxOff" ><span>System Admin</span></a>
+            <a id="it" class="roleCheckBoxOff" ><span><spring:message code="user.IT" /></span></a>
+    		<a id="admin" class="roleCheckBoxOff" ><span><spring:message code="user.system.admin" /></span></a>
         </div>
         <div class="addOperateButton">
-            <input type="button" value="Add"  id="addButton"></input>
-            <input type="button" value="Reset"  id="resetButton"></input> 
+            <input type="button" value=<spring:message code="add" />  id="addButton"></input>
+            <input type="button" value=<spring:message code="reset" />  id="resetButton"></input> 
         </div>
       </div>
 	  <div class="employeeRoleInfoTemplate">
@@ -58,18 +61,18 @@
       <div class="roleDispaly">
 	      <div class="rowHead" >
 	          <div id="showError"></div>
-	          <div class="columnElement sequenceElement">Sequence</div>
-	          <div class="columnElement employeeInfoElement">EmployeeID</div>
-	          <div class="columnElement employeeInfoElement">EmployeeName</div>
-	          <div class="columnElement operateElement">IT</div>
-	          <div class="columnElement operateElement">SystemAdmin</div>
-	          <div class="columnElement operateElement">Remove</div>    
+	          <div class="columnElement sequenceElement"><spring:message code="sequence" /></div>
+	          <div class="columnElement employeeInfoElement"><spring:message code="user.employeeId" /></div>
+	          <div class="columnElement employeeInfoElement"><spring:message code="user.employeeName" /></div>
+	          <div class="columnElement operateElement"><spring:message code="user.IT" /></div>
+	          <div class="columnElement operateElement"><spring:message code="user.system.admin" /></div>
+	          <div class="columnElement operateElement"><spring:message code="remove" /></div>    
 	       </div>
 	  </div>
 	  
 	  <div class="saveOperateButton">
-            <input type="button" value="Save"  id="saveButton"></input>
-            <input type="button" value="Cancel"  id="cancelButton"></input> 
+            <input type="button" value=<spring:message code="save" />  id="saveButton"></input>
+            <input type="button" value=<spring:message code="cancel" />  id="cancelButton"></input> 
         </div>
 	  
 	  <jsp:include page="userInfoTips.jsp" />
