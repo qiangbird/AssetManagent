@@ -12,13 +12,14 @@
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 
-<script type="text/javascript" src="<%=basePath%>/js/common/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="<%=basePath%>/js/common/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="<%=basePath%>/js/common/autocomplete.js"></script>
-<script type="text/javascript" src="<%=basePath%>/jquery.poshytip/js/jquery.poshytip.js"></script>
-<script type="text/javascript" src="<%=basePath%>/js/common/jquery.i18n.properties-1.0.9.js"></script>
-<script type="text/javascript" src="<%=basePath%>/js/common/uuid.js"></script>
-<script type="text/javascript" src="<%=basePath%>/js/common/header.js"></script>
+<script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="js/common/autocomplete.js"></script>
+<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
+<script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
+<script type="text/javascript" src="js/common/uuid.js"></script>
+<script type="text/javascript" src="js/common/header.js"></script>
+<script type="text/javascript" src="messageBar/js/messagebar.js"></script>
 
 <title>Asset Page</title>
 </head>

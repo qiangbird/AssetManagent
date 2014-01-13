@@ -21,6 +21,7 @@
 <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="css/asset/assignAssetsDialog.css">
+<link rel="stylesheet" type="text/css" href="messageBar/css/messagebar.css">
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
@@ -160,4 +161,5 @@
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 <script type="text/javascript" src="js/search/searchCustomizedView.js" ></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
+<script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 </html>

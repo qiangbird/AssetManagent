@@ -15,7 +15,7 @@ $(function() {
 	
 	var i18n = $("#locale").val();
 	jQuery.i18n.properties({
-		name : 'message',
+		name : 'jqueryi18n',
 		path : 'i18n/',
 		mode : 'map',
 		language : i18n,

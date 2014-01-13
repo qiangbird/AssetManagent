@@ -1,14 +1,9 @@
 var dataList;
 var criteria = {};
 var locale = $("#localeLanguage").val();
-//var dialogTitle = $("#dialog_assign").attr("title");
 var placeholder_customer = $("#customerName").attr("placeholder");
 var placeholder_project = $("#projectName").attr("placeholder");
 var placeholder_user = $("#userName").attr("placeholder");
-
-//var message_confirm_asset_addToAudit = $("#message_confirm_asset_addToAudit").val();
-//var message_warn_asset_assign = $("#message_warn_asset_assign").val();
-//var message_warn_asset_return = $("#message_warn_asset_return").val();
 
 $(document).ready(function() {
     
@@ -111,6 +106,11 @@ $(document).ready(function() {
                      success : function(data) {
                              criteria.pageNum = 1;
                              dataList.search();
+                             if (data.errorCodes) {
+                             	showMessageBarForAssetList(data.errorCodes);
+                             } else if (data.errorCode) {
+                             	showMessageBarForMessage(data.errorCode);
+                             }
                          }
                      });
                  }else{
@@ -136,6 +136,11 @@ $(document).ready(function() {
                          success : function(data) {
                              criteria.pageNum = 1;
                              dataList.search();
+                             if (data.errorCodes) {
+                             	showMessageBarForAssetList(data.errorCodes);
+                             } else if (data.errorCode) {
+                             	showMessageBarForMessage(data.errorCode);
+                             }
                          }
                      });
                  }else{
@@ -161,6 +166,11 @@ $(document).ready(function() {
                          success : function(data) {
                              criteria.pageNum = 1;
                              dataList.search();
+                             if (data.errorCodes) {
+                             	showMessageBarForAssetList(data.errorCodes);
+                             } else if (data.errorCode) {
+                             	showMessageBarForMessage(data.errorCode);
+                             }
                          }
                      });
                  }else{
@@ -176,8 +186,8 @@ $(document).ready(function() {
          
          if (getActivedAssetIds() != "") {
              tipMessage = i18nProp('message_confirm_asset_addToAudit', $('.row .dataList-checkbox-active').size().toString());
-             ShowMsg(tipMessage, function(aaa){
-                 if (aaa) {
+             ShowMsg(tipMessage, function(yes){
+                 if (yes) {
                      window.location.href = "asset/addAssetsToAuditForSelected?assetIds=" + getActivedAssetIds();
                  }else{
                      return;
@@ -484,6 +494,11 @@ $("#confirm_assign").click(function() {
             success : function(data) {
                 criteria.pageNum = 1;
                 dataList.search();
+                if (data.errorCodes) {
+                	showMessageBarForAssetList(data.errorCodes);
+                } else if (data.errorCode) {
+                	showMessageBarForMessage(data.errorCode);
+                }
             }
         });
         closeDialog();
