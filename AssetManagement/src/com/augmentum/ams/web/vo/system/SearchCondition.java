@@ -24,6 +24,10 @@ public class SearchCondition {
     
     private String customizedViewId;
     
+    private String auditFileName;
+    
+    private Boolean isAudited;
+    
     public String getCustomizedViewId() {
         return customizedViewId;
     }
@@ -111,4 +115,20 @@ public class SearchCondition {
     public void setToTime(String toTime) {
         this.toTime = toTime;
     }
+
+	public String getAuditFileName() {
+		return auditFileName;
+	}
+
+	public void setAuditFileName(String auditFileName) {
+		this.auditFileName = auditFileName;
+	}
+
+	public Boolean getIsAudited() {
+		return isAudited;
+	}
+
+	public void setIsAudited(Boolean isAudited) {
+		this.isAudited = isAudited;
+	}
 }

@@ -44,4 +44,10 @@ public class UserCustomColumnDaoImpl extends BaseDaoImpl<UserCustomColumn> imple
 
         return super.getUnique(detachedCriteria);
     }
+
+	@Override
+	public int getUserCustomColumnsCount(String userId) {
+		String hql = "SELECT COUNT(*) FROM UserCustomColumn WHERE isExpired = ? AND user.userId = ?";
+		return getCountByHql(hql, Boolean.FALSE, userId);
+	}
 }

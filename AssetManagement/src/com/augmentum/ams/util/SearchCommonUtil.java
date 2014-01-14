@@ -4,12 +4,15 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import net.sf.json.JSONArray;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.log4j.Logger;
+
+import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
@@ -72,6 +75,52 @@ public class SearchCommonUtil {
             arrays.add(array);
         }
         return arrays;
+    }
+    
+    //TODO test BeanUtils convert list to JSONArray
+    public static JSONArray convertAssetListToJSONArray(List<Asset> assetList) {
+    	JSONArray arrays = new JSONArray();
+    	List<String> propertyNames = new ArrayList<String>();
+    	propertyNames.add("assetId");
+    	propertyNames.add("assetName");
+//    	propertyNames.add("user.userName");
+    	propertyNames.add("project");
+    	propertyNames.add("project.projectName");
+    	propertyNames.add("customer.customerName");
+    	propertyNames.add("checkInTime");
+    	
+    		
+    	
+    	for (Asset asset : assetList) {
+    		JSONArray array = new JSONArray();
+    		
+    		
+    		for (String propertyName : propertyNames) {
+    			String value = "";
+    			try {
+    				
+    				//TODO judge associate is null
+//    				if (null != BeanUtils.getProperty(asset, "user")) {
+//    					value = BeanUtils.getProperty(asset, "user.userName");
+//    				}
+    				
+					value = BeanUtils.getProperty(asset, propertyName);
+					logger.info(propertyName + "--" + value);
+				} catch (IllegalAccessException e) {
+					logger.info("IllegalAccessException");
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					logger.info("InvocationTargetException");
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					logger.info("NoSuchMethodException");
+					e.printStackTrace();
+				}
+    			array.add(value);
+    		}
+    		arrays.add(array);
+    	}
+    	return arrays;
     }
 
     /**

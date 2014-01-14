@@ -8,13 +8,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -155,7 +155,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
 
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
-
+        
         Page<Asset> page = new Page<Asset>();
 
         // set page parameters, sort column, sort sign, page size, current page

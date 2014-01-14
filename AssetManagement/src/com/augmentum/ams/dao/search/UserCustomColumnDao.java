@@ -27,4 +27,12 @@ public interface UserCustomColumnDao extends BaseDao<UserCustomColumn>{
      */
     UserCustomColumn getUserCustomColumn(String userCustomColumnId);
     
+    /**
+     * get user customized column count to judge if the user login first time
+     * 
+     * @param userId
+     * @return
+     */
+    int getUserCustomColumnsCount(String userId);
+    
 }

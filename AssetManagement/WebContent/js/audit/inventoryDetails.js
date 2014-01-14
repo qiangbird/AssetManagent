@@ -4,6 +4,7 @@ $(document).ready(function() {
         location.href="exportAuditFile.action?auditFileName="+fileName;
     });*/
 	refreshData();
+	$(".viewInventoryAsset").hide();
  });
 
 function refreshData(){
@@ -85,10 +86,10 @@ function showAudited(a) {
     var uLink = $("#auditFilePanel").find(".u");
     uLink.find("a").css("color", "#23A5E4").css("text-decoration", "underline");
    
-/*    $("#auditView").bind("click", function(){
-       	$("#viewMoreDetails").dialog('open');
-       	$("#viewMoreDetails").load("viewAuditAssets?flag=audit&fileName="+auditFileName);
-    });*/
+    $("#auditView").bind("click", function(){
+       	$(".viewInventoryAsset").show();
+    });
+    
     $("#auditTable").dataTable({
         "bServerSide":true,
     	"bProcessing":true,
@@ -141,7 +142,7 @@ function showUnAudited(a) {
     aLink.find("a").css("color", "#23A5E4").css("text-decoration", "underline");
     var auditFileName = $(a).parents(".dialogBody").find(".process-panel").find("label").text();
     var fileName = $("#fielLabel").text().replace(/\s/ig,'');
-    $("#auditView").unbind("click");
+//    $("#auditView").unbind("click");
 /*    $("#auditView").bind("click", function(){
     	$("#viewMoreDetails").dialog('open');
     	$("#viewMoreDetails").load("viewUnAuditAssets?flag=unAudit&fileName="+fileName);

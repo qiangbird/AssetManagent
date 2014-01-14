@@ -1,6 +1,5 @@
 var dataList;
 var criteria = {};
-var locale = $("#localeLanguage").val();
 var placeholder_customer = $("#customerName").attr("placeholder");
 var placeholder_project = $("#projectName").attr("placeholder");
 var placeholder_user = $("#userName").attr("placeholder");
