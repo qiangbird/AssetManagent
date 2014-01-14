@@ -46,12 +46,7 @@ public class AuditDaoImpl extends BaseDaoImpl<Audit> implements AuditDao{
         criteria.add(Restrictions.eq("auditFile.id", fileId));
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         
-        List<Audit> audits = super.findByCriteria(criteria);
-        
-        if(0 < audits.size()){
-            return audits.get(0);
-        }
-        return null;
+        return super.getUnique(criteria);
     }
 
     @Override
