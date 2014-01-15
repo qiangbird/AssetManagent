@@ -85,5 +85,15 @@ public class SearchFieldHelper {
         stringBuilder.append("OTHERASSETS");
         return stringBuilder.toString();
     }
+
+	public static String[] getCustomerGroupFields() {
+		String[] sentenceFields = new String[4];
+        sentenceFields[0] = "groupName";
+        sentenceFields[1] = "description";
+        sentenceFields[2] = "processType";
+        sentenceFields[3] = "customers";
+        
+        return sentenceFields;
+	}
     
 }

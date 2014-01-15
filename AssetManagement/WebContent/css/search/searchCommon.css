@@ -149,7 +149,7 @@ a.viewDetail {
 	margin-left: 473px;
 	height: auto;
 	line-height: 180%;
-	z-index: 1;
+	z-index: 9999;
 	background-color: #cfe6bb;
 }
 
@@ -160,7 +160,6 @@ a.viewDetail {
 #viewUl li {
 	margin-left: -40px;
 	padding: 0px 5px 0px 5px;
-	width: 140px;
 }
 
 #viewUl li:HOVER {

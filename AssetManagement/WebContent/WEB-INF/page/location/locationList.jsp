@@ -141,9 +141,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
     
-    <div id="dialog-warning" title="<label id='label_Operation_Warning'></label>">
+    <%-- <div id="dialog-warning" title="<label id='label_Operation_Warning'></label>">
         <p id="warning-message-body"></p>
-    </div>
+    </div> --%>
     
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
     
@@ -154,6 +154,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="js/location/location.js"></script>
+<script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 <link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>

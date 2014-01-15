@@ -2,10 +2,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %> 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
 <html>
 <head>
@@ -31,9 +28,9 @@
 </form>
  <div class="customizedView">
  	<div class="viewName">
-          <span class="viewNameText"><spring:message code="customized.view.name"/>:</span>
+          <span class="viewNameText">View Name:</span>
           <input id="viewName" class="inTextForViewName" type="text" 
-               value="${customizedView.viewName}" placeholder=<spring:message code="customized.view.name.tip.message"/> />
+               value="${customizedView.viewName}" placeholder="Please input the view name" />
           <div class="error-box-viewName">
           	<div class="error-left-viewName"></div>
           	<div class="error-middle-viewName"></div>
@@ -42,15 +39,15 @@
           <span id="viewNameImg"></span>
     </div>
     <div id="filterContent">
-    <span class="filterSetText"> <spring:message code="customized.view.filter.set"/>:</span>
+    <span class="filterSetText"> Filter set:</span>
     <div class="radioBoxes">
-    	<span class="match-any"><spring:message code="customized.view.and"/></span><a class="radioCheckOff" name="or"></a>
-    	<span class="match-all"><spring:message code="customized.view.or"/></span><a class="radioCheckOn" name="and"></a>
+    	<span class="match-any">Match ANY of the followling (OR)</span><a class="radioCheckOff" name="or"></a>
+    	<span class="match-all">Match ALL of the followling (AND)</span><a class="radioCheckOn" name="and"></a>
     </div><br>
     <div class="filterHead">
-      <div class="columnElement columnNameTitleHead" ><spring:message code="customized.view.column.name"/></div>
-      <div class="columnElement criteriaTitle" ><spring:message code="customized.view.criteria"/></div>
-      <div class="columnElement valueTitle" ><spring:message code="customized.view.value"/></div>
+      <div class="columnElement columnNameTitleHead" >Column Name</div>
+      <div class="columnElement criteriaTitle" >Criteria</div>
+      <div class="columnElement valueTitle" >Value</div>
     </div>
 	<c:forEach items="${customizedViewItems}" var="customizedViewItem">
       <div class="filterInfo">
@@ -64,6 +61,13 @@
         <div class="columnData columnNameTitle realTableInColumn"><p>${customizedViewItem.realTable }</p></div>
         <div class="columnData criteriaTitle criteriaInColumn"><p>${customizedViewItem.searchCondition }</p></div>
         <div class="columnData valueTitle valueInColumn"><p><p>${customizedViewItem.value}</p></div>
+        <%-- <div class="valueInputHidden"><input type="text" id="valueInput" class="valueInput" value="${customizedViewItem.value}" /></div> --%>
+        <!-- <div id="error-box-valueInput" class="error-box-valueInput">
+          	<div class="error-left-valueInput"></div>
+          	<div class="error-middle-valueInput"></div>
+          	<div class="error-right-valueInput"></div>
+          </div> -->
+        <!-- <span id="valueInputImg"></span> </p></div>-->
         <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"><img src="<%=basePath%>/image/customize/customizedView/icon_delete_normal.png"></a></p></div>
         <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"><img src="<%=basePath%>/image/customize/customizedView/icon_edit_normal.png"></a></p></div>
       </div>
@@ -75,7 +79,7 @@
   <br>
   
     <div class="filter">
-    <span class="columnNameText"><spring:message code="customized.view.advanced.filtering"/>:</span>
+    <span class="columnNameText">Advanced filtering:</span>
     <div class="customizedViewItem">
           <input id="columnName" class="inText select-type" type="text"  readonly="readonly"
                value="" />
@@ -94,8 +98,8 @@
                value="" placeholder="Select date"/>
     </div>
     <div class="addToFilter marginLeft" >
-          <input id="addToFilter" type="button" value=<spring:message code="customized.view.add.to.filter"/> class="addToFilter-button" />
-          <input id="updateToFilter" type="button" value=<spring:message code="update"/> class="addToFilter-button" />
+          <input id="addToFilter" type="button" value="Add to Filter" class="addToFilter-button" />
+          <input id="updateToFilter" type="button" value="Update" class="addToFilter-button" />
     </div>
     </div>
     <br>
@@ -104,13 +108,13 @@
     <div class="saveOperation" >
   	<c:choose>  
 	   <c:when test="${customizedView.viewName != null}">
-	   	<input id="update" type="button" value=<spring:message code="update"/>  class="submit-save" />
+	   	<input id="update" type="button" value="Update"  class="submit-save" />
 	   </c:when>  
 	   <c:otherwise>
-	   	<input id="save" type="button" value=<spring:message code="save"/>  class="submit-save" />
+	   	<input id="save" type="button" value="Save"  class="submit-save" />
 	   </c:otherwise>  
 	</c:choose>  
-  	<input id="cancel" type="button" value=<spring:message code="cancel"/>  class="submit-cancel" />
+  	<input id="cancel" type="button" value="Cancel"  class="submit-cancel" />
   </div>
  </div>
  <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>

@@ -1,6 +1,8 @@
 package com.augmentum.ams.web.controller.base;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("baseController")
@@ -28,6 +32,8 @@ public class BaseController {
     
     @Autowired
 	private RemoteEmployeeService remoteEmployeeService;
+    @Autowired
+    private RemoteCustomerService remoteCustomerService;
     
     public String getUserIdByShiro() {
         
@@ -59,4 +65,12 @@ public class BaseController {
 		modelAndView.addObject("employeeInfo", employeeInfo);
      	return modelAndView;
 	}
+	
+	  @RequestMapping("/getCustomerInfo")
+	    public ModelAndView getCustomerInfo(HttpServletRequest request) throws DataException {
+	        ModelAndView modelAndView = new ModelAndView();
+	        List<CustomerVo> customerList = remoteCustomerService.getAllCustomerFromIAP(request);
+	        modelAndView.addObject("customerList", customerList);
+	        return modelAndView;
+	    }
 }

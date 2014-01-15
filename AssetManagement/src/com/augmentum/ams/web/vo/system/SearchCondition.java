@@ -24,6 +24,8 @@ public class SearchCondition {
     
     private String customizedViewId;
     
+    private String userUuid;
+    
     public String getCustomizedViewId() {
         return customizedViewId;
     }
@@ -110,5 +112,13 @@ public class SearchCondition {
 
     public void setToTime(String toTime) {
         this.toTime = toTime;
+    }
+
+    public String getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
     }
 }

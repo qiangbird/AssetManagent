@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
@@ -30,6 +31,7 @@ import com.augmentum.ams.model.base.BaseModel;
 @Table(name = "customer")
 @Indexed(index = "customer")
 @Analyzer(impl = IKAnalyzer.class)
+@JsonIgnoreProperties(value={"assets"})    
 public class Customer extends BaseModel {
 
 	private static final long serialVersionUID = -1485320091445990928L;
@@ -93,5 +95,36 @@ public class Customer extends BaseModel {
 		return "Customer [customerName=" + customerName + ", customerCode="
 				+ customerCode + "]";
 	}
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((customerCode == null) ? 0 : customerCode.hashCode());
+        result = prime * result + ((customerName == null) ? 0 : customerName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Customer other = (Customer) obj;
+        if (customerCode == null) {
+            if (other.customerCode != null)
+                return false;
+        } else if (!customerCode.equals(other.customerCode))
+            return false;
+        if (customerName == null) {
+            if (other.customerName != null)
+                return false;
+        } else if (!customerName.equals(other.customerName))
+            return false;
+        return true;
+    }
 	
 }

@@ -178,7 +178,8 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         searchModel
                 .setColumns(new String[] { IAPConstans.CUSTOMER_CODE, IAPConstans.CUSTOMER_NAME });
-        searchModel.setFilter(SqlRestrictionsUtil.ne(IAPConstans.PROJECTSTATUS, IAPConstans.INACTIVE));
+        searchModel.setFilter(SqlRestrictionsUtil.ne(IAPConstans.PROJECTSTATUS,
+                IAPConstans.INACTIVE));
 
         // Communicate with IAP.
         Request tmpRequest = RemoteUtil.getRequest(httpServletRequest, DataModelAPI.listProject,
@@ -244,7 +245,8 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
         String customerId = "";
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         searchModel.setColumns(new String[] { IAPConstans.ID });
-        searchModel.setFilter(SqlRestrictionsUtil.ne(IAPConstans.CUSTOMER_STATUS, IAPConstans.INACTIVE));
+        searchModel.setFilter(SqlRestrictionsUtil.ne(IAPConstans.CUSTOMER_STATUS,
+                IAPConstans.INACTIVE));
         Request tmpRequest = RemoteUtil.getRequest(httpServletRequest, DataModelAPI.listCustomer,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_XML);
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
@@ -264,29 +266,33 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
     @Override
     public Customer getCustomerByCodefromIAP(HttpServletRequest httpServletRequest,
             String customerCode) throws DataException {
-        Customer cust = new Customer();
+        // Prepare the condition for searching.
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
-        searchModel.setColumns(new String[] { IAPConstans.ID, IAPConstans.CUSTOMER_NAME,
-                IAPConstans.CUSTOMER_CODE });
-        searchModel.setFilter(SqlRestrictionsUtil.and(
-                SqlRestrictionsUtil.ne(IAPConstans.CUSTOMER_STATUS, IAPConstans.INACTIVE),
-                SqlRestrictionsUtil.eq(IAPConstans.CUSTOMER_CODE, customerCode)));
-        Request tmpRequest = RemoteUtil.getRequest(httpServletRequest, DataModelAPI.listCustomer,
+        searchModel
+                .setColumns(new String[] { IAPConstans.CUSTOMER_CODE, IAPConstans.CUSTOMER_NAME });
+        searchModel.setFilter(SqlRestrictionsUtil.eq(IAPConstans.CUSTOMER_CODE, customerCode));
+
+        // Communicate with IAP.
+        Request tmpRequest = RemoteUtil.getRequest(httpServletRequest, DataModelAPI.listProject,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_XML);
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
                 ContentType.APPLICATION_XML, tmpRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
+
+        // Gain the response and encapsulate them.
         if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
             responseData = responseModel.getRequestModel().getDataList();
         } else {
             logger.info("Cannot get responseData from IAP");
         }
+        Customer newCustomer = new Customer();
         for (Map<String, Object> mapData : responseData) {
-            cust.setId((String) mapData.get(IAPConstans.ID));
-            cust.setCustomerName((String) mapData.get(IAPConstans.CUSTOMER_NAME));
-            cust.setCustomerCode((String) mapData.get(IAPConstans.CUSTOMER_CODE));
+            String custCode = (String) mapData.get(IAPConstans.CUSTOMER_CODE);
+            String custName = (String) mapData.get(IAPConstans.CUSTOMER_NAME);
+            newCustomer.setCustomerCode(custCode);
+            newCustomer.setCustomerName(custName);
         }
-        return cust;
+        return newCustomer;
     }
 
     @Override

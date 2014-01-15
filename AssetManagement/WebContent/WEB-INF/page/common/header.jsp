@@ -90,6 +90,7 @@
                 <li class="menuLi"><a href="customizedView/goToNewCustomizedView"><spring:message code="navigator.my.assets" /></a>
 					<ul class="sencndMenuUl">
                         <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
+                        <li><a href="asset/listMyAssets"><spring:message code="navigator.my.assets" /></a></li>
                     </ul></li>
                 <li class="menuLi"><a href="#"><spring:message code="navigator.transfer.log" /></a></li>
                 <li class="menuLi"><a href="#"><spring:message code="navigator.operation.log" /></a></li>

@@ -20,8 +20,8 @@
       mode : 'map',
       language : i18n,
       callback : function() {
-         msg = jQuery.i18n.prop;
-         AddI18n('Home');
+//         msg = jQuery.i18n.prop;
+         /*AddI18n('Home');
          AddI18n('CreateAsset');
          AddI18n('CommonProperty');
          AddI18n('AssetId');
@@ -72,7 +72,7 @@
          AddI18n('Edit');
          AddI18n('Copy');
          AddI18n('Delete');
-         AddI18n('Cancel');
+         AddI18n('Cancel');*/
          
          
       }

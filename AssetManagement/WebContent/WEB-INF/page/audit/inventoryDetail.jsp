@@ -65,7 +65,7 @@
         </div>
 		<div class="dialog-blank">
             <span>
-		        <spring:message code="audit.checkResults"/>
+		        <spring:message code="audit.check.results"/>
             </span>
             <div> <a id="exportIconAll" ></a></div>
         </div>
@@ -74,7 +74,7 @@
 	        <thead> 
 	        	<tr>
 	        		<th style='text-indent:-50px; text-align:right'><spring:message code='audit.id' /></th>
-					<th ext-indent:-5px><spring:message code='audit.barcode' /></th> 
+					<th ext-indent:-5px><spring:message code='audit.bar-code' /></th> 
 					<th><spring:message code='audit.name' /></th>
 					<th><spring:message code='audit.type' /></th>
 				</tr>
@@ -84,7 +84,7 @@
         <div class="dialog-content">
             <div id="auditFilePanel" class="content-panel-inventory-left">
                 <div class="dialog-panel-title">
-                    <label><spring:message code="audit.auditFile"/></label>
+                    <label><spring:message code="audit.audit.file"/></label>
                     <span>
                         <label class="a">
                             <a id="aa" onclick="showAudited(this);"><spring:message code="audit.audited" /></a><strong>(0)</strong>
@@ -97,19 +97,19 @@
                 <div class="dialog-panel-content" id="tableContent"> </div>
                 <div class="dialog-panel-shadow"></div>
                 <div class="dialog-panel-link">
-                    <a  id="auditView"><spring:message code="audit.viewMore" /></a>
+                    <a  id="auditView"><spring:message code="audit.view.more" /></a>
                 </div>
             </div>
             
             <div id="inventoryFilePanel" class="content-panel-inventory-right">
               <div class="dialog-panel-title">
-                    <label><spring:message code="audit.inventoryFile" /></label>
+                    <label><spring:message code="audit.inventory.file" /></label>
                     <span><spring:message code="audit.inconsistent" /><strong id="iconsSize">(0)</strong></span>
                 </div>
                 <div id="inconsTableContent"></div>
                 <div class="dialog-panel-shadow"></div>  
                 <div class="dialog-panel-link">
-                    <a href="#" id="iconsView"><spring:message code="audit.viewMore" /></a>
+                    <a href="#" id="iconsView"><spring:message code="audit.view.more" /></a>
                 </div>
             </div>
       </div>

@@ -9,6 +9,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -245,9 +247,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     public List<PropertyTemplate> showOrViewSelfDefinedProperties(Asset asset, String operation)
             throws ParseException {
         @SuppressWarnings("unchecked")
-        List<PropertyTemplate> defaultPropertyTemplatesList = propertyTemplateService
+        List<PropertyTemplate> defaultPropertyTemplatesList =JSONArray.toList(propertyTemplateService
                 .findPropertyTemplateByCustomerAndAssetType(asset.getCustomer().getCustomerName(),
-                        asset.getType());
+                        asset.getType()),PropertyTemplate.class);
         List<PropertyTemplate> propertyTemplatesList = new ArrayList<PropertyTemplate>();
 
         for (PropertyTemplate pt : defaultPropertyTemplatesList) {

@@ -39,46 +39,42 @@ $(document).ready(function() {
         } 
         $("#label_" + message).siblings("input").attr("content", msg(message));
      }
-     var localeCode = $("#localeCode").val();
-     if (localeCode == 'en') {
-        i18n = 'en_US';
-     } else {
-        i18n = 'zh_CN';
-     }
+//     var localeCode = $("#localeCode").val();
+    var i18n = $("#language").val();
      jQuery.i18n.properties({
         name : 'message',
         path : 'i18n/',
         mode : 'map',
         language : i18n,
         callback : function() {
-           msg = jQuery.i18n.prop;
-           AddI18n('SearchButton');
-           AddI18n('SearchConditionReset');
-           AddI18n('KeywordPlaceholder');
-           AddI18n('SearchBy');
-           AddI18n('CheckedAllFields');
-           AddI18n('CheckedAllTypes');
-           AddI18n('CheckedAllStatus');
-           AddI18n('AssetId');
-           AddI18n('AssetName');
-           AddI18n('User');
-           AddI18n('Project');
-           AddI18n('Customer');
-           AddI18n('PoNo');
-           AddI18n('BarCode');
-           AddI18n('AssetType');
-           AddI18n('Machine');
-           AddI18n('Monitor');
-           AddI18n('Device');
-           AddI18n('Software');
-           AddI18n('OtherAssets');
-           AddI18n('AssetStatus');
-           AddI18n('Available');
-           AddI18n('InUse');
-           AddI18n('Idle');
-           AddI18n('Returned');
-           AddI18n('CheckInTime');
-           AddI18n('Operation_Warning');
+//           msg = jQuery.i18n.prop;
+//           AddI18n('SearchButton');
+//           AddI18n('SearchConditionReset');
+//           AddI18n('KeywordPlaceholder');
+//           AddI18n('SearchBy');
+//           AddI18n('CheckedAllFields');
+//           AddI18n('CheckedAllTypes');
+//           AddI18n('CheckedAllStatus');
+//           AddI18n('AssetId');
+//           AddI18n('AssetName');
+//           AddI18n('User');
+//           AddI18n('Project');
+//           AddI18n('Customer');
+//           AddI18n('PoNo');
+//           AddI18n('BarCode');
+//           AddI18n('AssetType');
+//           AddI18n('Machine');
+//           AddI18n('Monitor');
+//           AddI18n('Device');
+//           AddI18n('Software');
+//           AddI18n('OtherAssets');
+//           AddI18n('AssetStatus');
+//           AddI18n('Available');
+//           AddI18n('InUse');
+//           AddI18n('Idle');
+//           AddI18n('Returned');
+//           AddI18n('CheckInTime');
+//           AddI18n('Operation_Warning');
         }
      });
      

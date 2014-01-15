@@ -12,17 +12,7 @@ function ShowMsg(msg, callback) {
 };
 
 $(function() {
-	
-	var i18n = $("#locale").val();
-	jQuery.i18n.properties({
-		name : 'message',
-		path : 'i18n/',
-		mode : 'map',
-		language : i18n,
-		callback : function() {
-		}
-	});
-	
+	//confirm  dialog
 	$("#dialog-confirm").dialog({
 		autoOpen : false,
 		resizable : false,
@@ -31,21 +21,17 @@ $(function() {
 		draggable: false,
 		position : ["center",130],
 		modal : true,
-		title : i18nProp('operation_confirm'),
-		buttons : [{
-			text : i18nProp('yes'),
-			click : function() {
-					$(this).dialog("close");
-					mDialogCallback(true);
-				}
-			},{
-			text: i18nProp('no'),
-			click:function() {
-					$(this).dialog("close");
-					mDialogCallback(false);
-				}
+		title : $.i18n.prop('Operation_Confirm'),
+		buttons : {
+			"Yes" : function() {
+				$(this).dialog("close");
+				mDialogCallback(true);
+			},
+			"No" : function() {
+				$(this).dialog("close");
+				mDialogCallback(false);
 			}
-		]
+		}
 	});
 	//alert dialog
 	$('#dialog-warning').dialog({
@@ -53,28 +39,36 @@ $(function() {
 		height : 170,
 		width : 390,
 		modal : true,
-		title : i18nProp('operation_warning'),
+		title : $.i18n.prop('Operation_Warning'),
 		draggable: false,
 		resizable : false,
 		position : ["center",130],
-		buttons : [{
-			text : $.i18n.prop('ok'),
-			click : function() {
+		buttons : {
+			"OK" : function() {
 				$(this).dialog("close");
 			}
-		}]
+		}
 	});
   });
 
-function i18nProp(message, line) {
-	if(line == "" || line == null){
+function i18nProp(message,line) {
+	if(line==""||line==null){
 		return $.i18n.prop(message);
 	}else{
-		if (line.lastIndexOf(",") != -1) {
-			return $.i18n.prop(message, line.substring(0, line.length - 1));
-		} else {
-			return $.i18n.prop(message, line);
-		}
+		return $.i18n.prop(message,line.substr(0,line.length-1));
 	}
 }
 
+$(function(){
+	
+    var i18n = $("#language").val();
+    jQuery.i18n.properties({
+       name : 'message',
+       path : 'i18n/',
+       mode : 'map',
+       language : i18n,
+       callback : function() {
+       }
+    });
+	
+});

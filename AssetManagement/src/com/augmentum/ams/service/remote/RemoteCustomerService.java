@@ -84,7 +84,7 @@ public interface RemoteCustomerService {
      * @return
      * @throws DataException
      */
-    Customer getCustomerByCodefromIAP(HttpServletRequest httpServletRequest, String customerName)
+    Customer getCustomerByCodefromIAP(HttpServletRequest httpServletRequest, String customerCode)
             throws DataException;
 
     /**

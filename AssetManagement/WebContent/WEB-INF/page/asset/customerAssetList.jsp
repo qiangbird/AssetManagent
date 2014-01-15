@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -86,25 +87,25 @@
             </div>
             <a id="searchButton" class="a_common_button green_button_thirty">
                 <span class="left"></span>
-                <span class="middle" ><label id="label_SearchButton"></label> </span>
+                <span class="middle" ><spring:message code="SearchButton" /> </span>
                 <span class="right"></span>
             </a>
             
             <div class="operation_assets_list">
-                <a class="a_operations_assets_list">Operation</a>
+                <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
                 <c:choose>
                 <c:when test="${sessionScope.userRole == 'Manager'}">
                     <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
-                    <li id="takeOver" value=""><a>Take over</a></li>
-                    <li id="returnToProject" value="AVAILABLE"><a>Return To Project</a></li>
+                    <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
+                    <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
                     </c:if>
-                    <li id="assgin"><a>Assign</a></li>
-                    <li id="returnToIT" value="RETURNING_TO_IT"><a>Return to IT</a></li>
+                    <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
+                    <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
                 </c:when>
                 <c:otherwise>
-                    <li id="takeOver"><a>Take over</a></li>
-                    <li id="returnToProject" value="RETURNING_TO_IT"><a>Return To Project</a></li>
+                    <li id="takeOver"><a><spring:message code="customer.asset.take.over" /></a></li>
+                    <li id="returnToProject" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.project" /></a></li>
                 </c:otherwise>
                 </c:choose>
                 </ul>

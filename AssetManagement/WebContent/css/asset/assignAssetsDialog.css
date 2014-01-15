@@ -92,11 +92,10 @@
 	margin-left: 5px;
 	cursor: pointer;
 	font-family: Arial;
-	font-size: 14px;
+	font-size: 18px;
 	position: absolute;
 	top: 142px;
 	left: 263px;
-	font-weight: 800;
 }
 
 #tip_message {
