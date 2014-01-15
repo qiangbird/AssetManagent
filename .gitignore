@@ -1,6 +1,7 @@
 /AssetManagement/WebContent/WEB-INF/web.xml
 /AssetManagement/build/
 /AssetManagement/.settings/
+/AssetManagement/.settings/org.eclipse.jdt.core.prefs
 /AssetManagement/.externalToolBuilders/
 /AssetManagement/.project
 /AssetManagement/.classpath
