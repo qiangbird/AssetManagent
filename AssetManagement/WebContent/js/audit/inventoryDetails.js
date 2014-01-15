@@ -87,7 +87,13 @@ function showAudited(a) {
     uLink.find("a").css("color", "#23A5E4").css("text-decoration", "underline");
    
     $("#auditView").bind("click", function(){
-       	$(".viewInventoryAsset").show();
+       	$("#viewMoreDetails").dialog('open');
+//       	$("#viewMoreDetails").load("viewAuditAssets?flag=audit&fileName="+auditFileName);
+       	$("#viewMoreDetails").load("/AssetManagement/searchCommon/column/getColumns?category=asset");
+       	window.location.href = "/AssetManagement/audit/inventoryAsset";
+//       	initFields("asset");
+//       	initCriteria(1);
+//       	windows.location.href = "inventoryAsset.jsp";
     });
     
     $("#auditTable").dataTable({

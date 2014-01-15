@@ -143,6 +143,11 @@ public class AuditController extends BaseController{
         return SUCCESS;
     }*/
     
+    @RequestMapping(value = "/inventoryAsset")
+    public String redirectPage() {
+    	return "audit/inventoryAsset";
+    }
+    
     @RequestMapping(value = "/viewInventoryAsset", method = RequestMethod.GET)
 	public ModelAndView findAllAssetsBySearchCondition(
 			SearchCondition searchCondition, HttpSession session)

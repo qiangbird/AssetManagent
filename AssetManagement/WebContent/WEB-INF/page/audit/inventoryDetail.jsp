@@ -18,13 +18,7 @@
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/audit/inventoryDetails.css" />
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/asset/assignAssetsDialog.css" />
     <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css" />
-    <link rel="stylesheet" type="text/css" href="css/base/base.css">
-	<link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
-	<link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
-	<link rel="stylesheet" type="text/css" href="searchList/css/dataList.css">
-	<link rel="stylesheet" type="text/css" href="css/common/commonList.css">
-	<link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
-	<link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
+
     <title></title>
 </head>
 
@@ -134,80 +128,6 @@
 		 <div id="dialog-warning" title="Warning">
 		  <p id="warning-message-body"></p>
 		 </div>
-	<div class="viewInventoryAsset">
-    <div class="dataList">
-    	<div id="searchCondition">
-			<input type="hidden" id="keyword_content" value="">
-			<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
-			<input id="keyword" class="input_txt" name="" type="text" value="">
-			<div class="filterDiv filterDiv_common">
-				<button class="filterBtn filter_no_dropDown">
-				</button>
-				<span class="existedFlag"></span>
-				<div class="filterBox">
-					<div class="single_condition">
-						<div class="condition_title"><label><spring:message code="searchBy" /></label></div>
-						<div class="condition_optional" id="searchFields">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="assetId" /><label><spring:message code="asset.assetId"/></label></p>
-							<p><input type="checkBox" name="field" value="assetName" /><label><spring:message code="asset.name"/></label></p>
-			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="asset.user"/></label></p>
-			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="asset.project"/></label></p>
-			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="asset.customer"/></label></p>
-			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.poNo" /></label></p>
-			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.barcode"/></label></p>
-			        	</div>
-					</div>
-					<div class="single_condition">
-						<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
-						<div class="condition_optional" id="assetType">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="MACHINE" /><label><spring:message code="asset.machine"/></label></p>
-							<p><input type="checkBox" name="field" value="MONITOR" /><label><spring:message code="asset.monitor"/></label></p>
-							<p><input type="checkBox" name="field" value="DEVICE" /><label><spring:message code="asset.device"/></label></p>
-							<p><input type="checkBox" name="field" value="SOFTWARE" /><label><spring:message code="asset.software"/></label></p>
-							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label><spring:message code="asset.otherAssets"/></label></p>
-			            </div>
-			        </div>
-			        <div class="single_condition">
-						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
-						<div class="condition_optional" id="assetStatus">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="AVAILABLE" /><label><spring:message code="asset.available"/></label></p>
-							<p><input type="checkBox" name="field" value="IN_USE" /><label><spring:message code="asset.inUse"/></label></p>
-							<p><input type="checkBox" name="field" value="IDLE" /><label><spring:message code="asset.idle"/></label></p>
-							<p><input type="checkBox" name="field" value="RETURNED" /><label><spring:message code="asset.returned"/></label></p>
-			            </div>
-			        </div>
-			        <div class="single_condition">
-						<div class="condition_title"><spring:message code="asset.checkInDate"/></div>
-						<div class="condition_optional" id="checkInTime">
-							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
-                            <span class="dateLine">-</span>
-                            <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>
-			            </div>
-			        </div>
-			        <a class="reset" href="javascript:void(0);"><spring:message code="reset"/></a>
-				</div>
-			</div>
-			<a id="searchButton" class="a_common_button green_button_thirty">
-	        	<span class="left"></span>
-	        	<span class="middle" ><spring:message code="search" /></span>
-	        	<span class="right"></span>
-	        </a>
-	        <div id="customizedViewButton">
-		        <a id="customizedView" ><spring:message code="customizedView"/></a>
-		        <ul id="viewUlTemplate">
-	                <li><a id="" class="existCustomizedView" ></a></li>
-	            </ul>
-		        <ul id="viewUl">
-	                <li><a href="customizedView/goToNewCustomizedView"><spring:message code="createView"/></a></li>
-	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
-	            </ul>
-            </div>
-	    </div>
-    </div>
-    </div>
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     
     <jsp:include page="inventoryProcessbar.jsp"></jsp:include>
@@ -221,11 +141,6 @@
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.dataTables.js"></script>
 	<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 	<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js" ></script>
-<!-- all assets js files  ---------------------------------------- -->    
-    <script type="text/javascript" src="js/common/common.js"></script>
-<script type="text/javascript" src="js/search/searchCommon.js"></script>
-<script type="text/javascript" src="searchList/js/DataList.js"></script>
-<script type="text/javascript" src="js/audit/inventoryAsset.js" ></script>
-<script type="text/javascript" src="js/search/searchCustomizedView.js" ></script>
+
 </body>
 </html>

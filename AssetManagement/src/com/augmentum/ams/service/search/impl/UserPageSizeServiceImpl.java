@@ -12,7 +12,6 @@ import com.augmentum.ams.dao.user.UserDao;
 import com.augmentum.ams.model.base.PageSize;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.search.UserPageSizeService;
-import com.augmentum.ams.util.LogHelper;
 
 @Service("userPageSizeService")
 public class UserPageSizeServiceImpl implements UserPageSizeService {
@@ -28,22 +27,23 @@ public class UserPageSizeServiceImpl implements UserPageSizeService {
     @Override
     public PageSize getUserPageSize(String userId, int categoryFlag) {
 
-        logger.info(LogHelper.getLogInfo("get user page size start", userId, categoryFlag));
-
+        logger.info("get userPageSize start, [userId], [categoryFlag]: " + userId + "," + categoryFlag);
         User user = userDao.findUserByUserId(userId);
-
+        logger.info("judge user is null when updateUserPageSize, user is null: " + (null == user));
+        
         if (null == user) {
 
-            logger.info(LogHelper.getLogInfo("init user page size start", userId));
+            logger.info("init user page size start, userId: " + userId);
 
             user = userDao.getUserByUserId(userId);
             user.setPageSizeList(userPageSizeDao.findPageSizes());
             userDao.update(user);
 
-            logger.info(LogHelper.getLogInfo("init user page size end", userId));
+            logger.info("init user page size end, userId: " + userId);
         }
 
         List<PageSize> list = user.getPageSizeList();
+        logger.info("userPageSize list, list size: " + list.size());
 
         for (PageSize pageSize : list) {
 
@@ -58,14 +58,16 @@ public class UserPageSizeServiceImpl implements UserPageSizeService {
     @Override
     public PageSize updateUserPageSize(String userId, int categoryFlag, int pageSizeValue) {
 
-        logger.info(LogHelper.getLogInfo("update user page size start", userId, categoryFlag,
-                pageSizeValue));
+        logger.info("update user page size start, [userId], [categoryFlag], [pageSizeVlalue]"
+        		+ userId + "," + categoryFlag + "," + pageSizeValue);
 
         User user = userDao.findUserByUserId(userId);
+        logger.info("judge user is null when updateUserPageSize, user is null: " + (null == user));
 
         if (null != user) {
             List<PageSize> pageSizes = new ArrayList<PageSize>();
             List<PageSize> list = user.getPageSizeList();
+            logger.info("userPageSize list, list size: " + list.size());
 
             for (PageSize pageSize : list) {
 
