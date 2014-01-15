@@ -4,3 +4,5 @@
 /AssetManagement/.externalToolBuilders/
 /AssetManagement/.project
 /AssetManagement/.classpath
+/AssetManagement/*.project
+/AssetManagement/.classpath
