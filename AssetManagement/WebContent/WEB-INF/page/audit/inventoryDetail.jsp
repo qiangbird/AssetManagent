@@ -15,6 +15,9 @@
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/audit/inventoryDetails.css" />
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/asset/assignAssetsDialog.css" />
+
+    <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css" />
+
     <title></title>
 </head>
 
@@ -117,16 +120,27 @@
        <!--  <div id="viewMoreDetails" style="min-height: 540px">
    		</div> -->
         </div>
-        
+
+         <div id="dialog-confirm" title="Operation confirm">
+		   <p id="confirm-message-body"></p>
+		 </div>
+		
+		 <div id="dialog-warning" title="Warning">
+		  <p id="warning-message-body"></p>
+		 </div>
+    <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
+    
     <jsp:include page="inventoryProcessbar.jsp"></jsp:include>
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-<%--     <script type="text/javascript" src="<%=basePath%>/js/common/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="<%=basePath%>/js/common/jquery-ui-1.8.18.custom.min.js"></script> --%>
+    
+    <script type="text/javascript" src="<%=basePath%>/js/common/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>/js/common/jquery-ui-1.8.18.custom.min.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryDetails.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryCommonOperation.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.form.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.dataTables.js"></script>
-    <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
-    
+	<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
+	<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js" ></script>
+
 </body>
 </html>

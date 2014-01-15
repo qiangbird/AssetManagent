@@ -12,6 +12,7 @@ import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.service.BaseCaseTest;
 import com.augmentum.ams.service.asset.AssetService;
+import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -42,12 +43,16 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
     @Test
     public void testSearchAllAssetsBySearchCondition() throws BaseException {
         Page<Asset> page = new Page<Asset>();
-        page.setPageSize(30);
-        page.setKeyword("John Li");
         
         SearchCondition sc = new SearchCondition();
+        sc.setKeyWord("");
+        sc.setPageSize(20);
+        sc.setPageNum(1);
+        
         page = searchAssetService.findAllAssetsBySearchCondition(sc);
         Assert.assertTrue(page.getResult().size() > 0);
+        logger.info(page.getResult().size());
+        SearchCommonUtil.convertAssetListToJSONArray(page.getResult());
     }
         
 }

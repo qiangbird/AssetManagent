@@ -1,7 +1,10 @@
 package com.augmentum.ams.web.controller.audit;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -9,15 +12,25 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.augmentum.ams.exception.BaseException;
+import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.audit.AuditFile;
+import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.audit.AuditFileService;
 import com.augmentum.ams.service.audit.AuditService;
+import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.Constant;
+import com.augmentum.ams.util.FormatEntityListToEntityVoList;
+import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
+import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.audit.AuditVo;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 @Controller("auditController")
 @RequestMapping(value="/audit")
@@ -28,6 +41,9 @@ public class AuditController extends BaseController{
     
     @Autowired
     private AuditFileService auditFileService;
+    
+    @Autowired
+	private UserCustomColumnsService userCustomColumnsService;
     
     @RequestMapping("/showAuditDetails")
     public ModelAndView showAuditDetails(AuditVo auditVo) throws Exception{
@@ -126,4 +142,37 @@ public class AuditController extends BaseController{
         System.out.println("flag"+flag);
         return SUCCESS;
     }*/
+    
+    @RequestMapping(value = "/inventoryAsset")
+    public String redirectPage() {
+    	return "audit/inventoryAsset";
+    }
+    
+    @RequestMapping(value = "/viewInventoryAsset", method = RequestMethod.GET)
+	public ModelAndView findAllAssetsBySearchCondition(
+			SearchCondition searchCondition, HttpSession session)
+			throws BaseException {
+
+		if (null == searchCondition) {
+			searchCondition = new SearchCondition();
+		}
+		
+//		searchCondition.setIsAudited(true);
+//		searchCondition.setAuditFileName("2014-01-08_01");
+		
+		Page<Asset> page = auditService.findAssetForInventory(searchCondition);
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		List<AssetListVo> list = FormatEntityListToEntityVoList
+				.formatAssetListToAssetVoList(page.getResult(),
+						clientTimeOffset);
+		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+				.findUserCustomColumns("asset", getUserIdByShiro());
+		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
+				userCustomColumnList);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", page.getRecordCount());
+		modelAndView.addObject("totalPage", page.getTotalPage());
+		return modelAndView;
+	}
 }

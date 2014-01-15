@@ -31,6 +31,13 @@ $(document).ready(function(){
         data: "timeOffset=" + timeOffset
     });
     
+    // when user login, judge if userCustomColumns is null. If yes, initialize column.
+    $.ajax({
+    	dataType: 'json',
+        type: "POST",
+        url: "home/initUserCustomColumn"
+    });
+    
     $(".i18n-set-step").click(function(){
         var locale = $(this).attr("name");
          $.ajax({

@@ -4,13 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
 import com.augmentum.ams.dao.audit.AuditFileDao;
+import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Device;
@@ -339,250 +343,316 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     /**
-     * assign assets(manager and IT)
-     */
+	 * assign assets(manager and IT)
+	 */
 
-    @Override
-    public void itAssignAssets(AssignAssetCondition condition, HttpServletRequest request)
-            throws ExceptionHelper {
-        
-        String userId = condition.getUserId();
-        String assetIds = condition.getAssetIds();
-        String projectName = condition.getProjectName();
-        String projectCode = condition.getProjectCode();
-        String customerCode = condition.getCustomerCode();
-        String customerName = condition.getCustomerName();
+	@Override
+	public void itAssignAssets(AssignAssetCondition condition,
+			HttpServletRequest request) throws ExceptionHelper {
 
-        if (null == assetIds || "".equals(assetIds)) {
-            logger.error("The param assetIds is null when it/manager assign assets!");
-        } else if (null == customerName || "".equals(customerName)) {
-            logger.error("The param customerName is null when it/manager assign assets!");
-        }
+		logger.info("enter itAssignAssets service successfully");
+		if (null == condition) {
+			logger.error("The param condition is null when it assign assets!");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_ASSIGN_FAILED);
+		}
+		String userId = condition.getUserId();
+		String assetIds = condition.getAssetIds();
+		String projectName = condition.getProjectName();
+		String projectCode = condition.getProjectCode();
+		String customerCode = condition.getCustomerCode();
+		String customerName = condition.getCustomerName();
 
-        try {
-            Customer customer = customerService.getCustomerByCode(customerCode);
-            if (customer == null) {
-                customer = new Customer();
-                customer.setCustomerCode(customerCode);
-                customer.setCustomerName(customerName);
-                customerService.saveCustomer(customer);
-            }
+		if (StringUtils.isEmpty(assetIds)) {
+			logger.error("The param assetIds is null when it assign assets!");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_ASSIGN_FAILED);
+		} else if (StringUtils.isEmpty(customerName)) {
+			logger.error("The param customerName is null when it assign assets!");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_ASSIGN_FAILED);
+		}
 
-            Project project = null;
-            if (null != projectName && !"".equals(projectName)) {
-                project = projectService.getProjectByProjectCode(projectCode);
+		Customer customer = customerService.getCustomerByCode(customerCode);
+		logger.info("judge customer is null when it assign assets, customer is null: "
+				+ (null == customer));
 
-                if (project == null) {
-                    project = new Project();
-                    project.setProjectCode(projectCode);
-                    project.setProjectName(projectName);
-                    project.setCustomer(customer);
-                    projectService.saveProject(project);
-                }
-            }
+		if (customer == null) {
+			customer = new Customer();
+			customer.setCustomerCode(customerCode);
+			customer.setCustomerName(customerName);
+			customerService.saveCustomer(customer);
+			logger.info("save customer successfully when it assign assets");
+		}
 
-            User receiver = null;
-            UserVo userVo = null;
-            Boolean assigningFlag = false;
-            if (null != userId && !"".equals(userId)) {
+		Project project = null;
+		if (StringUtils.isNotEmpty(projectName)) {
+			project = projectService.getProjectByProjectCode(projectCode);
+			logger.info("judge project is null when it assign assets, project is null: "
+					+ (null == project));
 
-                userVo = remoteEmployeeService.getRemoteUserById(userId, request);
+			if (project == null) {
+				project = new Project();
+				project.setProjectCode(projectCode);
+				project.setProjectName(projectName);
+				project.setCustomer(customer);
+				projectService.saveProject(project);
+				logger.info("save project successfully when it assign assets");
+			}
+		}
 
-                if (null == userService.getUserByUserId(userId)) {
-                    userService.saveUserAsUserVo(userVo);
-                }
-                receiver = userService.getUserByUserId(userId);
+		User receiver = null;
+		UserVo userVo = null;
+		Boolean assigningFlag = false;
+		if (StringUtils.isNotEmpty(userId)) {
 
-                if (RoleLevelUtil.getRoleByUserVo(userVo).name().equals(RoleEnum.MANAGER.name())
-                        || specialRoleService.findSpecialRoleByUserId(userId)) {
-                    assigningFlag = true;
-                }
-            }
+			try {
+				userVo = remoteEmployeeService.getRemoteUserById(userId,
+						request);
+				logger.info("judge IAP userVo is null when it assign assets, userVo is null: "
+						+ (null == userVo));
+			} catch (DataException e) {
+				logger.error("get userVo from IAP failed when IT assign asset",
+						e);
+				// TODO throw IAP exception
+			}
 
-            String[] ids = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
+			if (null == userService.getUserByUserId(userId)) {
+				logger.info("judge DB user is null when it assign assets, user is null: "
+						+ (null == userService.getUserByUserId(userId)));
+				userService.saveUserAsUserVo(userVo);
+			}
+			receiver = userService.getUserByUserId(userId);
 
-            for (String id : ids) {
-                Asset asset = assetDao.getAssetById(id);
+			if (RoleLevelUtil.getRoleByUserVo(userVo).name()
+					.equals(RoleEnum.MANAGER.name())
+					|| specialRoleService.findSpecialRoleByUserId(userId)) {
+				assigningFlag = true;
+			}
+		}
 
-                if (null == asset) {
-                    logger.error("asset is null when IT return assets to customer");
-                    throw new ExceptionHelper(ErrorCodeUtil.DATA_ASSET_NOT_EXIST);
-                } else {
+		String[] ids = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
+		Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 
-                    if (!AssetStatusOperateUtil.canITAssignAsset(asset)) {
-                        logger
-                                .error("asset status is invalid when IT assign assets, asset status is: "
-                                        + asset.getStatus());
-                        throw new ExceptionHelper(ErrorCodeUtil.ASSET_ASSIGN_STATUS_INVALID);
-                    } else {
+		for (String id : ids) {
+			Asset asset = assetDao.getAssetById(id);
 
-                        if (assigningFlag) {
-                            asset.setStatus(TransientStatusEnum.ASSIGNING.name());
-                            asset.setProject(project);
-                            asset.setCustomer(customer);
-                            asset.setUser(receiver);
-                            assetDao.update(asset);
-                        } else {
-                            asset.setStatus(StatusEnum.IN_USE.name());
-                            asset.setProject(project);
-                            asset.setCustomer(customer);
-                            asset.setUser(receiver);
-                            assetDao.update(asset);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.error("IT assign assets failed", e);
-            throw new ExceptionHelper(ErrorCodeUtil.ASSET_ASSIGN_FAILED);
-        }
-    }
+			if (null == asset) {
+				logger.error("asset is null when IT return assets to customer, asset uuid: "
+						+ id);
+				errorCodes.put(id, new ExceptionHelper(
+						ErrorCodeUtil.DATA_NOT_EXIST));
+			} else {
 
-    @Override
-    public void returnAssetsToCustomer(String assetIds) throws ExceptionHelper {
+				if (!AssetStatusOperateUtil.canITAssignAsset(asset)) {
+					logger.error("asset status is invalid when IT assign assets, asset status is: "
+							+ asset.getStatus());
+					errorCodes.put(id, new ExceptionHelper(
+							ErrorCodeUtil.ASSET_STATUS_INVALID));
+				} else {
 
-        if (null == assetIds || "".equals(assetIds)) {
-            logger.error("The param assetIds is null when assets return to Customer");
-        } else {
+					if (assigningFlag) {
+						asset.setStatus(TransientStatusEnum.ASSIGNING.name());
+						asset.setProject(project);
+						asset.setCustomer(customer);
+						asset.setUser(receiver);
+						assetDao.update(asset);
+					} else {
+						asset.setStatus(StatusEnum.IN_USE.name());
+						asset.setProject(project);
+						asset.setCustomer(customer);
+						asset.setUser(receiver);
+						assetDao.update(asset);
+					}
+				}
+			}
+		}
+		if (0 != errorCodes.size()) {
+			throw new ExceptionHelper(errorCodes);
+		}
+		logger.info("enter itAssignAssets service successfully");
+	}
 
-            String[] assetIdArr = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
-            try {
+	@Override
+	public void returnAssetsToCustomer(String assetIds) throws ExceptionHelper {
 
-                for (String assetId : assetIdArr) {
-                    Asset asset = assetDao.getAssetById(assetId);
+		logger.info("enter returnAssetsToCustomer service successfully");
+		if (null == assetIds || "".equals(assetIds)) {
+			logger.error("The param assetIds is null when assets return to Customer");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_RETURN_FAILED);
+		} else {
 
-                    if (null == asset) {
-                        logger.error("asset is null when return assets to customer");
-                        throw new ExceptionHelper(ErrorCodeUtil.DATA_ASSET_NOT_EXIST);
-                    } else {
-                        if (!AssetStatusOperateUtil.canITReturnToCustomer(asset)) {
-                            logger
-                                    .error("asset status is invalid when IT return assets to customer");
-                            throw new ExceptionHelper(
-                                    ErrorCodeUtil.ASSET_RETURNING_TO_CUSTOMER_STATUS_INVALID);
-                        } else {
-                            asset.setStatus(TransientStatusEnum.RETURNING_TO_CUSTOMER.name());
-                            asset.setUser(null);
-                            assetDao.update(asset);
+			String[] assetIdArr = FormatUtil.splitString(assetIds,
+					Constant.SPLIT_COMMA);
+			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                logger.error("IT return assets to customer failed", e);
-                throw new ExceptionHelper(ErrorCodeUtil.ASSET_RETURNING_TO_CUSTOMER_FAILED);
-            }
-        }
-    }
+			for (String id : assetIdArr) {
+				Asset asset = assetDao.getAssetById(id);
 
-    @Override
-    public void changeAssetsToFixed(String assetIds) throws ExceptionHelper {
+				if (null == asset) {
+					logger.error("asset is null when return assets to customer, asset uuid: "
+							+ id);
+					errorCodes.put(id, new ExceptionHelper(
+							ErrorCodeUtil.DATA_NOT_EXIST));
+				} else {
+					if (!AssetStatusOperateUtil.canITReturnToCustomer(asset)) {
+						logger.error("asset status is invalid when IT return assets to customer, asset uuid: "
+								+ id);
+						errorCodes.put(id, new ExceptionHelper(
+								ErrorCodeUtil.ASSET_STATUS_INVALID));
+					} else {
+						asset.setStatus(TransientStatusEnum.RETURNING_TO_CUSTOMER
+								.name());
+						asset.setUser(null);
+						assetDao.update(asset);
+					}
+				}
+			}
+			if (0 != errorCodes.size()) {
+				throw new ExceptionHelper(errorCodes);
+			}
+			logger.info("leave returnAssetsToCustomer service successfully");
+		}
+	}
 
-        if (null == assetIds || "".equals(assetIds)) {
-            logger.error("The param assetIds is null when assets return to Customer");
-        } else {
+	@Override
+	public void changeAssetsToFixed(String assetIds) throws ExceptionHelper {
 
-            String[] assetIdArr = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
-            try {
+		logger.info("enter changeAssetsToFixed servie successfully");
+		if (null == assetIds || "".equals(assetIds)) {
+			logger.error("The param assetIds is null when assets return to Customer");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_CHANGE_TO_FIXED_FAILED);
+		} else {
 
-                for (String assetId : assetIdArr) {
-                    Asset asset = assetDao.getAssetById(assetId);
+			String[] assetIdArr = FormatUtil.splitString(assetIds,
+					Constant.SPLIT_COMMA);
+			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 
-                    if (null == asset) {
-                        logger.error("asset is null when return assets to customer");
-                        throw new ExceptionHelper(ErrorCodeUtil.DATA_ASSET_NOT_EXIST);
-                    } else {
-                        asset.setFixed(Boolean.TRUE);
-                        assetDao.update(asset);
-                    }
-                }
-            } catch (ExceptionHelper e) {
-                logger.error("change assets to fixed failed", e);
-                throw new ExceptionHelper(ErrorCodeUtil.ASSET_CHANGE_TO_FIXED_FAILED);
-            }
-        }
-    }
+			for (String assetId : assetIdArr) {
+				Asset asset = assetDao.getAssetById(assetId);
 
-    @Override
-    public void changeAssetsToNonFixed(String assetIds) throws ExceptionHelper {
-        if (null == assetIds || "".equals(assetIds)) {
-            logger.error("The param assetIds is null when assets return to Customer");
-        } else {
+				if (null == asset) {
+					logger.error("asset is null when return assets to customer, asset uuid: "
+							+ assetId);
+					errorCodes.put(assetId, new ExceptionHelper(
+							ErrorCodeUtil.DATA_NOT_EXIST));
+				} else {
+					asset.setFixed(Boolean.TRUE);
+					assetDao.update(asset);
+				}
+			}
+			if (0 != errorCodes.size()) {
+				throw new ExceptionHelper(errorCodes);
+			}
+			logger.info("leave changeAssetsToFixed servie successfully");
+		}
+	}
 
-            String[] assetIdArr = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
-            try {
+	@Override
+	public void changeAssetsToNonFixed(String assetIds) throws ExceptionHelper {
 
-                for (String assetId : assetIdArr) {
-                    Asset asset = assetDao.getAssetById(assetId);
+		logger.info("enter changeAssetsToNonFixed servie successfully");
+		if (null == assetIds || "".equals(assetIds)) {
+			logger.error("The param assetIds is null when assets return to Customer");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_CHANGE_TO_NONFIXED_FAILED);
+		} else {
 
-                    if (null == asset) {
-                        logger.error("asset is null when return assets to customer");
-                        throw new ExceptionHelper(ErrorCodeUtil.DATA_ASSET_NOT_EXIST);
-                    } else {
-                        asset.setFixed(Boolean.FALSE);
-                        assetDao.update(asset);
-                    }
-                }
-            } catch (ExceptionHelper e) {
-                logger.error("change assets to fixed failed", e);
-                throw new ExceptionHelper(ErrorCodeUtil.ASSET_CHANGE_TO_NOT_FIXED_FAILED);
-            }
-        }
-    }
+			String[] assetIdArr = FormatUtil.splitString(assetIds,
+					Constant.SPLIT_COMMA);
+			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 
-    @Override
-    public void addAssetsToAuditForSearchResult(Page<Asset> page) {
+			for (String assetId : assetIdArr) {
+				Asset asset = assetDao.getAssetById(assetId);
 
-        if (null == page || null == page.getResult() || 0 == page.getResult().size()) {
-            logger.error("there is no asset when add assets to audit for search result");
-        } else {
+				if (null == asset) {
+					logger.error("asset is null when return assets to customer, asset uuid: "
+							+ assetId);
+					errorCodes.put(assetId, new ExceptionHelper(
+							ErrorCodeUtil.DATA_NOT_EXIST));
+				} else {
+					asset.setFixed(Boolean.FALSE);
+					assetDao.update(asset);
+				}
+			}
+			if (0 != errorCodes.size()) {
+				throw new ExceptionHelper(errorCodes);
+			}
+			logger.info("leave changeAssetsToNonFixed servie successfully");
+		}
+	}
 
-            List<String> fileNameList = auditFileDao.getAuditFilesName();
-            AuditFile auditFile = new AuditFile();
-            auditFile.setFileName(FormatUtil.generateFileName(fileNameList));
-            auditFileDao.save(auditFile);
+	@Override
+	public void addAssetsToAuditForSearchResult(Page<Asset> page) throws ExceptionHelper {
 
-            for (Asset asset : page.getAllRecords()) {
+		logger.info("enter addAssetsToAuditForSearchResult service successfully");
+		if (null == page || null == page.getAllRecords()) {
+			logger.error("there is no asset when add assets to audit for search result");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_ADD_TO_AUDIT_FAILED);
+		} else {
 
-                Audit audit = new Audit();
-                audit.setAsset(asset);
-                audit.setAuditFile(auditFile);
-                audit.setStatus(false);
-                auditDao.save(audit);
-            }
-        }
-    }
+			List<String> fileNameList = auditFileDao.getAuditFilesName();
+			logger.info("get auditFile name list when add assets to audit for search result, auditFile name list size: "
+					+ fileNameList.size());
+			
+			AuditFile auditFile = new AuditFile();
+			auditFile.setFileName(FormatUtil.generateFileName(fileNameList));
+			auditFileDao.save(auditFile);
+			logger.info("save audit file successfully when add assets to audit for search result");
+			
+			for (Asset asset : page.getAllRecords()) {
 
-    @Override
-    public void addAssetsToAuditForSelected(String assetIds) {
+				Audit audit = new Audit();
+				audit.setAsset(asset);
+				audit.setAuditFile(auditFile);
+				audit.setStatus(false);
+				auditDao.save(audit);
+			}
+			logger.info("leave addAssetsToAuditForSearchResult service successfully");
+		}
+	}
 
-        if (null == assetIds || "".equals(assetIds)) {
-            logger.error("The param assetIds is null when add assets to audit for selected");
-        } else {
+	@Override
+	public void addAssetsToAuditForSelected(String assetIds) throws ExceptionHelper {
 
-            String[] assetIdArr = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
+		logger.info("enter addAssetsToAuditForSelected service successfully");
+		if (null == assetIds || "".equals(assetIds)) {
+			logger.error("The param assetIds is null when add assets to audit for selected");
+			throw new ExceptionHelper(ErrorCodeUtil.ASSET_ADD_TO_AUDIT_FAILED);
+		} else {
 
-            List<String> fileNameList = auditFileDao.getAuditFilesName();
-            AuditFile auditFile = new AuditFile();
-            auditFile.setFileName(FormatUtil.generateFileName(fileNameList));
-            auditFileDao.save(auditFile);
+			String[] assetIdArr = FormatUtil.splitString(assetIds,
+					Constant.SPLIT_COMMA);
 
-            for (String assetId : assetIdArr) {
-                Asset asset = assetDao.getAssetById(assetId);
+			List<String> fileNameList = auditFileDao.getAuditFilesName();
+			logger.info("get auditFile name list when add assets to audit for search result, auditFile name list size: "
+					+ fileNameList.size());
+			
+			AuditFile auditFile = new AuditFile();
+			auditFile.setFileName(FormatUtil.generateFileName(fileNameList));
+			auditFileDao.save(auditFile);
+			logger.info("save audit file successfully when add assets to audit for selected asset");
 
-                if (null == asset) {
-                    logger.error("asset is null when add assets to audit for selected");
-                } else {
+			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
+			
+			for (String assetId : assetIdArr) {
+				Asset asset = assetDao.getAssetById(assetId);
+				
 
-                    Audit audit = new Audit();
-                    audit.setAsset(asset);
-                    audit.setAuditFile(auditFile);
-                    audit.setStatus(false);
-                    auditDao.save(audit);
-                }
-            }
-        }
-    }
+				if (null == asset) {
+					logger.error("asset is null when add assets to audit for selected, asset uuid: " + assetId);
+					errorCodes.put(assetId, new ExceptionHelper(ErrorCodeUtil.DATA_NOT_EXIST));
+				} else {
+
+					Audit audit = new Audit();
+					audit.setAsset(asset);
+					audit.setAuditFile(auditFile);
+					audit.setStatus(false);
+					auditDao.save(audit);
+				}
+			}
+			if (0 != errorCodes.size()) {
+				throw new ExceptionHelper(errorCodes);
+			}
+			logger.info("leave addAssetsToAuditForSelected service successfully");
+		}
+	}
 
     @Override
     public void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request,

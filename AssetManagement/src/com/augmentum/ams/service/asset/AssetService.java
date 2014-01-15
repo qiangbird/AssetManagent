@@ -162,13 +162,13 @@ public interface AssetService {
      * @author Geoffrey.Zhao
      * @param assetIds
      */
-    void addAssetsToAuditForSelected(String assetIds);
+    void addAssetsToAuditForSelected(String assetIds) throws ExceptionHelper;
 
     /**
      * @author Geoffrey.Zhao
      * @param page
      */
-    void addAssetsToAuditForSearchResult(Page<Asset> page);
+    void addAssetsToAuditForSearchResult(Page<Asset> page) throws ExceptionHelper;
     /**
      * @author Jay.He
      * @time Jan 3, 2014 9:54:09 AM

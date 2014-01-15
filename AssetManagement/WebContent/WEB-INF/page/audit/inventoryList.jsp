@@ -15,9 +15,11 @@
 <link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
 <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="messageBar/css/messagebar.css">
 </head>
 <body>
 <jsp:include page="../common/header.jsp"></jsp:include>
+<div id="messageBar"></div>
 <div id="body" >
 	<div id="main">
 		<div class="up-shadow"></div>
@@ -54,12 +56,12 @@
 		            						<form action="auditFile/checkInventory" enctype="multipart/form-data" method="post">
 							                	<input id="fileUpload" type="file" name="file" id="file" onchange="initUpload(this);"></input>
 							                	<input type="hidden" name="auditFileName" id="auditFileName" value=""></input>
-						                		<input id="uploadBtn" type="button" value="Upload" Onclick="file.click();"></input>
+						                		<input id="uploadBtn" type="button" value="<spring:message code='upload'/>" Onclick="file.click();"></input>
 						                	</form>
 	            							<!-- <input id="uploadBtn" type="button" value="Upload" /> -->
 	            							<div class="hidden-tool">
-		            							<input type="button" value="Done"  class="check-done-button"/>
-		            							<input type="button" value="Delete"  class="check-delete-button"/>
+		            							<input type="button" value="<spring:message code='done'/>"  class="check-done-button"/>
+		            							<input type="button" value="<spring:message code='delete'/>"  class="check-delete-button"/>
 	            							</div>
 	            						</div>
 	            					</div>
@@ -104,5 +106,6 @@
 <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryCommonOperation.js"></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="<%=basePath%>/js/common/jquery.form.js"></script>
+<script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 </body>
 </html>

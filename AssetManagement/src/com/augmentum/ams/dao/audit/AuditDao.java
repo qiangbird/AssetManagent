@@ -64,5 +64,13 @@ public interface AuditDao extends BaseDao<Audit>{
      * @return
      */
     List<String> findAssetsBarCodeByFileId(String auditFileId);
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @param isAudited
+     * @param auditFileName
+     * @return
+     */
+    List<String> findInventoryAssetId(Boolean isAudited, String auditFileName);
 
 }

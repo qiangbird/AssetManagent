@@ -3,6 +3,10 @@ package com.augmentum.ams.service.audit;
 import net.sf.json.JSONArray;
 
 import com.augmentum.ams.exception.AuditHandleException;
+import com.augmentum.ams.exception.BaseException;
+import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 public interface AuditService {
 
@@ -48,4 +52,9 @@ public interface AuditService {
      */
     int getAuditPercentage(String auditFileName);
 
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    Page<Asset> findAssetForInventory(SearchCondition condition) throws BaseException;
 }

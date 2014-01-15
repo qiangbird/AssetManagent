@@ -22,6 +22,7 @@ import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
+import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
@@ -37,6 +38,8 @@ public class HomeController extends BaseController {
     private CustomerAssetService customerAssetService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserCustomColumnsService userCustomColumnsService;
 
     private Logger logger = Logger.getLogger(HomeController.class);
 
@@ -128,5 +131,17 @@ public class HomeController extends BaseController {
         logger.info("client browser timeOffset: " + session.getAttribute("timeOffset"));
         logger.info("getTimeOffset() end... ");
         return null;
+    }
+    
+    @RequestMapping("/initUserCustomColumn")
+    @ResponseBody
+    public String initUserCustomColumn(HttpSession session) {
+    	UserVo userVo = (UserVo) session.getAttribute("userVo");
+    	logger.info("get userVo from session when user login, userVo is null: " + (null == userVo));
+    	String userId = userVo.getEmployeeId();
+    	logger.info("init userCustomColumn start when user login first time, userId is: " + userId);
+    	userCustomColumnsService.initUserCustomColumn(userId);
+    	logger.info("init userCustomColumn end when user login first time, userId is: " + userId);
+    	return null;
     }
 }

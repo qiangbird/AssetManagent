@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ import com.augmentum.ams.service.search.SearchAssetService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.AssetUtil;
+import com.augmentum.ams.util.ErrorCodeConvertToJSON;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
@@ -401,66 +403,100 @@ public class AssetController extends BaseController {
     }
 
     @RequestMapping(value = "/itAssignAssets")
-    @ResponseBody
-    public String itAssignAssets(AssignAssetCondition condition, HttpServletRequest request) {
+	public ModelAndView itAssignAssets(AssignAssetCondition condition,
+			HttpServletRequest request) {
 
-        try {
-            assetService.itAssignAssets(condition, request);
-        } catch (ExceptionHelper e) {
-            logger.info(e);
-        }
-        return null;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		// TODO test condition is null
+		// condition = null;
+		try {
+			assetService.itAssignAssets(condition, request);
+		} catch (ExceptionHelper e) {
+			modelAndView = this.addErrorCode(e);
+		}
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "/returnAssetsToCustomer")
-    @ResponseBody
-    public String returnAssetsToCustomer(String assetIds) {
+	@RequestMapping(value = "/returnAssetsToCustomer")
+	public ModelAndView returnAssetsToCustomer(String assetIds) {
 
-        try {
-            assetService.returnAssetsToCustomer(assetIds);
-        } catch (ExceptionHelper e) {
-            logger.info(e);
-        }
-        return null;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			assetService.returnAssetsToCustomer(assetIds);
+		} catch (ExceptionHelper e) {
+			modelAndView = this.addErrorCode(e);
+		}
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "/changeAssetsToFixed")
-    @ResponseBody
-    public String changeAssetsToFixed(String assetIds) {
+	@RequestMapping(value = "/changeAssetsToFixed")
+	public ModelAndView changeAssetsToFixed(String assetIds) {
 
-        try {
-            assetService.changeAssetsToFixed(assetIds);
-        } catch (ExceptionHelper e) {
-            logger.info(e);
-        }
-        return null;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			assetService.changeAssetsToFixed(assetIds);
+		} catch (ExceptionHelper e) {
+			modelAndView = this.addErrorCode(e);
+		}
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "/changeAssetsToNonFixed")
-    @ResponseBody
-    public String changeAssetsToNonFixed(String assetIds) {
+	@RequestMapping(value = "/changeAssetsToNonFixed")
+	public ModelAndView changeAssetsToNonFixed(String assetIds) {
 
-        try {
-            assetService.changeAssetsToNonFixed(assetIds);
-        } catch (ExceptionHelper e) {
-            logger.info(e);
-        }
-        return null;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			assetService.changeAssetsToNonFixed(assetIds);
+		} catch (ExceptionHelper e) {
+			modelAndView = this.addErrorCode(e);
+		}
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "/addAssetsToAuditForSearchResult")
-    public String addAssetsToAuditForSearchResult() {
+	@RequestMapping(value = "/addAssetsToAuditForSearchResult")
+	public ModelAndView addAssetsToAuditForSearchResult() {
 
-        assetService.addAssetsToAuditForSearchResult(pageForAudit);
-        return "redirect:/auditFile/inventoryList";
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			assetService.addAssetsToAuditForSearchResult(pageForAudit);
+		} catch (ExceptionHelper e) {
+			modelAndView = this.addErrorCode(e);
+		}
+		modelAndView.setViewName("redirect:/auditFile/inventoryList");
+		return modelAndView;
+//		return "redirect:/auditFile/inventoryList";
+	}
 
-    @RequestMapping(value = "/addAssetsToAuditForSelected")
-    public String addAssetsToAuditForSelected(String assetIds) {
+	@RequestMapping(value = "/addAssetsToAuditForSelected")
+	public ModelAndView addAssetsToAuditForSelected(String assetIds) {
 
-        assetService.addAssetsToAuditForSelected(assetIds);
-        return "redirect:/auditFile/inventoryList";
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		try {
+			assetService.addAssetsToAuditForSelected(assetIds);
+		} catch (ExceptionHelper e) {
+			modelAndView = this.addErrorCode(e);
+		}
+		modelAndView.setViewName("redirect:/auditFile/inventoryList");
+		return modelAndView;
+//		return "redirect:/auditFile/inventoryList";
+	}
+
+	public ModelAndView addErrorCode(ExceptionHelper e) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		if (null != e.getErrorCodes()) {
+			JSONArray errorCodes = ErrorCodeConvertToJSON.convertToJSONArray(e
+					.getErrorCodes());
+			modelAndView.addObject("errorCodes", errorCodes);
+		} else if (null != e.getErrorCode()) {
+			JSONObject errorCode = ErrorCodeConvertToJSON.convertToJSONObject(e
+					.getErrorCode());
+			modelAndView.addObject("errorCode", errorCode);
+		} else {
+			modelAndView.addObject("errorCode", "");
+		}
+		return modelAndView;
+	}
 
     @RequestMapping(value = "/listMyAssets")
     public String redirectToMyassetsPage(HttpSession session, HttpServletRequest request) {
