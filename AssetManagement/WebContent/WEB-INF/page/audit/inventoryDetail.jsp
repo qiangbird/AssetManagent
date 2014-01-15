@@ -12,11 +12,10 @@
 <head>
 	<base href="<%=basePath%>">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
-    <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/common/tip-green/tip-green.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/audit/inventoryDetails.css" />
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/asset/assignAssetsDialog.css" />
+
     <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css" />
 
     <title></title>
@@ -121,6 +120,7 @@
        <!--  <div id="viewMoreDetails" style="min-height: 540px">
    		</div> -->
         </div>
+
          <div id="dialog-confirm" title="Operation confirm">
 		   <p id="confirm-message-body"></p>
 		 </div>

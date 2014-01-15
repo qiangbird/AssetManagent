@@ -5,18 +5,25 @@ $(document).ready(function() {
 	   window.location.href =  href;
    });
    
-   $(".deleteLink").click(function() {
-	   var id = $(this).parents(".filterInfo").find("#id").val();
-	   var urlPath = "customizedView/deleteCustomizedView?customizedViewId=" + id;
-	   $.ajax( {  
-		    type : 'POST',  
-		    contentType : 'application/json',  
-		    url : urlPath,  
-		    dataType : 'json',  
-		    success : function(data) { 
-		    	}
-	   });
-	   $(this).parents(".filterInfo").remove();
+   $(".deletePosition").click(function() {
+	   var object = this;
+	   ShowMsg(i18nProp('message_confirm_customizedView_delete_view'),function(yes){
+		      if (yes) {
+		    	   var id = $(object).parents(".filterInfo").find("#id").val();
+			   	   var urlPath = "customizedView/deleteCustomizedView?customizedViewId=" + id;
+			   	   $.ajax( {  
+			   		    type : 'POST',  
+			   		    contentType : 'application/json',  
+			   		    url : urlPath,  
+			   		    dataType : 'json',  
+			   		    success : function(data) { 
+			   		    	}
+			   	   });
+			   	   $(object).parents(".filterInfo").remove();
+		      }else{
+		          return;
+		      }
+		    });
    });
    
    $("#newView").click(function() {

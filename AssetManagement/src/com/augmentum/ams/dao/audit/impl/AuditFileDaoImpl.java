@@ -22,12 +22,8 @@ public class AuditFileDaoImpl extends BaseDaoImpl<AuditFile> implements AuditFil
     public AuditFile getAuditFileByFileName(String auditFileName) {
         
         String hql = "FROM AuditFile WHERE fileName = ? AND isExpired = ? ";
-        List<AuditFile> auditFiles = find(hql, auditFileName, Boolean.FALSE);
         
-        if(0 < auditFiles.size()){
-            return auditFiles.get(0);
-        }
-        return null;
+        return super.getUnique(hql, auditFileName, Boolean.FALSE);
     }
 
     @SuppressWarnings("unchecked")

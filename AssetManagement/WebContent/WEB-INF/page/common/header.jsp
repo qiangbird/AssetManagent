@@ -10,6 +10,7 @@
 <html>
 <head>
 <base href="<%=basePath%>">
+
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
@@ -21,11 +22,17 @@
 <script type="text/javascript" src="js/common/header.js"></script>
 <script type="text/javascript" src="messageBar/js/messagebar.js"></script>
 
+
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/header.css" >
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.8.18.custom.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
+
 <title>Asset Page</title>
 </head>
 <body>
 	<input type="hidden" id="basePath" value="<%=basePath %>">
-	<input type="hidden" id="localeLanguage" value=${sessionScope.localeLanguage }>
+	<input type="hidden" id="locale" value=${sessionScope.localeLanguage }>
 	<div id="header_top">
             <div id="header_logo"></div>
             <div id="header_text">
@@ -112,5 +119,19 @@
             </ul>
         </div>
     </div>
+     <div id="dialog-confirm" title="Operation confirm">
+   		<p id="confirm-message-body"></p>
+ 	</div>
+ 	<div id="dialog-warning" title="Warning">
+  		<p id="warning-message-body"></p>
+ 	</div>
+    <script type="text/javascript" src="<%=basePath%>js/common/jquery-1.7.1.min.js"></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui-1.8.18.custom.min.js"></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/autocomplete.js"></script>
+	<script type="text/javascript" src="<%=basePath%>jquery.poshytip/js/jquery.poshytip.js"></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/uuid.js"></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/header.js"></script>
+    <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 </body>
 </html>

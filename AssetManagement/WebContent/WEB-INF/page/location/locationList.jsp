@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -86,10 +87,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div> 
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
-	        	<span class="middle" ><label id="label_SearchButton"></label> </span>
+	        	<span class="middle" ><spring:message code="SearchButton" /></span>
 	        	<span class="right"></span>
 	        </a>
-	        <a id="addButton">Add</a>
+	        <a id="addButton"><spring:message code="add" /></a>
 	    </div>
     	</div>
     </div>
@@ -104,10 +105,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                <table  id="location_table">
         <div class="create-table">
             <div>
-                <tr><td>Site</td><td><input type="text" name="site" id="site" value="${location.site }"/><td/></tr>
+            <input type="hidden" name="id" id="location_id" value="${location.id }"/>
             </div>
             <div>
-                <tr><td>Room</td><td><input type="text" name="room" id="name" value="${location.room }" /></td></tr>
+                <tr><td><spring:message code="location.site" /></td><td><input type="text" name="site" id="site" value="${location.site }"/><td/></tr>
+            </div>
+            <div>
+                <tr><td><spring:message code="location.room" /></td><td><input type="text" name="room" id="room" value="${location.room }" /></td></tr>
             </div>
         </div>
         
@@ -115,8 +119,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
             <%-- <c:if test="${!isCreatePage }">
                 <input type="hidden" name="_method" value="put" />
             </c:if> --%>
-            <input class="input-80-30 submit-button" type="submit" value="submit" />
-            <input class="input-80-30 reset-button" type="reset" value="Reset" />
+            <input class="input-80-30 submit-button" type="submit" value='<spring:message code="submit" />' />
+            <input class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> />
             </tr>
         </div>
         </table>
@@ -136,7 +140,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
  	
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
+    
+    <div id="dialog-warning" title="<label id='label_Operation_Warning'></label>">
+        <p id="warning-message-body"></p>
+    </div>
+    
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
+    
 </body>
 <script type="text/javascript" src="js/common/common.js"></script>
 <script type="text/javascript" src="js/search/searchCommon.js"></script>
@@ -146,4 +156,5 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="js/location/location.js"></script>
 <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 <link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
+<script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 </html>

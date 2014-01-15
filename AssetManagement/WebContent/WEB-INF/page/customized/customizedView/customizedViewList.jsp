@@ -10,7 +10,7 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<link rel="stylesheet" type="text/css" href="css/customize/customizedView/newCustomizedView.css" />
+<link rel="stylesheet" type="text/css" href="css/customize/customizedView/createCustomizedView.css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 </head>
@@ -18,10 +18,10 @@
 <jsp:include page="../../common/header.jsp" />
 <div class="customizedView">
     <div class="create-new-button">
-        <input id="newView" type="button" value="Create" class="create-new" />
+        <input id="newView" type="button" value=<spring:message code="create" /> class="create-new" />
     </div>
     <div id="list-cancel">
-  	<input id="cancel" type="button" value="Cancel"  class="list-cancel" />
+  	<input id="cancel" type="button" value=<spring:message code="cancel" />  class="list-cancel" />
     </div>
     <div id="filterContent">
     <span class="filterSetText"><spring:message code="customized.view"></spring:message></span><br>
@@ -41,6 +41,7 @@
     </c:forEach>
   </div>
   </div>
+
   <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
   <script type="text/javascript" src="js/customize/customizedView/customizedViewList.js"></script>
    </body>

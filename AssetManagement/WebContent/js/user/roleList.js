@@ -62,21 +62,28 @@ $(document).ready(function() {
 		}
 		//delete role
 		if("deleteLink" == $(this).attr("class")){
-			var flag = false;
-			var currentEmployeeId = $(this).parents(".employeeRoleInfo").find(".employeeIdInRow").text();
-			flag = isAtLeastOneITAndAdmin(currentEmployeeId);
-			if(true == flag){
-				var isNew = parent.find("#isNew").text();
-				if("true" == isNew){
-					parent.remove();
-					usersRoleInfo.splice(index - 1, 1);
-				}else{
-					parent.css("display", "none");
-					usersRoleInfo[index - 1].isDelete = "true";
-				}
-			}else{
-				alert("There must at least two user has IT and System Admin role");
-			}
+			var object = this;
+	    	ShowMsg(i18nProp('message_confirm_rolelist_delete_role'),function(yes){
+			      if (yes) {
+						var flag = false;
+						var currentEmployeeId = $(object).parents(".employeeRoleInfo").find(".employeeIdInRow").text();
+						flag = isAtLeastOneITAndAdmin(currentEmployeeId);
+						if(true == flag){
+							var isNew = parent.find("#isNew").text();
+							if("true" == isNew){
+								parent.remove();
+								usersRoleInfo.splice(index - 1, 1);
+							}else{
+								parent.css("display", "none");
+								usersRoleInfo[index - 1].isDelete = "true";
+							}
+						}else{
+							alert("There must at least two user has IT and System Admin role");
+						}
+			      }else{
+			          return;
+			      }
+			});
 		}
 	});
 	
