@@ -141,6 +141,7 @@
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.dataTables.js"></script>
 	<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 	<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js" ></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
 
 </body>
 </html>
