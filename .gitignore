@@ -1,5 +1,5 @@
 /AssetManagement/WebContent/WEB-INF/web.xml
-/AssetManagement/build
-/AssetManagement/.project
-/AssetManagement/.classpath
-/AssetManagement/.prefs
+/AssetManagement/build/
+/AssetManagement/*.project
+/AssetManagement/*.classpath
+/AssetManagement/*.prefs
