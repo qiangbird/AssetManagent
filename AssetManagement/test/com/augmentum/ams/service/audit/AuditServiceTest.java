@@ -20,17 +20,22 @@ public class AuditServiceTest extends BaseCaseTest {
     @Test
     public void testFindAssetForInventory() throws BaseException {
     	SearchCondition condition = new SearchCondition();
-    	condition.setIsAudited(true);
+    	condition.setAuditFlag("audited");
     	condition.setAuditFileName("2014-01-08_01");
     	condition.setKeyWord("");
         condition.setPageSize(100);
         condition.setPageNum(1);
         
     	Page<Asset> page = auditService.findAssetForInventory(condition);
-    	logger.info(page.getResult().size());
-    	for (Asset asset : page.getResult()) {
-    		logger.info(asset.getAssetName());
+    	String[] temp = new String[page.getAllRecords().size()];
+    	logger.info(page.getAllRecords().size());
+//    	for (Asset asset : page.getAllRecords()) {
+//    		logger.info(asset.getAssetId());
+//    	}
+    	for (int i = 0; i < page.getAllRecords().size(); i++) {
+    		temp[i] = page.getAllRecords().get(i).getId();
     	}
+    	logger.info(temp.toString());
     }
     
 }

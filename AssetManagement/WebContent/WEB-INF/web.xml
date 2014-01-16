@@ -19,7 +19,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.22.143:8080</param-value>
+			<param-value>http://192.168.22.146:8080</param-value>
 		</init-param>
 	</filter>
 
@@ -40,7 +40,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.22.143:8080</param-value>
+			<param-value>http://192.168.22.146:8080</param-value>
 		</init-param>
 		<init-param>
 			<param-name>acceptAnyProxy</param-name>

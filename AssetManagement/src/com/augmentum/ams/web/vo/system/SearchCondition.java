@@ -8,9 +8,9 @@ public class SearchCondition {
     
     private String sortSign;
     
-    private Integer pageSize;
+    private Integer pageSize = 10;
     
-    private Integer pageNum;
+    private Integer pageNum = 1;
     
     private String searchFields;
     
@@ -26,7 +26,7 @@ public class SearchCondition {
     
     private String auditFileName;
     
-    private Boolean isAudited;
+    private String auditFlag;
     
     public String getCustomizedViewId() {
         return customizedViewId;
@@ -124,11 +124,11 @@ public class SearchCondition {
 		this.auditFileName = auditFileName;
 	}
 
-	public Boolean getIsAudited() {
-		return isAudited;
+	public String getAuditFlag() {
+		return auditFlag;
 	}
 
-	public void setIsAudited(Boolean isAudited) {
-		this.isAudited = isAudited;
+	public void setAuditFlag(String auditFlag) {
+		this.auditFlag = auditFlag;
 	}
 }

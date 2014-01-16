@@ -143,9 +143,15 @@ public class AuditController extends BaseController{
         return SUCCESS;
     }*/
     
-    @RequestMapping(value = "/inventoryAsset")
-    public String redirectPage() {
-    	return "audit/inventoryAsset";
+    @RequestMapping(value = "/inventoryAsset", method = RequestMethod.GET)
+    public ModelAndView redirectInventoryAsset(String flag, String auditFileName) {
+    	
+    	ModelAndView modelAndView = new ModelAndView("audit/inventoryAssetList");
+    	
+    	modelAndView.addObject("flag", flag);
+    	modelAndView.addObject("auditFileName", auditFileName);
+    	
+    	return modelAndView;
     }
     
     @RequestMapping(value = "/viewInventoryAsset", method = RequestMethod.GET)

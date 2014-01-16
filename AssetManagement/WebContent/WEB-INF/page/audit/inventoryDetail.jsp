@@ -112,13 +112,13 @@
                 <div id="inconsTableContent"></div>
                 <div class="dialog-panel-shadow"></div>  
                 <div class="dialog-panel-link">
-                    <a href="#" id="iconsView"><spring:message code="audit.viewMore" /></a>
+                    <a id="iconsView"><spring:message code="audit.viewMore" /></a>
                 </div>
             </div>
       </div>
         </div>
-       <!--  <div id="viewMoreDetails" style="min-height: 540px">
-   		</div> -->
+       	<div id="viewMoreDetails">
+   		</div>
         </div>
 
          <div id="dialog-confirm" title="Operation confirm">
@@ -139,8 +139,6 @@
     <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryCommonOperation.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.form.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.dataTables.js"></script>
-	<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
-	<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js" ></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
 
 </body>

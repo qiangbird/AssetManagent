@@ -7,7 +7,6 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
     <link rel="stylesheet" type="text/css" href="<%=basePath%>css/base/base.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>css/base/resetCss.css">
@@ -16,20 +15,27 @@
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/commonList.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>filterBox/css/filterBox.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>css/search/searchCommon.css">
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
 	
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui-1.8.18.custom.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/common.js"></script>
-	<script type="text/javascript" src="<%=basePath%>js/search/searchCommon.js"></script>
-	<script type="text/javascript" src="<%=basePath%>searchList/js/DataList.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/search/searchCustomizedView.js" ></script>
 	<script type="text/javascript" src="<%=basePath%>filterBox/js/filterBox.js" ></script>
 	<script type="text/javascript" src="<%=basePath%>jquery.poshytip/js/jquery.poshytip.js" ></script>
+	<script type="text/javascript" src="<%=basePath%>searchList/js/DataList.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/audit/inventoryAsset.js" ></script>
 	
-	<div class="viewMoreDetails">
-    <div class="dataList">
+	<div id="viewMoreDetailDialog">
+   	 	<input id="flag" type="hidden" value="${flag }"></input>
+   	 	<input id="auditFileName" type="hidden" value="${auditFileName }"></input>
+      	<div id="checkResult">
+            <a id="auditLink">Audited</a>
+            <a id="unAuditLink">Unaudited</a>
+            <a id="inconsistentLink">Inconsistent</a>
+    	</div>
+		<div class="dataList dataList-width">
     	<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
 			<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
@@ -100,5 +106,5 @@
 	            </ul>
             </div>
 	    </div>
-    </div>
+	    </div>
     </div>
