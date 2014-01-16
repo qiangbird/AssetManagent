@@ -175,7 +175,7 @@ $(document).ready(function(){
         modal: true,
         position: "center",
         resizable: false,
-        title: "Assign Assets",
+        title: i18nProp('manageAssign_dialog_title'),
         bgiframe: true
     });
 	//operation menu
@@ -214,10 +214,10 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
-				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 					 if (yes) {
 						 $.ajax({
 							  type: 'POST',
@@ -239,7 +239,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 	});
@@ -263,11 +263,11 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
 				//do i18n for all show message
-				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 					 if (yes) {
 						 alert($("#customerCode").val());
 						 alert(assetsId);
@@ -292,7 +292,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 		
@@ -316,7 +316,7 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assignIds == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
 			$("#dialog").dialog("open");
@@ -327,7 +327,7 @@ $(document).ready(function(){
 			  });
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 		
@@ -390,10 +390,10 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
-				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 				 if (yes) {
 					 $.ajax({
 						  type: 'POST',
@@ -414,7 +414,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 	});

@@ -281,23 +281,6 @@ public class AssetController extends BaseController {
         logger.info("uploadFile method end!");
     }
 
-//    @RequestMapping("/getCustomerInfo")
-//    public ModelAndView getCustomerInfo(HttpServletRequest request) throws DataException {
-//        ModelAndView modelAndView = new ModelAndView();
-//        List<CustomerVo> customerList = remoteCustomerService.getAllCustomerFromIAP(request);
-//        modelAndView.addObject("customerList", customerList);
-//        return modelAndView;
-//    }
-
-    // @RequestMapping("/listAsset")
-    // public ModelAndView listAsset() throws ParseException {
-    // ModelAndView modelAndView = new ModelAndView();
-    // List<Asset> allAssets = assetService.findAllAssets();
-    // modelAndView.addObject("assetList", allAssets);
-    // modelAndView.setViewName("asset/listAsset");
-    // return modelAndView;
-    // }
-
     @RequestMapping(value = "/edit/{id}")
     public ModelAndView editAssetById(@PathVariable String id, HttpServletRequest request)
             throws Exception {
@@ -320,7 +303,7 @@ public class AssetController extends BaseController {
     }
 
     @RequestMapping(value = "/view/{id}")
-    public ModelAndView viewAssetById(@PathVariable String id, HttpServletRequest request)
+    public ModelAndView viewAssetById(@PathVariable String id, HttpServletRequest request, String uuid)
             throws Exception {
 
         logger.info("viewAssetById method start!");
@@ -334,6 +317,7 @@ public class AssetController extends BaseController {
         // get self-defined properties
         getSelfDefinedProperties(asset, modelAndView, "view");
         modelAndView.addObject("asset", assetVo);
+        modelAndView.addObject("uuid", uuid);
         modelAndView.setViewName("asset/assetDetail");
 
         logger.info("viewAssetById method end!");
@@ -531,7 +515,7 @@ public class AssetController extends BaseController {
                 page.getResult(), clientTimeOffset);
         List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                 .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList);
+        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList, uuid);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("fieldsData", array);

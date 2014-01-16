@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import net.sf.json.JSONArray;
@@ -14,6 +15,7 @@ import net.sf.json.JSONArray;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
+import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 
@@ -53,7 +55,7 @@ public class SearchCommonUtil {
     }
 
     public static JSONArray formatAssetVoListTOJSONArray(List<AssetListVo> assetVoList,
-            List<UserCustomColumn> userCustomColumnList) {
+            List<UserCustomColumn> userCustomColumnList, String uuid) {
         JSONArray arrays = new JSONArray();
 
         for (AssetListVo assetListVo : assetVoList) {
@@ -64,9 +66,15 @@ public class SearchCommonUtil {
                 String fieldName = userCustomColumn.getCustomizedColumn().getSortName();
                 String value = "";
                 if ("assetId".equals(fieldName)) {
+                	if(!StringUtils.isBlank(uuid)){
                     value = "<a href='asset/view/" + assetListVo.getId()
-                            + "' style='color: #418FB5'>"
+                            +"?uuid="+uuid+ "' style='color: #418FB5'>"
                             + getAssetListVoValueByProperty(assetListVo, fieldName) + "</a>";
+                	}else{
+                		 value = "<a href='asset/view/" + assetListVo.getId()
+                                 +"' style='color: #418FB5'>"
+                                 + getAssetListVoValueByProperty(assetListVo, fieldName) + "</a>";
+                	}
                 } else {
                     value = getAssetListVoValueByProperty(assetListVo, fieldName);
                 }
@@ -139,4 +147,29 @@ public class SearchCommonUtil {
         }
         return arrays;
     }
+
+	public static JSONArray formatTransferLogListTOJSONArray(
+			List<TransferLog> result,List<UserCustomColumn> userCustomColumnList) {
+		
+	      JSONArray arrays = new JSONArray();
+
+	        for (TransferLog transferLog : result) {
+	            JSONArray array = new JSONArray();
+	            array.add(transferLog.getId());
+	            array.add(transferLog.getAsset().getAssetId());
+				array.add(transferLog.getAsset().getAssetName());
+				array.add(transferLog.getEmployee().getUserName());
+				array.add(UTCTimeUtil.formatDateToString(transferLog.getTime()));
+				array.add(transferLog.getAction());
+				array.add(transferLog.getAsset().getManufacturer());
+				array.add(transferLog.getAsset().getBarCode());
+				array.add(UTCTimeUtil.formatDateToString(transferLog.getAsset().getCheckInTime()));
+				array.add(transferLog.getAsset().getSeriesNo());
+				array.add(transferLog.getAsset().getPoNo());
+
+	            arrays.add(array);
+	        }
+	        return arrays;
+		
+	}
 }

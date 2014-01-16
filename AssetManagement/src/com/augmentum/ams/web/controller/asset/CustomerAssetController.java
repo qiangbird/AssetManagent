@@ -60,7 +60,7 @@ public class CustomerAssetController extends BaseController {
                 assetPage.getResult(), clientTimeOffset);
         List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                 .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList);
+        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList,null);
         modelAndView.addObject("fieldsData", array);
         modelAndView.addObject("count", assetPage.getRecordCount());
         modelAndView.addObject("totalPage", assetPage.getTotalPage());

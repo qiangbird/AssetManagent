@@ -1,10 +1,10 @@
-
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
 <base href="<%=basePath%>">
@@ -31,7 +31,6 @@
 <body>
 	<jsp:include page="../common/header.jsp" />
 <div class="content">
-    <!-- 核心入口 -->
     	<div class="dataList">
     		<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
@@ -46,16 +45,15 @@
 			</div> 
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
-	        	<span class="middle" ><label id="label_SearchButton"></label> </span>
+	        	<span class="middle" ><spring:message code="search" /></span>
 	        	<span class="right"></span>
 	        </a>
-	        <a id="addButton">Add</a>
+	        <a id="addButton"><spring:message code="add" /></a>
 	    </div>
     	</div>
 </div>
 
 	 <div class="addGroup"> 
-	<!-- <tr><td><input id="customers" type="text" name="customers"/></td></tr> -->
        <tr>
         <td valign="top">
          <form action="group/update" method="post" id="dialog">
@@ -64,7 +62,7 @@
             <div class="create-table">
                 <div>
                     <tr>
-                        <td>Group Name</td>
+                        <td><spring:message code="group.name" /></td>
                         <td>
                         <input id="groupId" type="hidden" name="id" value="${customerGroup.id }"/>
                         <input id="groupName" type="text" name="groupName" value="${customerGroup.groupName }"/>
@@ -73,13 +71,13 @@
                 </div>
                 <div>
                     <tr>
-                        <td>Description</td>
+                        <td><spring:message code="group.description" /></td>
                         <td><input id="description" type="text" name="description" value="${customerGroup.description }"/></td>
                     </tr>
                 </div>
                 <div>
                     <tr>
-                        <td>Process Type</td>
+                        <td><spring:message code="group.process.type" /></td>
                         <td>
                        <select name="processType" id="processType">
                         <c:if test="${customerGroup==null}">
@@ -99,7 +97,7 @@
                 </div>
                 <div>
                     <tr>
-                        <td>Customer</td>
+                        <td><spring:message code="customer" /></td>
                         <td>
                           <input id="customers" type="text" name="customerCodes"/>
                           <input type="hidden" id="customerName"/>
@@ -109,8 +107,8 @@
                 </div>
             </div>
 			<div class="submit-div">
-				<input class="input-80-30 submit-button" type="submit" value="Add" /> 
-				<input class="input-80-30 reset-button" type="reset" value="Cancel" />
+				<input class="input-80-30 submit-button" type="submit" value="<spring:message code='submit' />" /> 
+				<input class="input-80-30 reset-button" type="reset" value="<spring:message code='reset' />" />
 		    </div>
 		</table>
 		</form>

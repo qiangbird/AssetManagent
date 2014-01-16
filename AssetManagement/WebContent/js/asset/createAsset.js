@@ -171,6 +171,8 @@ $("#assetUser").click(function() {
                     if (!checkInArr(userArray,$("#assetUser").val())) {
                         TextMouseOutError(this);
                     } else {
+                    	$("#selectedStatus").val("IN_USE");
+                    	$("#selectedStatusList .dropDownList_text_select").text("IN_USE");
                         TextMouseOutNormal(this);
                     }
                 }

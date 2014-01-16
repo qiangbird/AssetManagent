@@ -450,7 +450,7 @@ $(document).ready(function(){
     		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
     		
     		
-    		ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+    		ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 				 if (yes) {
 					 $.ajax({
 			    		    type : 'DELETE',

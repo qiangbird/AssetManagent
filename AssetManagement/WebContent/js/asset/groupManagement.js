@@ -468,7 +468,7 @@ $(document).ready(function(){
         modal: true,
         position: "center",
         resizable: false,
-        title: "Group operation",
+        title: i18nProp('group_operation'),
         bgiframe: true
     });
 
@@ -527,9 +527,8 @@ $(document).ready(function(){
     //delete group
 	$(".dataList").delegate(".deleteGroupIcon","click",function(){
 		
-		alert(i18nProp('Operation_Confirm_Message'));
 		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
-		ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+		ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 			 if (yes) {
 				 $.ajax({
 	    		       type : 'get',

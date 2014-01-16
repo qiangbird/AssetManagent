@@ -41,7 +41,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<span class="existedFlag"></span>
 				<div class="filterBox">
 					<div class="single_condition">
-						<div class="condition_title"><label id="label_SearchBy"></label></div>
+						<div class="condition_title"><spring:message code="search" /></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllFields"></label></p>
 							<p><input type="checkBox" name="field" value="assetId"/><label id="label_AssetId"></label></p>

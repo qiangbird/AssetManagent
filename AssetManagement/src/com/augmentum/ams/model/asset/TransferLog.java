@@ -11,6 +11,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
+
 import com.augmentum.ams.model.base.BaseModel;
 import com.augmentum.ams.model.user.User;
 
@@ -20,6 +27,8 @@ import com.augmentum.ams.model.user.User;
  */
 @Entity
 @Table(name = "transfer_log")
+@Indexed(index = "transfer_log")
+@Analyzer(impl = IKAnalyzer.class)
 public class TransferLog extends BaseModel {
 
     private static final long serialVersionUID = 2991532139550684606L;
@@ -29,9 +38,11 @@ public class TransferLog extends BaseModel {
      */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
+    @Field(name = "time", index = Index.UN_TOKENIZED, store = Store.YES)
     private Date time;
 
     @Column(nullable = false, length = 64)
+    @Field(name = "action", index = Index.UN_TOKENIZED, store = Store.YES)
     private String action;
 
     @ManyToOne(fetch = FetchType.LAZY)

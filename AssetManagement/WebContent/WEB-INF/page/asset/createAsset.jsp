@@ -105,14 +105,14 @@ String basePath = request.getScheme() + "://"
 						<p>
 							<span>*</span> <label><spring:message code="asset.status" /></label>
 							<form:select path="status" cssClass="l-select"
-								id="selectedStatus">
-								<option value="AVAILABLE">Available</option>
+								id="selectedStatus" items="${assetStatus}">
+								<!-- <option value="AVAILABLE">Available</option>
 								<option value="IN_USE">In Use</option>
 								<option value="IDLE">Idle</option>
 								<option value="BORROWED">Borrowed</option>
 								<option value="RETURNED">Returned</option>
 								<option value="BROKEN">Broken</option>
-								<option value="WRITE_OFF">Write Off</option>
+								<option value="WRITE_OFF">Write Off</option> -->
 							</form:select>
 						</p>
 						<p>

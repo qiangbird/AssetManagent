@@ -132,7 +132,7 @@
             <input type="hidden" name="customerCode" value="${customer.customerCode }"/>
             <input type="hidden" name="ids" id="ids"/>
             <div>
-                <tr><td>Project</td>
+                <tr><td><spring:message code="project" /></td>
                 <td>
                 <select id="DropList" class="dropDownSelect" name="projectCode">
                 <c:forEach var="project" items="${projectList }">
@@ -143,14 +143,14 @@
                 </tr>
             </div>
             <div>
-                <tr><td>User</td><td><input type="text" name="userName" id="user"/>
+                <tr><td><spring:message code="asset.user" /></td><td><input type="text" name="userName" id="user"/>
                 <input type="hidden" name="assetUserCode" id="assetUserCode">
                 </td></tr>
             </div>
         
         <div class="submit-div">
-            <input class="input-80-30 submit-button" type="submit" value="submit" />
-            <input class="input-80-30 reset-button" type="reset" value="Reset" />
+            <input class="input-80-30 submit-button" type="submit" value="<spring:message code='submit' />" />
+            <input class="input-80-30 reset-button" type="reset" value="<spring:message code='cancel' />" />
             </tr>
         </div>
         </div>

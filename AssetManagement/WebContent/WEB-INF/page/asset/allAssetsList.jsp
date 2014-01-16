@@ -5,6 +5,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
     %>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
 <base href="<%=basePath%>">
@@ -35,7 +36,7 @@
 				<span class="existedFlag"></span>
 				<div class="filterBox">
 					<div class="single_condition">
-						<div class="condition_title"><label id="label_SearchBy"></label></div>
+						<div class="condition_title"><spring:message code="search" /></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllFields"></label></p>
 							<p><input type="checkBox" name="field" value="assetId"/><label id="label_AssetId"></label></p>
@@ -81,7 +82,7 @@
 			</div>
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
-	        	<span class="middle" ><label id="label_SearchButton"></label> </span>
+	        	<span class="middle" ><spring:message code="search" /> </span>
 	        	<span class="right"></span>
 	        </a>
 	        <c:if test="${requestScope.userUuid==null }">
@@ -148,9 +149,9 @@
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
     <input type="hidden" id="userUuid" value="${requestScope.userUuid }">
- 	<input type="hidden" id="message_confirm_asset_addToAudit" value="<spring:message code='message.confirm.asset.addToAudit'/>"/>
+<%--  	<input type="hidden" id="message_confirm_asset_addToAudit" value="<spring:message code='message.confirm.asset.addToAudit'/>"/> 
  	<input type="hidden" id="message_warn_asset_assign" value="<spring:message code='message.warn.asset.assign'/>"/>
- 	<input type="hidden" id="message_warn_asset_return" value="<spring:message code='message.warn.asset.return'/>"/>
+ 	<input type="hidden" id="message_warn_asset_return" value="<spring:message code='message.warn.asset.return'/>"/> --%>
  	
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>

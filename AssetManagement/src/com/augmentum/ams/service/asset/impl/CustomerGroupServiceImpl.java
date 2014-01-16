@@ -91,19 +91,6 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
         List<Customer> list = customerService.getCustomerByGroup(customerGroup.getId());
         List<Customer> list1 = customerGroup.getCustomers();
         
-//        Set<Customer> set = new HashSet<Customer>();
-//        set.addAll(list1);
-//        set.addAll(list);
-//        List<String> list2 = new ArrayList<String>();
-//        for(Customer customer : list1){
-//            list2.add(customer.getId());
-//        }
-//        for(int i=0;i<list.size();i++){
-//            if(list2.contains(list.get(i).getId())){
-//                list.remove(list.get(i));
-//            }
-//
-//        }
         for(int i=0;i<list.size();i++){
             if(list1.contains(list.get(i))){
                 list.remove(list.get(i));
