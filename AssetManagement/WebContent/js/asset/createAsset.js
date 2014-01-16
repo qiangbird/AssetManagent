@@ -42,7 +42,7 @@ $("#ownership").click(function() {
     $.ajax({
     type : 'GET',
     contentType : 'application/json',
-    url : 'asset/getCustomerInfo',
+    url : 'base/getCustomerInfo',
     dataType : 'json',
     success : function(data) {
         length = data.customerList.length;
@@ -69,7 +69,7 @@ custCode = [];
 $.ajax({
     type : 'GET',
     contentType : 'application/json',
-    url : 'asset/getCustomerInfo',
+    url : 'base/getCustomerInfo',
     dataType : 'json',
     success : function(data) {
     console.log(data.customerList);
@@ -171,6 +171,8 @@ $("#assetUser").click(function() {
                     if (!checkInArr(userArray,$("#assetUser").val())) {
                         TextMouseOutError(this);
                     } else {
+                    	$("#selectedStatus").val("IN_USE");
+                    	$("#selectedStatusList .dropDownList_text_select").text("IN_USE");
                         TextMouseOutNormal(this);
                     }
                 }

@@ -1,11 +1,17 @@
 package com.augmentum.ams.model.asset;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
@@ -26,6 +32,7 @@ import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
 @Table(name = "customer_group")
 @Indexed(index = "customer_group")
 @Analyzer(impl = IKAnalyzer.class)
+@JsonIgnoreProperties(value={"customers"})    
 public class CustomerGroup extends BaseModel {
 
     private static final long serialVersionUID = -4884926963993885339L;
@@ -52,6 +59,12 @@ public class CustomerGroup extends BaseModel {
     @Field(name = "processType", index = Index.UN_TOKENIZED, store = Store.YES)
     private ProcessTypeEnum processType;
 
+    /**
+     *  The customers in the group
+     */
+    @OneToMany(fetch = FetchType.EAGER,mappedBy="customerGroup",cascade =CascadeType.PERSIST)
+    private List<Customer> customers;
+    
     public String getDescription() {
         return description;
     }
@@ -75,5 +88,13 @@ public class CustomerGroup extends BaseModel {
     public void setProcessType(ProcessTypeEnum processType) {
         this.processType = processType;
     }
+
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
     
 }

@@ -351,3 +351,44 @@ a.green_button_twenty_disable .left {
 a.green_button_twenty_disable .right {
     background: url("../../image/buttonIMG/BTN_20pxButton_Green_Disable_Right_3x20.png") transparent no-repeat;
 }
+
+/* .ui-button-text {
+	background:
+		url("../../image/customize/customizedView/BTN_Cancel_80x30.png");
+	no-repeat;
+	width: 80px;
+	color: #8A8A8A;
+	float: right;
+	margin-left: 20px;
+	text-index: -7px;
+	left: -30px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.ui-button-text:hover {
+	background:
+		url("../../image/customize/customizedView/BTN_Cancel_Hover_80x30.png");
+	no-repeat;
+}
+
+
+.ui-dialog-buttonset:first-child .ui-button-text:first-child {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png");
+	no-repeat;
+	float: left;
+	width: 40px;
+	cursor: pointer;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.ui-dialog-buttonset:first-child .ui-button-text:hover {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png");
+	no-repeat;
+}
+.ui-button-text {
+	
+} */

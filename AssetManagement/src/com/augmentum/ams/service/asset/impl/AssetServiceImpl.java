@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,295 +73,276 @@ import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Service("assetService")
-public class AssetServiceImpl extends SearchAssetServiceImpl implements
-		AssetService {
+public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetService {
 
-	@Autowired
-	private AssetDao assetDao;
-	@Autowired
-	private SoftwareService softwareService;
-	@Autowired
-	private MachineService machineService;
-	@Autowired
-	private DeviceService deviceService;
-	@Autowired
-	private MonitorService monitorService;
-	@Autowired
-	private OtherAssetsService otherAssetsService;
-	@Autowired
-	private DeviceSubtypeService deviceSubtypeService;
-	@Autowired
-	private PropertyTemplateService propertyTemplateService;
-	@Autowired
-	private CustomizedPropertyService customizedPropertyService;
-	@Autowired
-	private CustomerService customerService;
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private LocationService locationService;
-	@Autowired
-	private RemoteEmployeeService remoteEmployeeService;
-	@Autowired
-	private SpecialRoleService specialRoleService;
-	@Autowired
-	private AuditFileDao auditFileDao;
-	@Autowired
-	private AuditDao auditDao;
+    @Autowired
+    private AssetDao assetDao;
+    @Autowired
+    private SoftwareService softwareService;
+    @Autowired
+    private MachineService machineService;
+    @Autowired
+    private DeviceService deviceService;
+    @Autowired
+    private MonitorService monitorService;
+    @Autowired
+    private OtherAssetsService otherAssetsService;
+    @Autowired
+    private DeviceSubtypeService deviceSubtypeService;
+    @Autowired
+    private PropertyTemplateService propertyTemplateService;
+    @Autowired
+    private CustomizedPropertyService customizedPropertyService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private LocationService locationService;
+    @Autowired
+    private RemoteEmployeeService remoteEmployeeService;
+    @Autowired
+    private SpecialRoleService specialRoleService;
+    @Autowired
+    private AuditFileDao auditFileDao;
+    @Autowired
+    private AuditDao auditDao;
 
-	private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
+    private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
 
-	@Override
-	public void saveAsset(Asset asset) {
-		assetDao.save(asset);
-	}
+    @Override
+    public void saveAsset(Asset asset) {
+        assetDao.save(asset);
+    }
 
-	@Override
-	public void updateAsset(Asset asset) {
-		assetDao.update(asset);
-	}
+    @Override
+    public void updateAsset(Asset asset) {
+        assetDao.update(asset);
+    }
 
-	@Override
-	public Asset getAsset(String id) {
-		return assetDao.getAssetById(id);
-	}
+    @Override
+    public Asset getAsset(String id) {
+        return assetDao.getAssetById(id);
+    }
 
-	@Override
-	public void deleteAssetById(String id) {
-		assetDao.delete(assetDao.getAssetById(id));
-	}
+    @Override
+    public void deleteAssetById(String id) {
+        assetDao.delete(assetDao.getAssetById(id));
+    }
 
-	@Override
-	public List<Asset> findAllAssets() {
-		return assetDao.findAllAssets();
-	}
+    @Override
+    public List<Asset> findAllAssets() {
+        return assetDao.findAllAssets();
+    }
 
-	@Override
-	public int getAllAssetCount() {
-		return assetDao.getAllAssetCount();
-	}
+    @Override
+    public int getAllAssetCount() {
+        return assetDao.getAllAssetCount();
+    }
 
-	@Override
-	public void saveAssetAsType(AssetVo assetVo, Asset asset, String operation) {
-		if (AssetTypeEnum.SOFTWARE.toString().equals(assetVo.getType().trim())) {
-			if (operation.equals("save")) {
-				softwareService.saveSoftware(assetVo.getSoftware());
-				asset.setSoftware(assetVo.getSoftware());
-				saveAsset(asset);
-			} else {
-				Software soft = softwareService.findById(assetVo.getSoftware()
-						.getId());
-				Software newSoft = assetVo.getSoftware();
-				soft.setVersion(newSoft.getVersion());
-				soft.setMaxUseNum(newSoft.getMaxUseNum());
-				soft.setAdditionalInfo(newSoft.getAdditionalInfo());
-				soft.setLicenseKey(newSoft.getLicenseKey());
-				softwareService.updateSoftware(soft);
-				asset.setSoftware(soft);
-				updateAsset(asset);
-			}
-		} else if (AssetTypeEnum.MACHINE.toString().equals(
-				assetVo.getType().trim())) {
-			if (operation.equals("save")) {
-				saveAsset(asset);
-				assetVo.getMachine().setAsset(asset);
-				machineService.saveMachine(assetVo.getMachine());
-			} else {
-				updateAsset(asset);
-				Machine machine = machineService.getMachineById(assetVo
-						.getMachine().getId());
-				machine.setSubtype(assetVo.getMachine().getSubtype());
-				machine.setSpecification(assetVo.getMachine()
-						.getSpecification());
-				machine.setConfiguration(assetVo.getMachine()
-						.getConfiguration());
-				machine.setAddress(assetVo.getMachine().getAddress());
-				machineService.updateMachine(machine);
-			}
-		} else if (AssetTypeEnum.MONITOR.toString().equals(
-				assetVo.getType().trim())) {
-			if (operation.equals("save")) {
-				saveAsset(asset);
-				assetVo.getMonitor().setAsset(asset);
-				monitorService.saveMonitor(assetVo.getMonitor());
-			} else {
-				updateAsset(asset);
-				Monitor monitor = monitorService.getMonitorById(assetVo
-						.getMonitor().getId());
-				monitor.setSize(assetVo.getMonitor().getSize());
-				monitor.setDetail(assetVo.getMonitor().getDetail());
-				monitorService.updateMonitor(monitor);
-			}
-		} else if (AssetTypeEnum.DEVICE.toString().equals(
-				assetVo.getType().trim())) {
-			if (operation.equals("save")) {
-				saveAsset(asset);
-				assetVo.getDevice().setAsset(asset);
-				List<DeviceSubtype> deviceSubtypesList = deviceSubtypeService
-						.getDeviceSubtypeByName(assetVo.getDevice()
-								.getDeviceSubtype().getSubtypeName());
-				if (deviceSubtypesList.size() > 0) {
-					assetVo.getDevice().setDeviceSubtype(
-							deviceSubtypesList.get(0));
-				} else {
-					DeviceSubtype newDeviceSubtype = new DeviceSubtype();
-					newDeviceSubtype.setSubtypeName(assetVo.getDevice()
-							.getDeviceSubtype().getSubtypeName());
-					deviceSubtypeService.saveDeviceSubtype(newDeviceSubtype);
-					assetVo.getDevice().setDeviceSubtype(newDeviceSubtype);
-				}
-				deviceService.saveDevice(assetVo.getDevice());
-			} else {
+    @Override
+    public void saveAssetAsType(AssetVo assetVo, Asset asset, String operation) {
+        if (AssetTypeEnum.SOFTWARE.toString().equals(assetVo.getType().trim())) {
+            if (operation.equals("save")) {
+                softwareService.saveSoftware(assetVo.getSoftware());
+                asset.setSoftware(assetVo.getSoftware());
+                saveAsset(asset);
+            } else {
+                Software soft = softwareService.findById(assetVo.getSoftware().getId());
+                Software newSoft = assetVo.getSoftware();
+                soft.setVersion(newSoft.getVersion());
+                soft.setMaxUseNum(newSoft.getMaxUseNum());
+                soft.setAdditionalInfo(newSoft.getAdditionalInfo());
+                soft.setLicenseKey(newSoft.getLicenseKey());
+                softwareService.updateSoftware(soft);
+                asset.setSoftware(soft);
+                updateAsset(asset);
+            }
+        } else if (AssetTypeEnum.MACHINE.toString().equals(assetVo.getType().trim())) {
+            if (operation.equals("save")) {
+                saveAsset(asset);
+                assetVo.getMachine().setAsset(asset);
+                machineService.saveMachine(assetVo.getMachine());
+            } else {
+                updateAsset(asset);
+                Machine machine = machineService.getMachineById(assetVo.getMachine().getId());
+                machine.setSubtype(assetVo.getMachine().getSubtype());
+                machine.setSpecification(assetVo.getMachine().getSpecification());
+                machine.setConfiguration(assetVo.getMachine().getConfiguration());
+                machine.setAddress(assetVo.getMachine().getAddress());
+                machineService.updateMachine(machine);
+            }
+        } else if (AssetTypeEnum.MONITOR.toString().equals(assetVo.getType().trim())) {
+            if (operation.equals("save")) {
+                saveAsset(asset);
+                assetVo.getMonitor().setAsset(asset);
+                monitorService.saveMonitor(assetVo.getMonitor());
+            } else {
+                updateAsset(asset);
+                Monitor monitor = monitorService.getMonitorById(assetVo.getMonitor().getId());
+                monitor.setSize(assetVo.getMonitor().getSize());
+                monitor.setDetail(assetVo.getMonitor().getDetail());
+                monitorService.updateMonitor(monitor);
+            }
+        } else if (AssetTypeEnum.DEVICE.toString().equals(assetVo.getType().trim())) {
+            if (operation.equals("save")) {
+                saveAsset(asset);
+                assetVo.getDevice().setAsset(asset);
+                List<DeviceSubtype> deviceSubtypesList = deviceSubtypeService
+                        .getDeviceSubtypeByName(assetVo.getDevice().getDeviceSubtype()
+                                .getSubtypeName());
+                if (deviceSubtypesList.size() > 0) {
+                    assetVo.getDevice().setDeviceSubtype(deviceSubtypesList.get(0));
+                } else {
+                    DeviceSubtype newDeviceSubtype = new DeviceSubtype();
+                    newDeviceSubtype.setSubtypeName(assetVo.getDevice().getDeviceSubtype()
+                            .getSubtypeName());
+                    deviceSubtypeService.saveDeviceSubtype(newDeviceSubtype);
+                    assetVo.getDevice().setDeviceSubtype(newDeviceSubtype);
+                }
+                deviceService.saveDevice(assetVo.getDevice());
+            } else {
 
-				updateAsset(asset);
-				Device device = deviceService.findDeviceById(assetVo
-						.getDevice().getId());
-				device.setConfiguration(assetVo.getDevice().getConfiguration());
+                updateAsset(asset);
+                Device device = deviceService.findDeviceById(assetVo.getDevice().getId());
+                device.setConfiguration(assetVo.getDevice().getConfiguration());
 
-				List<DeviceSubtype> deviceSubtypesList = deviceSubtypeService
-						.getDeviceSubtypeByName(assetVo.getDevice()
-								.getDeviceSubtype().getSubtypeName());
+                List<DeviceSubtype> deviceSubtypesList = deviceSubtypeService
+                        .getDeviceSubtypeByName(assetVo.getDevice().getDeviceSubtype()
+                                .getSubtypeName());
 
-				if (deviceSubtypesList.size() > 0) {
-					DeviceSubtype deviceSubtype = deviceSubtypesList.get(0);
-					device.setDeviceSubtype(deviceSubtype);
-				} else {
-					DeviceSubtype newDeviceSubtype = new DeviceSubtype();
-					newDeviceSubtype.setSubtypeName(assetVo.getDevice()
-							.getDeviceSubtype().getSubtypeName());
-					deviceSubtypeService.saveDeviceSubtype(newDeviceSubtype);
-					device.setDeviceSubtype(deviceSubtypeService
-							.getDeviceSubtypeByName(
-									newDeviceSubtype.getSubtypeName()).get(0));
-				}
-				deviceService.updateDevice(device);
-			}
-		} else if (AssetTypeEnum.OTHERASSETS.toString().equals(
-				assetVo.getType().trim())) {
-			if (operation.equals("save")) {
-				saveAsset(asset);
-				assetVo.getOtherAssets().setAsset(asset);
-				otherAssetsService.saveOtherAssets(assetVo.getOtherAssets());
-			} else {
-				updateAsset(asset);
-				OtherAssets otherAssets = otherAssetsService
-						.getOtherAssetsById(assetVo.getOtherAssets().getId());
-				otherAssets.setDetail(assetVo.getOtherAssets().getDetail());
-				otherAssetsService.updateOtherAssets(otherAssets);
-			}
-		}
-	}
+                if (deviceSubtypesList.size() > 0) {
+                    DeviceSubtype deviceSubtype = deviceSubtypesList.get(0);
+                    device.setDeviceSubtype(deviceSubtype);
+                } else {
+                    DeviceSubtype newDeviceSubtype = new DeviceSubtype();
+                    newDeviceSubtype.setSubtypeName(assetVo.getDevice().getDeviceSubtype()
+                            .getSubtypeName());
+                    deviceSubtypeService.saveDeviceSubtype(newDeviceSubtype);
+                    device.setDeviceSubtype(deviceSubtypeService.getDeviceSubtypeByName(
+                            newDeviceSubtype.getSubtypeName()).get(0));
+                }
+                deviceService.updateDevice(device);
+            }
+        } else if (AssetTypeEnum.OTHERASSETS.toString().equals(assetVo.getType().trim())) {
+            if (operation.equals("save")) {
+                saveAsset(asset);
+                assetVo.getOtherAssets().setAsset(asset);
+                otherAssetsService.saveOtherAssets(assetVo.getOtherAssets());
+            } else {
+                updateAsset(asset);
+                OtherAssets otherAssets = otherAssetsService.getOtherAssetsById(assetVo
+                        .getOtherAssets().getId());
+                otherAssets.setDetail(assetVo.getOtherAssets().getDetail());
+                otherAssetsService.updateOtherAssets(otherAssets);
+            }
+        }
+    }
 
-	@Override
-	public String getGenerateAssetId() {
-		int assetCount = getAllAssetCount();
-		return AssetUtil.generateAssetId(assetCount);
-	}
+    @Override
+    public String getGenerateAssetId() {
+        int assetCount = getAllAssetCount();
+        return AssetUtil.generateAssetId(assetCount);
+    }
 
-	@Override
-	public List<PropertyTemplate> showOrViewSelfDefinedProperties(Asset asset,
-			String operation) throws ParseException {
-		@SuppressWarnings("unchecked")
-		List<PropertyTemplate> defaultPropertyTemplatesList = propertyTemplateService
-				.findPropertyTemplateByCustomerAndAssetType(asset.getCustomer()
-						.getCustomerName(), asset.getType());
-		List<PropertyTemplate> propertyTemplatesList = new ArrayList<PropertyTemplate>();
+    @Override
+    public List<PropertyTemplate> showOrViewSelfDefinedProperties(Asset asset, String operation)
+            throws ParseException {
+        @SuppressWarnings("unchecked")
+        List<PropertyTemplate> defaultPropertyTemplatesList =JSONArray.toList(propertyTemplateService
+                .findPropertyTemplateByCustomerAndAssetType(asset.getCustomer().getCustomerName(),
+                        asset.getType()),PropertyTemplate.class);
+        List<PropertyTemplate> propertyTemplatesList = new ArrayList<PropertyTemplate>();
 
-		for (PropertyTemplate pt : defaultPropertyTemplatesList) {
-			CustomizedProperty customizedProperty = customizedPropertyService
-					.getCustomizedPropertyByTemplateId(pt.getId());
-			if (null == customizedProperty) {
-				CustomizedProperty newCustomizedProperty = new CustomizedProperty();
-				newCustomizedProperty.setValue(pt.getValue());
-				newCustomizedProperty.setAsset(asset);
-				newCustomizedProperty.setPropertyTemplate(pt);
-				customizedPropertyService
-						.saveCustomizedProperty(newCustomizedProperty);
-				propertyTemplatesList.add(pt);
-			} else {
-				if (operation.equals("show")) {
-					if (!(pt.getPropertyType().equals("selectType"))) {
-						pt.setValue(customizedProperty.getValue());
-					}
-				} else {
-					pt.setValue(customizedProperty.getValue());
-				}
-				propertyTemplatesList.add(pt);
-			}
-		}
-		return propertyTemplatesList;
-	}
+        for (PropertyTemplate pt : defaultPropertyTemplatesList) {
+            CustomizedProperty customizedProperty = customizedPropertyService
+                    .getCustomizedPropertyByTemplateId(pt.getId());
+            if (null == customizedProperty) {
+                CustomizedProperty newCustomizedProperty = new CustomizedProperty();
+                newCustomizedProperty.setValue(pt.getValue());
+                newCustomizedProperty.setAsset(asset);
+                newCustomizedProperty.setPropertyTemplate(pt);
+                customizedPropertyService.saveCustomizedProperty(newCustomizedProperty);
+                propertyTemplatesList.add(pt);
+            } else {
+                if (operation.equals("show")) {
+                    if (!(pt.getPropertyType().equals("selectType"))) {
+                        pt.setValue(customizedProperty.getValue());
+                    }
+                } else {
+                    pt.setValue(customizedProperty.getValue());
+                }
+                propertyTemplatesList.add(pt);
+            }
+        }
+        return propertyTemplatesList;
+    }
 
-	@Override
-	public void setAssetCustomer(Asset asset, String custCode, Customer cust) {
-		Customer customer = customerService.getCustomerByCode(custCode);
-		if (null == customer) {
-			customer = new Customer();
-			customer.setCustomerName(cust.getCustomerName());
-			customer.setCustomerCode(custCode);
-			customerService.saveCustomer(customer);
-			Customer newCustomer = customerService.getCustomerByCode(custCode);
-			asset.setCustomer(newCustomer);
-		} else {
-			asset.setCustomer(customer);
-		}
-	}
+    @Override
+    public void setAssetCustomer(Asset asset, String custCode, Customer cust) {
+        Customer customer = customerService.getCustomerByCode(custCode);
+        if (null == customer) {
+            customer = new Customer();
+            customer.setCustomerName(cust.getCustomerName());
+            customer.setCustomerCode(custCode);
+            customerService.saveCustomer(customer);
+            Customer newCustomer = customerService.getCustomerByCode(custCode);
+            asset.setCustomer(newCustomer);
+        } else {
+            asset.setCustomer(customer);
+        }
+    }
 
-	public void assetVoToAsset(AssetVo assetVo, Asset asset) {
-		try {
-			Project project = projectService.getProjectForAsset(assetVo, asset);
-			if (null != assetVo.getId()) {
-				asset.setId(assetVo.getId());
-			}
-			User assetUser = null;
-			if (null != assetVo.getUser()) {
-				assetUser = userService.getUserByName(assetVo.getUser()
-						.getUserName());
-			}
-			String locationAddr = assetVo.getLocation();
-			Location location = null;
-			try {
-				location = locationService.getLocationBySiteAndRoom(
-						locationAddr.trim().substring(0, 6), locationAddr
-								.trim().substring(6, locationAddr.length()));
-			} catch (Exception e) {
-				logger.error("Get location error!", e);
-			}
-			asset.setProject(project);
-			asset.setAssetName(assetVo.getAssetName());
-			asset.setOwnerShip(assetVo.getOwnerShip());
-			asset.setType(assetVo.getType());
-			asset.setBarCode(assetVo.getBarCode());
-			asset.setUser(assetUser);
-			asset.setLocation(location);
-			asset.setStatus(assetVo.getStatus());
-			asset.setSeriesNo(assetVo.getSeriesNo());
-			asset.setPoNo(assetVo.getPoNo());
-			asset.setPhotoPath(assetVo.getPhotoPath());
-			asset.setEntity(CommonUtil.stringToUTF8(assetVo.getEntity()));
-			asset.setManufacturer(assetVo.getManufacturer());
-			asset.setCheckInTime(UTCTimeUtil.localDateToUTC(assetVo
-					.getCheckInTime()));
-			asset.setCheckOutTime(UTCTimeUtil.localDateToUTC(assetVo
-					.getCheckOutTime()));
-			asset.setWarrantyTime(UTCTimeUtil.localDateToUTC(assetVo
-					.getWarrantyTime()));
-			asset.setVendor(assetVo.getVendor());
-			asset.setMemo(assetVo.getMemo());
-		} catch (Exception e) {
-			logger.error("AssetVo to asset error!", e);
-		}
-	}
+    public void assetVoToAsset(AssetVo assetVo, Asset asset) {
+        try {
+            Project project = projectService.getProjectForAsset(assetVo, asset);
+            if (null != assetVo.getId()) {
+                asset.setId(assetVo.getId());
+            }
+            User assetUser = null;
+            if (null != assetVo.getUser()) {
+                assetUser = userService.getUserByName(assetVo.getUser().getUserName());
+            }
+            String locationAddr = assetVo.getLocation();
+            Location location = null;
+            try {
+                location = locationService.getLocationBySiteAndRoom(locationAddr.trim().substring(
+                        0, 6), locationAddr.trim().substring(6, locationAddr.length()));
+            } catch (Exception e) {
+                logger.error("Get location error!", e);
+            }
+            asset.setProject(project);
+            asset.setAssetName(assetVo.getAssetName());
+            asset.setOwnerShip(assetVo.getOwnerShip());
+            asset.setType(assetVo.getType());
+            asset.setBarCode(assetVo.getBarCode());
+            asset.setUser(assetUser);
+            asset.setLocation(location);
+            asset.setStatus(assetVo.getStatus());
+            asset.setSeriesNo(assetVo.getSeriesNo());
+            asset.setPoNo(assetVo.getPoNo());
+            asset.setPhotoPath(assetVo.getPhotoPath());
+            asset.setEntity(CommonUtil.stringToUTF8(assetVo.getEntity()));
+            asset.setManufacturer(assetVo.getManufacturer());
+            asset.setCheckInTime(UTCTimeUtil.localDateToUTC(assetVo.getCheckInTime()));
+            asset.setCheckOutTime(UTCTimeUtil.localDateToUTC(assetVo.getCheckOutTime()));
+            asset.setWarrantyTime(UTCTimeUtil.localDateToUTC(assetVo.getWarrantyTime()));
+            asset.setVendor(assetVo.getVendor());
+            asset.setMemo(assetVo.getMemo());
+        } catch (Exception e) {
+            logger.error("AssetVo to asset error!", e);
+        }
+    }
 
-	@Override
-	public List<Asset> findAssetsByCustomerId(String customerId) {
-		String hql = "from Asset where customer.id = ? and isExpired = false ";
-		return assetDao.find(hql, customerId);
-	}
+    @Override
+    public List<Asset> findAssetsByCustomerId(String customerId) {
+        String hql = "from Asset where customer.id = ? and isExpired = false ";
+        return assetDao.find(hql, customerId);
+    }
 
-	/**
+    /**
 	 * assign assets(manager and IT)
 	 */
 
@@ -671,33 +654,32 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		}
 	}
 
-	@Override
-	public void uploadAndDisplayImage(MultipartFile file,
-			HttpServletRequest request, HttpServletResponse response) {
-		String path = request.getSession().getServletContext()
-				.getRealPath("upload");
-		// request.getSession().getServletContext().getRealPath("C:/AMS/upload");
-		// TODO create upload Utils
-		String fileName = file.getOriginalFilename();
-		File targetFile = new File(path, fileName);
-		if (!targetFile.exists()) {
-			targetFile.mkdirs();
-		}
-		try {
-			file.transferTo(targetFile);
-		} catch (Exception e) {
-			logger.error("Upload image error!", e);
-		}
-		String pathName = request.getContextPath() + "/upload/" + fileName;
-		// File f=new File("C:/AMS/upload"+fileName);
-		StringBuilder sbmsg = new StringBuilder(request.getScheme());
-		sbmsg.append("://").append(request.getServerName()).append(":")
-				.append(request.getServerPort()).append(pathName);
-		try {
-			response.getWriter().print(sbmsg);
-		} catch (IOException e) {
-			logger.error("Get image error!", e);
-		}
-
-	}
+    @Override
+    public void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request,
+            HttpServletResponse response) {
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        // request.getSession().getServletContext().getRealPath("C:/AMS/upload");
+        //TODO create upload Utils
+        String fileName = file.getOriginalFilename();
+        File targetFile = new File(path, fileName);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        try {
+            file.transferTo(targetFile);
+        } catch (Exception e) {
+            logger.error("Upload image error!",e);
+        }
+        String pathName = request.getContextPath() + "/upload/" + fileName;
+        // File f=new File("C:/AMS/upload"+fileName);
+        StringBuilder sbmsg = new StringBuilder(request.getScheme());
+        sbmsg.append("://").append(request.getServerName()).append(":")
+                .append(request.getServerPort()).append(pathName);
+        try {
+            response.getWriter().print(sbmsg);
+        } catch (IOException e) {
+            logger.error("Get image error!",e);
+        }
+        
+    }
 }

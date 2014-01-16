@@ -44,16 +44,16 @@ $(document).ready(function() {
 // init dataList information for search list
 var dataListInfo = {
     columns : 
-    [{ EN : 'Site', ZH : '地点', sortName : 'site', width : 100, headerId: 1, isMustShow : true },
-    { EN : 'Room', ZH : '房间号', sortName : 'room', width : 100, headerId : 11 },
-    { EN : 'Operation', ZH : '操作', sortName : 'operation', width : 100, headerId : 12 }],
+    [{ EN : 'Site', ZH : '地点', sortName : 'site', width : 200, headerId: 1, isMustShow : true },
+    { EN : 'Room', ZH : '房间号', sortName : 'room', width : 200, headerId : 11 },
+    { EN : 'Operation', ZH : '操作', sortName : 'operation', width : 300, headerId : 12 }],
     criteria : criteria,
     minHeight : 150,
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
 //    url : 'asset/searchAsset',
-    url : 'location/list',
+    url : 'location/searchLocation',
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {
@@ -146,7 +146,7 @@ $("#customerName").focus(function() {
     $.ajax({
         type : 'GET',
         contentType : 'application/json',
-        url : 'asset/getCustomerInfo',
+        url : 'base/getCustomerInfo',
         dataType : 'json',
         success : function(data) {
            var length = data.customerList.length;
@@ -391,12 +391,15 @@ $(document).ready(function(){
         modal: true,
         position: "center",
         resizable: false,
-        title: "Add new locatoin",
+        title: i18nProp("Location_Management"),
         bgiframe: true
     });
 	
 	$("#addButton").click(function(){
 		$("#dialog").dialog("open");
+		$("#location_id").val("");
+		$("#site").val("");
+		$("#room").val("");
 	});
 	
 	$("#sites").DropDownList({
@@ -404,7 +407,6 @@ $(document).ready(function(){
 	    header : false,
 	    noneSelectedText : 'Select site',
 	});
-	
 	
 	$("#site").click(function(){
 		  $.ajax({
@@ -419,7 +421,6 @@ $(document).ready(function(){
 			    	for(i = 0;i< length; i++){
 			    		sites[i] = data.siteList[i].siteNameAbbr;
 			    	}
-			    	
 			    	$("#site").autocomplete({
 			            minLength : 0,
 			            source : sites
@@ -427,5 +428,47 @@ $(document).ready(function(){
 			     }
 			  });
 	});
+	
+	//edit group
+	$(".dataList").delegate(".editLocationIcon","click",function(){
+		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
+		$.ajax({
+		    type : 'GET',
+		    contentType : 'application/json',
+		    url : 'location/edit/' + pk,
+		    dataType : 'json',
+		    success : function(data) {
+				$("#dialog").dialog("open");
+				$("#location_id").val(data.location.id);
+				$("#site").val(data.location.site);
+				$("#room").val(data.location.room);
+		     }
+		  });
+	});
+    //delete group
+    	$(".dataList").delegate(".deleteLocationIcon","click",function(){
+    		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
+    		
+    		
+    		ShowMsg(i18nProp('operation_confirm_message'),function(yes){
+				 if (yes) {
+					 $.ajax({
+			    		    type : 'DELETE',
+			    		    contentType : 'application/json',
+			    		    url : 'location/delete/' + pk,
+			    		    dataType : 'json',
+			    		    data:{
+			    		    	 _method: 'DELETE',
+			    		    },
+			    		    success : function(data) {
+			    		    	dataList.search();
+			    		     }
+			    		  });
+	                }else{
+	                	return;
+	                }
+				});
+    		
+    	});
 	
 });

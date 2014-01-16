@@ -20,61 +20,6 @@
       mode : 'map',
       language : i18n,
       callback : function() {
-         msg = jQuery.i18n.prop;
-         AddI18n('Home');
-         AddI18n('CreateAsset');
-         AddI18n('CommonProperty');
-         AddI18n('AssetId');
-         AddI18n('AssetName');
-         AddI18n('AssetType');
-         AddI18n('AssetBarCode');
-         AddI18n('AssetGenerateBarCode');
-         AddI18n('AssetOwnerShip');
-         AddI18n('AssetUsedBy');
-         AddI18n('AssetUser');
-         AddI18n('AssetLocation');
-         AddI18n('AssetStatus');
-         AddI18n('AssetSeriesNo');
-         AddI18n('AssetPoNo');
-         AddI18n('AssetManufacture');
-         AddI18n('AssetPhoto');
-         AddI18n('AssetEntity');
-         AddI18n('AssetCheckInDate');
-         AddI18n('AssetCheckOutDate');
-         AddI18n('AssetWarranty');
-         AddI18n('AssetVendor');
-         AddI18n('AssetMemo');
-         AddI18n('AssetMachineDetails');
-         AddI18n('AssetMachineSubtype');
-         AddI18n('AssetMachineSpeification');
-         AddI18n('AssetMachineAddtionalConfig');
-         AddI18n('AssetMachineMacAddress');
-         AddI18n('AssetMonitorDetails');
-         AddI18n('AssetMonitorSize');
-         AddI18n('AssetMonitrDetails');
-         AddI18n('AssetDeviceDetails');
-         AddI18n('AssetDeviceSubtype');
-         AddI18n('AssetDeviceConfiguration');
-         AddI18n('AssetSoftwareDetails');
-         AddI18n('AssetSoftwareVersion');
-         AddI18n('AssetSoftwareLicenseKey');
-         AddI18n('AssetSoftwareMaxUserNum');
-         AddI18n('AssetSoftwareAdditionalInfo');
-         AddI18n('AssetNonItAssetDetails');
-         AddI18n('AssetNonItAssetDetail');
-         AddI18n('AssetSelfDefine');
-         AddI18n('BatchCreate');
-         AddI18n('Project');
-         AddI18n('Keeper');
-         AddI18n('CopyAsset');
-         AddI18n('EditAsset');
-         AddI18n('ViewAsset');
-         AddI18n('Edit');
-         AddI18n('Copy');
-         AddI18n('Delete');
-         AddI18n('Cancel');
-         
-         
       }
    });
    

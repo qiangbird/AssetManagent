@@ -97,16 +97,38 @@ td {
 .submit-button {
 	width: 80px;
 	height: 30px;
+	color: #FFFFFF; font-size : 14px; font-weight : bold; font-family :
+	Arial;
 	background: url("../../img/BTN_Create_80x30.png") no-repeat;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
 }
 
 .reset-button {
 	width: 80px;
 	height: 30px;
-	background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+	color: #8A8A8A;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
 }
 
-.dropDownList .dropDownList_icon {
+background
+:
+ 
+url
+("../../img/BTN_Cancel_80x30
+.png
+")
+ 
+no-repeat
+;
+
+
+}
+
+/* .dropDownList .dropDownList_icon {
 	margin: 0 10px 0 300;
 }
 
@@ -114,7 +136,7 @@ td {
 	color: #808080;
 	margin: 0 0 0 110px;
 }
-
+ */
 .ui-autocomplete {
 	max-height: 130px;
 	overflow: auto;

@@ -2,9 +2,6 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %> 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
@@ -25,7 +22,7 @@
      	<div class="customerName">
      		<label class="shortLeftText">
                 <span class="propertyRequired">*</span>
-                <span class="propertyText"><spring:message code="customer" /></span>
+                <span class="propertyText">Customer</span>
             </label>
             <input id="customerName" class="inputSelect" type="text" value="" readonly="readonly" placeholder="Please choose the customer"/>
             <input id="customerCode" type="hidden" value="" />
@@ -33,13 +30,13 @@
         <div id="autoText">
         	<label class="shortLeftText">
                 <span class="propertyRequired">*</span>
-                <span class="propertyText"><spring:message code="employee" /></span>
+                <span class="propertyText">Employee</span>
             </label>
             <input id="employeeName" name="employeeName" type="text" value="" readonly="readonly" />
         </div>
         <div class="addOperateButton">
-            <input type="button" value=<spring:message code="add" />  id="addButton"></input>
-            <input type="button" value=<spring:message code="reset" />  id="resetButton"></input> 
+            <input type="button" value="Add"  id="addButton"></input>
+            <input type="button" value="Reset"  id="resetButton"></input> 
         </div>
       </div>
 	  <div class="employeeRoleInfoTemplate">
@@ -57,17 +54,17 @@
       <div class="roleDispaly">
 	      <div class="rowHead" >
 	          <div id="showError"></div>
-	          <div class="columnElement sequenceElement"><spring:message code="sequence" /></div>
-	          <div class="columnElement employeeInfoElement"><spring:message code="user.employeeId" /></div>
-	          <div class="columnElement employeeInfoElement"><spring:message code="user.employeeName" /></div>
-	          <div class="columnElement customerElement"><spring:message code="customer" /></div>
-	          <div class="columnElement operateElement"><spring:message code="remove" /></div>    
+	          <div class="columnElement sequenceElement">Sequence</div>
+	          <div class="columnElement employeeInfoElement">EmployeeID</div>
+	          <div class="columnElement employeeInfoElement">EmployeeName</div>
+	          <div class="columnElement customerElement">Customer</div>
+	          <div class="columnElement operateElement">Remove</div>    
 	       </div>
 	  </div>
 	  
 	  <div class="saveOperateButton">
-            <input type="button" value=<spring:message code="save" />  id="saveButton"></input>
-            <input type="button" value=<spring:message code="cancel" />  id="cancelButton"></input> 
+            <input type="button" value="Save"  id="saveButton"></input>
+            <input type="button" value="Cancel"  id="cancelButton"></input> 
         </div>
 	  
 	  <jsp:include page="userInfoTips.jsp" />

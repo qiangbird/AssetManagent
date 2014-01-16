@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,39 +19,26 @@ import com.augmentum.ams.web.vo.asset.ProjectVo;
 @RequestMapping(value = "/project")
 public class ProjectController extends BaseController {
 
+    Logger logger = Logger.getLogger(ProjectController.class);
     @Autowired
     private RemoteCustomerService remoteCustomerService;
 
-    @RequestMapping("/getProjectByCustomer")
-    public ModelAndView getProjectByCustomer(String customerName, HttpServletRequest request)
-            throws DataException {
-        // Customer customer=customerService.getCustomerByName(customerName);
-        // String customerCode=customer.getCustomerCode();
-        ModelAndView modelAndView = new ModelAndView();
-        // List<Project> projectList=
-        // remoteCustomerService.getProjectByCustomerCodes(customerCode,request);
-        // modelAndView.addObject("projectList",projectList);
-        //
-        // String projectManageIds="";
-
-        // List<User> pmList=new ArrayList<User>();
-        // for(Project project:projectList){
-        // projectManageIds+=remoteProjectService.getManagerIdByProjectCode(project.getProjectCode(),request)+" ";
-        // }
-        // modelAndView.addObject("projectManageIds",projectManageIds);
-        return modelAndView;
-    }
-
     @RequestMapping("/getProjectByCustomerCode")
     public ModelAndView getProjectByCustomerCode(String customerCode, HttpServletRequest request) {
+
+        logger.info("getProjectByCustomerCode method start!");
+
         ModelAndView modelAndView = new ModelAndView();
         List<ProjectVo> list = null;
         try {
             list = remoteCustomerService.getProjectByCustomerCode(customerCode, request);
         } catch (DataException e) {
             e.printStackTrace();
+            logger.error("Get data as customerCode from IAP error", e);
         }
         modelAndView.addObject("projectList", list);
+
+        logger.info("getProjectByCustomerCode method end!");
         return modelAndView;
     }
 

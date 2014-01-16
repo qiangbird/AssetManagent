@@ -60,7 +60,7 @@ div.operation_assets_list:hover {
 }
 
 /*  begin the assign dialog css */
-#dialog{
+#dialog {
 	display: none;
 }
 
@@ -102,8 +102,7 @@ div.operation_assets_list:hover {
 	width: 220px;
 }
 
-#assginTable tr span {
-	/* color: #FF0000; */
+#assginTable tr span { /* color: #FF0000; */
 	position: absolute;
 	top: auto;
 	left: 80px;
@@ -113,12 +112,21 @@ div.operation_assets_list:hover {
 	width: 80px;
 	height: 30px;
 	background: url("../../img/BTN_Create_80x30.png") no-repeat;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
 }
 
 .reset-button {
 	width: 80px;
 	height: 30px;
 	background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+	width: 80px;
+	color: #8A8A8A;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
 }
 
 .dropDownList .dropDownList_icon {
@@ -129,27 +137,36 @@ div.operation_assets_list:hover {
 	color: #808080;
 	margin: 0 0 0 110px;
 }
-.ui-autocomplete{
-max-height: 130px;
-overflow: auto;
+
+.ui-autocomplete {
+	max-height: 130px;
+	overflow: auto;
 }
-#dialog-confirm{
+
+#dialog-confirm {
 	display: none;
 }
 
-div.operation_assets_list ul{
+div.operation_assets_list ul {
 	display: block;
 }
 
-.submit-button{
-	background: url("../../image/customize/customizedView/BTN_Create_80x30.png") no-repeat;
+.submit-button {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png")
+		no-repeat;
 }
-.submit-button:HOVER{
-	background: url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png") no-repeat;
-	}
-.reset-button{
+
+.submit-button:HOVER {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
+		no-repeat;
+}
+
+.reset-button {
 	background: url("../../image/common/Cancel.png") no-repeat;
 }
-.reset-button:hover{
-    background: url("../../image/common/Cancel_Hover.png") no-repeat;
+
+.reset-button:hover {
+	background: url("../../image/common/Cancel_Hover.png") no-repeat;
 }

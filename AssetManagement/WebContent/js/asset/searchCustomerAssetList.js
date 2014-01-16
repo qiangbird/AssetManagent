@@ -39,46 +39,42 @@ $(document).ready(function() {
         } 
         $("#label_" + message).siblings("input").attr("content", msg(message));
      }
-     var localeCode = $("#localeCode").val();
-     if (localeCode == 'en') {
-        i18n = 'en_US';
-     } else {
-        i18n = 'zh_CN';
-     }
+//     var localeCode = $("#localeCode").val();
+    var i18n = $("#language").val();
      jQuery.i18n.properties({
         name : 'message',
         path : 'i18n/',
         mode : 'map',
         language : i18n,
         callback : function() {
-           msg = jQuery.i18n.prop;
-           AddI18n('SearchButton');
-           AddI18n('SearchConditionReset');
-           AddI18n('KeywordPlaceholder');
-           AddI18n('SearchBy');
-           AddI18n('CheckedAllFields');
-           AddI18n('CheckedAllTypes');
-           AddI18n('CheckedAllStatus');
-           AddI18n('AssetId');
-           AddI18n('AssetName');
-           AddI18n('User');
-           AddI18n('Project');
-           AddI18n('Customer');
-           AddI18n('PoNo');
-           AddI18n('BarCode');
-           AddI18n('AssetType');
-           AddI18n('Machine');
-           AddI18n('Monitor');
-           AddI18n('Device');
-           AddI18n('Software');
-           AddI18n('OtherAssets');
-           AddI18n('AssetStatus');
-           AddI18n('Available');
-           AddI18n('InUse');
-           AddI18n('Idle');
-           AddI18n('Returned');
-           AddI18n('CheckInTime');
-           AddI18n('Operation_Warning');
+//           msg = jQuery.i18n.prop;
+//           AddI18n('SearchButton');
+//           AddI18n('SearchConditionReset');
+//           AddI18n('KeywordPlaceholder');
+//           AddI18n('SearchBy');
+//           AddI18n('CheckedAllFields');
+//           AddI18n('CheckedAllTypes');
+//           AddI18n('CheckedAllStatus');
+//           AddI18n('AssetId');
+//           AddI18n('AssetName');
+//           AddI18n('User');
+//           AddI18n('Project');
+//           AddI18n('Customer');
+//           AddI18n('PoNo');
+//           AddI18n('BarCode');
+//           AddI18n('AssetType');
+//           AddI18n('Machine');
+//           AddI18n('Monitor');
+//           AddI18n('Device');
+//           AddI18n('Software');
+//           AddI18n('OtherAssets');
+//           AddI18n('AssetStatus');
+//           AddI18n('Available');
+//           AddI18n('InUse');
+//           AddI18n('Idle');
+//           AddI18n('Returned');
+//           AddI18n('CheckInTime');
+//           AddI18n('Operation_Warning');
         }
      });
      
@@ -179,7 +175,7 @@ $(document).ready(function(){
         modal: true,
         position: "center",
         resizable: false,
-        title: "Assign Assets",
+        title: i18nProp('manageAssign_dialog_title'),
         bgiframe: true
     });
 	//operation menu
@@ -218,10 +214,10 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
-				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 					 if (yes) {
 						 $.ajax({
 							  type: 'POST',
@@ -243,7 +239,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 	});
@@ -267,11 +263,11 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
 				//do i18n for all show message
-				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 					 if (yes) {
 						 alert($("#customerCode").val());
 						 alert(assetsId);
@@ -296,7 +292,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 		
@@ -320,7 +316,7 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assignIds == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
 			$("#dialog").dialog("open");
@@ -331,7 +327,7 @@ $(document).ready(function(){
 			  });
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 		
@@ -394,10 +390,10 @@ $(document).ready(function(){
 		});
 		if(flag){
 			if(assetsId == ""){
-				ShowMsg(i18nProp('None_Select_Asset'));
+				ShowMsg(i18nProp('none_select_record'));
 				return;
 			}else{
-				ShowMsg(i18nProp('Operation_Confirm_Message'),function(yes){
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 				 if (yes) {
 					 $.ajax({
 						  type: 'POST',
@@ -418,7 +414,7 @@ $(document).ready(function(){
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('Status_Error_Prompt_Message',line));
+			ShowMsg(i18nProp('status_error_prompt_message',line));
 			return;
 		}
 	});

@@ -1,7 +1,5 @@
 var auditProcessTr = $("#dataTable tr:first-child").html().toString();
 var auditDoneTr = $("#dataTable tr:nth-child(2)").html().toString();
-var locale = $("#locale").val();
-var activedStatus;
 
 $(document).ready(function(){
     
@@ -22,7 +20,6 @@ $(document).ready(function(){
         showProcessBtnBlank(showProcessingAudit);
         showAuditList(showProcessingAudit);
     });
-    
 });
 
 function refreshCheckInventoryData(){
@@ -121,17 +118,12 @@ function showAuditList(showProcessingAudit) {
 }
 
 function showProcessAudits(data) {
-	setAuditStatusForTitle();
+    $("#content-title-status").html("(Processing)");
     $("#dataTable").html("");
     var length = data.processAudits.length;
     $(".audit-file-no-data").html("");
     if (length == 0) {
-    	if ("zh_CN" == locale) {
-    		$(".audit-file-no-data").html("没有正在盘点的资产文件，请从  <a href='asset/allAssets'>资产列表</a> 选取生成。");
-    	} else {
-    		$(".audit-file-no-data").html("There is no processing inventory, please select from <a href='asset/allAssets'>All Assets List</a> to generate it.");
-    	}
-    	
+        $(".audit-file-no-data").html("没有正在盘点的资产文件，请从  <a href='asset/allAssets'>资产列表</a> 选取生成。");
     } else {
         $("#dataTable .audit-process-tr").css("display", "block");
         for (var i = 0; i < length; i++) {
@@ -151,16 +143,12 @@ function showProcessAudits(data) {
 }
 
 function showDoneAudits(data) {
-	setAuditStatusForTitle();
+    $("#content-title-status").html("(Done)");
     $("#dataTable").html("");
     var length = data.doneAudits.length;
     $(".audit-file-no-data").html("");
     if (length == 0) {
-    	if ("zh_CN" == locale) {
-    		$(".audit-file-no-data").html("没有盘点完成的资产文件。");
-    	} else {
-    		$(".audit-file-no-data").html("There is no done inventory.");
-    	}
+        $(".audit-file-no-data").html("没有盘点完成的资产文件。");
     } else {
         $("#dataTable .audit-done-tr").css("display", "block");
         for (var i = 0; i < length; i++) {
@@ -179,10 +167,5 @@ function showDoneAudits(data) {
             $(".done-" + i + " .percentResult").html(data.doneAudits[i].percentage + "%");
         }
     }
-}
-
-function setAuditStatusForTitle() {
-	var activedStatus = $(".processBtn-control-blank-actived").parent(".left-control").children("span").children(".audit-status-actived").html();
-	$("#content-title-status").html("(" + activedStatus + ")");
 }
 

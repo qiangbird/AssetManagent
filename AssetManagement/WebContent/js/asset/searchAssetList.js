@@ -1,24 +1,11 @@
 var dataList;
 var criteria = {};
-var placeholder_customer = $("#customerName").attr("placeholder");
-var placeholder_project = $("#projectName").attr("placeholder");
-var placeholder_user = $("#userName").attr("placeholder");
 
 $(document).ready(function() {
     
     // categoryFlag = 1, it means category is 'asset'
     initCriteria(1);
     findDataListInfo("asset");
-    
-    $(".filterDiv input[type='checkBox']").each(function(){
-    	if ($(this).val() != "all") {
-    		$(this).attr("content", $(this).siblings("label").html());
-    	}
-    });
-    
-    $(".filterDiv input[type='text']").each(function(){
-    	$(this).attr("content", $(this).val());
-    });
     
     $(".filterDiv").filterBox({});
     $("#searchButton").click(function() {
@@ -53,6 +40,56 @@ $(document).ready(function() {
         yearRange: "2000:2030"
     });
     
+    function AddI18n(message) {
+        $("#label_" + message).html(msg(message));
+        if (message == "CheckInTime") {
+            var $temp = $("#label_" + message).parent().siblings(".condition_optional").children("p").children("input");
+            $temp.attr("content", msg(message));
+        } 
+        $("#label_" + message).siblings("input").attr("content", msg(message));
+     }
+     var localeCode = $("#localeCode").val();
+     if (localeCode == 'en') {
+        i18n = 'en_US';
+     } else {
+        i18n = 'zh_CN';
+     }
+     jQuery.i18n.properties({
+        name : 'message',
+        path : 'i18n/',
+        mode : 'map',
+        language : i18n,
+        callback : function() {
+           msg = jQuery.i18n.prop;
+           AddI18n('SearchButton');
+           AddI18n('SearchConditionReset');
+           AddI18n('KeywordPlaceholder');
+           AddI18n('SearchBy');
+           AddI18n('CheckedAllFields');
+           AddI18n('CheckedAllTypes');
+           AddI18n('CheckedAllStatus');
+           AddI18n('AssetId');
+           AddI18n('AssetName');
+           AddI18n('User');
+           AddI18n('Project');
+           AddI18n('Customer');
+           AddI18n('PoNo');
+           AddI18n('BarCode');
+           AddI18n('AssetType');
+           AddI18n('Machine');
+           AddI18n('Monitor');
+           AddI18n('Device');
+           AddI18n('Software');
+           AddI18n('OtherAssets');
+           AddI18n('AssetStatus');
+           AddI18n('Available');
+           AddI18n('InUse');
+           AddI18n('Idle');
+           AddI18n('Returned');
+           AddI18n('CheckInTime');
+        }
+     });
+     
      // add place holder event for keyword
      removePlaceholderForKeyWord();
      
@@ -70,7 +107,7 @@ $(document).ready(function() {
      $("#assignAssetsButton").parent("li").click(function() {
          
          $("#dialog_assign").dialog({
-             title: i18nProp('itAssign_dialog_title'),
+             title: "IT Assign Assets",
              autoOpen: false,
              closeOnEscape: true,
              draggable: false,
@@ -92,7 +129,7 @@ $(document).ready(function() {
      // return assets to customer
      $("#returnAssetsToCustomer").parent("li").click(function(){
          if (checkActivedAssetIds() && checkActivedAssetsStatusForReturn()) {
-             ShowMsg(i18nProp('message_confirm_asset_returnToCustomer', $('.row .dataList-checkbox-active').size().toString()), function(yes){
+             ShowMsg($('.row .dataList-checkbox-active').size() + " assets will be returned to customer. Are you sure?", function(yes){
                  if (yes) {
                      $.ajax({
                          type : 'GET',
@@ -105,11 +142,6 @@ $(document).ready(function() {
                      success : function(data) {
                              criteria.pageNum = 1;
                              dataList.search();
-                             if (data.errorCodes) {
-                             	showMessageBarForAssetList(data.errorCodes);
-                             } else if (data.errorCode) {
-                             	showMessageBarForMessage(data.errorCode);
-                             }
                          }
                      });
                  }else{
@@ -122,7 +154,7 @@ $(document).ready(function() {
      // change assets to fixed
      $("#changeToFixed").parent("li").click(function(){
          if (checkActivedAssetIds()) {
-             ShowMsg(i18nProp('message_confirm_asset_changeToFixedAsset', $('.row .dataList-checkbox-active').size().toString()), function(yes){
+             ShowMsg($('.row .dataList-checkbox-active').size() + " assets will be changed to fixed assets. Are you sure?", function(yes){
                  if (yes) {
                      $.ajax({
                          type : 'GET',
@@ -135,11 +167,6 @@ $(document).ready(function() {
                          success : function(data) {
                              criteria.pageNum = 1;
                              dataList.search();
-                             if (data.errorCodes) {
-                             	showMessageBarForAssetList(data.errorCodes);
-                             } else if (data.errorCode) {
-                             	showMessageBarForMessage(data.errorCode);
-                             }
                          }
                      });
                  }else{
@@ -152,7 +179,7 @@ $(document).ready(function() {
      // change assets to not fixed
      $("#changeToNonFixed").parent("li").click(function(){
          if (checkActivedAssetIds()) {
-             ShowMsg(i18nProp('message_confirm_asset_changeToNonFixedAsset', $('.row .dataList-checkbox-active').size().toString()), function(yes){
+             ShowMsg($('.row .dataList-checkbox-active').size() + " assets will be changed to non-fixed assets. Are you sure?", function(yes){
                  if (yes) {
                      $.ajax({
                          type : 'GET',
@@ -165,11 +192,6 @@ $(document).ready(function() {
                          success : function(data) {
                              criteria.pageNum = 1;
                              dataList.search();
-                             if (data.errorCodes) {
-                             	showMessageBarForAssetList(data.errorCodes);
-                             } else if (data.errorCode) {
-                             	showMessageBarForMessage(data.errorCode);
-                             }
                          }
                      });
                  }else{
@@ -184,7 +206,7 @@ $(document).ready(function() {
          var tipMessage = "";
          
          if (getActivedAssetIds() != "") {
-             tipMessage = i18nProp('message_confirm_asset_addToAudit', $('.row .dataList-checkbox-active').size().toString());
+             tipMessage = $('.row .dataList-checkbox-active').size() + " assets will be added to audit. Are you sure?";
              ShowMsg(tipMessage, function(yes){
                  if (yes) {
                      window.location.href = "asset/addAssetsToAuditForSelected?assetIds=" + getActivedAssetIds();
@@ -193,7 +215,7 @@ $(document).ready(function() {
                  }
              });
          } else {
-        	 tipMessage = i18nProp('message_confirm_asset_addToAudit', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
+             tipMessage = $(".dataList .dataList-div-perPage span:nth-child(3)").html() + " assets will be added to audit. Are you sure?";
              ShowMsg(tipMessage, function(yes){
                  if (yes) {
                      window.location.href = "asset/addAssetsToAuditForSearchResult";
@@ -213,7 +235,7 @@ var dataListInfo = {
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
-    url : 'asset/allAssetsList',
+    url : 'asset/allAssetsList?uuid='+$("#userUuid").val(),
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {
@@ -252,7 +274,7 @@ function setCriteria() {
     criteria.keyWord = $("#keyword").val();
     criteria.fromTime = $("#fromTime").val();
     criteria.toTime = $("#toTime").val();
-    
+    criteria.userUuid = $("#userUuid").val();
     // set search fields
     var searchFields = "";
     $("#searchFields").find(":checked").each(function() {
@@ -306,7 +328,7 @@ $("#customerName").focus(function() {
     $.ajax({
         type : 'GET',
         contentType : 'application/json',
-        url : 'asset/getCustomerInfo',
+        url : 'base/getCustomerInfo',
         dataType : 'json',
         success : function(data) {
            var length = data.customerList.length;
@@ -329,7 +351,7 @@ $("#customerName").focus(function() {
 
 $("#customerName").blur(function() {
     if ($(this).val() == "") {
-        $(this).attr("placeholder", placeholder_customer);
+        $(this).attr("placeholder", "Please enter customer name");
     }
 });
 
@@ -369,7 +391,7 @@ $("#projectName").focus(function() {
 
 $("#projectName").blur(function() {
     if ($(this).val() == "") {
-        $(this).attr("placeholder", placeholder_project);
+        $(this).attr("placeholder", "Please enter project name");
     }
 });
 
@@ -403,7 +425,7 @@ $("#userName").focus(function() {
 
 $("#userName").blur(function() {
     if ($(this).val() == "") {
-        $(this).attr("placeholder", placeholder_user);
+        $(this).attr("placeholder", "Please enter user name");
     }
 });
 
@@ -420,7 +442,7 @@ function getActivedAssetIds() {
 function checkActivedAssetIds() {
     var assetIds = getActivedAssetIds();
     if (assetIds == "") {
-        ShowMsg(i18nProp('none_select_record'));
+        ShowMsg("Please select one asset at least");
         return false;
     }
     return true;
@@ -437,13 +459,13 @@ function checkActivedAssetsStatusForAssign() {
             || status == "RETURNING_TO_IT" || status == "RETURNED"
                 || status == "BORROWED" || status == "IDLE") {
             
-            lineNum += $(this).siblings(".w-30").html() + ",";
+            lineNum += $(this).siblings(".w-30").html() + ", ";
             flag = false;
         } 
     });
     
     if (!flag) {
-    	ShowMsg(i18nProp('message_warn_asset_assign', lineNum));
+        ShowMsg("Line " + lineNum.substring(0, lineNum.length - 2) + ": illegal status asset can not be assigned");
     }
     return flag;
 }
@@ -459,13 +481,13 @@ function checkActivedAssetsStatusForReturn() {
             || status == "RETURNING_TO_IT" || status == "RETURNED"
                 || $(this).siblings(".Ownership").html() == "Augmentum") {
             
-            lineNum += $(this).siblings(".w-30").html() + ",";
+            lineNum += $(this).siblings(".w-30").html() + ", ";
             flag = false;
         } 
     });
     
     if (!flag) {
-    	ShowMsg(i18nProp('message_warn_asset_return', lineNum));
+        ShowMsg("Line " + lineNum.substring(0, lineNum.length - 2) + ": illegal status asset can not be returned");
     }
     return flag;
 }
@@ -493,11 +515,6 @@ $("#confirm_assign").click(function() {
             success : function(data) {
                 criteria.pageNum = 1;
                 dataList.search();
-                if (data.errorCodes) {
-                	showMessageBarForAssetList(data.errorCodes);
-                } else if (data.errorCode) {
-                	showMessageBarForMessage(data.errorCode);
-                }
             }
         });
         closeDialog();
@@ -513,16 +530,16 @@ $("#cancel_assign").click(function() {
 function closeDialog() {
     $("#projectName").val("");
     $("#projectCode").val("");
-    $("#projectName").attr("placeholder", placeholder_customer);
+    $("#projectName").attr("placeholder", "Please enter project name");
     
     $("#customerName").val("");
     $("#customerCode").val("");
-    $("#customerName").attr("placeholder", placeholder_project);
+    $("#customerName").attr("placeholder", "Please enter customer name");
     $("#customerName").css("border-color", "");
     
     $("#userName").val("");
     $("#userId").val("");
-    $("#userName").attr("placeholder", placeholder_user);
+    $("#userName").attr("placeholder", "Please enter user name");
     
     $("#dialog_assign").dialog("close");
 }

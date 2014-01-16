@@ -18,7 +18,7 @@
 <link rel="stylesheet" type="text/css" href="css/common/commonList.css">
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
 <link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
-<link rel="stylesheet" type="text/css" href="css/asset/assignAssetsDialog.css">
+<link rel="stylesheet" type="text/css" href="css/asset/transferLog.css">
 <link rel="stylesheet" type="text/css" href="messageBar/css/messagebar.css">
 </head>
 <body>
@@ -85,81 +85,17 @@
 	        	<span class="middle" ><spring:message code="search" /> </span>
 	        	<span class="right"></span>
 	        </a>
-	        <c:if test="${requestScope.userUuid==null }">
-	        <div id="customizedViewButton">
-		        <a id="customizedView" >Customized View</a>
-		        <ul id="viewUlTemplate">
-	                <li><a id="" class="existCustomizedView" ></a></li>
-	            </ul>
-		        <ul id="viewUl">
-	                <li><a href="customizedView/goToNewCustomizedView">Create View</a></li>
-	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement">Management View </a></li>
-	            </ul>
-            </div>
-	        <div class="operation_assets_list">
-		        <a class="a_operations_assets_list">Operation</a>
-	        	<ul>
-	        		<li><label id="assignAssetsButton">Assign</label></li>
-	        		<li><label id="returnAssetsToCustomer">ReturnToCustomer</label></li>
-	        		<li><label id="changeToFixed">ChangeToFixedAsset</label></li>
-	        		<li><label id="changeToNonFixed">ChangeToNonFixedAsset</label></li>
-	        		<li><label id="addToAudit">AddToAudit</label></li>
-	        	</ul>
-	        </div>
-	        </c:if>
-	        
 	    </div>
     	</div>
     </div>
-    <div id="dialog_assign">
-	      <div>
-	          <span>*</span>
-	          <label id="label_CustomerName">Customer</label>
-	          <input id="customerName" type="text" name="customerName" placeholder="Please enter customer name"/>
-	          <input type="hidden" id="customerCode" />
-	      </div>
-	      <div>
-	          <label id="label_ProjectName">Project</label>
-	          <input id="projectName" type="text"  name="projectName" placeholder="Please enter project name"/>
-	          <input type="hidden" id="projectCode" />
-	          
-	      </div>
-	      <div>
-	          <label id="label_UserName">User</label>
-	          <input id="userName" type="text" name="userName" placeholder="Please enter receiver name"/>
-	          <input type="hidden" id="userId">
-	      </div>
-	          <a id="confirm_assign" class="a_common_button green_button_thirty">
-	        	<span class="left"></span>
-	        	<span class="middle" ><label id="label_ConfirmAssign">Confirm</label> </span>
-	        	<span class="right"></span>
-	          </a>
-	          <p>
-		          <input type="button" id="cancel_assign" value="Cancel">
-	          <p>
-    </div>
-    
-     <div id="dialog-confirm" title="Operation confirm">
-   		<p id="confirm-message-body"></p>
- 	</div>
- 	<div id="dialog-warning" title="Warning">
-  		<p id="warning-message-body"></p>
- 	</div>
  	
-
-    <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
-    <input type="hidden" id="userUuid" value="${requestScope.userUuid }">
-
-    <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
 <script type="text/javascript" src="js/common/common.js"></script>
 <script type="text/javascript" src="js/search/searchCommon.js"></script>
 <script type="text/javascript" src="searchList/js/DataList.js"></script>
-<script type="text/javascript" src="js/asset/searchAssetList.js" ></script>
+<script type="text/javascript" src="js/asset/searchTransferLogList.js" ></script>
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
-<script type="text/javascript" src="js/search/searchCustomizedView.js" ></script>
-<script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 </html>

@@ -24,6 +24,8 @@ public class SearchCondition {
     
     private String customizedViewId;
     
+    private String userUuid;
+
     private String auditFileName;
     
     private String auditFlag;
@@ -116,6 +118,13 @@ public class SearchCondition {
         this.toTime = toTime;
     }
 
+    public String getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
+    }
 	public String getAuditFileName() {
 		return auditFileName;
 	}

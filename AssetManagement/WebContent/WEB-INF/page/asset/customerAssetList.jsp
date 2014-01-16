@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -86,25 +87,25 @@
             </div>
             <a id="searchButton" class="a_common_button green_button_thirty">
                 <span class="left"></span>
-                <span class="middle" ><label id="label_SearchButton"></label> </span>
+                <span class="middle" ><spring:message code="SearchButton" /> </span>
                 <span class="right"></span>
             </a>
             
             <div class="operation_assets_list">
-                <a class="a_operations_assets_list">Operation</a>
+                <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
                 <c:choose>
                 <c:when test="${sessionScope.userRole == 'Manager'}">
                     <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
-                    <li id="takeOver" value=""><a>Take over</a></li>
-                    <li id="returnToProject" value="AVAILABLE"><a>Return To Project</a></li>
+                    <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
+                    <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
                     </c:if>
-                    <li id="assgin"><a>Assign</a></li>
-                    <li id="returnToIT" value="RETURNING_TO_IT"><a>Return to IT</a></li>
+                    <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
+                    <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
                 </c:when>
                 <c:otherwise>
-                    <li id="takeOver"><a>Take over</a></li>
-                    <li id="returnToProject" value="RETURNING_TO_IT"><a>Return To Project</a></li>
+                    <li id="takeOver"><a><spring:message code="customer.asset.take.over" /></a></li>
+                    <li id="returnToProject" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.project" /></a></li>
                 </c:otherwise>
                 </c:choose>
                 </ul>
@@ -131,7 +132,7 @@
             <input type="hidden" name="customerCode" value="${customer.customerCode }"/>
             <input type="hidden" name="ids" id="ids"/>
             <div>
-                <tr><td>Project</td>
+                <tr><td><spring:message code="project" /></td>
                 <td>
                 <select id="DropList" class="dropDownSelect" name="projectCode">
                 <c:forEach var="project" items="${projectList }">
@@ -142,14 +143,14 @@
                 </tr>
             </div>
             <div>
-                <tr><td>User</td><td><input type="text" name="userName" id="user"/>
+                <tr><td><spring:message code="asset.user" /></td><td><input type="text" name="userName" id="user"/>
                 <input type="hidden" name="assetUserCode" id="assetUserCode">
                 </td></tr>
             </div>
         
         <div class="submit-div">
-            <input class="input-80-30 submit-button" type="submit" value="submit" />
-            <input class="input-80-30 reset-button" type="reset" value="Reset" />
+            <input class="input-80-30 submit-button" type="submit" value="<spring:message code='submit' />" />
+            <input class="input-80-30 reset-button" type="reset" value="<spring:message code='cancel' />" />
             </tr>
         </div>
         </div>

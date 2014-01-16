@@ -52,7 +52,7 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
         page = searchAssetService.findAllAssetsBySearchCondition(sc);
         Assert.assertTrue(page.getResult().size() > 0);
         logger.info(page.getResult().size());
-        SearchCommonUtil.convertAssetListToJSONArray(page.getResult());
+//        SearchCommonUtil.convertAssetListToJSONArray(page.getResult());
     }
         
 }

@@ -8,6 +8,7 @@
 .groupDispaly {
 	width: 960px;
 	margin: 0px auto;
+	overflow: auto;
 }
 
 .groupListContent {
@@ -36,17 +37,6 @@
 	margin-top: 110px;
 	margin-left: 110px;
 }
-
-/* .ui-dialog .ui-dialog-titlebar-close {
-	position: absolute;
-	right: .3em;
-	top: 50%;
-	width: 19px;
-	margin: -10px 0 0 0;
-	padding: 1px;
-	height: 18px;
-	background: #505050;
-} */
 
 .hightLight {
 	background: url("../../img/IMG_List_Acitve_1x30.png");
@@ -114,6 +104,148 @@
 	color: #A7A1A1;
 }
 
+.ui-dialog .ui-widget-header {
+	border: 1px solid #71B3D6;
+	background: #71B3D6;
+	height: 40px;
+}
+
+.ui-dialog .ui-dialog-title {
+	margin-top: 5px;
+}
+
+#dialog .submit-div {
+	position: absolute;
+	margin: 150px 150px;
+}
+
+#location_table td {
+	width: 80px;
+	text-align: center;
+}
+
+#location_table tr {
+	line-height: 40px;
+}
+
+#location_table td input {
+	height: 30px;
+	width: 220px;
+}
+
+#location_table td select {
+	height: 30px;
+	width: 220px;
+}
+
+#location_table tr span { /* color: #FF0000; */
+	position: absolute;
+	top: auto;
+	left: 80px;
+}
+
+.submit-button {
+	width: 80px;
+	height: 30px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+	background: url("../../img/BTN_Create_80x30.png") no-repeat;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+.reset-button {
+	width: 80px;
+	height: 30px;
+	color: #8A8A8A;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+	background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+}
+
+.ui-autocomplete {
+	max-height: 130px;
+	overflow: auto;
+}
+
+#addButton {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png")
+		no-repeat;
+}
+
+#addButton:hover {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
+		no-repeat;
+}
+
+#addButton {
+	width: 80px;
+	margin-left: 100px;
+	text-align: center;
+	line-height: 30px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+#dialog-confirm {
+	display: none;
+}
+
+div.operation_assets_list ul {
+	display: block;
+}
+
+.submit-button {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png")
+		no-repeat;
+}
+
+.submit-button:HOVER {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
+		no-repeat;
+}
+
+.reset-button {
+	background: url("../../image/common/Cancel.png") no-repeat;
+}
+
+.reset-button:hover {
+	background: url("../../image/common/Cancel_Hover.png") no-repeat;
+}
+
+.dataList-div-body .row .Operation {
+	margin-left: -20px;
+}
+
+.editGroupIcon {
+	cursor: pointer;
+	width: 30px;
+	height: 30px;
+	margin: 0 35;
+	background: url("../../image/common/Edit.png") no-repeat;
+}
+
+.deleteGroupIcon {
+	cursor: pointer;
+	position: relative;
+	top: -60px;
+	left: 45px;
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	background: url("../../image/common/Delete.png") no-repeat;
+}
+
 .editIcon,.removeIcon {
 	cursor: pointer;
 }
@@ -122,8 +254,71 @@
 	cursor: pointer;
 	color: rgb(41, 184, 211);
 }
-.roleAddContent #autoText .token-input-list-facebook{
-width: 300px;
-max-height: 55px;
-min-height: 55px;
+
+.roleAddContent #autoText .token-input-list-facebook {
+	width: 300px;
+	max-height: 55px;
+	min-height: 55px;
+}
+
+#group_table {
+	margin: 20px auto;
+	width: 400px;
+}
+
+#group_table tr {
+	line-height: 40px;
+}
+
+#group_table td input,select {
+	height: 30px;
+	width: 220px;
+}
+
+#dialog .submit-div {
+	position: absolute;
+	margin: 270px 210px;
+}
+
+#group_table td input {
+	padding-left: 8px;
+}
+
+#group_table td span {
+	padding-left: 4px;
+}
+
+.dropDownList_icon {
+	padding-left: 0px;
+}
+
+#dialog {
+	display: none;
+}
+
+div.token-input-dropdown-facebook {
+	/* �����dialog�޷���ʾautocomplete�����⣬ �������� */
+	z-index: 10000;
+}
+
+#customers,#token-input-customers {
+	border-color: #BFBFBF;
+	border-width: 0px;
+	border-style: solid;
+	outline: none;
+	-webkit-box-shadow: inset 0 0 0;
+	-webkit-border-radius: 2px;
+	-moz-box-shadow: inset 0 0 5px #BFBFBF;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	box-shadow: inset 0 0 0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.token-input-token-facebook {
+	line-height: 15px;
+}
+.dataList-div-nineSqurt{
+	display: none;
 }

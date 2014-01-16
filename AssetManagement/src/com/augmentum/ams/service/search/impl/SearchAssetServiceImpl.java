@@ -80,8 +80,8 @@ public class SearchAssetServiceImpl implements SearchAssetService {
 
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
-        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(
-                Asset.class).get();
+        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder()
+                .forEntity(Asset.class).get();
 
         // create ordinary query, it contains search by keyword and field names
         BooleanQuery query = new BooleanQuery();
@@ -127,6 +127,11 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         // filtering query result
         BooleanQuery booleanQuery = new BooleanQuery();
 
+        if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
+            booleanQuery.add(new TermQuery(new Term("user.id", searchCondition.getUserUuid())),
+                    Occur.MUST);
+        }
+
         // If customizedViewId is not empty, only use the
         // customizedViewItemQuery
         if (null != searchCondition.getCustomizedViewId()
@@ -138,8 +143,8 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         } else {
             BooleanQuery statusQuery = getStatusQuery(searchCondition.getAssetStatus());
             BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
-            Query trq = getTimeRangeQuery(searchCondition.getFromTime(), searchCondition
-                    .getToTime());
+            Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
+                    searchCondition.getToTime());
 
             booleanQuery.add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
                     Occur.MUST);
@@ -152,8 +157,12 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class)
                 .setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
-                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
+                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN)
+                .createAlias("user", "user");
 
+        if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
+            criteria.add(Restrictions.eq("user.id", searchCondition.getUserUuid()));
+        }
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         
         Page<Asset> page = new Page<Asset>();
@@ -269,5 +278,5 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             logger.error(e);
         }
     }
-    
+
 }
