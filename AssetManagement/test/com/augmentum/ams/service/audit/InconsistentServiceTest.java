@@ -23,7 +23,6 @@ public class InconsistentServiceTest extends BaseCaseTest {
 	public void testFindInconsistentAssetByFileName() {
 		Set<String> list = inconsistentService.findInconsistentAssetByFileName("2014-01-08_01");
 		logger.info("inconsistent size: " + list.size());
-		
 		int acount = 0;
 		int bcount = 0;
 		for (String s : list) {

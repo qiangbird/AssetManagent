@@ -16,6 +16,8 @@
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>filterBox/css/filterBox.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>css/search/searchCommon.css">
 	<link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/header.css" >
+	<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
 	
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui-1.8.18.custom.min.js"></script>
@@ -31,9 +33,9 @@
    	 	<input id="flag" type="hidden" value="${flag }"></input>
    	 	<input id="auditFileName" type="hidden" value="${auditFileName }"></input>
       	<div id="checkResult">
-            <a id="auditLink">Audited</a>
-            <a id="unAuditLink">Unaudited</a>
-            <a id="inconsistentLink">Inconsistent</a>
+            <a id="auditLink"><spring:message code="viewMoreDialog_auditLink"/></a>
+            <a id="unAuditLink"><spring:message code="viewMoreDialog_unauditLink"/></a>
+            <a id="inconsistentLink"><spring:message code="viewMoreDialog_inconsistentLink"/></a>
     	</div>
 		<div class="dataList dataList-width">
     	<div id="searchCondition">

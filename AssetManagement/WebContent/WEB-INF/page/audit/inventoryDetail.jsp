@@ -28,7 +28,7 @@
 <input type="hidden" name="percentage" id="percentage" value="${percentNum}"/>
 <input type="hidden" name="operator" id="operator" value="${operator}"/>
 <input type="hidden" name="operationTime" id="operationTime" value="${operationTime}"/>
-
+<input type="hidden" id="viewMoreDialog_title" value="<spring:message code='viewMoreDialog_title'/>" />
 <!--         <div id="blank">
             <a href="dashBoard">home</a>
             <b id="father">&gt;</b>

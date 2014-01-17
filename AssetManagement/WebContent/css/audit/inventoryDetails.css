@@ -563,3 +563,7 @@ table.dataTable thead th {
 	margin-left: 15px;
 	color: #FFFFFF;
 }
+
+#ui-datepicker-div {
+	z-index: 2000;
+}

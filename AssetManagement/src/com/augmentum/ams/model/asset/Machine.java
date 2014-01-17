@@ -1,9 +1,11 @@
 package com.augmentum.ams.model.asset;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Analyzer;
@@ -50,7 +52,7 @@ public class Machine extends BaseModel {
 	@Field(name = "configuration", index = Index.TOKENIZED, store = Store.YES)
 	private String configuration;
 
-	@OneToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "asset_id", unique = true)
 	@IndexedEmbedded
 	private Asset asset;

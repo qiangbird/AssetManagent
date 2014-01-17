@@ -15,7 +15,7 @@ function showDataListDialog() {
 		modal : true, // set true, the dialog will have modal behavior; other items on the page will be disabled.
 		resizable : false, // set false, dialog's size can't change.
 		draggable : false, // set false, dialog can't move.
-		title : 'Inventory Asset List',
+		title : $("#viewMoreDialog_title").val(),
 		resizable:false,
 		draggable:true,
 		position : ['center',60],
