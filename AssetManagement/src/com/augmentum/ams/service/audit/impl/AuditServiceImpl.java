@@ -180,7 +180,13 @@ public class AuditServiceImpl implements AuditService {
 	public Page<Asset> findAssetForInventory(SearchCondition searchCondition) throws BaseException {
 		
 		// get asset UUID based on isAudited status and audit file name
-		List<String> assetIds = auditDao.findInventoryAssetId(searchCondition.getIsAudited(), searchCondition.getAuditFileName());
+		Boolean boo = Boolean.TRUE;
+		if ("audited".equals(searchCondition.getAuditFlag())) {
+			boo = Boolean.TRUE;
+		} else if ("unaudited".equals(searchCondition.getAuditFlag())) {
+			boo = Boolean.FALSE;
+		}
+		List<String> assetIds = auditDao.findInventoryAssetId(boo, searchCondition.getAuditFileName());
 
         // init base search columns and associate way
         String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
@@ -238,6 +244,13 @@ public class AuditServiceImpl implements AuditService {
         // create filter based on advanced search condition, it used for further
         // filtering query result
         BooleanQuery booleanQuery = new BooleanQuery();
+        
+        BooleanQuery bq = new BooleanQuery();
+        for (int i = 0; i < assetIds.size(); i++) {
+        	bq.add(new TermQuery(new Term("id", assetIds.get(i))), Occur.SHOULD);
+        }
+        
+        booleanQuery.add(bq, Occur.MUST);
 
         // If customizedViewId is not empty, only use the
         // customizedViewItemQuery

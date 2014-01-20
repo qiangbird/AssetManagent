@@ -4,7 +4,9 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -53,6 +55,19 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
         Assert.assertTrue(page.getResult().size() > 0);
         logger.info(page.getResult().size());
 //        SearchCommonUtil.convertAssetListToJSONArray(page.getResult());
+    }
+    
+    @Test
+    public void testQueryPerformance() {
+    	Criteria criteria = sessionFactory.openSession().createCriteria(Asset.class);
+    	criteria.createAlias("user", "user");
+    	criteria.add(Restrictions.eq("user.userId", "T04300"));
+    	criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
+    	@SuppressWarnings("unchecked")
+		List<Asset> list = (List<Asset>)criteria.list();
+    	for (Asset asset : list) {
+    		logger.info(asset.getAssetId() + "---" + asset.getUser().getUserName());
+    	}
     }
         
 }

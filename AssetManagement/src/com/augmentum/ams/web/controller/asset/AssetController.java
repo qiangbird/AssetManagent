@@ -448,7 +448,6 @@ public class AssetController extends BaseController {
 		}
 		modelAndView.setViewName("redirect:/auditFile/inventoryList");
 		return modelAndView;
-//		return "redirect:/auditFile/inventoryList";
 	}
 
 	@RequestMapping(value = "/addAssetsToAuditForSelected")
@@ -462,7 +461,6 @@ public class AssetController extends BaseController {
 		}
 		modelAndView.setViewName("redirect:/auditFile/inventoryList");
 		return modelAndView;
-//		return "redirect:/auditFile/inventoryList";
 	}
 
 	public ModelAndView addErrorCode(ExceptionHelper e) {

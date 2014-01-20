@@ -28,7 +28,7 @@
 <input type="hidden" name="percentage" id="percentage" value="${percentNum}"/>
 <input type="hidden" name="operator" id="operator" value="${operator}"/>
 <input type="hidden" name="operationTime" id="operationTime" value="${operationTime}"/>
-
+<input type="hidden" id="viewMoreDialog_title" value="<spring:message code='viewMoreDialog_title'/>" />
 <!--         <div id="blank">
             <a href="dashBoard">home</a>
             <b id="father">&gt;</b>
@@ -112,13 +112,15 @@
                 <div id="inconsTableContent"></div>
                 <div class="dialog-panel-shadow"></div>  
                 <div class="dialog-panel-link">
-                    <a href="#" id="iconsView"><spring:message code="audit.view.more" /></a>
+
+                    <a id="iconsView"><spring:message code="audit.viewMore" /></a>
+
                 </div>
             </div>
       </div>
         </div>
-       <!--  <div id="viewMoreDetails" style="min-height: 540px">
-   		</div> -->
+       	<div id="viewMoreDetails">
+   		</div>
         </div>
 
          <div id="dialog-confirm" title="Operation confirm">
@@ -139,8 +141,7 @@
     <script type="text/javascript" src="<%=basePath%>/js/audit/inventoryCommonOperation.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.form.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.dataTables.js"></script>
-	<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
-	<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js" ></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
 
 </body>
 </html>

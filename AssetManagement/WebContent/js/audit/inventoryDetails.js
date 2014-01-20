@@ -7,6 +7,28 @@ $(document).ready(function() {
 	$(".viewInventoryAsset").hide();
  });
 
+function showDataListDialog() {
+	
+	$("#viewMoreDetails").dialog({
+		autoOpen : false, // set autoOpen false, dialog will stay hidden until.dialog ('open') is called on it.
+		width : 974, // set dialog's width
+		modal : true, // set true, the dialog will have modal behavior; other items on the page will be disabled.
+		resizable : false, // set false, dialog's size can't change.
+		draggable : false, // set false, dialog can't move.
+		title : $("#viewMoreDialog_title").val(),
+		resizable:false,
+		draggable:true,
+		position : ['center',60],
+		height:620,
+		close: function() {
+			location = location;
+		}
+	});
+	
+	$("#viewMoreDetails").dialog("open");
+}
+
+
 function refreshData(){
 	var auditFileName=$("#fileName").val();
 	var percentNum=$("#percentage").val();
@@ -36,6 +58,12 @@ function refreshData(){
 function showIncons(auditFileName){
 	$("#inconsTableContent").children().remove();
 	AddInconsTable();
+	
+	$("#iconsView").bind("click", function(){
+    	showDataListDialog();
+       	$("#viewMoreDetails").load("audit/inventoryAsset?flag=inconsistent" + "&auditFileName=" + auditFileName);
+    });
+	
     $("#inconsTable").dataTable({
         "bServerSide":true,
     	"bProcessing":true,
@@ -86,14 +114,10 @@ function showAudited(a) {
     var uLink = $("#auditFilePanel").find(".u");
     uLink.find("a").css("color", "#23A5E4").css("text-decoration", "underline");
    
+    $("#auditView").unbind("click");
     $("#auditView").bind("click", function(){
-       	$("#viewMoreDetails").dialog('open');
-//       	$("#viewMoreDetails").load("viewAuditAssets?flag=audit&fileName="+auditFileName);
-       	$("#viewMoreDetails").load("/AssetManagement/searchCommon/column/getColumns?category=asset");
-       	window.location.href = "/AssetManagement/audit/inventoryAsset";
-//       	initFields("asset");
-//       	initCriteria(1);
-//       	windows.location.href = "inventoryAsset.jsp";
+    	showDataListDialog();
+       	$("#viewMoreDetails").load("audit/inventoryAsset?flag=audited" + "&auditFileName=" + auditFileName);
     });
     
     $("#auditTable").dataTable({
@@ -148,11 +172,13 @@ function showUnAudited(a) {
     aLink.find("a").css("color", "#23A5E4").css("text-decoration", "underline");
     var auditFileName = $(a).parents(".dialogBody").find(".process-panel").find("label").text();
     var fileName = $("#fielLabel").text().replace(/\s/ig,'');
-//    $("#auditView").unbind("click");
-/*    $("#auditView").bind("click", function(){
-    	$("#viewMoreDetails").dialog('open');
-    	$("#viewMoreDetails").load("viewUnAuditAssets?flag=unAudit&fileName="+fileName);
-    });*/
+    
+    $("#auditView").unbind("click");
+    $("#auditView").bind("click", function(){
+    	showDataListDialog();
+       	$("#viewMoreDetails").load("audit/inventoryAsset?flag=unaudited" + "&auditFileName=" + auditFileName);
+    });
+    
     $("#unauditTable").dataTable({
         "bServerSide":true,
     	"bProcessing":true,

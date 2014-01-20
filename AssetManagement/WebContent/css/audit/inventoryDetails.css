@@ -338,13 +338,18 @@ table.dataTable tr.odd {
 	height: 30px;
 }
 
-.process-bar {
+.process-content .process-bar {
 	height: 24px;
 	width: 394px;
 	padding: 3px;
 	float: left;
 	position: relative;
 	z-index: 5;
+}
+
+.process-content .process-bar .ui-progressbar-value {
+	border: 1px solid RGB(83,157,48);
+	background: RGB(83,157,48) 50% 50% repeat-x;
 }
 
 /* 
@@ -492,10 +497,6 @@ table.dataTable tr.odd {
 	table-layout: fixed;
 }
 
-#viewMoreDetails {
-	min-height: 540px;
-}
-
 .dataTables_scroll {
 	max-heigth: 450px;
 }
@@ -548,3 +549,21 @@ table.dataTable thead th {
 	display: none;
 }
 
+#checkResult a {
+	font-size: 16px;
+	font-weight: bold;
+	font-family: Arial;
+	padding-left: 10px;
+	background: #71B3D6;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-right: 15px;
+	line-height: 50px;
+	height: 50px;
+	margin-left: 15px;
+	color: #FFFFFF;
+}
+
+#ui-datepicker-div {
+	z-index: 2000;
+}

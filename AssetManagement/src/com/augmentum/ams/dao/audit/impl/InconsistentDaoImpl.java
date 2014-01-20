@@ -1,7 +1,9 @@
 package com.augmentum.ams.dao.audit.impl;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.FetchMode;
 import org.hibernate.HibernateException;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import com.augmentum.ams.dao.audit.InconsistentDao;
 import com.augmentum.ams.dao.base.impl.BaseDaoImpl;
-import com.augmentum.ams.model.audit.Audit;
 import com.augmentum.ams.model.audit.Inconsistent;
 
 
@@ -54,5 +55,15 @@ public class InconsistentDaoImpl extends BaseDaoImpl<Inconsistent> implements In
         });
         return list;
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Set<String> findInconsistentAssetByFileName(String fileName) {
+		
+		String hql = "SELECT asset.id FROM Inconsistent WHERE isExpired = ? AND auditFile.fileName = ? AND asset.id is NOT NULL";
+		List<String> allAssetIds = getHibernateTemplate().find(hql, Boolean.FALSE, fileName);
+		Set<String> assetIdSet = new HashSet<String>(allAssetIds);
+		return assetIdSet;
+	}
 
 }

@@ -146,13 +146,11 @@
   		<p id="warning-message-body"></p>
  	</div>
  	
+
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
     <input type="hidden" id="userUuid" value="${requestScope.userUuid }">
-<%--  	<input type="hidden" id="message_confirm_asset_addToAudit" value="<spring:message code='message.confirm.asset.addToAudit'/>"/> 
- 	<input type="hidden" id="message_warn_asset_assign" value="<spring:message code='message.warn.asset.assign'/>"/>
- 	<input type="hidden" id="message_warn_asset_return" value="<spring:message code='message.warn.asset.return'/>"/> --%>
- 	
+
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
