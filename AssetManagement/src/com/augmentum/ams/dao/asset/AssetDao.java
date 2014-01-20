@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.augmentum.ams.dao.base.BaseDao;
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.web.vo.asset.ExportVo;
 
 public interface AssetDao extends BaseDao<Asset>{
 	/**
@@ -39,4 +40,12 @@ public interface AssetDao extends BaseDao<Asset>{
 	 * @return
 	 */
     public List<Asset> findAssetByBarCode(String auditBarCode);
+    
+    /**
+     * Find the assets by ids for export
+     * @param assetIdArr
+     * @return
+     */
+    public List<ExportVo> findAssetsByIdsForExport(String[] assetIds);
+    
 }

@@ -2,7 +2,9 @@ package com.augmentum.ams.service.user.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -251,5 +253,17 @@ public class UserServiceImpl implements UserService {
         }else{
             return "Employee";
         }
+    }
+
+    @Override
+    public Map<String, User> findAllUsersFromLocal() {
+        
+        List<User> users = userDao.findAll(User.class);
+        Map<String, User> employees = new HashMap<String, User>();
+        
+        for(User user : users){
+            employees.put(user.getUserName(), user);
+        }
+        return employees;
     }
 }

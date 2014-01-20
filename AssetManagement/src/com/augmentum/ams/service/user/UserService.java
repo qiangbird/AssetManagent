@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.user;
 
 import java.util.List;
+import java.util.Map;
 
 import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.model.user.User;
@@ -72,15 +73,8 @@ public interface UserService {
     
     void saveUser(User user);
     
-/*    *//**
-     * @description physics delete value from user_role table by user id
-     * @author John.li
-     * @time Nov 25, 2013 4:04:01 PM
-     * @param userId
-     *//*
-    void deleteUserRoleById(String userId);*/
-    
     void saveUserAsUserVo(UserVo userVo);
+    
     /**
      * 
      * @author Jay.He
@@ -89,4 +83,13 @@ public interface UserService {
      * @return
      */
     String getUserRole(UserVo userVo);
+
+    /**
+     * 
+     * @author John.li
+     * @time Dec 17, 2014 
+     * @param userVo
+     * @return
+     */
+    Map<String, User> findAllUsersFromLocal();
 }

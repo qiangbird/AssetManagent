@@ -54,6 +54,19 @@
    </mvc:interceptors>
 <!-- support Restful -->
 <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>   
-<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>  
+<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+<property name="messageConverters">  
+        <list>  
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>  
+            <bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" >  
+                <property name = "supportedMediaTypes">  
+                    <list>  
+                        <value>text/plain;charset=UTF-8</value>  
+                    </list>  
+                </property>  
+            </bean>  
+        </list>  
+    </property>  
+</bean>  
 
 </beans>

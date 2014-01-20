@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.asset;
 
 import java.util.List;
+import java.util.Map;
 
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Project;
@@ -69,5 +70,11 @@ public interface ProjectService {
      * @return
      */
     public Project getProjectForAsset(AssetVo assetVo, Asset asset);
+
+    /**
+     * @author John.Li
+     * @return
+     */
+    Map<String, Project> findAllCustomersFromLocal();
 
 }

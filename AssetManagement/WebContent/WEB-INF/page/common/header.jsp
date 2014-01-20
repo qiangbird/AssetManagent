@@ -116,7 +116,7 @@
             <ul class="operationUl">
                 <li><a href="auditFile/inventoryList"><spring:message code="navigator.check.inventory" /></a></li>
                 <li><a href="asset/createAsset"><spring:message code="navigator.create.asset" /></a></li>
-                <li><a href="#"><spring:message code="navigator.import.asset" /></a></li>
+                <li><a href="asset/import"><spring:message code="navigator.import.asset" /></a></li>
             </ul>
         </div>
     </div>

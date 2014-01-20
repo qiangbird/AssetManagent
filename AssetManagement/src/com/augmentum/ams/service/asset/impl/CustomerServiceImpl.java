@@ -2,7 +2,9 @@ package com.augmentum.ams.service.asset.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -102,5 +104,18 @@ public class CustomerServiceImpl implements CustomerService {
 	public void updateCustomer(Customer customer) {
 		customerDao.update(customer);
 	}
+
+    @Override
+    public Map<String, Customer> findAllCustomersFromLocal() {
+        
+        Map<String, Customer> localCustomers = new HashMap<String, Customer>();
+        List<Customer> customers =  customerDao.findAll(Customer.class);
+        
+        for(Customer customer : customers){
+            localCustomers.put(customer.getCustomerName(), customer);
+        }
+        
+        return localCustomers;
+    }
 
 }

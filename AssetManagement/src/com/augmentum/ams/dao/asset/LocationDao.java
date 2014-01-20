@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.augmentum.ams.dao.base.BaseDao;
 import com.augmentum.ams.model.asset.Location;
+import com.augmentum.ams.web.vo.asset.SiteCacheVo;
 
 public interface LocationDao extends BaseDao<Location>{
 	/**
@@ -34,5 +35,11 @@ public interface LocationDao extends BaseDao<Location>{
 	 * @return
 	 */
 	public Location getLocationById(String id);
+
+	/**
+	 * @author John.Li
+	 * @return
+	 */
+    List<SiteCacheVo> findLocationSiteAndRoom();
 	
 }

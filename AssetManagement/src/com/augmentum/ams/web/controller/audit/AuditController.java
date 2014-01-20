@@ -126,23 +126,6 @@ public class AuditController extends BaseController{
         return jsonObject;
      }
     
-/*    @RequestMapping("/viewInventory")
-    @ResponseBody
-    public String viewInventory(AuditVo auditVo) throws Exception {
-        User loginUser = (User) session.get("user");
-        String showField = null;
-        String flag = auditVo.getFlag();
-        if(flag.equals("audit")||flag.equals("unAudit")){
-            showField= Format.showFieldsToString(userService.getCommonColumnByUser(loginUser, CommonTableName.audit.toString()));
-        }
-        else if(flag.equals("incons")){
-            showField= Format.showFieldsToString(userService.getCommonColumnByUser(loginUser, CommonTableName.inconsistent.toString()));
-        }
-        request.put("showFields", showField);
-        System.out.println("flag"+flag);
-        return SUCCESS;
-    }*/
-    
     @RequestMapping(value = "/inventoryAsset", method = RequestMethod.GET)
     public ModelAndView redirectInventoryAsset(String flag, String auditFileName) {
     	
@@ -163,9 +146,6 @@ public class AuditController extends BaseController{
 			searchCondition = new SearchCondition();
 		}
 		
-//		searchCondition.setIsAudited(true);
-//		searchCondition.setAuditFileName("2014-01-08_01");
-		
 		Page<Asset> page = auditService.findAssetForInventory(searchCondition);
 		String clientTimeOffset = (String) session.getAttribute("timeOffset");
 		List<AssetListVo> list = FormatEntityListToEntityVoList
@@ -174,7 +154,7 @@ public class AuditController extends BaseController{
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
 				.findUserCustomColumns("asset", getUserIdByShiro());
 		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
-				userCustomColumnList,null);
+				userCustomColumnList, null);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", page.getRecordCount());

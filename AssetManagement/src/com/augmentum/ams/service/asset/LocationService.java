@@ -2,8 +2,8 @@ package com.augmentum.ams.service.asset;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
-import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -94,4 +94,10 @@ public interface LocationService {
      * @param classes
      */
     void createIndexForLocation(Class<Location>... classes);
+
+    /**
+     * @author John.Li
+     * @return
+     */
+    Map<String, Location> findAllLocationsFromIAP();
 }

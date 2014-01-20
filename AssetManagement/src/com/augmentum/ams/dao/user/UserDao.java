@@ -47,4 +47,5 @@ public interface UserDao extends BaseDao<User>{
      * @time Sep 17, 2013 3:38:31 PM
      */
 	void deleteUserRoleById(String userId);
+
 }

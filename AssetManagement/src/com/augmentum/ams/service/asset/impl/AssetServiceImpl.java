@@ -2,9 +2,12 @@ package com.augmentum.ams.service.asset.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 
 import org.apache.commons.lang.StringUtils;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.write.WritableWorkbook;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +31,10 @@ import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
 import com.augmentum.ams.dao.audit.AuditFileDao;
 import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.excel.AssetTemplateParser;
+import com.augmentum.ams.excel.ExcelBuilder;
+import com.augmentum.ams.excel.ExcelUtil;
+import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Device;
@@ -54,7 +66,10 @@ import com.augmentum.ams.service.asset.ProjectService;
 import com.augmentum.ams.service.asset.SoftwareService;
 import com.augmentum.ams.service.customized.CustomizedPropertyService;
 import com.augmentum.ams.service.customized.PropertyTemplateService;
+import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.service.remote.RemoteProjectService;
+import com.augmentum.ams.service.remote.RemoteSiteService;
 import com.augmentum.ams.service.search.impl.SearchAssetServiceImpl;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
@@ -64,11 +79,14 @@ import com.augmentum.ams.util.CommonUtil;
 import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.ExceptionHelper;
+import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
+import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.asset.ExportVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.user.UserVo;
 
@@ -103,6 +121,12 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     private LocationService locationService;
     @Autowired
     private RemoteEmployeeService remoteEmployeeService;
+    @Autowired
+    private RemoteCustomerService remoteCustomerService;
+    @Autowired
+    private RemoteProjectService remoteProjectService;
+    @Autowired
+    private RemoteSiteService remoteSiteService;
     @Autowired
     private SpecialRoleService specialRoleService;
     @Autowired
@@ -657,26 +681,555 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     @Override
     public void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request,
             HttpServletResponse response) {
-        String path = request.getSession().getServletContext().getRealPath("upload");
-        String fileName = file.getOriginalFilename();
-        File targetFile = new File(path, fileName);
-        if (!targetFile.exists()) {
-            targetFile.mkdirs();
-        }
-        try {
-            file.transferTo(targetFile);
-        } catch (Exception e) {
-            logger.error("Upload image error!",e);
-        }
-        String pathName = request.getContextPath() + "/upload/" + fileName;
+        
+        FileOperateUtil.upload(request, response, file);
+        String pathName = request.getContextPath() + "/upload/" + file.getOriginalFilename();
         StringBuilder sbmsg = new StringBuilder(request.getScheme());
         sbmsg.append("://").append(request.getServerName()).append(":")
                 .append(request.getServerPort()).append(pathName);
+        
         try {
             response.getWriter().print(sbmsg);
         } catch (IOException e) {
             logger.error("Get image error!",e);
         }
+    }
+
+    @Override
+    public String exportAssetsByIds(String assetIds) throws ExcelException, SQLException {
+        
+        String[] assetIdArr = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
+        List<ExportVo> exportVos = assetDao.findAssetsByIdsForExport(assetIdArr);
+
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        
+        return assetTemplateParser.parse(exportVos);
+    }
+    
+    @Override
+    public String exportAssetsForAll(Page<Asset> page) throws ExcelException, SQLException {
+        
+        if (null == page || null == page.getResult() || 0 == page.getResult().size()) {
+            logger.error("there is no asset when export assets for search result");
+            throw new ExcelException("there is no asset when export assets for search result");
+        } else {
+            String[] assetIdArr = new String[page.getAllRecords().size()];
+            
+            for(int i = 0; i < page.getAllRecords().size(); i++){
+                if(null != page.getAllRecords().get(i)){
+                    System.out.println(page.getAllRecords().get(i).toString());
+                    assetIdArr[i] = page.getAllRecords().get(i).getId();
+                }else{
+                    // TODO throw exception
+                    logger.error("The i'th asset is not exist when export assets for search result");
+                }
+            }
+            List<ExportVo> exportVos = assetDao.findAssetsByIdsForExport(assetIdArr);
+            AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+            
+            return assetTemplateParser.parse(exportVos);
+        }
+    }
+
+    @Override
+    public void analyseUploadExcelFile(File file, HttpServletRequest request) throws ExcelException, DataException {
+        
+        ExcelUtil excelUtil = ExcelUtil.getInstance();
+        Workbook workbookImport = null;
+        
+        
+        try {
+            workbookImport = excelUtil.getWorkbook(file);
+        } catch (Exception e) {
+            logger.error("backUp xls error : " + e.getMessage(), e);
+        }
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        Workbook workbookTemplate = assetTemplateParser.getWorkbook(AssetTemplateParser.ASSET_TEMPLATE);
+        
+        WritableWorkbook writableWorkbook = ExcelBuilder.createWritableWorkbook(assetTemplateParser.getOutputPath("Asset", UTCTimeUtil
+                .formatDateToString(new Date(),Constant.FILTER_TIME_PATTERN)), workbookTemplate);
+        
+        Sheet templateMachineSheet = workbookTemplate.getSheet("Machine");
+        Sheet templateMonitorSheet = workbookTemplate.getSheet("Monitor");
+        Sheet templateDeviceSheet = workbookTemplate.getSheet("Device");
+        Sheet templateSoftwaresheet = workbookTemplate.getSheet("Software");
+        Sheet templateOtherAssetsSheet = workbookTemplate.getSheet("OtherAsset");
+        
+        Cell[] templateMachineTitleCells = excelUtil.getRows(templateMachineSheet, 0);
+        Cell[] templateMonitorTitleCells = excelUtil.getRows(templateMonitorSheet, 0);
+        Cell[] templateDeviceTitleCells = excelUtil.getRows(templateDeviceSheet, 0);
+        Cell[] templateSoftwareTitleCells = excelUtil.getRows(templateSoftwaresheet, 0);
+        Cell[] templateOtherAssetTitleCells = excelUtil.getRows(templateOtherAssetsSheet, 0);
+        
+        Sheet machineSheet = workbookImport.getSheet("Machine");
+        Sheet monitorSheet = workbookImport.getSheet("Monitor");
+        Sheet deviceSheet = workbookImport.getSheet("Device");
+        Sheet softwareSheet = workbookImport.getSheet("Software");
+        Sheet otherAssetsSheet = workbookImport.getSheet("OtherAsset");
+        
+        logger.info("------------Start to parse Excel-------------");
+        Cell[] machineTitleCells = excelUtil.getRows(machineSheet, 0);
+        Cell[] monitorTitleCells = excelUtil.getRows(monitorSheet, 0);
+        Cell[] deviceTitleCells = excelUtil.getRows(deviceSheet, 0);
+        Cell[] softwareTitleCells = excelUtil.getRows(softwareSheet, 0);
+        Cell[] otherAssetTitleCells = excelUtil.getRows(otherAssetsSheet, 0);
+        
+        int machineTotalRecords = excelUtil.getRows(machineSheet); 
+        int monitorTotalRecords = excelUtil.getRows(monitorSheet); 
+        int deviceTotalRecords = excelUtil.getRows(deviceSheet); 
+        int softwareTotalRecords = excelUtil.getRows(softwareSheet); 
+        int otherAssetTotalRecords = excelUtil.getRows(otherAssetsSheet); 
+        
+        logger.info("-----------The machine type totally has："+(machineTotalRecords - 1)+" records-----------");
+        logger.info("-----------The monitor type totally has："+(monitorTotalRecords - 1)+" records-----------");
+        logger.info("-----------The device type totally has："+(deviceTotalRecords - 1)+" records-----------");
+        logger.info("-----------The software type totally has："+(softwareTotalRecords - 1)+" records-----------");
+        logger.info("-----------The otherAsset type totally has："+(otherAssetTotalRecords - 1)+" records-----------");
+        
+        compareCellTitle(templateMachineTitleCells, machineTitleCells, AssetTypeEnum.MACHINE.toString());
+        compareCellTitle(templateMonitorTitleCells, monitorTitleCells, AssetTypeEnum.MONITOR.toString());
+        compareCellTitle(templateDeviceTitleCells, deviceTitleCells, AssetTypeEnum.DEVICE.toString());
+        compareCellTitle(templateSoftwareTitleCells, softwareTitleCells, AssetTypeEnum.SOFTWARE.toString());
+        compareCellTitle(templateOtherAssetTitleCells, otherAssetTitleCells, AssetTypeEnum.OTHERASSETS.toString());
+        
+        //temporary store the employee
+        Map<String, String> remoteEmployees = remoteEmployeeService.findRemoteEmployeesForCache(request);
+        Map<String, User> localEmployees = userService.findAllUsersFromLocal();
+        
+        //temporary store the customer
+        Map<String, Customer> localCustomers = customerService.findAllCustomersFromLocal();
+        Map<String, String> remoteCustomers = new HashMap<String, String>();
+        List<CustomerVo> customers = remoteCustomerService.getAllCustomerFromIAP(request);
+        for(CustomerVo customerVo : customers){
+            remoteCustomers.put(customerVo.getCustomerName(), customerVo.getCustomerCode());
+        }
+        
+        //temporary store the project
+        Map<String, Project> localProjects = projectService.findAllCustomersFromLocal();
+        Map<String, String> remoteProjects = remoteProjectService.findAllProjectsFromIAP(request);
+        
+        //temporary store the location
+        Map<String, Location> localLocations = locationService.findAllLocationsFromIAP();
+        
+        Map<String, Object> cacheData = new HashMap<String, Object>();
+        cacheData.put("remoteEmployees", remoteEmployees);
+        cacheData.put("localEmployees", localEmployees);
+        cacheData.put("localCustomers", localCustomers);
+        cacheData.put("remoteCustomers", remoteCustomers);
+        cacheData.put("localProjects", localProjects);
+        cacheData.put("remoteProjects", remoteProjects);
+        cacheData.put("localLocations", localLocations);
+        
+        if(1 < machineTotalRecords){
+            setExcelToMachine(machineSheet, machineTotalRecords, excelUtil, cacheData, writableWorkbook);
+        }
+        if(1 < monitorTotalRecords){
+            setExcelToMonitor(monitorSheet, monitorTotalRecords, excelUtil, cacheData, writableWorkbook);
+        }
+        if(1 < deviceTotalRecords){
+            setExcelToDevice(deviceSheet, deviceTotalRecords, excelUtil, cacheData, writableWorkbook);
+        }
+        if(1 < softwareTotalRecords){
+            setExcelToSoftware(softwareSheet, softwareTotalRecords, excelUtil, cacheData, writableWorkbook);
+        }
+        if(1 < otherAssetTotalRecords){
+            setExcelToOtherAsset(otherAssetsSheet, otherAssetTotalRecords, excelUtil, cacheData, writableWorkbook);
+        }
+    }
+    
+    private void compareCellTitle(Cell[] template, Cell[] upload, String compareType) throws ExcelException{
+        
+        if(template.length != upload.length + 1){
+            throw new ExcelException("errorCode", compareType + " type Title not match!");
+        }
+        for(int i = 0; i < upload.length; i++){
+            if( ! template[i + 1].getContents().equals(upload[i].getContents())){
+                throw new ExcelException("errorCode", compareType + " type Title not match!");
+            }
+         }
+    }
+    
+    @SuppressWarnings("unchecked")
+    private boolean setExcelToAsset(Cell[] currentRowCells, Asset asset,
+            Map<String, Object> cacheData) throws ExcelException{
+        
+        boolean isErrorRecorde = Boolean.FALSE;
+        
+        Map<String, String> remoteEmployees = (Map<String, String>) cacheData.get("remoteEmployees");
+        Map<String, User> localEmployees = (Map<String, User>) cacheData.get("localEmployees");
+        Map<String, Customer> localCustomers = (Map<String, Customer>) cacheData.get("localCustomers");
+        Map<String, String> remoteCustomers = (Map<String, String>) cacheData.get("remoteCustomers");
+        Map<String, Project> localProjects = (Map<String, Project>) cacheData.get("localProjects");
+        Map<String, String> remoteProjects = (Map<String, String>) cacheData.get("remoteProjects");
+        Map<String, Location> localLocations = (Map<String, Location>) cacheData.get("localLocations");
+        
+        asset.setAssetId(generateAssetId(assetDao.getTotalCount(Asset.class)));
+        
+        if("".equals(currentRowCells[1].getContents()) || null == currentRowCells[1].getContents()){
+            isErrorRecorde = Boolean.TRUE;
+        }
+        asset.setAssetName(currentRowCells[1].getContents());
+        
+        StatusEnum [] status = StatusEnum.values();
+        boolean isNotRightStatu = Boolean.FALSE;
+        
+        for(StatusEnum statu : status){
+           if(! statu.toString().equals(currentRowCells[2].getContents())){
+               isNotRightStatu = Boolean.TRUE;
+               break;
+           }
+        }
+        
+        if("".equals(currentRowCells[2].getContents()) || null == currentRowCells[2].getContents() ||
+                isNotRightStatu){
+            isErrorRecorde = Boolean.TRUE;
+        }
+        asset.setStatus(currentRowCells[2].getContents());
+        
+
+        User user = new User();
+        
+        if("".equals(currentRowCells[3].getContents()) || null == currentRowCells[3].getContents()){
+            isErrorRecorde = Boolean.TRUE;
+        }else {
+            if(localEmployees.containsKey(currentRowCells[3].getContents())){
+                user = localEmployees.get(currentRowCells[3].getContents());
+            }else if(remoteEmployees.containsKey(currentRowCells[3].getContents())){
+                user.setUserId(remoteEmployees.get(currentRowCells[3].getContents()));
+                user.setUserName(currentRowCells[3].getContents());
+                userService.saveUser(user);
+            }else{
+                isErrorRecorde = Boolean.TRUE;
+                user.setUserName(currentRowCells[3].getContents());
+                logger.info("The " + currentRowCells[5].getContents() + " user is not exsit in the IAP");
+            }
+        }
+        asset.setUser(user);
+        asset.setKeeper(currentRowCells[4].getContents());
+        
+        Customer customer = new Customer();
+        
+        if("".equals(currentRowCells[5].getContents()) || null == currentRowCells[5].getContents()){
+            isErrorRecorde = Boolean.TRUE;
+        }else{
+            if(localCustomers.containsKey(currentRowCells[5].getContents())){
+                customer = localCustomers.get(currentRowCells[5].getContents());
+            }else if(remoteCustomers.containsKey(currentRowCells[5].getContents())){
+                customer.setCustomerCode(remoteCustomers.get(currentRowCells[5].getContents()));
+                customer.setCustomerName(currentRowCells[5].getContents());
+                customerService.saveCustomer(customer);
+            }else{
+                isErrorRecorde = Boolean.TRUE;
+                customer.setCustomerName(currentRowCells[5].getContents());
+                logger.info("The " + currentRowCells[5].getContents() + " customer is not exsit in the IAP");
+            }
+        }
+        asset.setCustomer(customer);
+        
+        Project project = new Project();
+        
+        if (localProjects.containsKey(currentRowCells[6].getContents())) {
+            project = localProjects.get(currentRowCells[6].getContents());
+        } else if (remoteProjects.containsKey(currentRowCells[6].getContents())) {
+            project.setProjectCode(remoteProjects.get(currentRowCells[6].getContents()));
+            project.setProjectName(currentRowCells[6].getContents());
+            // TODO check whether the project belong to the customer?
+            project.setCustomer(asset.getCustomer());
+            projectService.saveProject(project);
+        } else {
+            isErrorRecorde = Boolean.TRUE;
+            project.setProjectName(currentRowCells[6].getContents());
+            logger.info("The " + currentRowCells[6].getContents()
+                    + " project is not exsit in the IAP");
+        }
+        asset.setProject(project);
+        
+        AssetTypeEnum [] assetTypes = AssetTypeEnum.values();
+        boolean isNotRightType = Boolean.FALSE;
+        
+        for(AssetTypeEnum assetType : assetTypes){
+           if(! assetType.toString().equals(currentRowCells[7].getContents())){
+               isNotRightType = Boolean.TRUE;
+               break;
+           }
+        }
+        
+        if("".equals(currentRowCells[2].getContents()) || null == currentRowCells[2].getContents() ||
+                isNotRightType){
+            isErrorRecorde = Boolean.TRUE;
+        }
+        asset.setType(currentRowCells[7].getContents());
+        asset.setBarCode(currentRowCells[8].getContents());
+        
+        Location location = new Location();
+        
+        if(("".equals(currentRowCells[9].getContents()) || null == currentRowCells[9].getContents())){
+            isErrorRecorde = Boolean.TRUE;
+        }else {
+            if(currentRowCells[9].getContents().lastIndexOf(Constant.SPLIT_UNDERLINE) < 0){
+                isErrorRecorde = Boolean.TRUE;
+                location.setSite(currentRowCells[9].getContents());
+                location.setRoom("");
+            }else{
+                int splitIndex = currentRowCells[9].getContents().lastIndexOf(Constant.SPLIT_UNDERLINE);
+                int length = currentRowCells[9].getContents().length();
+                String site = currentRowCells[9].getContents().substring(0, splitIndex);
+                String room = currentRowCells[9].getContents().substring(splitIndex + 1, length);
+                
+                if(localLocations.containsKey(site) && localLocations.get(site).getRoom()
+                        .equals(room)){
+                    location = localLocations.get(site);
+                }else{
+                    location.setSite(site);
+                    location.setRoom(room);
+                    locationService.saveLocation(location);
+                }
+            }
+        }
+        asset.setLocation(location);
+        asset.setManufacturer(currentRowCells[10].getContents());
+        
+        if(null == currentRowCells[11].getContents() || "".equals(currentRowCells[11].getContents())){
+            isErrorRecorde = Boolean.TRUE;
+        }
+        asset.setOwnerShip(currentRowCells[11].getContents());
+        
+        if(null == currentRowCells[12].getContents() || "".equals(currentRowCells[12].getContents())){
+            isErrorRecorde = Boolean.TRUE;
+        }
+        asset.setEntity(currentRowCells[12].getContents());
+        asset.setMemo(currentRowCells[13].getContents());
+        if("N".equals(currentRowCells[14].getContents()) ||
+                "0".equals(currentRowCells[14].getContents())){
+            asset.setFixed(Boolean.FALSE);
+        }
+        if("Y".equals(currentRowCells[14].getContents()) ||
+                "1".equals(currentRowCells[14].getContents())){
+            asset.setFixed(Boolean.TRUE);
+        }
+        asset.setSeriesNo(currentRowCells[15].getContents());
+        asset.setPoNo(currentRowCells[16].getContents());
+        asset.setCheckInTime(UTCTimeUtil.formatStringToDate(currentRowCells[17].getContents()));
+        asset.setCheckOutTime(UTCTimeUtil.formatStringToDate(currentRowCells[18].getContents()));
+        asset.setVendor(currentRowCells[19].getContents());
+        asset.setWarrantyTime(UTCTimeUtil.formatStringToDate(currentRowCells[20].getContents()));
+        
+        return isErrorRecorde;
+    }
+    
+    private void setExcelToMachine(Sheet machineSheet, int machineTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook) 
+                    throws ExcelException{
+        
+        Asset asset = new Asset();
+//        List<Machine> machines = new ArrayList<Machine>();
+        
+        for(int i = 1; i < machineTotalRecords; i++){
+            Cell[] currentRowCells = excelUtil.getRows(machineSheet, i);
+            
+            Machine machine = new Machine();
+            
+            boolean isErrorRecorde = setExcelToAsset(currentRowCells, asset, cacheData);
+            boolean emptySubtype = Boolean.FALSE;
+            
+            if(null == currentRowCells[21].getContents() || "".equals(currentRowCells[21].getContents())){
+                emptySubtype = Boolean.TRUE;
+            }
+            
+            machine.setSubtype(currentRowCells[21].getContents());
+            machine.setSpecification(currentRowCells[22].getContents());
+            machine.setAddress(currentRowCells[23].getContents());
+            machine.setConfiguration(currentRowCells[24].getContents());
+            
+            if(isErrorRecorde || emptySubtype){
+                AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+//                assetTemplateParser.fillOneCell(c, r, value, ws);
+                setErrorCommonAsset();
+            } else{
+                Asset newAsset = assetDao.save(asset);
+//                Machine machine = machines.get(i);
+                machine.setAsset(asset);
+                machineService.saveMachine(machine);
+            }
+//            machines.add(machine);
+        }
+//        if((assets.size() > 0) && (machines.size() > 0) && (assets.size() == machines.size())){
+//            for(int i = 0; i < assets.size(); i++){
+//                Asset asset = assetDao.save(assets.get(i));
+//                Machine machine = machines.get(i);
+//                machine.setAsset(asset);
+//                machineService.saveMachine(machine);
+//            }
+//            
+//        }else{
+//          //TODO cheng error code
+//            throw new ExcelException("errorcode", "setExcelToMachine error!");
+//        }
+    }
+    
+    private void setExcelToMonitor(Sheet monitorSheet, int monitorTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook)
+                    throws ExcelException{
+        
+        Asset asset = new Asset();
+        List<Monitor> monitors = new ArrayList<Monitor>();
+        
+        for(int i = 1; i < monitorTotalRecords; i++){
+            Cell[] currentRowCells = excelUtil.getRows(monitorSheet, i);
+            
+            setExcelToAsset(currentRowCells, asset, cacheData);
+            Monitor monitor = new Monitor();
+            
+            monitor.setSize(currentRowCells[21].getContents());
+            monitor.setDetail(currentRowCells[22].getContents());
+            
+            monitors.add(monitor);
+        }
+/*        if((assets.size() > 0) && (monitors.size() > 0) && (assets.size() == monitors.size())){
+            for(int i = 0; i < assets.size(); i++){
+                Asset asset = assetDao.save(assets.get(i));
+                Monitor monitor = monitors.get(i);
+                monitor.setAsset(asset);
+                monitorService.saveMonitor(monitor);
+            }
+        }else{
+          //TODO cheng error code
+            throw new ExcelException("errorcode", "setExcelToMonitor error!");
+        }*/
+    }
+    
+    private void setExcelToDevice(Sheet deviceSheet, int deviceTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook) 
+                    throws ExcelException{
+        
+        Asset asset = new Asset();
+        List<Device> devices = new ArrayList<Device>();
+        List<DeviceSubtype> deviceSubtypes = new ArrayList<DeviceSubtype>();
+        
+        for(int i = 1; i < deviceTotalRecords; i++){
+            Cell[] currentRowCells = excelUtil.getRows(deviceSheet, i);
+            
+            setExcelToAsset(currentRowCells, asset, cacheData);
+            Device device = new Device();
+            
+            DeviceSubtype deviceSubtype = new DeviceSubtype();
+            deviceSubtype.setSubtypeName(currentRowCells[21].getContents());
+            device.setConfiguration(currentRowCells[22].getContents());
+            
+            deviceSubtypes.add(deviceSubtype);
+            devices.add(device);
+        }
+/*        if((assets.size() > 0) && (devices.size() > 0) && (deviceSubtypes.size() > 0)
+                && (assets.size() == devices.size()) && (assets.size() == deviceSubtypes.size())){
+            
+            for(int i = 0; i < assets.size(); i++){
+                Asset asset = assetDao.save(assets.get(i));
+                Device device = devices.get(i);
+                DeviceSubtype deviceSubtype = deviceSubtypes.get(i);
+                device.setAsset(asset);
+                device.setDeviceSubtype(deviceSubtype);
+                deviceService.saveDevice(device);
+            }
+            
+        }else{
+          //TODO cheng error code
+            throw new ExcelException("errorcode", "setExcelToDevice error!");
+        }*/
+    }
+    
+    private void setExcelToSoftware(Sheet softwareSheet, int softwareTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook)
+                    throws ExcelException{
+        
+        Asset asset = new Asset();
+        List<Software> softwares = new ArrayList<Software>();
+        
+        for(int i = 1; i < softwareTotalRecords; i++){
+            Cell[] currentRowCells = excelUtil.getRows(softwareSheet, i);
+            
+            Software software = new Software();
+            setExcelToAsset(currentRowCells, asset, cacheData);
+            
+            software.setVersion(currentRowCells[21].getContents());
+            software.setLicenseKey(currentRowCells[22].getContents());
+            software.setSoftwareExpiredTime(UTCTimeUtil.formatStringToDate(currentRowCells[23].getContents()));
+            software.setMaxUseNum(Integer.valueOf(currentRowCells[24].getContents()));
+            software.setAdditionalInfo(currentRowCells[25].getContents());
+            
+            softwares.add(software);
+        }
+/*        if((assets.size() > 0) && (softwares.size() > 0) && (assets.size() == softwares.size())){
+            
+            for(int i = 0; i < assets.size(); i++){
+                Asset asset = assets.get(i);
+                Software software = softwares.get(i);
+                softwareService.saveSoftware(software);
+                asset.setSoftware(software);
+                assetDao.save(asset);
+            }
+        }else{
+          //TODO cheng error code
+            throw new ExcelException("errorcode", "setExcelToSoftware error!");
+        }*/
+    }
+    
+    private void setExcelToOtherAsset(Sheet otherAssetsSheet, int otherAssetTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook) 
+                    throws ExcelException{
+        
+        Asset asset = new Asset();
+        List<OtherAssets> otherAssets = new ArrayList<OtherAssets>();
+        
+        for(int i = 1; i < otherAssetTotalRecords; i++){
+            Cell[] currentRowCells = excelUtil.getRows(otherAssetsSheet, i);
+            
+            setExcelToAsset(currentRowCells, asset, cacheData);
+            OtherAssets otherAsset = new OtherAssets();
+            
+            otherAsset.setDetail(currentRowCells[21].getContents());
+            otherAssets.add(otherAsset);
+        }
+        /*if((assets.size() > 0) && (otherAssets.size() > 0) && (assets.size() == otherAssets.size())){
+            
+            for(int i = 0; i < assets.size(); i++){
+                Asset asset = assetDao.save(assets.get(i));
+                OtherAssets otherAsset = otherAssets.get(i);
+                otherAsset.setAsset(asset);
+                otherAssetsService.saveOtherAssets(otherAsset);
+            }
+        }else{
+            //TODO cheng error code
+            throw new ExcelException("errorcode", "setExcelToOtherAsset error!");
+        }*/
+    }
+    
+    public static String generateAssetId(int count) {
+        String assetId = "Asset"
+                + UTCTimeUtil.formatDateToString(UTCTimeUtil.localDateToUTC(), "yyyy-mm-dd")
+                        .substring(0, 4) + ((count + 100000) + "").substring(1, 6);
+        return assetId;
+    }
+    
+    private void setErrorCommonAsset(){
         
     }
+    
+    private void setErrorMachine(){
+        
+    }
+    
+    private void setErrorMonitor(){
+        
+    }
+    private void setErrorDevice(){
+        
+    }
+    private void setErrorSoftware(){
+        
+    }
+    private void setErrorOtherAsset(){
+        
+    }
+            
+    
 }

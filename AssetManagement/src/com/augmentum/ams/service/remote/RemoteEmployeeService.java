@@ -1,5 +1,7 @@
 package com.augmentum.ams.service.remote;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
@@ -23,6 +25,17 @@ public interface RemoteEmployeeService {
      * @throws DataException
      */
     JSONArray findRemoteEmployees(HttpServletRequest request) throws DataException;
+    
+    /**
+     * @description Get all employees info from IAP, then encapsulated them in
+     *              json array
+     * @author Rudy.Gao
+     * @time Sep 12, 2013 12:58:53 PM
+     * @param request
+     * @return JSONArray
+     * @throws DataException
+     */
+    Map<String, String> findRemoteEmployeesForCache(HttpServletRequest request) throws DataException;
 
     /**
      * @author Grylls.Xu

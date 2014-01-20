@@ -1,16 +1,17 @@
 package com.augmentum.ams.service.asset.impl;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.WildcardQuery;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -27,7 +28,6 @@ import com.augmentum.ams.dao.asset.LocationDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.service.asset.LocationService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -156,6 +156,18 @@ public class LocationServiceImpl implements LocationService {
         } catch (InterruptedException e) {
             logger.error(e);
         }
+    }
+
+    @Override
+    public Map<String, Location> findAllLocationsFromIAP() {
+        
+        Map<String, Location> localLocations =  new HashMap<String, Location>();
+        List<Location> lcoations = locationDao.findAll(Location.class);
+        
+        for(Location location : lcoations){
+            localLocations.put(location.getSite(), location);
+        }
+        return localLocations;
     }
 
 }

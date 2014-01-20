@@ -274,3 +274,19 @@ a {
 	left: 42; */
 }
 
+#exportIcon {
+	height: 29px;
+	width: 27px;
+	background: url("../../img/ICN_Export_Normal_27x29.png") no-repeat;
+	cursor: pointer;
+	position: absolute;
+	top:21px;
+	left:887px;
+}
+#exportIcon:hover {
+	background: url("../../img/ICN_Export_Hovered_27x29.png") no-repeat;
+}
+ #exportIcon:active {
+	background: url("../../img/ICN_Export_Clicked_27x29.png") no-repeat;
+}
+

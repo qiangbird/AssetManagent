@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.augmentum.ams.model.audit.AuditFile;
 import com.augmentum.ams.service.audit.AuditFileService;
 import com.augmentum.ams.util.Constant;
+import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.audit.AuditVo;
@@ -107,20 +108,9 @@ public class AuditFileController extends BaseController {
     public String checkInventory(@RequestParam(value = "file", required = false) MultipartFile file,
             AuditVo auditFileVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
         
-        String path = request.getSession().getServletContext().getRealPath("upload/temp");//upload directory
-        String fileName = file.getOriginalFilename();//upload file name
-        File targetFile = new File(path, fileName);
-        
-        if (!targetFile.exists()) {
-            targetFile.mkdirs();
-        }
-        try {
-            file.transferTo(targetFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-//        Map<String, String> percentage = new HashMap<String, String>();
-        int percentage = auditFileService.checkInventory(getUserVoByShiro(), targetFile, auditFileVo.getAuditFileName());
+        File targetFile = FileOperateUtil.upload(request, response, file);
+        int percentage = auditFileService.checkInventory(getUserVoByShiro(), targetFile, 
+                auditFileVo.getAuditFileName());
         
         return String.valueOf(percentage);
     }

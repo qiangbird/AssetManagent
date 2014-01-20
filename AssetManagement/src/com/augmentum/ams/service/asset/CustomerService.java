@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.asset;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -53,5 +54,11 @@ public interface CustomerService {
     public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request)  throws DataException;
     
     public void updateCustomer(Customer customer);
+
+    /**
+     * @author John.li
+     * @return
+     */
+    Map<String, Customer> findAllCustomersFromLocal();
 
 }

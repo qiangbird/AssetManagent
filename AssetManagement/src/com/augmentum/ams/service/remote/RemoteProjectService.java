@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.remote;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,4 +45,12 @@ public interface RemoteProjectService {
      * @throws DataException
      */
     public ProjectVo getProjectByProjectCode(String projectCode, HttpServletRequest request) throws DataException;
+
+    /**
+     * @author John.Li
+     * @param request
+     * @return
+     * @throws DataException
+     */
+    Map<String, String> findAllProjectsFromIAP(HttpServletRequest request) throws DataException;
 }

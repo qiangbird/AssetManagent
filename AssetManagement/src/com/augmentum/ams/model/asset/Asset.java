@@ -125,7 +125,7 @@ public class Asset extends BaseModel {
     @OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<TransferLog> transferLogs = new HashSet<TransferLog>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "software_id")
     @IndexedEmbedded(depth = 1)
     private Software software;

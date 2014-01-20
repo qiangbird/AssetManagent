@@ -1,6 +1,5 @@
 package com.augmentum.ams.dao.asset.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;

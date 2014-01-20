@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.remote.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,6 +119,36 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
             projectVo.setProjectCode((String) mapData.get(IAPConstans.PROJECT_CODE));
         }
         return projectVo;
+    }
+    
+    @Override
+    public Map<String, String> findAllProjectsFromIAP(HttpServletRequest request) throws DataException{
+        
+     // Prepare the condition for searching.
+        IAPDataSearchModel searchModel = new IAPDataSearchModel();
+        searchModel.setColumns(new String[] { IAPConstans.PROJECT_NAME, IAPConstans.PROJECT_CODE });
+
+        // Communicate with IAP.
+        Request tmpRequest = RemoteUtil.getRequest(request, DataModelAPI.listProject,
+                IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_XML);
+        IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
+                ContentType.APPLICATION_XML, tmpRequest);
+        List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
+
+        // Gain the response and encapsulate them.
+        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
+            responseData = responseModel.getRequestModel().getDataList();
+        } else {
+            logger.info(responseModel.getStatus().getMessage());
+        }
+        Map<String, String> projects = new HashMap<String, String>();
+        
+        for (Map<String, Object> mapData : responseData) {
+
+            projects.put((String) mapData.get(IAPConstans.PROJECT_NAME),
+                    (String) mapData.get(IAPConstans.PROJECT_CODE));
+        }
+        return projects;
     }
 
 }

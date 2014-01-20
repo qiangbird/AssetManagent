@@ -1,10 +1,16 @@
 package com.augmentum.ams.web.controller.asset;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,6 +19,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.DeviceSubtype;
@@ -44,6 +52,8 @@ import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.AssetUtil;
 import com.augmentum.ams.util.ErrorCodeConvertToJSON;
 import com.augmentum.ams.util.ExceptionHelper;
+import com.augmentum.ams.util.FileOperateUtil;
+//import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
@@ -84,6 +94,16 @@ public class AssetController extends BaseController {
     private Page<Asset> pageForAudit;
 
     private Logger logger = Logger.getLogger(AssetController.class);
+    
+    /**
+     * Size of a byte buffer to read/write file
+     */
+    private static final int BUFFER_SIZE = 4096;
+             
+    /**
+     * Path of the file to be downloaded, relative to application's directory
+     */
+    private String filePath = "/download/Asset_2014-01-16.xls";
 
     @RequestMapping("/software")
     public String softwareList() {
@@ -523,5 +543,50 @@ public class AssetController extends BaseController {
         logger.info("findMyAssetsBySearchCondition method end!");
         return modelAndView;
     }
-
+    
+    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @ResponseBody
+    public void  exportAssets(HttpServletRequest request, HttpServletResponse response,
+            String assetIds) {
+        
+        String outPutPath = null;
+        try {
+            
+            if (null == assetIds || "".equals(assetIds)) {
+                outPutPath = assetService.exportAssetsForAll(pageForAudit);
+            } else {
+                outPutPath = assetService.exportAssetsByIds(assetIds);
+            }
+            FileOperateUtil.download(request, response, outPutPath);
+            
+        } catch (ExcelException e) {
+            logger.error(e.getMessage());
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+    
+    @RequestMapping(value = "/import")
+    public String  importAssets() {
+        return "asset/importAssets";
+    }
+    
+    @RequestMapping(value = "/upload")
+    public String  uploadAssetsExcelFile(MultipartFile file, HttpServletRequest request,
+            HttpServletResponse response) {
+        
+        File targetFile = FileOperateUtil.upload(request, response, file);
+        try {
+            assetService.analyseUploadExcelFile(targetFile, request);
+        } catch (ExcelException e) {
+            logger.error(e.getMessage(), e);
+        } catch (DataException e) {
+            logger.error(e.getMessage(), e);
+        }
+        
+        return "asset/importAssets";
+    }
+    
 }

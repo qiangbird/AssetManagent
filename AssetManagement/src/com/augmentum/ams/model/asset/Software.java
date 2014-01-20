@@ -50,7 +50,7 @@ public class Software extends BaseModel {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "software_expired_time")
-	@Field(name = "warrantyTime", index = Index.UN_TOKENIZED, store = Store.YES)
+	@Field(name = "softwareExpiredTime", index = Index.UN_TOKENIZED, store = Store.YES)
 	private Date softwareExpiredTime;
 
 	/**

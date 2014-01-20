@@ -88,7 +88,7 @@ public class InconsistentController extends BaseController {
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
 				.findUserCustomColumns("asset", getUserIdByShiro());
 		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
-				userCustomColumnList);
+				userCustomColumnList, null);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", page.getRecordCount());

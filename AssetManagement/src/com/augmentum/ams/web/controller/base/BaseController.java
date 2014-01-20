@@ -1,8 +1,6 @@
 package com.augmentum.ams.web.controller.base;
 
-
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
@@ -27,7 +25,6 @@ import com.augmentum.ams.web.vo.user.UserVo;
 @RequestMapping(value="/base")
 public class BaseController {
 
-    @SuppressWarnings("unused")
     private Logger logger = Logger.getLogger(BaseController.class);
     
     @Autowired

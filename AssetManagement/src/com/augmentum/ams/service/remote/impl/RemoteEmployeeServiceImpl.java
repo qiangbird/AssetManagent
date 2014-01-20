@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.remote.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,41 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         }
 
         return array;
+    }
+    
+    @Override
+    public Map<String, String> findRemoteEmployeesForCache(HttpServletRequest request) throws DataException {
+
+        Request clientRequest = RemoteUtil.getRequest(request, DataModelAPI.listEmployee,
+                IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_JSON);
+
+        IAPDataSearchModel model = new IAPDataSearchModel();
+
+        model.setColumns(new String[] { IAPConstans.EMPLOYEE_NAME,
+                IAPConstans.EMPLOYEE_EMPLOYEE_ID, IAPConstans.POSITION_LEVEL,
+                IAPConstans.EMPLOYEE_POSITION_CODE });
+        List<Sorter> sorters = new ArrayList<Sorter>();
+        // Sort employee by employeeName
+        Sorter sorter = new Sorter(IAPConstans.EMPLOYEE_NAME, SorterType.ASC);
+        sorters.add(sorter);
+        model.setSorters(sorters);
+
+        IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
+                ContentType.APPLICATION_XML, clientRequest);
+        logger.info("get employeeName and employeeEmployeeId from IAP");
+
+        List<Map<String, Object>> employeeeList = responseModel.getRequestModel().getDataList();
+        Map<String, String> employeees = new HashMap<String, String>();
+
+        // Encapsulated employee info in json array
+        for (int i = 0; i < employeeeList.size(); i++) {
+            String employeeName = (String) employeeeList.get(i).get(IAPConstans.EMPLOYEE_NAME);
+            String employeeEmployeeId = (String) employeeeList.get(i).get(
+                    IAPConstans.EMPLOYEE_EMPLOYEE_ID);
+            employeees.put(employeeName, employeeEmployeeId);
+        }
+
+        return employeees;
     }
 
     /*

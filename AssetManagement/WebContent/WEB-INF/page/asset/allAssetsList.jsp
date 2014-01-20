@@ -108,6 +108,10 @@
 	        </div>
 	        </c:if>
 	        
+	        <form name="exportForm" id="exportForm" action="asset/export">
+	        	<input type="hidden" name="assetIds" id="assetIds" value=""/>
+	        </form>
+	        <a id="exportIcon" ></a>
 	    </div>
     	</div>
     </div>

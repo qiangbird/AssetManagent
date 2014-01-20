@@ -1,7 +1,9 @@
 package com.augmentum.ams.service.asset.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,6 +70,18 @@ public class ProjectServiceImpl implements ProjectService {
             }
         }
         return project;
+    }
+
+    @Override
+    public Map<String, Project> findAllCustomersFromLocal() {
+        
+        Map<String, Project> localProjects = new HashMap<String, Project>();
+        List<Project> projects = projectDao.findAll(Project.class);
+        
+        for(Project project : projects){
+            localProjects.put(project.getProjectName(), project);
+        }
+        return localProjects;
     }
 
 }
