@@ -119,8 +119,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
             <%-- <c:if test="${!isCreatePage }">
                 <input type="hidden" name="_method" value="put" />
             </c:if> --%>
-            <input class="input-80-30 submit-button" type="submit" value='<spring:message code="submit" />' />
-            <input class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> />
+<%--             <input class="input-80-30 submit-button" type="submit" value='<spring:message code="submit" />' />
+            <input class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> /> --%>
+            <input id="submitLocation" class="input-80-30 submit-button" type="button" value='<spring:message code="submit" />' />
+            <input id="resetLocation" class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> />
             </tr>
         </div>
         </table>

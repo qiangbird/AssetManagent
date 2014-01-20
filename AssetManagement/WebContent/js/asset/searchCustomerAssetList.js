@@ -269,8 +269,6 @@ $(document).ready(function(){
 				//do i18n for all show message
 				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
 					 if (yes) {
-						 alert($("#customerCode").val());
-						 alert(assetsId);
 						 $.ajax({
 							 contentType : 'application/x-www-form-urlencoded', 
 							  type: 'POST',
@@ -279,7 +277,8 @@ $(document).ready(function(){
 							  data: {
 								  _method: 'PUT',
 								  "customerCode":$("#customerCode").val(),
-								  "assetsId":assetsId.toString()
+								  "assetsId":assetsId.toString(),
+								  "operation":"Return To Project"
 								  },
 							  dataType : 'json',
 							  success: function(data){
@@ -401,7 +400,8 @@ $(document).ready(function(){
 						  data: {
 							  _method: 'PUT',
 							  customerCode:$("#customerCode").val(),
-							  assetsId:assetsId.toString()
+							  assetsId:assetsId.toString(),
+							  "operation":"Return To IT"
 							  },
 						  dataType : 'json',
 						  success: function(data){

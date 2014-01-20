@@ -587,6 +587,45 @@ $(document).ready(function(){
 		       }
 		    });
 	});
+	
+	//submit
+	$("#submitGroup").click(function(){
+	    flag = 0;
+		inputGroupName = $("#groupName").val();
+		inputProcessType= $("#processType").val();
+		
+		if(inputGroupName.trim()==""){
+			$("#groupName").addClass("group-error");
+			flag = 1;
+			alert("aaaa");
+		}
+//		if(inputProcessType.trim()==""){
+//			$("#processType").addClass("group-error");
+//			flag = 2;
+//			alert("bbb");
+//		}
+		
+//		$("tr").delegate("#token-input-customers","blur",function(){
+		$(".token-input-token-facebook").each(function(i){
+			if($(this).attr("error")){
+				$(this).addClass("input-error-autocomplete");
+				flag = 3;
+			}
+//		});
+		
+	});
+		
+		if(flag==0){
+			$("#dialog").submit();
+		}
+		
+	});
+	
+	$("#groupName").click(function(){
+		$("#groupName").removeClass("group-error");
+		});
+	
+	
     
 });
 

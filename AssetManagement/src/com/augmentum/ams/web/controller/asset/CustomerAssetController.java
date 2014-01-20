@@ -19,11 +19,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.enumeration.StatusEnum;
 import com.augmentum.ams.model.enumeration.TransientStatusEnum;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.CustomerService;
+import com.augmentum.ams.service.asset.TransferLogService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.FormatEntityListToEntityVoList;
@@ -37,75 +39,113 @@ import com.augmentum.ams.web.vo.system.SearchCondition;
 @Controller("customerAssetController")
 @RequestMapping(value = "/customerAsset")
 public class CustomerAssetController extends BaseController {
-    @Autowired
-    private CustomerAssetService customerAssetService;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private UserCustomColumnsService userCustomColumnsService;
-    @Autowired
-    private RemoteCustomerService remoteCustomerService;
+	@Autowired
+	private CustomerAssetService customerAssetService;
+	@Autowired
+	private CustomerService customerService;
+	@Autowired
+	private UserCustomColumnsService userCustomColumnsService;
+	@Autowired
+	private RemoteCustomerService remoteCustomerService;
+	@Autowired
+	private TransferLogService transferLogService;
 
-    private Logger logger = Logger.getLogger(CustomerAssetController.class);
+	private Logger logger = Logger.getLogger(CustomerAssetController.class);
 
-    @RequestMapping(value = "searchCustomerAssetsList")
-    public ModelAndView listAssetsAsCustomerCode(SearchCondition searchCondition,
-            String customerCode, HttpSession session) {
-        ModelAndView modelAndView = new ModelAndView();
-        Customer customer = customerService.getCustomerByCode(customerCode);
-        Page<Asset> assetPage = customerAssetService.findCustomerAssetsBySearchCondition(
-                searchCondition, customer.getId());
-        String clientTimeOffset = (String) session.getAttribute("timeOffset");
-        List<AssetListVo> list = FormatEntityListToEntityVoList.formatAssetListToAssetVoList(
-                assetPage.getResult(), clientTimeOffset);
-        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
-                .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList,null);
-        modelAndView.addObject("fieldsData", array);
-        modelAndView.addObject("count", assetPage.getRecordCount());
-        modelAndView.addObject("totalPage", assetPage.getTotalPage());
-        return modelAndView;
-    }
+	@RequestMapping(value = "searchCustomerAssetsList")
+	public ModelAndView listAssetsAsCustomerCode(
+			SearchCondition searchCondition, String customerCode,
+			HttpSession session) {
 
-    // goCustomerAsset
-    @RequestMapping(value = "listCustomerAsset", method = RequestMethod.GET)
-    public String listCustomerAsset(String customerCode, HttpServletRequest request)
-            throws DataException {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("customerCode", customerCode);
-        Customer customer = customerService.getCustomerByCode(customerCode);
-        List<ProjectVo> projectList = remoteCustomerService.getProjectByCustomerCode(customerCode,
-                request);
-        request.setAttribute("customer", customer);
-        request.setAttribute("projectList", projectList);
-        return "asset/customerAssetList";
-    }
+		logger.info("listAssetsAsCustomerCode method start!");
 
-    @RequestMapping(value = "assginAssets", method = RequestMethod.PUT)
-    public ModelAndView assginAssets(String customerCode, String ids, String projectCode,
-            String userName, String assetUserCode, HttpServletRequest request) throws DataException {
-        logger.info(customerCode + "\t" + projectCode + "\t" + userName + "\t" + assetUserCode);
-        ModelAndView modelAndView = new ModelAndView();
-        customerAssetService.assginCustomerAsset(customerCode, ids, projectCode, userName,
-                assetUserCode, request);
-        modelAndView.addObject("customerCode", customerCode);
-        modelAndView.setViewName("redirect:/customerAsset/listCustomerAsset");
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		Customer customer = customerService.getCustomerByCode(customerCode);
+		Page<Asset> assetPage = customerAssetService
+				.findCustomerAssetsBySearchCondition(searchCondition,
+						customer.getId());
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		List<AssetListVo> list = FormatEntityListToEntityVoList
+				.formatAssetListToAssetVoList(assetPage.getResult(),
+						clientTimeOffset);
+		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+				.findUserCustomColumns("asset", getUserIdByShiro());
+		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
+				userCustomColumnList, null);
+		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", assetPage.getRecordCount());
+		modelAndView.addObject("totalPage", assetPage.getTotalPage());
 
-    @RequestMapping(value = "changeStatus/{status}", method = RequestMethod.PUT)
-    @ResponseBody
-    public String returnToOperation(@PathVariable String status, String assetsId, String customerCode) {
-        customerAssetService.returnCustomerAsset(status, assetsId);
-        return null;
-    }
+		logger.info("listAssetsAsCustomerCode method end!");
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "takeOver", method = RequestMethod.PUT)
-    @ResponseBody
-    public String takeOver(String assetsId, String customerCode, String userCode,
-            HttpServletRequest request) {
-        customerAssetService.takeOverCustomerAsset(assetsId, userCode, request);
-        return null;
-    }
+	// goCustomerAsset
+	@RequestMapping(value = "listCustomerAsset", method = RequestMethod.GET)
+	public String listCustomerAsset(String customerCode,
+			HttpServletRequest request) throws DataException {
+
+		logger.info("listCustomerAsset method start!");
+
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("customerCode", customerCode);
+		Customer customer = customerService.getCustomerByCode(customerCode);
+		List<ProjectVo> projectList = remoteCustomerService
+				.getProjectByCustomerCode(customerCode, request);
+		request.setAttribute("customer", customer);
+		request.setAttribute("projectList", projectList);
+
+		logger.info("listCustomerAsset method start!");
+		return "asset/customerAssetList";
+	}
+
+	@RequestMapping(value = "assginAssets", method = RequestMethod.PUT)
+	public ModelAndView assginAssets(String customerCode, String ids,
+			String projectCode, String userName, String assetUserCode,
+			HttpServletRequest request) throws DataException {
+
+		logger.info("assginAssets method start!");
+		logger.info(customerCode + "\t" + projectCode + "\t" + userName + "\t"
+				+ assetUserCode);
+
+		ModelAndView modelAndView = new ModelAndView();
+		customerAssetService.assginCustomerAsset(customerCode, ids,
+				projectCode, userName, assetUserCode, request);
+		transferLogService.saveTransferLog(ids, "Assign");
+
+		modelAndView.addObject("customerCode", customerCode);
+		modelAndView.setViewName("redirect:/customerAsset/listCustomerAsset");
+
+		logger.info("assginAssets method end!");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "changeStatus/{status}", method = RequestMethod.PUT)
+	@ResponseBody
+	public String returnToOperation(@PathVariable String status,
+			String assetsId, String customerCode, String operation) {
+
+		logger.info("returnToOperation method start!");
+
+		customerAssetService.returnCustomerAsset(status, assetsId);
+		transferLogService.saveTransferLog(assetsId, operation);
+
+		logger.info("returnToOperation method end!");
+		return null;
+	}
+
+	@RequestMapping(value = "takeOver", method = RequestMethod.PUT)
+	@ResponseBody
+	public String takeOver(String assetsId, String customerCode,
+			String userCode, HttpServletRequest request) {
+
+		logger.info("takeOver method in CustomerAssetController start!");
+
+		customerAssetService.takeOverCustomerAsset(assetsId, userCode, request);
+		transferLogService.saveTransferLog(assetsId, "TakeOver");
+
+		logger.info("takeOver method in CustomerAssetController end!");
+		return null;
+	}
 
 }

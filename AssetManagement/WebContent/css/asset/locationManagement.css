@@ -196,3 +196,6 @@ div.operation_assets_list ul {
 .dataList-div-body .row .Operation {
 	margin-left: -20px;
 }
+.site-error{
+border: solid 1px red !important;
+}

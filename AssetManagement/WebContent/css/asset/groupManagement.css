@@ -322,3 +322,9 @@ div.token-input-dropdown-facebook {
 .dataList-div-nineSqurt{
 	display: none;
 }
+.group-error{
+border: solid 1px red !important;
+}
+.input-error-autocomplete{
+border: solid 1px red !important;
+}

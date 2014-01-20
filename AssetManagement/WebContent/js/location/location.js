@@ -379,7 +379,7 @@ function closeDialog() {
 
 
 $(document).ready(function(){
-	
+	sites = [];
 	$("#dialog").dialog({
         autoOpen:false,
         closeOnEscape: true,
@@ -396,6 +396,8 @@ $(document).ready(function(){
     });
 	
 	$("#addButton").click(function(){
+		$("#site").removeClass("site-error");
+		$("#room").removeClass("site-error");
 		$("#dialog").dialog("open");
 		$("#location_id").val("");
 		$("#site").val("");
@@ -409,6 +411,7 @@ $(document).ready(function(){
 	});
 	
 	$("#site").click(function(){
+		$("#site").removeClass("site-error");
 		  $.ajax({
 			    type : 'GET',
 			    contentType : 'application/json',
@@ -416,7 +419,6 @@ $(document).ready(function(){
 			    dataType : 'json',
 			    success : function(data) {
 			    	console.log(data.siteList);
-			    	sites = [];
 			    	length = data.siteList.length;
 			    	for(i = 0;i< length; i++){
 			    		sites[i] = data.siteList[i].siteNameAbbr;
@@ -428,9 +430,13 @@ $(document).ready(function(){
 			     }
 			  });
 	});
-	
+	$("#room").click(function(){
+	$("#room").removeClass("site-error");
+	});
 	//edit group
 	$(".dataList").delegate(".editLocationIcon","click",function(){
+		$("#site").removeClass("site-error");
+		$("#room").removeClass("site-error");
 		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
 		$.ajax({
 		    type : 'GET',
@@ -468,7 +474,42 @@ $(document).ready(function(){
 	                	return;
 	                }
 				});
+    	});
+    	
+    	//submit
+    	$("#submitLocation").click(function(){
+    	    flag = 0;
+    		inputSite = $("#site").val()
+    		inputRoom = $("#room").val()
+    		if(inputSite.trim()==""){
+    			$("#site").addClass("site-error");
+    			flag = 1;
+    		}
+    		if(inputRoom.trim()==""){
+    			$("#room").addClass("site-error");
+    			flag = 2;
+    		}
+    		if(flag==0){
+    		if(checkInArr(sites,$("#site").val())){
+    			$("#dialog").submit();
+    		}else{
+    			$("#site").addClass("site-error");
+    			return;
+    		}
+    		}
     		
     	});
 	
 });
+
+
+//common method
+function checkInArr(Arr, ele) {
+	    console.log(Arr);
+	    for ( var i = 0; i < Arr.length; i++) {
+	        if (ele == Arr[i]) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}

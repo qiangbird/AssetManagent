@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,150 +36,171 @@ import com.augmentum.ams.web.vo.system.SearchCondition;
 @Controller("customerGroupController")
 @RequestMapping(value = "/group")
 public class CustomerGroupController {
-    Logger logger = Logger.getLogger(CustomerGroupController.class);
-    @Autowired
-    private CustomerGroupService customerGroupService;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private RemoteCustomerService remoteCustomerService;
-    @Autowired
-    private CustomerDao customerDao;
+	Logger logger = Logger.getLogger(CustomerGroupController.class);
+	@Autowired
+	private CustomerGroupService customerGroupService;
+	@Autowired
+	private CustomerService customerService;
+	@Autowired
+	private RemoteCustomerService remoteCustomerService;
+	@Autowired
+	private CustomerDao customerDao;
 
-    // @RequestMapping("/list")
-    // public ModelAndView listCustomerGroup(){
-    // ModelAndView modelAndView = new ModelAndView();
-    // List<CustomerGroup> groupList = customerGroupService.findAllGroups();
-    // //get processType
-    // @SuppressWarnings("rawtypes")
-    // List processTypeList = AssetUtil.getProcessTypes();
-    // modelAndView.addObject("groupList", groupList);
-    // modelAndView.addObject("processTypeList",processTypeList);
-    // modelAndView.setViewName("asset/groupList");
-    // return modelAndView;
-    // }
+	@RequestMapping("/list")
+	public ModelAndView listCustomerGroup() {
 
-    @RequestMapping("/list")
-    public ModelAndView listCustomerGroup() {
-        ModelAndView modelAndView = new ModelAndView();
-        List processTypeList = AssetUtil.getProcessTypes();
+		logger.info("listCustomerGroup method in CustomerGroupController start!");
 
-        modelAndView.addObject("processTypeList", processTypeList);
-        modelAndView.setViewName("asset/groupList");
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		List processTypeList = AssetUtil.getProcessTypes();
 
-    @RequestMapping("/search")
-    public ModelAndView listCustomerGroup(SearchCondition searchCondition, HttpSession session) {
-        ModelAndView modelAndView = new ModelAndView();
-        Page<CustomerGroup> groupPage = customerGroupService
-                .findCustomerGroupBySearchCondition(searchCondition);
-        String clientTimeOffset = (String) session.getAttribute("timeOffset");
-        List<CustomerGroup> groupList = groupPage.getResult();
-        System.out.println(groupList.size());
-        JSONArray array = new JSONArray();
-        array = SearchCommonUtil.formatGroupListTOJSONArray(groupList);
-        List processTypeList = AssetUtil.getProcessTypes();
+		modelAndView.addObject("processTypeList", processTypeList);
+		modelAndView.setViewName("asset/groupList");
 
-        modelAndView.addObject("processTypeList", processTypeList);
-        modelAndView.addObject("fieldsData", array);
-        modelAndView.addObject("count", groupPage.getRecordCount());
-        modelAndView.addObject("totalPage", groupPage.getTotalPage());
-        return modelAndView;
-    }
+		logger.info("listCustomerGroup method in CustomerGroupController end!");
+		return modelAndView;
+	}
 
-    /** 　edit　 */
-    @RequestMapping(value = "/update")
-    public ModelAndView updateGroup(CustomerGroup group, String customerCodes,
-            HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
-        String codes[] = customerCodes.split(",");
-        if (group.getId().equals("")) {
-            List<Customer> customerList = new ArrayList<Customer>();
-            try {
-                // customerList =
-                // customerService.getCustomerListByCodes(codes,request);
-                for (String code : codes) {
-                    Customer customer = customerService.getCustomerByCode(code);
-                    if (null != customer) {
-                        customerList.add(customer);
-                    } else {
-                        Customer remoteCustomer = remoteCustomerService.getCustomerByCodefromIAP(
-                                request, code);
-                        Customer customer1 = customerDao.save(remoteCustomer);
-                        customerList.add(customer1);
-                    }
-                }
-            } catch (DataException e) {
-                logger.error(e);
-            }
-            group.setCustomers(customerList);
-            customerGroupService.saveCustomerGroup(group);
-        } else {
-            CustomerGroup customerGroup = customerGroupService.getCustomerGroupById(group.getId());
-            customerGroup.setGroupName(group.getGroupName());
-            customerGroup.setDescription(group.getDescription());
-            customerGroup.setProcessType(group.getProcessType());
-            
-            List<Customer> customerList = new ArrayList<Customer>();
-            try {
-                // customerList =
-                // customerService.getCustomerListByCodes(codes,request);
-                for (String code : codes) {
-                    Customer customer = customerService.getCustomerByCode(code);
-                    if (null != customer) {
-                        customerList.add(customer);
-                    } else {
-                        Customer remoteCustomer = remoteCustomerService.getCustomerByCodefromIAP(
-                                request, code);
-                        Customer customer1 = customerDao.save(remoteCustomer);
-                        customerList.add(customer1);
-                    }
-                }
-            } catch (DataException e) {
-                logger.error(e);
-            }
-            customerGroup.setCustomers(customerList);
-            
-            customerGroupService.updateCustomerGroup(customerGroup);
-        }
-        modelAndView.setViewName("redirect:/group/list");
-        return modelAndView;
-    }
+	@RequestMapping("/search")
+	public ModelAndView searchCustomerGroup(SearchCondition searchCondition,
+			HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView();
 
-    /** 　edit　 */
-    @SuppressWarnings("rawtypes")
-    @RequestMapping(value = "/edit")
-    public ModelAndView editGroup(String id, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
+		logger.info("searchCustomerGroup method in CustomerGroupController start!");
 
-        logger.info("editGroup start");
-        CustomerGroup customerGroup = customerGroupService.getCustomerGroupById(id);
-        List<Customer> customerList = customerService.getCustomerByGroup(id);
-        List processTypeList = AssetUtil.getProcessTypes();
+		Page<CustomerGroup> groupPage = customerGroupService
+				.findCustomerGroupBySearchCondition(searchCondition);
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		List<CustomerGroup> groupList = groupPage.getResult();
+		System.out.println(groupList.size());
+		JSONArray array = new JSONArray();
+		array = SearchCommonUtil.formatGroupListTOJSONArray(groupList);
+		List processTypeList = AssetUtil.getProcessTypes();
 
-        modelAndView.addObject("processTypeList", processTypeList);
-        modelAndView.addObject("customerGroup", customerGroup);
-        modelAndView.addObject("customerList", customerList);
-        modelAndView.setViewName("asset/groupEdit");
-        logger.info("editGroup end");
-        return modelAndView;
-    }
+		modelAndView.addObject("processTypeList", processTypeList);
+		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", groupPage.getRecordCount());
+		modelAndView.addObject("totalPage", groupPage.getTotalPage());
 
-    /**
-     * delete
-     */
-    @RequestMapping(value = "/delete")
-    public ModelAndView deleteGroup(String id, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
-        customerGroupService.deleteCustomerGroupById(id);
-        return modelAndView;
-    }
+		logger.info("searchCustomerGroup method in CustomerGroupController end!");
+		return modelAndView;
+	}
 
-    @RequestMapping(value = "manageGroupCustomer")
-    public ModelAndView manageGroupCustomer(String id, HttpServletRequest request) {
-        CustomerGroup customerGroup = customerGroupService.getCustomerGroupById(id);
-        return new ModelAndView("/asset/groupDetail", "customerGroup", customerGroup);
-    }
+	/** 　edit　 */
+	@RequestMapping(value = "/update")
+	public ModelAndView updateGroup(CustomerGroup group, String customerCodes,
+			HttpServletRequest request) {
+
+		logger.info("updateGroup method in CustomerGroupController start!");
+
+		ModelAndView modelAndView = new ModelAndView();
+		String codes[] = customerCodes.split(",");
+		if (group.getId().equals("")) {
+			if (!StringUtils.isBlank(customerCodes)) {
+				List<Customer> customerList = new ArrayList<Customer>();
+				try {
+					for (String code : codes) {
+						Customer customer = customerService
+								.getCustomerByCode(code);
+						if (null != customer) {
+							customerList.add(customer);
+						} else {
+							Customer remoteCustomer = remoteCustomerService
+									.getCustomerByCodefromIAP(request, code);
+							Customer customer1 = customerDao
+									.save(remoteCustomer);
+							customerList.add(customer1);
+						}
+					}
+				} catch (DataException e) {
+					logger.error(e);
+				}
+				group.setCustomers(customerList);
+			}
+			customerGroupService.saveCustomerGroup(group);
+		} else {
+			CustomerGroup customerGroup = customerGroupService
+					.getCustomerGroupById(group.getId());
+			customerGroup.setGroupName(group.getGroupName());
+			customerGroup.setDescription(group.getDescription());
+			customerGroup.setProcessType(group.getProcessType());
+			if (!StringUtils.isBlank(customerCodes)) {
+				List<Customer> customerList = new ArrayList<Customer>();
+				try {
+					for (String code : codes) {
+						Customer customer = customerService
+								.getCustomerByCode(code);
+						if (null != customer) {
+							customerList.add(customer);
+						} else {
+							Customer remoteCustomer = remoteCustomerService
+									.getCustomerByCodefromIAP(request, code);
+							Customer customer1 = customerDao
+									.save(remoteCustomer);
+							customerList.add(customer1);
+						}
+					}
+				} catch (DataException e) {
+					logger.error(e);
+				}
+				customerGroup.setCustomers(customerList);
+			}
+			customerGroupService.updateCustomerGroup(customerGroup);
+		}
+		modelAndView.setViewName("redirect:/group/list");
+
+		logger.info("updateGroup method in CustomerGroupController end!");
+		return modelAndView;
+	}
+
+	/** 　edit　 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/edit")
+	public ModelAndView editGroup(String id, HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		logger.info("editGroup in CustomerGroupController  start");
+		CustomerGroup customerGroup = customerGroupService
+				.getCustomerGroupById(id);
+		List<Customer> customerList = customerService.getCustomerByGroup(id);
+		List processTypeList = AssetUtil.getProcessTypes();
+
+		modelAndView.addObject("processTypeList", processTypeList);
+		modelAndView.addObject("customerGroup", customerGroup);
+		modelAndView.addObject("customerList", customerList);
+		modelAndView.setViewName("asset/groupEdit");
+
+		logger.info("editGroup in CustomerGroupController  end");
+		return modelAndView;
+	}
+
+	/**
+	 * delete
+	 */
+	@RequestMapping(value = "/delete")
+	public ModelAndView deleteGroup(String id, HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		logger.info("deleteGroup in CustomerGroupController  start!");
+
+		customerGroupService.deleteCustomerGroupById(id);
+
+		logger.info("deleteGroup in CustomerGroupController  end!");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "manageGroupCustomer")
+	public ModelAndView manageGroupCustomer(String id,
+			HttpServletRequest request) {
+
+		logger.info("manageGroupCustomer in CustomerGroupController  start!");
+
+		CustomerGroup customerGroup = customerGroupService
+				.getCustomerGroupById(id);
+
+		logger.info("manageGroupCustomer in CustomerGroupController  end!");
+		return new ModelAndView("/asset/groupDetail", "customerGroup",
+				customerGroup);
+	}
 
 }

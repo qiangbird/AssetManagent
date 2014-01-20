@@ -46,7 +46,7 @@ String basePath = request.getScheme() + "://"
 			</div>
 
 
-			<form:form action="asset/saveNewAsset" method="post" id="assetFrom"
+			<form:form action="asset/saveAsset" method="post" id="assetFrom"
 				modelAttribute="assetVo">
 				<div class="common-requirement-property">
 					<div class="asset-input-left asset-input-panel">

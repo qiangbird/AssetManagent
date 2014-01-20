@@ -658,8 +658,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     public void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request,
             HttpServletResponse response) {
         String path = request.getSession().getServletContext().getRealPath("upload");
-        // request.getSession().getServletContext().getRealPath("C:/AMS/upload");
-        //TODO create upload Utils
         String fileName = file.getOriginalFilename();
         File targetFile = new File(path, fileName);
         if (!targetFile.exists()) {
@@ -671,7 +669,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             logger.error("Upload image error!",e);
         }
         String pathName = request.getContextPath() + "/upload/" + fileName;
-        // File f=new File("C:/AMS/upload"+fileName);
         StringBuilder sbmsg = new StringBuilder(request.getScheme());
         sbmsg.append("://").append(request.getServerName()).append(":")
                 .append(request.getServerPort()).append(pathName);

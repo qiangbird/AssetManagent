@@ -107,8 +107,8 @@
                 </div>
             </div>
 			<div class="submit-div">
-				<input class="input-80-30 submit-button" type="submit" value="<spring:message code='submit' />" /> 
-				<input class="input-80-30 reset-button" type="reset" value="<spring:message code='reset' />" />
+				<input id="submitGroup" class="input-80-30 submit-button" type="button" value="<spring:message code='submit' />" /> 
+				<input id="resetGroup" class="input-80-30 reset-button" type="button" value="<spring:message code='reset' />" />
 		    </div>
 		</table>
 		</form>

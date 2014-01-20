@@ -8,5 +8,11 @@ import com.augmentum.ams.model.asset.CustomerGroup;
 @Repository("customerGroupDao")
 public class CustomerGroupDaoImpl  extends BaseDaoImpl<CustomerGroup> implements CustomerGroupDao{
 
+	@Override
+	public void updateCustomerGroup(CustomerGroup customerGroup) {
+		hibernateTemplate.merge(customerGroup);
+		
+	}
+
 
 }

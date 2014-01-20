@@ -10,7 +10,7 @@ public interface TransferLogService {
 	 * 
 	 * @param transferLog
 	 */
-	void saveTransferLog(TransferLog transferLog);
+	void saveTransferLog(String assetIds, String action);
 	/**
 	 * 
 	 * @param searchCondition

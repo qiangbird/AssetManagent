@@ -1,11 +1,6 @@
 package com.augmentum.ams.service.asset.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -15,7 +10,6 @@ import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
@@ -60,12 +54,12 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
     public void saveCustomerGroup(CustomerGroup customerGroup) {
         List<Customer> list = customerGroup.getCustomers();
         customerGroup = customerGroupDao.save(customerGroup);
+        if(null != list){
         for (Customer customer : list) {
             customer.setCustomerGroup(customerGroup);
-            // customerService.saveCustomer(customer);
             customerService.updateCustomer(customer);
         }
-        // customerGroupDao.save(customerGroup);
+        }
     }
 
     @Override
@@ -87,6 +81,8 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
 
     @Override
     public void updateCustomerGroup(CustomerGroup customerGroup) {
+    	
+    	logger.info("UpdateCustomerGroup method start!");
         //delete 
         List<Customer> list = customerService.getCustomerByGroup(customerGroup.getId());
         List<Customer> list1 = customerGroup.getCustomers();
@@ -112,7 +108,9 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
             customerService.updateCustomer(customer);
             }
         }
-        customerGroupDao.update(customerGroup);
+        customerGroupDao.updateCustomerGroup(customerGroup);
+        
+        logger.info("UpdateCustomerGroup method end!");
     }
 
     @Override
