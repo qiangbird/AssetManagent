@@ -50,13 +50,6 @@ public class AmsRealm extends AuthorizingRealm {
     
     private Logger logger = Logger.getLogger(AmsRealm.class);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.shiro.realm.AuthorizingRealm#doGetAuthorizationInfo(org.apache
-     * .shiro.subject.PrincipalCollection)
-     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
