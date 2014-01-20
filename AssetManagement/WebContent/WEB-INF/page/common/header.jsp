@@ -6,6 +6,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
 <html>
 <head>
@@ -41,7 +42,7 @@
             <div id="header_top_right">
                 <div id="header_login">
                     <a id="header_login_name"><spring:message code="head.welcome" /> <span id="loginUser">${sessionScope.userVo.employeeName}</span></a>
-                    <%-- <a class="decoration_hover cursor_hand" id="header_login_control" href="<%=path %>/logout">Login out</a> --%>
+                 <%-- <a class="decoration_hover cursor_hand" id="header_login_control" href="<%=path %>/logout">Login out</a> --%>
                 </div>
                 <div id="header_i18n">
                     <c:if test="${'en_US' == localeLanguage || null == localeLanguage}">
@@ -106,6 +107,12 @@
                         <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
                         <li><a href="asset/listMyAssets"><spring:message code="navigator.my.assets" /></a></li>
                     </ul></li>
+               <%--  <shiro:hasRole name="MANAGER">
+                dddddddddddd    
+                </shiro:hasRole> --%>
+                <shiro:hasRole name="MANAGER">
+                dddddddd
+                </shiro:hasRole>
                 <li class="menuLi"><a href="transferLog/list"><spring:message code="navigator.transfer.log" /></a></li>
                 <li class="menuLi"><a href="#"><spring:message code="navigator.operation.log" /></a></li>
             </ul>

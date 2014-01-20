@@ -127,6 +127,7 @@
 				/operationLog/** = authc,perms[OperationLog:*]
 				/user/** = authc,perms[User:*]
 				/location/** = authc,perms[Location:*]
+				/**=authc
                 
             </value>
         </property>
