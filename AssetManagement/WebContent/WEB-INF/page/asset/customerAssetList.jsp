@@ -6,6 +6,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
     %>
+    <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <html>
 <head>
 <base href="<%=basePath%>">
@@ -90,11 +91,15 @@
                 <span class="middle" ><spring:message code="SearchButton" /> </span>
                 <span class="right"></span>
             </a>
-            
+            <shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
             <div class="operation_assets_list">
                 <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
-                <c:choose>
+                    <%-- <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
+                    <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
+                    <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
+                    <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li> --%>
+             <c:choose>
                 <c:when test="${sessionScope.userRole == 'Manager'}">
                     <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
                     <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
@@ -110,7 +115,7 @@
                 </c:choose>
                 </ul>
             </div>
-            
+            </shiro:hasAnyRoles>
             
         </div>
         </div>

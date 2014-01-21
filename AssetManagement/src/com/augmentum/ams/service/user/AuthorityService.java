@@ -1,6 +1,9 @@
 package com.augmentum.ams.service.user;
 
+import java.util.List;
+
 import com.augmentum.ams.model.user.Authority;
+import com.augmentum.ams.model.user.Role;
 
 public interface AuthorityService {
 
@@ -27,5 +30,7 @@ public interface AuthorityService {
      * @return
      */
     Authority getAuthorityByName(String authorityName);
+    
+    List<String> getAuthorityByRole(Role role); 
 
 }

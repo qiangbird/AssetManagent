@@ -61,6 +61,7 @@
         <div class="menuCotent">
             <ul class="firstMenuUl">
                 <li class="menuLi"><a href="#"><spring:message code="navigator.home" /></a></li>
+                <shiro:authenticated>
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
                     <ul class="sencndMenuUl">
                         <li><a href="asset/allAssets"><spring:message code="navigator.all.assets" /></a></li>
@@ -70,7 +71,10 @@
                         <li><a href="#/asset/software"><spring:message code="navigator.software" /></a></li>
                         <li><a href="#"><spring:message code="navigator.device" /></a></li>
                         <li><a href="#"><spring:message code="navigator.other.assets" /></a></li>
-                    </ul></li>
+                    </ul>
+                </li>
+                </shiro:authenticated>
+                <shiro:hasRole name="SYSTEM_ADMIN">
                 <li class="menuLi"><a><spring:message code="navigator.system" /></a>
                     <ul class="sencndMenuUl">
                         <li><a href="user/roleList"><spring:message code="navigator.roleList" /></a></li>
@@ -79,7 +83,10 @@
                         <li><a href="#"><spring:message code="navigator.scheduler.task" /></a></li>
                         <li><a href="location/listLocation"><spring:message code="navigator.location.list" /></a></li>
                         <li><a href="group/list"><spring:message code="navigator.group.list" /></a></li>
-                    </ul></li>
+                    </ul>
+                </li>
+                </shiro:hasRole>
+                 <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
                 <li class="menuLi"><a><spring:message code="navigator.customser.assets" /></a>
                     <ul class="sencndMenuUl">
                     <c:if test="${sessionScope.customerList !=null }">
@@ -102,22 +109,22 @@
                        </c:forEach>
                        </c:if>
                     </ul></li>
+               </shiro:hasAnyRoles>
                 <li class="menuLi"><a href="customizedView/goToNewCustomizedView"><spring:message code="navigator.my.assets" /></a>
 					<ul class="sencndMenuUl">
                         <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
                         <li><a href="asset/listMyAssets"><spring:message code="navigator.my.assets" /></a></li>
                     </ul></li>
-               <%--  <shiro:hasRole name="MANAGER">
-                dddddddddddd    
-                </shiro:hasRole> --%>
-                <shiro:hasRole name="MANAGER">
-                dddddddd
-                </shiro:hasRole>
+               <shiro:hasAnyRoles name="MANAGER,IT">
                 <li class="menuLi"><a href="transferLog/list"><spring:message code="navigator.transfer.log" /></a></li>
+               </shiro:hasAnyRoles>
+               <shiro:hasRole name="SYSTEM_ADMIN">
                 <li class="menuLi"><a href="#"><spring:message code="navigator.operation.log" /></a></li>
+                </shiro:hasRole>
             </ul>
         </div>
-
+        
+        <shiro:hasRole name="IT">
         <div class="headerNavigationEnd">
             <a><spring:message code="navigator.operation" /></a>
             <ul class="operationUl">
@@ -126,6 +133,7 @@
                 <li><a href="asset/import"><spring:message code="navigator.import.asset" /></a></li>
             </ul>
         </div>
+        </shiro:hasRole>
     </div>
      <div id="dialog-confirm" title="Operation confirm">
    		<p id="confirm-message-body"></p>

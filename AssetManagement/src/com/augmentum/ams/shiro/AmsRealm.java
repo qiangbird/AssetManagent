@@ -29,6 +29,7 @@ import com.augmentum.ams.model.user.Authority;
 import com.augmentum.ams.model.user.Role;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.service.user.AuthorityService;
 import com.augmentum.ams.service.user.RoleService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.web.vo.user.UserVo;
@@ -44,6 +45,9 @@ public class AmsRealm extends AuthorizingRealm {
 
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private AuthorityService authorityService;
 
 	@Autowired
 	private RemoteEmployeeService remoteEmployeeService;
@@ -72,10 +76,11 @@ public class AmsRealm extends AuthorizingRealm {
 
 		for (Role employeeRole : employeeRoles) {
 			info.addRole(employeeRole.getRoleName().toString());
-			List<Authority> authorities = employeeRole.getAuthorities();
+//			List<Authority> authorities = employeeRole.getAuthorities();
+			List<String> authorities = authorityService.getAuthorityByRole(employeeRole);
 			try {
-				for (Authority authority : authorities) {
-					authorityNames.add(authority.getName());
+				for (String authority : authorities) {
+					authorityNames.add(authority);
 				}
 			} catch (IllegalArgumentException e) {
 				String message = user.getUserName()

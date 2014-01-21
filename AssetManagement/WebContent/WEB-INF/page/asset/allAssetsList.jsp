@@ -6,6 +6,7 @@
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
     %>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+    <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <html>
 <head>
 <base href="<%=basePath%>">
@@ -96,6 +97,7 @@
 	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement">Management View </a></li>
 	            </ul>
             </div>
+            <shiro:hasRole name="IT">
 	        <div class="operation_assets_list">
 		        <a class="a_operations_assets_list">Operation</a>
 	        	<ul>
@@ -106,6 +108,7 @@
 	        		<li><label id="addToAudit">AddToAudit</label></li>
 	        	</ul>
 	        </div>
+	        </shiro:hasRole>
 	        </c:if>
 	        
 	        <form name="exportForm" id="exportForm" action="asset/export">

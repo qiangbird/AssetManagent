@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <authorities>
-    <role name="employee">
+    <role name="EMPLOYEE">
         <authority>Asset:view_own</authority>
         <authority>Asset:view_project</authority>
         <authority>Asset:export</authority>
         <authority>Asset:apply_asset</authority>
     </role>
     
-    <role name="special_role">
+    <role name="SPECIAL_ROLE">
         <authority>Asset:view_own</authority>
         <authority>Asset:view_project</authority>
         <authority>Asset:export</authority>
         <authority>Asset:assign_asset</authority>
     </role>
     
-    <role name="manager">
+    <role name="MANAGER">
         <authority>Asset:view_own</authority>
         <authority>Asset:view_project</authority>
         <authority>Asset:export</authority>
@@ -35,7 +35,7 @@
         <authority>TransferLog:*</authority>
     </role>
     
-    <role name="system_admin">
+    <role name="SYSTEM_ADMIN">
         <authority>Asset:view_all</authority>
         <authority>Asset:export</authority>
         <authority>Asset:assign_asset</authority>
