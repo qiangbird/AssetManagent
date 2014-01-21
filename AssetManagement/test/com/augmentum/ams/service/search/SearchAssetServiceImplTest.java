@@ -48,7 +48,7 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
         
         SearchCondition sc = new SearchCondition();
         sc.setKeyWord("");
-        sc.setPageSize(20);
+        sc.setPageSize(2000);
         sc.setPageNum(1);
         
         page = searchAssetService.findAllAssetsBySearchCondition(sc);

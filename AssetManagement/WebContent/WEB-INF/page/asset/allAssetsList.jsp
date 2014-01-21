@@ -40,13 +40,13 @@
 						<div class="condition_title"><spring:message code="searchBy" /></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="assetId"/><label><spring:message code="asset.assetId"/></label></p>
+							<p><input type="checkBox" name="field" value="assetId"/><label><spring:message code="asset.id"/></label></p>
 							<p><input type="checkBox" name="field" value="assetName"/><label><spring:message code="asset.name"/></label></p>
 			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="asset.user"/></label></p>
-			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="asset.project"/></label></p>
-			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="asset.customer"/></label></p>
-			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.poNo" /></label></p>
-			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.barcode"/></label></p>
+			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="project"/></label></p>
+			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="customer"/></label></p>
+			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.po.no" /></label></p>
+			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.bar.code"/></label></p>
 			        	</div>
 					</div>
 					<div class="single_condition">
@@ -61,7 +61,7 @@
 			            </div>
 			        </div>
 			        <div class="single_condition">
-						<div class="condition_title"><label id="label_AssetStatus"></label></div>
+						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
 						<div class="condition_optional" id="assetStatus">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
 							<p><input type="checkBox" name="field" value="AVAILABLE" /><label><spring:message code="asset.available"/></label></p>
@@ -71,14 +71,14 @@
 			            </div>
 			        </div>
 			        <div class="single_condition">
-						<div class="condition_title"><spring:message code="asset.checkInDate"/></div>
+						<div class="condition_title"><spring:message code="asset.check.in.date"/></div>
 						<div class="condition_optional" id="checkInTime">
 							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
                             <span class="dateLine">-</span>
                             <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>
 			            </div>
 			        </div>
-			        <a class="reset" href="javascript:void(0);"><label id="label_SearchConditionReset"></label></a>
+			        <a class="reset" href="javascript:void(0);"><spring:message code="reset"/></a>
 				</div>
 			</div>
 			<a id="searchButton" class="a_common_button green_button_thirty">
@@ -121,12 +121,12 @@
     <div id="dialog_assign" title="<spring:message code='itAssign.dialog.title'/>">
 	      <div>
 	          <span>*</span>
-	          <label id="label_CustomerName"><spring:message code="asset.customer"/></label>
+	          <label id="label_CustomerName"><spring:message code="customer"/></label>
 	          <input id="customerName" type="text" name="customerName" placeholder="<spring:message code='dialog.placeholder.customer'/>"/>
 	          <input type="hidden" id="customerCode" />
 	      </div>
 	      <div>
-	          <label id="label_ProjectName"><spring:message code="asset.project"/></label>
+	          <label id="label_ProjectName"><spring:message code="project"/></label>
 	          <input id="projectName" type="text"  name="projectName" placeholder="<spring:message code='dialog.placeholder.project'/>"/>
 	          <input type="hidden" id="projectCode" />
 	          

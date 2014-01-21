@@ -146,9 +146,9 @@ a.viewDetail {
 #viewUl {
 	position: absolute;
 	display: none;
-	width: auto;
+	width: 110px;
 	margin-left: 473px;
-	height: auto;
+	height: 26px;
 	line-height: 180%;
 	z-index: 9999;
 	background-color: #cfe6bb;
@@ -161,6 +161,7 @@ a.viewDetail {
 #viewUl li {
 	margin-left: -40px;
 	padding: 0px 5px 0px 5px;
+	background-color: #cfe6bb;
 }
 
 #viewUl li:HOVER {
