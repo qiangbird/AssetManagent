@@ -1,5 +1,7 @@
 var auditProcessTr = $("#dataTable tr:first-child").html().toString();
 var auditDoneTr = $("#dataTable tr:nth-child(2)").html().toString();
+var locale = $("#locale").val();
+var activedStatus;
 
 $(document).ready(function(){
     
@@ -50,7 +52,7 @@ $("#processFiles").delegate(".check-delete-button", "click", function(){
 
 //upto done
 function upToDone(object) {
-	ShowMsg("Are you sure to done this file?",function(yes){
+	ShowMsg(i18nProp('audit_file_done'), function(yes){
 	      if (yes) {
 	    	  var auditFileName=$(object).parents(".process-panel").find("a").text();
 	    	  var url = "auditFile/inventoryList";
@@ -62,7 +64,7 @@ function upToDone(object) {
 }
 
 function removeAuditFile(object) {
-	ShowMsg("Are you sure to remove this file?",function(yes){
+	ShowMsg(i18nProp('audit_file_delete'), function(yes){
 	      if (yes) {
 	    	  var auditFileName=$(object).parents(".process-panel").find("a").text();
 	    	  var url = "auditFile/inventoryList";
@@ -118,12 +120,16 @@ function showAuditList(showProcessingAudit) {
 }
 
 function showProcessAudits(data) {
-    $("#content-title-status").html("(Processing)");
+	setAuditStatusForTitle();
     $("#dataTable").html("");
     var length = data.processAudits.length;
     $(".audit-file-no-data").html("");
     if (length == 0) {
-        $(".audit-file-no-data").html("没有正在盘点的资产文件，请从  <a href='asset/allAssets'>资产列表</a> 选取生成。");
+    	if ("zh_CN" == locale) {
+    		$(".audit-file-no-data").html("没有正在盘点的资产文件，请从  <a href='asset/allAssets'>资产列表</a> 选取生成。");
+    	} else {
+    		$(".audit-file-no-data").html("There is no processing inventory, please select from <a href='asset/allAssets'>All Assets List</a> to generate it.");
+    	}
     } else {
         $("#dataTable .audit-process-tr").css("display", "block");
         for (var i = 0; i < length; i++) {
@@ -143,12 +149,16 @@ function showProcessAudits(data) {
 }
 
 function showDoneAudits(data) {
-    $("#content-title-status").html("(Done)");
+	setAuditStatusForTitle();
     $("#dataTable").html("");
     var length = data.doneAudits.length;
     $(".audit-file-no-data").html("");
     if (length == 0) {
-        $(".audit-file-no-data").html("没有盘点完成的资产文件。");
+    	if ("zh_CN" == locale) {
+    		$(".audit-file-no-data").html("没有盘点完成的资产文件。");
+    	} else {
+    		$(".audit-file-no-data").html("There is no done inventory.");
+    	}
     } else {
         $("#dataTable .audit-done-tr").css("display", "block");
         for (var i = 0; i < length; i++) {
@@ -167,5 +177,10 @@ function showDoneAudits(data) {
             $(".done-" + i + " .percentResult").html(data.doneAudits[i].percentage + "%");
         }
     }
+}
+
+function setAuditStatusForTitle() {
+	var activedStatus = $(".processBtn-control-blank-actived").parent(".left-control").children("span").children(".audit-status-actived").html();
+	$("#content-title-status").html("(" + activedStatus + ")");
 }
 
