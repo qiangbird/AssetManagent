@@ -19,7 +19,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.22.146:8080</param-value>
+			<param-value>http://192.168.22.143:8080</param-value>
 		</init-param>
 	</filter>
 
@@ -40,7 +40,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.22.146:8080</param-value>
+			<param-value>http://192.168.22.143:8080</param-value>
 		</init-param>
 		<init-param>
 			<param-name>acceptAnyProxy</param-name>
@@ -49,7 +49,7 @@
 		<init-param>
 			<param-name>proxyCallbackUrl</param-name>
 			<!-- sso.democlient.com is your CN in your keyStore if you are not server please use your IP, and use http, example : http://192.168.251.44:8080/DemoAPP/proxyCallback -->
-			<param-value>http://192.168.22.146:8080/AssetManagement/proxyCallback</param-value>
+			<param-value>http://192.168.22.143:8080/AssetManagement/proxyCallback</param-value>
 		</init-param>
 		<init-param>
 			<param-name>proxyReceptorUrl</param-name>
