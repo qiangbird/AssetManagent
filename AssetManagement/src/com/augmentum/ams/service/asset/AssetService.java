@@ -18,6 +18,7 @@ import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
+import com.augmentum.ams.web.vo.asset.ImportVo;
 import com.augmentum.ams.web.vo.system.Page;
 
 public interface AssetService {
@@ -204,5 +205,5 @@ public interface AssetService {
      * @throws ExcelException 
      * @throws DataException 
      */
-    void analyseUploadExcelFile(File file, HttpServletRequest request) throws ExcelException, DataException;
+    ImportVo analyseUploadExcelFile(File file, HttpServletRequest request, String flag) throws ExcelException, DataException;
 }

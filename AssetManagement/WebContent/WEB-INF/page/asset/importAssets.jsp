@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" 
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
 <html>
 <head>
@@ -29,49 +30,45 @@
                <div class="operate-panel">
                    <div class="tips">
                        <p>
-		                   importNote
+		                   <spring:message code="import.note"></spring:message>
                        </p>
                    </div>
                    <div class="process-panel pro-first">
-                       <strong>importType: </strong>
+                       <strong><spring:message code="import.type"></spring:message>: </strong>
                        <p class="create-p">
 		                   <span id="create"></span>
-		                   <label>importCreate</label>
+		                   <label><spring:message code="import.create"></spring:message></label>
                        </p>
                        <p class="update-p">
 		                   <span id="update"></span>
-		                   <label>importUpdate</label>
+		                   <label><spring:message code="import.update"></spring:message></label>
 	                   </p>
                    </div>
                    <div class="process-panel pro-second">
-                       <strong>importFile: </strong>
+                       <strong><spring:message code="import.file"></spring:message>: </strong>
                        <form id="importForm" action="asset/upload" enctype="multipart/form-data" method="post">
-                           <input type="hidden" id="flag" name="flag" value="true" />
-	                       <input type="file"  class="import-file" name="file" onchange="uploadFile(this);" />
+                           <input type="hidden" id="flag" name="flag" value="create" />
+	                       <input type="file"  class="import-file" name="file" id="file" onchange="uploadFile(this);" />
+	                       <input type="button" id="uploadButon" class="import-button upload-button" value=<spring:message code="upload" /> Onclick="file.click();"/>
 	                   </form>    
                        <input type="text" class="import-text" readonly="readonly" />
-                       <!--<div class="blank-span"></div>
-                       --><input type="button" class="import-button upload-button" value="upload"/>
-                       <input type="button" class="import-button start-button" value="start" disabled="disabled" />
-                       <!--<span id="tips" onmouseover="showHelpTips()" onmouseout="hideHelpTips()"></span>
-                       <div id="helpTips">
-                        importNote"/>
-                       </div>-->
+                       <input type="button" class="import-button start-button" value=<spring:message code="start" /> disabled="disabled" />
                    </div>
 	               <div class="process-panel pro-third">
-	                   <strong>importResult:  </strong>
+	                   <strong><spring:message code="import.result"></spring:message>: </strong>
 	                   <p>
-	                       <label>all: </label> 
+	                       <label><spring:message code="all"></spring:message>: </label> 
 	                       &nbsp;<span id="allSize" class="result-size">0</span>  
 	                   </p>
 	                   <p>    
-	                       <label class="mess-label">success:</label> 
+	                       <label class="mess-label"><spring:message code="success"></spring:message>:</label> 
 	                       &nbsp;<span id="sucSize" class="result-size">0</span> 
 	                   </p>    
 	                   <p>
-	                       <label class="mess-label">failure:</label> 
+	                       <label class="mess-label"><spring:message code="failure"></spring:message>:</label> 
 	                       <a id="exportError" class="export-icon"></a>
 	                       <span id="fiaSize" class="result-size">0</span> 
+	                       <input type="hidden" id="failureFileName" />
 	                   </p>    
 	               </div>
                </div>

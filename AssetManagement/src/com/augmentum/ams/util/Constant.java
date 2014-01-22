@@ -72,4 +72,8 @@ public class Constant {
     public static final String UNAUDIT = "unAudit";
     public static final String INCONSISTENT = "incons";
 
+    //Constant of import asset 
+    public static final String CONFIG_TEMPLATES_PATH = "template/";
+    public static final String CREATE = "create";
+    public static final String UPDATE = "update";
 }

@@ -10,4 +10,12 @@ import com.augmentum.ams.model.asset.Monitor;
 @Repository("monitorDao")
 public class MonitorDaoImpl extends BaseDaoImpl<Monitor> implements MonitorDao{
 
+    @Override
+    public Monitor getByAssetId(String assetId) {
+        
+        String hql = "from Monitor where asset.id= ?";
+        
+        return super.getUnique(hql, assetId);
+    }
+
 }

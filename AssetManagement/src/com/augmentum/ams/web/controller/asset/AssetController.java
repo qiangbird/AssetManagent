@@ -1,16 +1,12 @@
 package com.augmentum.ams.web.controller.asset;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,7 +15,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,17 +45,17 @@ import com.augmentum.ams.service.search.SearchAssetService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.AssetUtil;
+import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.ErrorCodeConvertToJSON;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FileOperateUtil;
-//import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
-import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.asset.ImportVo;
 import com.augmentum.ams.web.vo.asset.SiteVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -574,19 +569,39 @@ public class AssetController extends BaseController {
     }
     
     @RequestMapping(value = "/upload")
-    public String  uploadAssetsExcelFile(MultipartFile file, HttpServletRequest request,
+    @ResponseBody
+    public JSONObject  uploadAssetsExcelFile(MultipartFile file, String flag, HttpServletRequest request,
             HttpServletResponse response) {
         
         File targetFile = FileOperateUtil.upload(request, response, file);
+        ImportVo importVo = null;
+        JSONObject jsonObject = new JSONObject();
         try {
-            assetService.analyseUploadExcelFile(targetFile, request);
+            importVo = assetService.analyseUploadExcelFile(targetFile, request, flag);
         } catch (ExcelException e) {
             logger.error(e.getMessage(), e);
         } catch (DataException e) {
             logger.error(e.getMessage(), e);
         }
+        jsonObject.put("all", importVo.getAllImportRecords());
+        jsonObject.put("success", importVo.getSuccessRecords());
+        jsonObject.put("failure", importVo.getFailureRecords());
+        jsonObject.put("failureFileName", importVo.getFailureFileName());
         
-        return "asset/importAssets";
+        return jsonObject;
+    }
+    
+    @RequestMapping(value = "/download")
+    public void downloadFailureAssets(String fileName, HttpServletRequest request,
+            HttpServletResponse response) {
+        
+        String outPutPath = FileOperateUtil.getBasePath() + Constant.CONFIG_TEMPLATES_PATH
+                + fileName;
+        try {
+            FileOperateUtil.download(request, response, outPutPath);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
     
 }

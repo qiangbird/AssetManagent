@@ -20,7 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +89,7 @@ import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.ExportVo;
+import com.augmentum.ams.web.vo.asset.ImportVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.user.UserVo;
 
@@ -732,11 +735,13 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     @Override
-    public void analyseUploadExcelFile(File file, HttpServletRequest request) throws ExcelException, DataException {
+    public ImportVo analyseUploadExcelFile(File file, HttpServletRequest request, String flag) throws ExcelException, DataException {
         
         ExcelUtil excelUtil = ExcelUtil.getInstance();
         Workbook workbookImport = null;
-        
+        int allImportRecords = 0;
+        int successRecords = 0;
+        int failureRecords = 0;
         
         try {
             workbookImport = excelUtil.getWorkbook(file);
@@ -746,8 +751,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
         Workbook workbookTemplate = assetTemplateParser.getWorkbook(AssetTemplateParser.ASSET_TEMPLATE);
         
-        WritableWorkbook writableWorkbook = ExcelBuilder.createWritableWorkbook(assetTemplateParser.getOutputPath("Asset", UTCTimeUtil
-                .formatDateToString(new Date(),Constant.FILTER_TIME_PATTERN)), workbookTemplate);
+        String outPutPath = assetTemplateParser.getOutputPath("Asset", UTCTimeUtil
+                .formatDateToString(new Date(),Constant.FILTER_TIME_PATTERN));
+        WritableWorkbook writableWorkbook = ExcelBuilder.createWritableWorkbook(outPutPath, workbookTemplate);
         
         Sheet templateMachineSheet = workbookTemplate.getSheet("Machine");
         Sheet templateMonitorSheet = workbookTemplate.getSheet("Monitor");
@@ -786,6 +792,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         logger.info("-----------The software type totally has："+(softwareTotalRecords - 1)+" records-----------");
         logger.info("-----------The otherAsset type totally has："+(otherAssetTotalRecords - 1)+" records-----------");
         
+        allImportRecords = machineTotalRecords + monitorTotalRecords + deviceTotalRecords + 
+                softwareTotalRecords + otherAssetTotalRecords - 5;
+        
         compareCellTitle(templateMachineTitleCells, machineTitleCells, AssetTypeEnum.MACHINE.toString());
         compareCellTitle(templateMonitorTitleCells, monitorTitleCells, AssetTypeEnum.MONITOR.toString());
         compareCellTitle(templateDeviceTitleCells, deviceTitleCells, AssetTypeEnum.DEVICE.toString());
@@ -820,40 +829,70 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         cacheData.put("remoteProjects", remoteProjects);
         cacheData.put("localLocations", localLocations);
         
+        int failureMachineRecords = 0;
+        int failureMonitorRecords = 0;
+        int failureDeviceRecords = 0;
+        int failureSoftwareRecords = 0;
+        int failureOtherAssetRecords = 0;
+        
         if(1 < machineTotalRecords){
-            setExcelToMachine(machineSheet, machineTotalRecords, excelUtil, cacheData, writableWorkbook);
+            failureMachineRecords = setExcelToMachine(machineSheet, machineTotalRecords, excelUtil, 
+                    cacheData, writableWorkbook, flag);
         }
         if(1 < monitorTotalRecords){
-            setExcelToMonitor(monitorSheet, monitorTotalRecords, excelUtil, cacheData, writableWorkbook);
+            failureMonitorRecords = setExcelToMonitor(monitorSheet, monitorTotalRecords, excelUtil,
+                    cacheData, writableWorkbook, flag);
         }
         if(1 < deviceTotalRecords){
-            setExcelToDevice(deviceSheet, deviceTotalRecords, excelUtil, cacheData, writableWorkbook);
+            failureDeviceRecords = setExcelToDevice(deviceSheet, deviceTotalRecords, excelUtil, 
+                    cacheData, writableWorkbook, flag);
         }
         if(1 < softwareTotalRecords){
-            setExcelToSoftware(softwareSheet, softwareTotalRecords, excelUtil, cacheData, writableWorkbook);
+            failureSoftwareRecords = setExcelToSoftware(softwareSheet, softwareTotalRecords, excelUtil, 
+                    cacheData, writableWorkbook, flag);
         }
         if(1 < otherAssetTotalRecords){
-            setExcelToOtherAsset(otherAssetsSheet, otherAssetTotalRecords, excelUtil, cacheData, writableWorkbook);
+            failureOtherAssetRecords = setExcelToOtherAsset(otherAssetsSheet, otherAssetTotalRecords, 
+                    excelUtil, cacheData, writableWorkbook, flag);
         }
+        
+        failureRecords = failureMachineRecords + failureMonitorRecords + failureDeviceRecords + 
+                failureSoftwareRecords + failureOtherAssetRecords;
+        successRecords = allImportRecords - failureRecords;
+        
+        Workbook [] workbooks = {workbookImport, workbookTemplate};
+        closeWorkbook(workbooks, writableWorkbook, failureRecords);
+        
+        ImportVo importVo =  new ImportVo();
+        
+        importVo.setAllImportRecords(allImportRecords);
+        importVo.setSuccessRecords(successRecords);
+        importVo.setFailureRecords(failureRecords);
+        
+        File failureFile = new File(outPutPath);
+        importVo.setFailureFileName(failureFile.getName());
+        
+        return importVo;
     }
     
     private void compareCellTitle(Cell[] template, Cell[] upload, String compareType) throws ExcelException{
         
-        if(template.length != upload.length + 1){
+        if(template.length != upload.length){
             throw new ExcelException("errorCode", compareType + " type Title not match!");
         }
         for(int i = 0; i < upload.length; i++){
-            if( ! template[i + 1].getContents().equals(upload[i].getContents())){
+            if( ! template[i].getContents().equals(upload[i].getContents())){
                 throw new ExcelException("errorCode", compareType + " type Title not match!");
             }
          }
     }
     
     @SuppressWarnings("unchecked")
-    private boolean setExcelToAsset(Cell[] currentRowCells, Asset asset,
-            Map<String, Object> cacheData) throws ExcelException{
+    private ImportVo setExcelToAsset(Cell[] currentRowCells,Map<String, Object> cacheData,
+            String flag) throws ExcelException{
         
         boolean isErrorRecorde = Boolean.FALSE;
+        Asset asset = new Asset();
         
         Map<String, String> remoteEmployees = (Map<String, String>) cacheData.get("remoteEmployees");
         Map<String, User> localEmployees = (Map<String, User>) cacheData.get("localEmployees");
@@ -863,7 +902,26 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         Map<String, String> remoteProjects = (Map<String, String>) cacheData.get("remoteProjects");
         Map<String, Location> localLocations = (Map<String, Location>) cacheData.get("localLocations");
         
-        asset.setAssetId(generateAssetId(assetDao.getTotalCount(Asset.class)));
+        if(Constant.CREATE.equals(flag)){
+            if(null != currentRowCells[0].getContents() && !"".equals(currentRowCells[0].getContents())){
+                isErrorRecorde = Boolean.TRUE;
+                asset.setAssetId(currentRowCells[0].getContents());
+            }else{
+                asset.setAssetId(generateAssetId(assetDao.getTotalCount(Asset.class)));
+            }
+        }else{
+            if(null == currentRowCells[0].getContents() || "".equals(currentRowCells[0].getContents())){
+                isErrorRecorde = Boolean.TRUE;
+            }else{
+                asset = assetDao.getByAssetId(currentRowCells[0].getContents());
+                
+                if(null == asset){
+                    isErrorRecorde = Boolean.TRUE;
+                    asset.setAssetId(currentRowCells[0].getContents());
+                }
+            }
+            
+        }
         
         if("".equals(currentRowCells[1].getContents()) || null == currentRowCells[1].getContents()){
             isErrorRecorde = Boolean.TRUE;
@@ -871,17 +929,17 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         asset.setAssetName(currentRowCells[1].getContents());
         
         StatusEnum [] status = StatusEnum.values();
-        boolean isNotRightStatu = Boolean.FALSE;
+        boolean isRightStatu = Boolean.FALSE;
         
         for(StatusEnum statu : status){
-           if(! statu.toString().equals(currentRowCells[2].getContents())){
-               isNotRightStatu = Boolean.TRUE;
+           if(statu.toString().equals(currentRowCells[2].getContents())){
+               isRightStatu = Boolean.TRUE;
                break;
            }
         }
         
         if("".equals(currentRowCells[2].getContents()) || null == currentRowCells[2].getContents() ||
-                isNotRightStatu){
+                !isRightStatu){
             isErrorRecorde = Boolean.TRUE;
         }
         asset.setStatus(currentRowCells[2].getContents());
@@ -889,7 +947,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
 
         User user = new User();
         
-        if("".equals(currentRowCells[3].getContents()) || null == currentRowCells[3].getContents()){
+        if("".equals(currentRowCells[3].getContents()) || null == currentRowCells[2].getContents()){
             isErrorRecorde = Boolean.TRUE;
         }else {
             if(localEmployees.containsKey(currentRowCells[3].getContents())){
@@ -901,7 +959,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             }else{
                 isErrorRecorde = Boolean.TRUE;
                 user.setUserName(currentRowCells[3].getContents());
-                logger.info("The " + currentRowCells[5].getContents() + " user is not exsit in the IAP");
+                logger.info("The " + currentRowCells[3].getContents() + " user is not exsit in the IAP");
             }
         }
         asset.setUser(user);
@@ -909,7 +967,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         
         Customer customer = new Customer();
         
-        if("".equals(currentRowCells[5].getContents()) || null == currentRowCells[5].getContents()){
+        if("".equals(currentRowCells[5].getContents()) || null == currentRowCells[4].getContents()){
             isErrorRecorde = Boolean.TRUE;
         }else{
             if(localCustomers.containsKey(currentRowCells[5].getContents())){
@@ -945,18 +1003,22 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         asset.setProject(project);
         
         AssetTypeEnum [] assetTypes = AssetTypeEnum.values();
-        boolean isNotRightType = Boolean.FALSE;
+        boolean isRightType = Boolean.FALSE;
         
         for(AssetTypeEnum assetType : assetTypes){
-           if(! assetType.toString().equals(currentRowCells[7].getContents())){
-               isNotRightType = Boolean.TRUE;
+           if(assetType.toString().equals(currentRowCells[7].getContents())){
+               isRightType = Boolean.TRUE;
                break;
            }
         }
         
-        if("".equals(currentRowCells[2].getContents()) || null == currentRowCells[2].getContents() ||
-                isNotRightType){
+        if("".equals(currentRowCells[7].getContents()) || null == currentRowCells[7].getContents() ||
+                !isRightType){
             isErrorRecorde = Boolean.TRUE;
+        }else{
+            if(!currentRowCells[7].getContents().equals(asset.getType())){
+                isErrorRecorde = Boolean.TRUE;
+            }
         }
         asset.setType(currentRowCells[7].getContents());
         asset.setBarCode(currentRowCells[8].getContents());
@@ -1014,26 +1076,33 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         asset.setVendor(currentRowCells[19].getContents());
         asset.setWarrantyTime(UTCTimeUtil.formatStringToDate(currentRowCells[20].getContents()));
         
-        return isErrorRecorde;
+        ImportVo importVo = new ImportVo();
+        importVo.setErrorRecorde(isErrorRecorde);
+        importVo.setAsset(asset);
+        
+        return importVo;
     }
     
-    private void setExcelToMachine(Sheet machineSheet, int machineTotalRecords,
-            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook) 
-                    throws ExcelException{
+    private int setExcelToMachine(Sheet machineSheet, int machineTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook,
+            String flag) throws ExcelException{
         
-        Asset asset = new Asset();
-//        List<Machine> machines = new ArrayList<Machine>();
+        int failureRecords = 0;
         
         for(int i = 1; i < machineTotalRecords; i++){
             Cell[] currentRowCells = excelUtil.getRows(machineSheet, i);
-            
             Machine machine = new Machine();
             
-            boolean isErrorRecorde = setExcelToAsset(currentRowCells, asset, cacheData);
+            ImportVo importVo = setExcelToAsset(currentRowCells, cacheData, flag);
             boolean emptySubtype = Boolean.FALSE;
             
             if(null == currentRowCells[21].getContents() || "".equals(currentRowCells[21].getContents())){
                 emptySubtype = Boolean.TRUE;
+            }
+            if(Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde() && !emptySubtype && 
+                    AssetTypeEnum.MACHINE.toString().equals(importVo.getAsset().getType())){
+                
+                machine = machineService.getByAssetId(importVo.getAsset().getId());
             }
             
             machine.setSubtype(currentRowCells[21].getContents());
@@ -1041,166 +1110,215 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             machine.setAddress(currentRowCells[23].getContents());
             machine.setConfiguration(currentRowCells[24].getContents());
             
-            if(isErrorRecorde || emptySubtype){
-                AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
-//                assetTemplateParser.fillOneCell(c, r, value, ws);
-                setErrorCommonAsset();
+            if(importVo.isErrorRecorde() || emptySubtype || 
+                    !AssetTypeEnum.MACHINE.toString().equals(importVo.getAsset().getType())){
+                
+                WritableSheet sheet = writableWorkbook.getSheet("Machine");
+                int errorRecords = excelUtil.getRows(sheet);
+                int column = setErrorCommonAsset(importVo.getAsset(), sheet, errorRecords);
+                sheet = setErrorMachine(machine, sheet, column, errorRecords);
+                failureRecords++;
             } else{
-                Asset newAsset = assetDao.save(asset);
-//                Machine machine = machines.get(i);
-                machine.setAsset(asset);
-                machineService.saveMachine(machine);
+                if(Constant.CREATE.equals(flag)){
+                    Asset newAsset = assetDao.save(importVo.getAsset());
+                    machine.setAsset(newAsset);
+                    machineService.saveMachine(machine);
+                }else{
+                    Asset newAsset = assetDao.update(importVo.getAsset());
+                    machine.setAsset(newAsset);
+                    machineService.updateMachine(machine);
+                }
+                
             }
-//            machines.add(machine);
         }
-//        if((assets.size() > 0) && (machines.size() > 0) && (assets.size() == machines.size())){
-//            for(int i = 0; i < assets.size(); i++){
-//                Asset asset = assetDao.save(assets.get(i));
-//                Machine machine = machines.get(i);
-//                machine.setAsset(asset);
-//                machineService.saveMachine(machine);
-//            }
-//            
-//        }else{
-//          //TODO cheng error code
-//            throw new ExcelException("errorcode", "setExcelToMachine error!");
-//        }
+        return failureRecords;
     }
     
-    private void setExcelToMonitor(Sheet monitorSheet, int monitorTotalRecords,
-            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook)
-                    throws ExcelException{
+    private int setExcelToMonitor(Sheet monitorSheet, int monitorTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook,
+            String flag) throws ExcelException{
         
-        Asset asset = new Asset();
-        List<Monitor> monitors = new ArrayList<Monitor>();
+        int failureRecords = 0;
         
         for(int i = 1; i < monitorTotalRecords; i++){
             Cell[] currentRowCells = excelUtil.getRows(monitorSheet, i);
             
-            setExcelToAsset(currentRowCells, asset, cacheData);
+            ImportVo importVo = setExcelToAsset(currentRowCells, cacheData, flag);
             Monitor monitor = new Monitor();
+            
+            if(Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde() && 
+                    AssetTypeEnum.MONITOR.toString().equals(importVo.getAsset().getType())){
+                
+                monitor = monitorService.getByAssetId(importVo.getAsset().getId());
+            }
             
             monitor.setSize(currentRowCells[21].getContents());
             monitor.setDetail(currentRowCells[22].getContents());
             
-            monitors.add(monitor);
-        }
-/*        if((assets.size() > 0) && (monitors.size() > 0) && (assets.size() == monitors.size())){
-            for(int i = 0; i < assets.size(); i++){
-                Asset asset = assetDao.save(assets.get(i));
-                Monitor monitor = monitors.get(i);
-                monitor.setAsset(asset);
-                monitorService.saveMonitor(monitor);
+            if(importVo.isErrorRecorde() || !AssetTypeEnum.MONITOR.toString()
+                    .equals(importVo.getAsset().getType())){
+                WritableSheet sheet = writableWorkbook.getSheet("Monitor");
+                int errorRecords = excelUtil.getRows(sheet);
+                int column = setErrorCommonAsset(importVo.getAsset(), sheet, errorRecords);
+                sheet = setErrorMonitor(monitor, sheet, column, errorRecords);
+                failureRecords++;
+            }else{
+                if(Constant.CREATE.equals(flag)){
+                    Asset newAsset = assetDao.save(importVo.getAsset());
+                    monitor.setAsset(newAsset);
+                    monitorService.saveMonitor(monitor);
+                }else{
+                    Asset newAsset = assetDao.update(importVo.getAsset());
+                    monitor.setAsset(newAsset);
+                    monitorService.updateMonitor(monitor);
+                }
+                
             }
-        }else{
-          //TODO cheng error code
-            throw new ExcelException("errorcode", "setExcelToMonitor error!");
-        }*/
+        }
+        return failureRecords;
     }
     
-    private void setExcelToDevice(Sheet deviceSheet, int deviceTotalRecords,
-            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook) 
-                    throws ExcelException{
+    private int setExcelToDevice(Sheet deviceSheet, int deviceTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook,
+            String flag) throws ExcelException{
         
-        Asset asset = new Asset();
-        List<Device> devices = new ArrayList<Device>();
-        List<DeviceSubtype> deviceSubtypes = new ArrayList<DeviceSubtype>();
+        int failureRecords = 0;
         
         for(int i = 1; i < deviceTotalRecords; i++){
             Cell[] currentRowCells = excelUtil.getRows(deviceSheet, i);
             
-            setExcelToAsset(currentRowCells, asset, cacheData);
+            ImportVo importVo = setExcelToAsset(currentRowCells, cacheData, flag);
             Device device = new Device();
-            
             DeviceSubtype deviceSubtype = new DeviceSubtype();
+            
+            if(Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde() && 
+                    AssetTypeEnum.DEVICE.toString().equals(importVo.getAsset().getType())){
+                
+                device = deviceService.getByAssetId(importVo.getAsset().getId());
+                deviceSubtype = device.getDeviceSubtype();
+            }
+            
             deviceSubtype.setSubtypeName(currentRowCells[21].getContents());
             device.setConfiguration(currentRowCells[22].getContents());
             
-            deviceSubtypes.add(deviceSubtype);
-            devices.add(device);
-        }
-/*        if((assets.size() > 0) && (devices.size() > 0) && (deviceSubtypes.size() > 0)
-                && (assets.size() == devices.size()) && (assets.size() == deviceSubtypes.size())){
-            
-            for(int i = 0; i < assets.size(); i++){
-                Asset asset = assetDao.save(assets.get(i));
-                Device device = devices.get(i);
-                DeviceSubtype deviceSubtype = deviceSubtypes.get(i);
-                device.setAsset(asset);
-                device.setDeviceSubtype(deviceSubtype);
-                deviceService.saveDevice(device);
+            if(importVo.isErrorRecorde() || !AssetTypeEnum.DEVICE.toString()
+                    .equals(importVo.getAsset().getType())){
+                WritableSheet sheet = writableWorkbook.getSheet("Device");
+                int errorRecords = excelUtil.getRows(sheet);
+                int column = setErrorCommonAsset(importVo.getAsset(), sheet, errorRecords);
+                sheet = setErrorDevice(device, sheet, column, errorRecords);
+                failureRecords++;
+            }else{
+                if(Constant.CREATE.equals(flag)){
+                    Asset newAsset = assetDao.save(importVo.getAsset());
+                    device.setAsset(newAsset);
+                    device.setDeviceSubtype(deviceSubtype);
+                    deviceService.saveDevice(device);
+                }else{
+                    Asset newAsset = assetDao.update(importVo.getAsset());
+                    device.setAsset(newAsset);
+                    device.setDeviceSubtype(deviceSubtype);
+                    deviceService.updateDevice(device);
+                }
+                
             }
-            
-        }else{
-          //TODO cheng error code
-            throw new ExcelException("errorcode", "setExcelToDevice error!");
-        }*/
+        }
+        return failureRecords;
     }
     
-    private void setExcelToSoftware(Sheet softwareSheet, int softwareTotalRecords,
-            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook)
-                    throws ExcelException{
+    private int setExcelToSoftware(Sheet softwareSheet, int softwareTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook,
+            String flag) throws ExcelException{
         
-        Asset asset = new Asset();
-        List<Software> softwares = new ArrayList<Software>();
+        int failureRecords = 0;
         
         for(int i = 1; i < softwareTotalRecords; i++){
             Cell[] currentRowCells = excelUtil.getRows(softwareSheet, i);
             
             Software software = new Software();
-            setExcelToAsset(currentRowCells, asset, cacheData);
+            ImportVo importVo = setExcelToAsset(currentRowCells, cacheData, flag);
+            
+            if(Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde() && 
+                    AssetTypeEnum.SOFTWARE.toString().equals(importVo.getAsset().getType())){
+                
+                software = importVo.getAsset().getSoftware();
+            }
             
             software.setVersion(currentRowCells[21].getContents());
             software.setLicenseKey(currentRowCells[22].getContents());
+            //TODO check whether the right time format
             software.setSoftwareExpiredTime(UTCTimeUtil.formatStringToDate(currentRowCells[23].getContents()));
-            software.setMaxUseNum(Integer.valueOf(currentRowCells[24].getContents()));
+            
+            boolean isNum = currentRowCells[24].getContents().matches("[0-9]+"); 
+            
+            if(isNum){
+                software.setMaxUseNum(Integer.valueOf(currentRowCells[24].getContents()));
+            }else{
+                importVo.setErrorRecorde(Boolean.TRUE);
+            }
             software.setAdditionalInfo(currentRowCells[25].getContents());
             
-            softwares.add(software);
-        }
-/*        if((assets.size() > 0) && (softwares.size() > 0) && (assets.size() == softwares.size())){
-            
-            for(int i = 0; i < assets.size(); i++){
-                Asset asset = assets.get(i);
-                Software software = softwares.get(i);
-                softwareService.saveSoftware(software);
-                asset.setSoftware(software);
-                assetDao.save(asset);
+            if(importVo.isErrorRecorde() || !AssetTypeEnum.SOFTWARE.toString().equals(importVo.getAsset().getType())){
+                WritableSheet sheet = writableWorkbook.getSheet("Software");
+                int errorRecords = excelUtil.getRows(sheet);
+                int column = setErrorCommonAsset(importVo.getAsset(), sheet, errorRecords);
+                sheet = setErrorSoftware(software, sheet, column, errorRecords,
+                        currentRowCells[24].getContents());
+                failureRecords++;
+            }else{
+                if(Constant.CREATE.equals(flag)){
+                    softwareService.saveSoftware(software);
+                    importVo.getAsset().setSoftware(software);
+                    assetDao.save(importVo.getAsset());
+                }else{
+                    softwareService.updateSoftware(software);
+                    importVo.getAsset().setSoftware(software);
+                    assetDao.update(importVo.getAsset());
+                }
             }
-        }else{
-          //TODO cheng error code
-            throw new ExcelException("errorcode", "setExcelToSoftware error!");
-        }*/
+        }
+        return failureRecords;
     }
     
-    private void setExcelToOtherAsset(Sheet otherAssetsSheet, int otherAssetTotalRecords,
-            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook) 
-                    throws ExcelException{
+    private int setExcelToOtherAsset(Sheet otherAssetsSheet, int otherAssetTotalRecords,
+            ExcelUtil excelUtil, Map<String, Object> cacheData, WritableWorkbook writableWorkbook,
+            String flag) throws ExcelException{
         
-        Asset asset = new Asset();
-        List<OtherAssets> otherAssets = new ArrayList<OtherAssets>();
+        int failureRecords = 0;
         
         for(int i = 1; i < otherAssetTotalRecords; i++){
             Cell[] currentRowCells = excelUtil.getRows(otherAssetsSheet, i);
             
-            setExcelToAsset(currentRowCells, asset, cacheData);
+            ImportVo importVo = setExcelToAsset(currentRowCells, cacheData, flag);
             OtherAssets otherAsset = new OtherAssets();
             
-            otherAsset.setDetail(currentRowCells[21].getContents());
-            otherAssets.add(otherAsset);
-        }
-        /*if((assets.size() > 0) && (otherAssets.size() > 0) && (assets.size() == otherAssets.size())){
-            
-            for(int i = 0; i < assets.size(); i++){
-                Asset asset = assetDao.save(assets.get(i));
-                OtherAssets otherAsset = otherAssets.get(i);
-                otherAsset.setAsset(asset);
-                otherAssetsService.saveOtherAssets(otherAsset);
+            if(Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde() && 
+                    AssetTypeEnum.OTHERASSETS.toString().equals(importVo.getAsset().getType())){
+                
+                otherAsset = otherAssetsService.getByAssetId(importVo.getAsset().getId());
             }
-        }else{
-            //TODO cheng error code
-            throw new ExcelException("errorcode", "setExcelToOtherAsset error!");
-        }*/
+            
+            otherAsset.setDetail(currentRowCells[21].getContents());
+            
+            if(importVo.isErrorRecorde() || AssetTypeEnum.OTHERASSETS.toString().equals(importVo.getAsset().getType())){
+                WritableSheet sheet = writableWorkbook.getSheet("OtherAsset");
+                int errorRecords = excelUtil.getRows(sheet);
+                int column = setErrorCommonAsset(importVo.getAsset(), sheet, errorRecords);
+                sheet = setErrorOtherAsset(otherAsset, sheet, column, errorRecords);
+                failureRecords++;
+            }else{
+                if(Constant.CREATE.equals(flag)){
+                    Asset newAsset = assetDao.save(importVo.getAsset());
+                    otherAsset.setAsset(newAsset);
+                    otherAssetsService.saveOtherAssets(otherAsset);
+                }else{
+                    Asset newAsset = assetDao.update(importVo.getAsset());
+                    otherAsset.setAsset(newAsset);
+                    otherAssetsService.updateOtherAssets(otherAsset);
+                }
+            }
+        }
+        return failureRecords;
     }
     
     public static String generateAssetId(int count) {
@@ -1210,24 +1328,113 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         return assetId;
     }
     
-    private void setErrorCommonAsset(){
+    private int setErrorCommonAsset(Asset asset, WritableSheet sheet, int row) throws ExcelException{
         
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        int column = 1;
+
+        assetTemplateParser.fillOneCell(column++, row, asset.getAssetName(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getStatus(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getUser().getUserName(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getKeeper(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getCustomer().getCustomerName(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getProject().getProjectName(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getType(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getBarCode(), sheet);
+        
+        if(null != asset.getLocation().getRoom() || !"".equals(asset.getLocation().getRoom())){
+            assetTemplateParser.fillOneCell(column++, row, asset.getLocation().getSite() + Constant.SPLIT_UNDERLINE 
+                    + asset.getLocation().getRoom(), sheet);
+        }else{
+            assetTemplateParser.fillOneCell(column++, row, asset.getLocation().getSite(), sheet);
+        }
+        assetTemplateParser.fillOneCell(column++, row, asset.getManufacturer(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getOwnerShip(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getEntity(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getMemo(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.isFixed(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getSeriesNo(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getPoNo(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getCheckInTime(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getCheckOutTime(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getVendor(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, asset.getWarrantyTime(), sheet);
+        
+        return column;
     }
     
-    private void setErrorMachine(){
+    private WritableSheet setErrorMachine(Machine machine, WritableSheet sheet, int column, int row)
+            throws ExcelException{
         
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        
+        assetTemplateParser.fillOneCell(column++, row, machine.getSubtype(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, machine.getSpecification(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, machine.getAddress(), sheet);
+        assetTemplateParser.fillOneCell(column, row, machine.getConfiguration(), sheet);
+        
+        return sheet;
     }
     
-    private void setErrorMonitor(){
+    private WritableSheet setErrorMonitor(Monitor monitor, WritableSheet sheet, int column, int row)
+            throws ExcelException {
+        
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        
+        assetTemplateParser.fillOneCell(column++, row, monitor.getSize(), sheet);
+        assetTemplateParser.fillOneCell(column, row, monitor.getDetail(), sheet);
+        
+        return sheet;
+    }
+    private WritableSheet setErrorDevice(Device device, WritableSheet sheet, int column, int row)
+            throws ExcelException{
+        
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        
+        assetTemplateParser.fillOneCell(column++, row, device.getDeviceSubtype().getSubtypeName(), sheet);
+        assetTemplateParser.fillOneCell(column, row, device.getConfiguration(), sheet);
+        
+        return sheet;
         
     }
-    private void setErrorDevice(){
+    private WritableSheet setErrorSoftware(Software software, WritableSheet sheet, int column, int row,
+            String maxUseNum) 
+            throws ExcelException{
         
-    }
-    private void setErrorSoftware(){
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
         
+        assetTemplateParser.fillOneCell(column++, row, software.getVersion(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, software.getLicenseKey(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, software.getSoftwareExpiredTime(), sheet);
+        assetTemplateParser.fillOneCell(column++, row, maxUseNum, sheet);
+        assetTemplateParser.fillOneCell(column, row, software.getAdditionalInfo(), sheet);
+        
+        return sheet;
     }
-    private void setErrorOtherAsset(){
+    private WritableSheet setErrorOtherAsset(OtherAssets otherAssets, WritableSheet sheet, int column, int row)
+            throws ExcelException{
+        
+        AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+        
+        assetTemplateParser.fillOneCell(column, row, otherAssets.getDetail(), sheet);
+        
+        return sheet;
+    }
+    
+    private void closeWorkbook(Workbook [] workbooks, WritableWorkbook writableWorkbook, int failureRecords)
+            throws ExcelException{
+        
+        for(Workbook workbook : workbooks){
+            workbook.close();
+        }
+        try {
+            if(0 < failureRecords){
+                writableWorkbook.write();
+            }
+            writableWorkbook.close();
+        } catch (Exception e) {
+            throw new ExcelException("Exception when closing WritableWorkbook: " + e);
+        }
         
     }
             

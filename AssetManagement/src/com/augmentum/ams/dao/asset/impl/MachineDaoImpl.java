@@ -10,4 +10,12 @@ import com.augmentum.ams.model.asset.Machine;
 @Repository("machineDao")
 public class MachineDaoImpl extends BaseDaoImpl<Machine> implements MachineDao{
 
+    @Override
+    public Machine getByAssetId(String assetId) {
+
+        String hql = "from Machine where asset.id = ?";
+        
+        return super.getUnique(hql, assetId);
+    }
+
 }

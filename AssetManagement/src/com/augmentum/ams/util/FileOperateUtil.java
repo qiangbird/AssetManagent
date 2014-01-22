@@ -5,6 +5,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;  
 import java.io.FileInputStream;  
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;  
 import javax.servlet.http.HttpServletResponse;  
 
@@ -104,4 +106,18 @@ public class FileOperateUtil {
         }
         return targetFile;  
     }  
+    
+    public static String getBasePath() {
+        
+        String url = Thread.currentThread().getContextClassLoader().getResource("/").getPath();
+        String basePath = url.replaceFirst("/", "");
+        String decodedPath = null;
+        try {
+            decodedPath = java.net.URLDecoder.decode(basePath, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Decode path error, path = " + basePath, e);
+        }
+        
+        return decodedPath;
+    }
 }  

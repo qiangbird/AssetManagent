@@ -29,4 +29,11 @@ public interface MonitorService {
 	 * @return
 	 */
 	Monitor getMonitorById(String id);
+	
+	/**
+	 * @author John.Li
+	 * @param id
+	 * @return
+	 */
+    Monitor getByAssetId(String id);
 }

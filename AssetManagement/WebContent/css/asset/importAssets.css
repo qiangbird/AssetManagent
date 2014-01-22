@@ -7,6 +7,8 @@
     width: 940px;
     background: url("../../img/IMG_UpShadow_1000x5.png") repeat-x;
     overflow:hidden;
+    margin-left: auto;
+	margin-right: auto;
 }
 
 .operate-panel {
@@ -31,11 +33,12 @@
 }
 
 .pro-first p {
-    width: 150px;
+    width: 180px;
     height: 30px;
     line-height: 30px;
     position: relative;
     float: left;
+    margin: 0px;
 }
 .pro-first p label {
     padding: 10px;
@@ -57,6 +60,7 @@
 }
 
 .pro-second {
+	clear: both;
 	position: relative;
 }
 .pro-second input {
@@ -67,7 +71,7 @@
 	left:148px;
 }
 .pro-second .import-text {
-	width: 290px;
+	width: 300px;
 	padding: 2px 0 3px 10px;
 	color: #555555;
 	font-family: Arial;
@@ -91,35 +95,29 @@
 	z-index: 4;
 	background: url("../../img/IPX_300x30_Empty.png") no-repeat;
 }
-.pro-second .import-button {
-	width: 90px;
-	font-size: 18px;
-	border: 0;
-}
-.pro-second .upload-button {
-	left: 462px;
-	color: #FFFFFF;
-	background: url("../../img/button/BTN_90x30_Primary-Action_Normal.png") no-repeat;
-}
+
 .pro-second .start-button {
-	left: 574px;
-	color: #BBBBBB;
-	background: url("../../img/button/BTN_90x30_Secondary_Action_Disabled.png") no-repeat;
+	background: url("../../image/common/BTN_Cancel_80x30.png") no-repeat;
+	color: #555555;
+	float: left;
+	margin-left: 430px;
+	font-family: arial;
+	font-size: 14px;
+	font-weight: bold;
+	width: 80px;
+	height: 30px;
 	cursor: pointer;
 }
+
+.pro-second .start-button:HOVER {
+	background: url("../../image/common/BTN_Cancel_Hover_80x30.png")
+		no-repeat;
+}
+
 .pro-third {
 	height: 250px;
 }
-/*********************************************************
-.pro-third table {
-	width: 300px;
-	height: 60px;
-}
-.pro-third table td {
-	text-align: center;
-	width: 100px;
-}
-*********************************************************/
+
 .pro-third p {
 	height: 30px;
 	width: 300px;
@@ -218,28 +216,29 @@
     width: auto;
     height: 30px;
 }
-/***
-#tips{
-background-image: url("img/help.png");
-width:16px;
-height:16px;
-position:absolute;
-left:673px;
-cursor: pointer;
-}
-#helpTips{
-color:black;
-display:none;
-width: 203px;
-height: 86px;
-border: 1px solid #BBB;
-background-color:#F0F0F0;
-position: absolute;
-left: 461px;
-top: 64px;
-padding: 17px;
-}
-***/
+
 .tips p {
 color:red;
+}
+
+#uploadButon {
+	background: url("../../image/common/BTN_Create_80x30.png") no-repeat;
+	color: #FFFFFF;
+	position: absolute;
+	font-family: arial;
+	font-size: 14px;
+	font-weight: bold;
+	width: 80px;
+	height: 30px;
+	margin-left: 325px;
+}
+
+#uploadButon:HOVER {
+	background: url("../../image/common/BTN_Create_Hover_80x30.png")
+		no-repeat;
+	cursor: pointer;
+}
+
+#file{
+	display: none;
 }

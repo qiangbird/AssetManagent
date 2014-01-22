@@ -28,4 +28,10 @@ public class MonitorServiceImpl implements MonitorService {
         return monitorDao.get(Monitor.class, id);
     }
 
+    @Override
+    public Monitor getByAssetId(String assetId) {
+        
+        return monitorDao.getByAssetId(assetId);
+    }
+
 }

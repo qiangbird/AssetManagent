@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import jxl.Workbook;
 import jxl.format.CellFormat;
 import jxl.write.Label;
@@ -15,14 +13,16 @@ import jxl.write.Number;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
+import org.apache.log4j.Logger;
+
 import com.augmentum.ams.exception.ExcelException;
+import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.UTCTimeUtil;
 
 public abstract class ExcelParser {
     
     private Logger logger = Logger.getLogger(ExcelParser.class);
     public static final String EXCEL_FILE_TYPE = ".xls";
-    private static final String CONFIG_TEMPLATES_PATH = "template/";
 
     protected Workbook workbook;
     protected WritableWorkbook writableWorkbook;
@@ -66,12 +66,12 @@ public abstract class ExcelParser {
     }
 
     public String getTemplatePath(String templateName) {
-        templatePath =  getBasePath() + CONFIG_TEMPLATES_PATH + templateName;
+        templatePath =  getBasePath() + Constant.CONFIG_TEMPLATES_PATH + templateName;
         return templatePath;
     }
 
     public String getOutputPath(String... outputName) {
-        StringBuilder builder = new StringBuilder(getBasePath() + CONFIG_TEMPLATES_PATH);
+        StringBuilder builder = new StringBuilder(getBasePath() + Constant.CONFIG_TEMPLATES_PATH);
 
         for (int i = 0, n = outputName.length; i < n; i++) {
             builder.append(outputName[i]);

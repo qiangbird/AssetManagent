@@ -5,4 +5,11 @@ import com.augmentum.ams.model.asset.Monitor;
 
 public interface MonitorDao extends BaseDao<Monitor>{
 
+    /**
+     * @author John.Li
+     * @param assetId
+     * @return
+     */
+    Monitor getByAssetId(String assetId);
+
 }
