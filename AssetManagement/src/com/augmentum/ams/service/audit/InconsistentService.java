@@ -1,11 +1,10 @@
 package com.augmentum.ams.service.audit;
 
-import java.util.Set;
-
 import net.sf.json.JSONArray;
 
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -27,11 +26,10 @@ public interface InconsistentService {
             int iDisplayLength);
     
     /**
-     * find inconsistent asset by file name
-     * @param fileName
+     * @author Geoffrey.Zhao
      * @return
      */
-    Set<String> findInconsistentAssetByFileName(String fileName);
+    Page<Inconsistent> findInconsistentBarcode(SearchCondition condition) throws BaseException;
 
     /**
      * @author Geoffrey.Zhao

@@ -1,7 +1,6 @@
 package com.augmentum.ams.service.audit.impl;
 
 import java.util.List;
-import java.util.Set;
 
 import net.sf.json.JSONArray;
 
@@ -17,6 +16,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -48,290 +48,405 @@ import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
 @Service("inconsistentService")
-public class InconsistentServciceImpl implements InconsistentService{
+public class InconsistentServciceImpl implements InconsistentService {
 
-    @Autowired
-    private InconsistentDao inconsistentDao;
-    
-    @Autowired
-    private AuditFileDao auditFileDao;
-    
-    @Autowired
-    protected SessionFactory sessionFactory;
-    
-    @Autowired
-    private CustomizedViewItemService customizedViewItemService;
-    
-    @Autowired
-    private BaseHibernateDao<Asset> baseHibernateDao;
-    
-    private Logger logger = Logger.getLogger(InconsistentServciceImpl.class);
-    
-    @Override
-    public int getInconsistentAssetsCount(String auditFileName) {
-        
-        AuditFile auditFile = auditFileDao.getAuditFileByFileName(auditFileName);
-        
-        if(null == auditFile){
-            return 0;
-        }
-        
-        return inconsistentDao.findInconsistentAssetsByFileId(auditFile.getId()).size();
-    }
+	@Autowired
+	private InconsistentDao inconsistentDao;
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.service.audit.InconsistentService#findInconsistentAssets(java.lang.String, int, int)
-     */
-    @Override
-    public JSONArray findInconsistentAssets(String auditFileName, int iDisplayStart,
-            int iDisplayLength) {
-        
-        AuditFile auditFile = auditFileDao.getAuditFileByFileName(auditFileName);
-        JSONArray arrays = new JSONArray();
-        
-        if(null == auditFile){
-            return arrays;
-        }
-        List<Inconsistent> inconsistentList = inconsistentDao.getInconsistentByFileId(auditFile.getId(),
-                iDisplayStart, iDisplayLength);
-        
-        for (int i = 0; i < inconsistentList.size(); i++) {
-            JSONArray array = new JSONArray();
-            Inconsistent incon = inconsistentList.get(i);
+	@Autowired
+	private AuditFileDao auditFileDao;
 
-            if (incon.getAsset() != null) {
-                array.add(i + 1 + iDisplayStart);
-                if (incon.getAsset().getBarCode() == null) {
-                    array.add("");
-                } else {
-                    array.add(incon.getAsset().getBarCode());
-                }
-                array.add(incon.getAsset().getAssetName());
-                array.add(incon.getAsset().getType());
-            } else {
-                array.add(i + 1 + iDisplayStart);
-                array.add(incon.getBarCode());
-                array.add("");
-                array.add("");
-            }
-            arrays.add(array);
-        }
-        return arrays;
-    }
+	@Autowired
+	protected SessionFactory sessionFactory;
+
+	@Autowired
+	private CustomizedViewItemService customizedViewItemService;
+
+	@Autowired
+	private BaseHibernateDao<Asset> baseHibernateDao;
+
+	@Autowired
+	private BaseHibernateDao<Inconsistent> baseHibernateDaoIncons;
+
+	private Logger logger = Logger.getLogger(InconsistentServciceImpl.class);
 
 	@Override
-	public Set<String> findInconsistentAssetByFileName(String fileName) {
-		return inconsistentDao.findInconsistentAssetByFileName(fileName);
+	public int getInconsistentAssetsCount(String auditFileName) {
+
+		AuditFile auditFile = auditFileDao
+				.getAuditFileByFileName(auditFileName);
+
+		if (null == auditFile) {
+			return 0;
+		}
+
+		return inconsistentDao
+				.findInconsistentAssetsByFileId(auditFile.getId()).size();
 	}
 
-	
-	//TODO refine search code  ------------------------------------------------------------------------
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.augmentum.ams.service.audit.InconsistentService#findInconsistentAssets
+	 * (java.lang.String, int, int)
+	 */
+	@Override
+	public JSONArray findInconsistentAssets(String auditFileName,
+			int iDisplayStart, int iDisplayLength) {
+
+		JSONArray arrays = new JSONArray();
+
+		List<Inconsistent> inconsistentList = inconsistentDao
+				.findInconsistentList(auditFileName, iDisplayStart,
+						iDisplayLength);
+
+		for (int i = 0; i < inconsistentList.size(); i++) {
+			JSONArray array = new JSONArray();
+			Inconsistent incons = inconsistentList.get(i);
+
+			if (null != incons.getAsset()) {
+				array.add(i + 1 + iDisplayStart);
+				if (null == incons.getAsset().getBarCode()) {
+					array.add("");
+				} else {
+					array.add(incons.getAsset().getBarCode());
+				}
+				array.add(incons.getAsset().getAssetName());
+				array.add(incons.getAsset().getType());
+			} else {
+				array.add(i + 1 + iDisplayStart);
+				array.add(incons.getBarCode());
+				array.add("");
+				array.add("");
+			}
+			arrays.add(array);
+		}
+		return arrays;
+	}
+
+	// TODO refine search code
+	// ------------------------------------------------------------------------
 	@Override
 	public Page<Asset> findAssetForInconsistent(SearchCondition searchCondition)
 			throws BaseException {
-		
-		Set<String> assetIdList = findInconsistentAssetByFileName(searchCondition.getAuditFileName());
-		
-		String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
-        Occur[] clauses = new Occur[fieldNames.length];
 
-        for (int i = 0; i < fieldNames.length; i++) {
-            clauses[i] = Occur.SHOULD;
-        }
+		List<String> assetIdList = inconsistentDao.findInconsistentAssetByFileName(searchCondition
+				.getAuditFileName());
 
-        Session session = sessionFactory.openSession();
-        FullTextSession fullTextSession = Search.getFullTextSession(session);
-        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(
-                Asset.class).get();
+		String[] fieldNames = getSearchFieldNames(searchCondition
+				.getSearchFields());
+		Occur[] clauses = new Occur[fieldNames.length];
 
-        // create ordinary query, it contains search by keyword and field names
-        BooleanQuery query = new BooleanQuery();
+		for (int i = 0; i < fieldNames.length; i++) {
+			clauses[i] = Occur.SHOULD;
+		}
 
-        String keyWord = searchCondition.getKeyWord();
+		Session session = sessionFactory.openSession();
+		FullTextSession fullTextSession = Search.getFullTextSession(session);
+		QueryBuilder qb = fullTextSession.getSearchFactory()
+				.buildQueryBuilder().forEntity(Asset.class).get();
 
-        // if keyword is null or "", search condition is "*", it will search all
-        // the value based on some one field
-        if (StringUtils.isBlank(keyWord)) {
-            Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
-            query.add(defaultQuery, Occur.MUST);
-        } else {
+		// create ordinary query, it contains search by keyword and field names
+		BooleanQuery query = new BooleanQuery();
 
-            keyWord = FormatUtil.formatKeyword(keyWord);
+		String keyWord = searchCondition.getKeyWord();
 
-            // judge if keyword contains space, if yes, search keyword as a
-            // sentence
-            if (-1 != keyWord.indexOf(" ")) {
-                query = getSentenceQuery(qb, fieldNames, keyWord);
-            }
-            BooleanQuery bq = new BooleanQuery();
+		// if keyword is null or "", search condition is "*", it will search all
+		// the value based on some one field
+		if (StringUtils.isBlank(keyWord)) {
+			Query defaultQuery = new TermQuery(new Term("isExpired",
+					Boolean.FALSE.toString()));
+			query.add(defaultQuery, Occur.MUST);
+		} else {
 
-            Query parseQuery = null;
+			keyWord = FormatUtil.formatKeyword(keyWord);
 
-            try {
-                parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord, fieldNames,
-                        clauses, new IKAnalyzer());
-            } catch (ParseException e) {
-                logger.error("parse keyword error", e);
-            }
-            bq.add(parseQuery, Occur.SHOULD);
+			// judge if keyword contains space, if yes, search keyword as a
+			// sentence
+			if (-1 != keyWord.indexOf(" ")) {
+				query = getSentenceQuery(qb, fieldNames, keyWord);
+			}
+			BooleanQuery bq = new BooleanQuery();
 
-            for (int i = 0; i < fieldNames.length; i++) {
+			Query parseQuery = null;
 
-                Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
-                bq.add(keyWordPrefixQuery, Occur.SHOULD);
-            }
+			try {
+				parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30,
+						keyWord, fieldNames, clauses, new IKAnalyzer());
+			} catch (ParseException e) {
+				logger.error("parse keyword error", e);
+			}
+			bq.add(parseQuery, Occur.SHOULD);
 
-            query.add(bq, Occur.MUST);
-        }
+			for (int i = 0; i < fieldNames.length; i++) {
 
-        // create filter based on advanced search condition, it used for further
-        // filtering query result
-        BooleanQuery booleanQuery = new BooleanQuery();
-        
-        BooleanQuery bq = new BooleanQuery();
-        for (String s : assetIdList) {
-        	bq.add(new TermQuery(new Term("id", s)), Occur.SHOULD);
-        }
-        
-        booleanQuery.add(bq, Occur.MUST);
+				Query keyWordPrefixQuery = new PrefixQuery(new Term(
+						fieldNames[i], keyWord));
+				bq.add(keyWordPrefixQuery, Occur.SHOULD);
+			}
 
-        // If customizedViewId is not empty, only use the
-        // customizedViewItemQuery
-        if (null != searchCondition.getCustomizedViewId()
-                && !"".equals(searchCondition.getCustomizedViewId())) {
-            BooleanQuery customizedViewItemQuery = customizedViewItemService
-                    .getCustomizedViewItemQuery(searchCondition.getCustomizedViewId());
+			query.add(bq, Occur.MUST);
+		}
 
-            booleanQuery.add(customizedViewItemQuery, Occur.MUST);
-        } else {
-            BooleanQuery statusQuery = getStatusQuery(searchCondition.getAssetStatus());
-            BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
-            Query trq = getTimeRangeQuery(searchCondition.getFromTime(), searchCondition
-                    .getToTime());
+		// create filter based on advanced search condition, it used for further
+		// filtering query result
+		BooleanQuery booleanQuery = new BooleanQuery();
 
-            booleanQuery.add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
-                    Occur.MUST);
-            booleanQuery.add(statusQuery, Occur.MUST);
-            booleanQuery.add(typeQuery, Occur.MUST);
-            booleanQuery.add(trq, Occur.MUST);
-        }
-        QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
+		BooleanQuery bq = new BooleanQuery();
+		for (String s : assetIdList) {
+			bq.add(new TermQuery(new Term("id", s)), Occur.SHOULD);
+		}
 
-        // add entity associate
-        Criteria criteria = session.createCriteria(Asset.class)
-                .setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
-                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
+		booleanQuery.add(bq, Occur.MUST);
 
-        criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
-        criteria.add(Restrictions.in("id", assetIdList));
-        
-        Page<Asset> page = new Page<Asset>();
+		// If customizedViewId is not empty, only use the
+		// customizedViewItemQuery
+		if (null != searchCondition.getCustomizedViewId()
+				&& !"".equals(searchCondition.getCustomizedViewId())) {
+			BooleanQuery customizedViewItemQuery = customizedViewItemService
+					.getCustomizedViewItemQuery(searchCondition
+							.getCustomizedViewId());
 
-        // set page parameters, sort column, sort sign, page size, current page
-        // num
-        page.setPageSize(searchCondition.getPageSize());
-        page.setCurrentPage(searchCondition.getPageNum());
-        page.setSortOrder(searchCondition.getSortSign());
-        page.setSortColumn(transferSortName(searchCondition.getSortName()));
+			booleanQuery.add(customizedViewItemQuery, Occur.MUST);
+		} else {
+			BooleanQuery statusQuery = getStatusQuery(searchCondition
+					.getAssetStatus());
+			BooleanQuery typeQuery = getTypeQuery(searchCondition
+					.getAssetType());
+			Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
+					searchCondition.getToTime());
 
-        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
-                .setCriteriaQuery(criteria);
-        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
-        fullTextSession.close();
-        return page;
-    
+			booleanQuery.add(
+					new TermQuery(new Term("isExpired", Boolean.FALSE
+							.toString())), Occur.MUST);
+			booleanQuery.add(statusQuery, Occur.MUST);
+			booleanQuery.add(typeQuery, Occur.MUST);
+			booleanQuery.add(trq, Occur.MUST);
+		}
+		QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
+
+		// add entity associate
+		Criteria criteria = session.createCriteria(Asset.class)
+				.setFetchMode("user", FetchMode.JOIN)
+				.setFetchMode("customer", FetchMode.JOIN)
+				.setFetchMode("project", FetchMode.JOIN)
+				.setFetchMode("location", FetchMode.JOIN);
+
+		criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
+		criteria.add(Restrictions.in("id", assetIdList));
+
+		Page<Asset> page = new Page<Asset>();
+
+		// set page parameters, sort column, sort sign, page size, current page
+		// num
+		page.setPageSize(searchCondition.getPageSize());
+		page.setCurrentPage(searchCondition.getPageNum());
+		page.setSortOrder(searchCondition.getSortSign());
+		page.setSortColumn(transferSortName(searchCondition.getSortName()));
+
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
+				query, Asset.class).setCriteriaQuery(criteria);
+		page = baseHibernateDao.findByIndex(fullTextQuery, filter, page,
+				Asset.class);
+		fullTextSession.close();
+		return page;
+
 	}
-	
+
 	private String[] getSearchFieldNames(String searchConditions) {
-        String[] fieldNames = FormatUtil.splitString(searchConditions, Constant.SPLIT_COMMA);
+		String[] fieldNames = FormatUtil.splitString(searchConditions,
+				Constant.SPLIT_COMMA);
 
-        if (null == fieldNames || 0 == fieldNames.length) {
-            fieldNames = SearchFieldHelper.getAssetFields();
-        }
-        return fieldNames;
-    }
+		if (null == fieldNames || 0 == fieldNames.length) {
+			fieldNames = SearchFieldHelper.getAssetFields();
+		}
+		return fieldNames;
+	}
 
-    private BooleanQuery getSentenceQuery(QueryBuilder qb, String[] sentenceFields, String keyWord) {
-        BooleanQuery sentenceQuery = new BooleanQuery();
+	private BooleanQuery getSentenceQuery(QueryBuilder qb,
+			String[] sentenceFields, String keyWord) {
+		BooleanQuery sentenceQuery = new BooleanQuery();
 
-        for (int i = 0; i < sentenceFields.length; i++) {
-            Query query = qb.phrase().onField(sentenceFields[i]).sentence(keyWord).createQuery();
-            sentenceQuery.add(query, Occur.SHOULD);
-        }
-        return sentenceQuery;
-    }
+		for (int i = 0; i < sentenceFields.length; i++) {
+			Query query = qb.phrase().onField(sentenceFields[i])
+					.sentence(keyWord).createQuery();
+			sentenceQuery.add(query, Occur.SHOULD);
+		}
+		return sentenceQuery;
+	}
 
-    private BooleanQuery getStatusQuery(String status) {
-        String[] statusConditions;
-        BooleanQuery statusQuery = new BooleanQuery();
+	private BooleanQuery getStatusQuery(String status) {
+		String[] statusConditions;
+		BooleanQuery statusQuery = new BooleanQuery();
 
-        if (null == status || "".equals(status)) {
-            statusConditions = FormatUtil.splitString(SearchFieldHelper.getAssetStatus(),
-                    Constant.SPLIT_COMMA);
-        } else {
-            statusConditions = FormatUtil.splitString(status, Constant.SPLIT_COMMA);
-        }
+		if (null == status || "".equals(status)) {
+			statusConditions = FormatUtil.splitString(
+					SearchFieldHelper.getAssetStatus(), Constant.SPLIT_COMMA);
+		} else {
+			statusConditions = FormatUtil.splitString(status,
+					Constant.SPLIT_COMMA);
+		}
 
-        if (null != statusConditions && 0 < statusConditions.length) {
+		if (null != statusConditions && 0 < statusConditions.length) {
 
-            for (int i = 0; i < statusConditions.length; i++) {
-                statusQuery.add(new TermQuery(new Term("status", statusConditions[i])),
-                        Occur.SHOULD);
-            }
-        }
-        return statusQuery;
-    }
+			for (int i = 0; i < statusConditions.length; i++) {
+				statusQuery.add(new TermQuery(new Term("status",
+						statusConditions[i])), Occur.SHOULD);
+			}
+		}
+		return statusQuery;
+	}
 
-    private BooleanQuery getTypeQuery(String type) {
-        String[] typeConditions;
-        BooleanQuery typeQuery = new BooleanQuery();
+	private BooleanQuery getTypeQuery(String type) {
+		String[] typeConditions;
+		BooleanQuery typeQuery = new BooleanQuery();
 
-        if (null == type || "".equals(type)) {
-            typeConditions = FormatUtil.splitString(SearchFieldHelper.getAssetType(),
-                    Constant.SPLIT_COMMA);
-        } else {
-            typeConditions = FormatUtil.splitString(type, Constant.SPLIT_COMMA);
-        }
+		if (null == type || "".equals(type)) {
+			typeConditions = FormatUtil.splitString(
+					SearchFieldHelper.getAssetType(), Constant.SPLIT_COMMA);
+		} else {
+			typeConditions = FormatUtil.splitString(type, Constant.SPLIT_COMMA);
+		}
 
-        if (null != typeConditions && 0 < typeConditions.length) {
+		if (null != typeConditions && 0 < typeConditions.length) {
 
-            for (int i = 0; i < typeConditions.length; i++) {
-                typeQuery.add(new TermQuery(new Term("type", typeConditions[i])), Occur.SHOULD);
-            }
-        }
-        return typeQuery;
-    }
+			for (int i = 0; i < typeConditions.length; i++) {
+				typeQuery.add(
+						new TermQuery(new Term("type", typeConditions[i])),
+						Occur.SHOULD);
+			}
+		}
+		return typeQuery;
+	}
 
-    private Query getTimeRangeQuery(String fromTime, String toTime) {
-        boolean isNullFromTime = (null == fromTime || "".equals(fromTime));
-        boolean isNullToTime = (null == toTime || "".equals(toTime));
+	private Query getTimeRangeQuery(String fromTime, String toTime) {
+		boolean isNullFromTime = (null == fromTime || "".equals(fromTime));
+		boolean isNullToTime = (null == toTime || "".equals(toTime));
 
-        if (isNullFromTime && !isNullToTime) {
-            fromTime = Constant.SEARCH_MIN_DATE;
-            toTime = UTCTimeUtil.formatFilterTime(toTime);
-            return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
-        } else if (isNullToTime && !isNullFromTime) {
-            toTime = Constant.SEARCH_MAX_DATE;
-            fromTime = UTCTimeUtil.formatFilterTime(fromTime);
-            return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
-        } else if (!isNullFromTime && !isNullToTime) {
-            fromTime = UTCTimeUtil.formatFilterTime(fromTime);
-            toTime = UTCTimeUtil.formatFilterTime(toTime);
-            return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
-        } else {
-            return new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
-        }
-    }
-    
-    private String transferSortName(String sortName) {
+		if (isNullFromTime && !isNullToTime) {
+			fromTime = Constant.SEARCH_MIN_DATE;
+			toTime = UTCTimeUtil.formatFilterTime(toTime);
+			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
+					true);
+		} else if (isNullToTime && !isNullFromTime) {
+			toTime = Constant.SEARCH_MAX_DATE;
+			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
+					true);
+		} else if (!isNullFromTime && !isNullToTime) {
+			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+			toTime = UTCTimeUtil.formatFilterTime(toTime);
+			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
+					true);
+		} else {
+			return new TermQuery(
+					new Term("isExpired", Boolean.FALSE.toString()));
+		}
+	}
 
-        if ("userName".equals(sortName)) {
-            sortName = "user.userName";
-        }
-        return sortName;
-    }
-    
- // TODO search asset end --------------------------------------------------------------------
+	private String transferSortName(String sortName) {
 
-	
+		if ("userName".equals(sortName)) {
+			sortName = "user.userName";
+		}
+		return sortName;
+	}
+
+
+	// TODO search inconsistent barcode
+	@Override
+	public Page<Inconsistent> findInconsistentBarcode(
+			SearchCondition searchCondition) {
+
+		List<String> barcodeList = inconsistentDao
+				.findInconsistentBarcode(searchCondition.getAuditFileName());
+
+		String[] fieldNames = { "barcode" };
+		Occur[] clauses = new Occur[fieldNames.length];
+
+		for (int i = 0; i < fieldNames.length; i++) {
+			clauses[i] = Occur.SHOULD;
+		}
+
+		Session session = sessionFactory.openSession();
+		FullTextSession fullTextSession = Search.getFullTextSession(session);
+		QueryBuilder qb = fullTextSession.getSearchFactory()
+				.buildQueryBuilder().forEntity(Inconsistent.class).get();
+
+		// create ordinary query, it contains search by keyword and field names
+		BooleanQuery query = new BooleanQuery();
+
+		String keyWord = searchCondition.getKeyWord();
+
+		// if keyword is null or "", search condition is "*", it will search all
+		// the value based on some one field
+		if (StringUtils.isBlank(keyWord)) {
+			query.add(getDefaultQuery(barcodeList), Occur.MUST);
+		} else {
+
+			keyWord = FormatUtil.formatKeyword(keyWord);
+
+			// judge if keyword contains space, if yes, search keyword as a
+			// sentence
+			if (-1 != keyWord.indexOf(" ")) {
+				query = getSentenceQuery(qb, fieldNames, keyWord);
+			}
+			BooleanQuery bq = new BooleanQuery();
+
+			Query parseQuery = null;
+
+			try {
+				parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30,
+						keyWord, fieldNames, clauses, new IKAnalyzer());
+			} catch (ParseException e) {
+				logger.error("parse keyword error", e);
+			}
+			bq.add(parseQuery, Occur.SHOULD);
+
+			for (int i = 0; i < fieldNames.length; i++) {
+
+				Query keyWordPrefixQuery = new PrefixQuery(new Term(
+						fieldNames[i], keyWord));
+				bq.add(keyWordPrefixQuery, Occur.SHOULD);
+			}
+
+			query.add(getDefaultQuery(barcodeList), Occur.MUST);
+			query.add(bq, Occur.MUST);
+		}
+
+		QueryWrapperFilter filter = null;
+
+		// add entity associate
+		Criteria criteria = session.createCriteria(Inconsistent.class);
+		criteria.add(Restrictions.in("barCode", barcodeList));
+
+		Page<Inconsistent> page = new Page<Inconsistent>();
+
+		// set page parameters, sort column, sort sign, page size, current page
+		// num
+		page.setPageSize(searchCondition.getPageSize());
+		page.setCurrentPage(searchCondition.getPageNum());
+		page.setSortColumn(searchCondition.getSortName());
+		page.setSortOrder(searchCondition.getSortSign());
+
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
+				query, Inconsistent.class).setCriteriaQuery(criteria);
+		page = baseHibernateDaoIncons.findByIndex(fullTextQuery, filter, page,
+				Inconsistent.class);
+		fullTextSession.close();
+		return page;
+	}
+
+	private BooleanQuery getDefaultQuery(List<String> barcodeList) {
+		BooleanQuery bq = new BooleanQuery();
+
+		for (String barcode : barcodeList) {
+			Query wildcardQuery = new WildcardQuery(
+					new Term("barcode", barcode));
+			bq.add(wildcardQuery, Occur.SHOULD);
+		}
+		return bq;
+	}
+
 }

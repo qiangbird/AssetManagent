@@ -7,6 +7,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
+
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.base.BaseModel;
 
@@ -16,6 +23,8 @@ import com.augmentum.ams.model.base.BaseModel;
  */
 @Entity
 @Table(name = "inconsistent")
+@Indexed(index = "inconsistent")
+@Analyzer(impl = IKAnalyzer.class)
 public class Inconsistent extends BaseModel {
 
 	private static final long serialVersionUID = 6638347160078914685L;
@@ -24,6 +33,7 @@ public class Inconsistent extends BaseModel {
 	 * The bar code which asset is not inconsistent
 	 */
 	@Column(name = "bar_code", length = 64)
+	@Field(name = "barcode", index = Index.UN_TOKENIZED, store = Store.YES)
 	private String barCode;
 
 	@ManyToOne(fetch = FetchType.LAZY)

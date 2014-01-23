@@ -55,8 +55,8 @@
                 		<input id="uploadBtn" type="button" value=<spring:message code="audit.upload" /> Onclick="file.click();"></input>
                 	</form>
                 	<div class="hidden-tool">
-                		<input type="button" value=<spring:message code="audit.done" /> onclick="upToDone(this);"></input>
-                		<input type="button" value=<spring:message code="audit.delete" /> onclick="removeAuditFile(this);" ></input>
+                		<input type="button" value="<spring:message code='audit.done' />" onclick="upToDone(this);" />
+                		<input type="button" value="<spring:message code='audit.delete' />" onclick="removeAuditFile(this);" />
                 	</div>
                 </c:if>
                 <c:if test="${operator != null}">
@@ -142,6 +142,6 @@
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.form.js"></script>
     <script type="text/javascript" src="<%=basePath%>/js/common/jquery.dataTables.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
-
+	<script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 </body>
 </html>

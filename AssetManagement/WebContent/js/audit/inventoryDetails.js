@@ -253,9 +253,10 @@ function AddInconsTable(){
 	table.append("<tbody ></tbody>");
 }
 
+
 //up to done
 function upToDone(object) {
-	ShowMsg("Are you sure to done this file?",function(yes){
+	ShowMsg(i18nProp('audit_file_done'), function(yes){
 	      if (yes) {
 	    	  var auditFileName=$("#fileName").val();
 	    	  var url = "audit/showAuditDetails?auditFileName=" + auditFileName;
@@ -267,7 +268,7 @@ function upToDone(object) {
 }
 
 function removeAuditFile(object) {
-	ShowMsg("Are you sure to remove this file?",function(yes){
+	ShowMsg(i18nProp('audit_file_delete'), function(yes){
 	      if (yes) {
 	    	  var auditFileName=$("#fileName").val();
 	    	  var url = "auditFile/inventoryList";
