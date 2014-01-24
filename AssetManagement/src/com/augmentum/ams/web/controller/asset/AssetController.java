@@ -42,6 +42,7 @@ import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
 import com.augmentum.ams.service.asset.LocationService;
+import com.augmentum.ams.service.asset.TransferLogService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.remote.RemoteEntityService;
@@ -90,6 +91,8 @@ public class AssetController extends BaseController {
     private UserCustomColumnsService userCustomColumnsService;
     @Autowired
     private SearchAssetService searchAssetService;
+    @Autowired
+    private TransferLogService transferLogService;
 
     private Page<Asset> pageForAudit;
 
@@ -364,6 +367,9 @@ public class AssetController extends BaseController {
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
         try {
             assetService.saveAssetAsType(assetVo, asset, "update");
+            if(asset.getUser()!=assetVo.getUser()){
+            	transferLogService.saveTransferLog(asset.getId(),"Assign");
+            }
         } catch (Exception e) {
             logger.error("Update asset error!", e);
         }

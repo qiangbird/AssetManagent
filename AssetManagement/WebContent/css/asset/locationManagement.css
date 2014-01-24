@@ -66,7 +66,7 @@ td {
 
 #dialog .submit-div {
 	position: absolute;
-	margin: 150px 150px;
+	margin: 116px 110px;
 }
 
 #location_table td {
@@ -171,7 +171,7 @@ div.operation_assets_list ul {
 }
 
 #location_table {
-	margin: 20px auto;
+	margin: 20px;
 }
 
 .editLocationIcon {
@@ -198,4 +198,8 @@ div.operation_assets_list ul {
 }
 .site-error{
 border: solid 1px red !important;
+}
+
+#location_table td{
+	text-align:left;
 }

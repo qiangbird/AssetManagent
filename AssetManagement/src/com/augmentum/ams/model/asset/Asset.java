@@ -11,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -130,15 +131,19 @@ public class Asset extends BaseModel {
     @IndexedEmbedded(depth = 1)
     private Software software;
 
+    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
     @ContainedIn
     private Machine machine;
 
+    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
     @ContainedIn
     private Monitor monitor;
 
+    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
     @ContainedIn
     private Device device;
 
+    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
     @ContainedIn
     private OtherAssets otherAssets;
 

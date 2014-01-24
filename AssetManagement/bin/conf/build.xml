@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}" default="AMS.deploy" basedir="..">
+
+	<!-- import the properties file -->
+	<property file="conf/build.properties"/>
+
+	<!-- libs for the project -->
+	<path id="lib_classpath">
+		<fileset dir="${project.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- libs in the tomcat -->
+	<path id="lib_tomcat">
+		<fileset dir="${tomcat.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- libs for the cobertura -->
+	<path id="cobertura.classpath">
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties">
+	</taskdef>
+
+	<!-- Check whether tomcat is running -->
+	<target name="check-port" description="Check whether Tomcat is running">
+		<echo message="Checking whether Tomcat is running"/>
+		<condition property="tomcat.running">
+			<socket server="${tomcat.host}" port="${tomcat.port}"/>
+		</condition>
+	</target>
+
+	<!-- Stop tomcat -->
+	<target name="tomcat.stop" depends="check-port" description="Stop tomcat" if="tomcat.running">
+		<exec executable="cmd.exe" spawn="true" vmlauncher="false">
+			<env key="CATALINA_HOME" value="${catalina.home}" />
+			<arg line="/c call ${catalina.home}/bin/shutdown.bat" />
+		</exec>
+		<waitfor maxwait="10" maxwaitunit="second" checkevery="500">
+			<socket server="${tomcat.host}" port="${tomcat.port}"/>
+		</waitfor>
+	</target>
+
+
+	<!-- delete the build file and bin file -->
+	<target name="clean" description="delete relevant files">
+		<antcall target="tomcat.stop" />
+		<delete dir="${project.build}"/>
+		<echo>Clean up the ${project.build} folder!</echo>
+		<delete dir="${project.bin}"/>
+		<echo>Clean up the ${project.bin} folder!</echo>
+		<delete dir="${cobertura.reports}" />
+		<echo>Clean up the ${cobertura.reports} folder!</echo>
+		<delete dir="${project.junit-report}" />
+		<echo>Clean up the ${project.junit-report} folder!</echo>
+		<delete dir="${project.sonar}"/>
+		<echo>Clean up the sonar folder!</echo>
+	</target>
+
+	<!-- create the files needs to use -->
+	<target name="init" depends="clean" description="create relevant files">
+		<mkdir dir="${project.build}"/>
+		<echo>successfullly created the ${project.build} folder!</echo>
+		<mkdir dir="${project.bin}"/>
+		<echo>successfullly created the ${project.bin} folder!</echo>
+		<mkdir dir="${project.junit-report}"/>
+		<echo>successfullly created the ${project.junit-report} folder!</echo>
+		<mkdir dir="${cobertura.reports}" />
+		<echo>successfullly created the ${cobertura.reports} folder!</echo>
+		<mkdir dir="${instrumented.dir}" />
+		<echo>successfullly created the ${instrumented.dir} folder!</echo>
+		<mkdir dir="${coverage.xml.dir}" />
+		<echo>successfullly created the ${coverage.xml.dir} folder!</echo>
+		<mkdir dir="${coverage.summaryxml.dir}" />
+		<echo>successfullly created the ${coverage.summaryxml.dir} folder!</echo>
+		<mkdir dir="${coverage.html.dir}" />
+		<echo>successfullly created the ${coverage.html.dir} folder!</echo>
+		<mkdir dir="${project.sonar}"/>
+		<echo>successfullly created the sonar folder!</echo>
+	</target>
+
+	<!-- prepare the xml,properties or other kinds of files needed in the project -->
+	<target name="prepare" depends="init" description="prepare the xml,properties or other kinds of files needed in the project">
+		<copy todir="${project.bin}">
+			<fileset dir="${project.conf}">
+				<include name="**/*.xml"/>
+				<exclude name="**/build.xml"/>
+				<exclude name="**/sonar-ams.xml"/>
+			</fileset>
+		</copy>
+		<copy todir="${project.bin}">
+			<fileset dir="${project.conf}">
+				<include name="**/*.properties"/>
+				<exclude name="**/build.properties"/>
+			</fileset>
+		</copy>
+		<echo>successfullly prepared the xml,properties or other kinds of files needed in the project </echo>
+	</target>
+
+	<!-- compile the source codes (exclude the codes for test) -->
+	<target name="compile.src" depends="prepare" description="compile the source codes (exclude the codes for test)">
+		<javac encoding = "utf-8" srcdir="${project.src}" destdir="${project.bin}" debug="yes">
+			<classpath refid="cobertura.classpath"/>
+			<classpath refid="lib_classpath"/>
+			<classpath refid="lib_tomcat"/>
+		</javac>
+		<echo>successfullly compiled source codes (exclude the codes for test) from ${project.src} to ${project.bin}</echo>
+	</target>
+
+	<!-- compile the source codes for test -->
+	<target name="compile.test" depends="compile.src" description="compile the source codes for test">
+		<javac encoding = "utf-8" srcdir="${project.test}" destdir="${project.bin}" debug="yes">
+			<classpath>
+				<path refid="cobertura.classpath"/>
+				<path refid="lib_classpath" />
+				<path refid="lib_tomcat"/>
+				<pathelement path="${project.bin}"/>
+			</classpath>
+		</javac>
+		<echo>successfullly compiled source codes for test from ${project.test} to ${project.bin}</echo>
+	</target>
+    
+	<target name="instrument" depends="compile.src">
+		<!--
+            Remove the coverage data file and any old instrumentation.
+        -->
+		<delete file="cobertura.ser"/>
+		<delete dir="${instrumented.dir}" />
+
+		<!--
+            Instrument the application classes, writing the
+            instrumented classes into ${build.instrumented.dir}.
+        -->
+		<cobertura-instrument todir="${instrumented.dir}">
+			<!--
+                The following line causes instrument to ignore any
+                source line containing a reference to log4j, for the
+                purposes of coverage reporting.
+            -->
+			<ignore regex="org.apache.log4j.*" />
+
+			<fileset dir="${project.bin}">
+				<!--
+                    Instrument all the application classes, but
+                    don't instrument the test classes.
+                -->
+				<include name="**/*.class" />
+				<exclude name="**/*Test.class" />
+				<exclude name="**/*Case.class" />
+				<exclude name="**/Mock*.class" />
+			</fileset>
+		</cobertura-instrument>
+		<copy todir="${instrumented.dir}">
+			<fileset dir="${project.bin}">
+				<include name="*.xml"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- init the database -->
+	<!-- <target name = "initDB" depends="instrument" description="init the database">
+        <sql driver="com.mysql.jdbc.Driver"
+    		url="jdbc:mysql://localhost:3306/ams"
+            userid="${jdbc.username}"
+            password="${jdbc.password}"
+            src="${project.sql}">
+            <classpath refid="lib_classpath" />
+        </sql>
+        <echo>successfullly initialized the database </echo>
+    </target>
+    -->
+	<target name="junitTest" depends="instrument">
+		<junit fork="yes" dir="${basedir}" failureProperty="test.failed" printsummary="yes" showoutput="true">
+			<!--
+                Note the classpath order: instrumented classes are before the
+                original (uninstrumented) classes.  This is important.
+            -->
+			<classpath location="${instrumented.dir}" />
+			<classpath location="${project.bin}" />
+			<!--
+                The instrumented classes reference classes used by the
+                Cobertura runtime, so Cobertura and its dependencies
+                must be on your classpath.
+            -->
+			<classpath refid="cobertura.classpath" />
+			<classpath>
+				<path refid="lib_classpath"/>
+				<pathelement path="${project.bin}"/>
+			</classpath>
+			<classpath refid="lib_tomcat"/>
+
+			<formatter type="xml" />
+			<test name="${testcase}" todir="${project.junit-report}" if="testcase"/>
+			<batchtest fork="yes" todir="${project.junit-report}">
+				<fileset dir="${project.test}" includes="**/*Test.java"/>
+			</batchtest>
+		</junit>
+
+		<junitreport todir="${project.junit-report}">
+			<fileset dir="${project.junit-report}" includes="TEST-*.xml"/>
+			<report format="frames" todir="${project.junit-report}"/>
+		</junitreport>
+	</target>
+
+	<target name="coverage-check" depends="junitTest">
+		<cobertura-check branchrate="0" linerate="0" packagebranchrate="0" packagelinerate="0" totalbranchrate="0" totallinerate="0" />
+	</target>
+
+	<target name="coverage-report" depends="coverage-check">
+		<!--
+            Generate an XML file containing the coverage data using
+            the "srcdir" attribute.
+        -->
+		<cobertura-report srcdir="${project.src}" destdir="${coverage.xml.dir}" format="xml" />
+	</target>
+
+	<target name="summary-coverage-report" depends="coverage-report">
+		<!--
+            Generate an summary XML file containing the coverage data using
+            the "srcdir" attribute.
+        -->
+		<cobertura-report srcdir="${project.src}" destdir="${coverage.summaryxml.dir}" format="summaryXml" />
+	</target>
+
+	<target name="alternate-coverage-report" depends="summary-coverage-report">
+		<!--
+            Generate a series of HTML files containing the coverage
+            data in a user-readable form using nested source filesets.
+        -->
+		<cobertura-report destdir="${coverage.html.dir}">
+			<fileset dir="${project.src}">
+				<include name="**/*.java"/>
+			</fileset>
+		</cobertura-report>
+	</target>
+
+	<!-- Creat the war file -->
+	<target name="war-ams" depends="alternate-coverage-report" description="Creat the war file">
+		<war destfile="${project.build}/${project.name}.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent" includes="**/*.*"/>
+			<lib dir="${project.lib}"/>
+			<classes dir="${project.bin}" excludes="*Test*.*"/>
+		</war>
+	</target>
+
+	<!-- delete the relevant file in tomcat -->
+	<target name="clean-tomcat" depends="war-ams" description="delete relevant files in tomcat">
+		<delete dir="${tomcat.webapps}/${project.name}" />
+		<delete file="${tomcat.webapps}/${project.name}.war" />
+		<delete dir="${tomcat.work}/Catalina/localhost/${project.name}" />
+		<echo message="Cleaned relevant files">
+		</echo>
+	</target>
+
+	<!-- Start the tomcat -->
+	<target name="tomcat.start" description="Start the Tomcat">
+		<exec executable="cmd.exe" spawn="true" vmlauncher="false">
+			<env key="CATALINA_HOME" value="${catalina.home}" />
+			<arg line="/c call ${catalina.home}/bin/startup.bat" />
+		</exec>
+		<waitfor maxwait="5" maxwaitunit="minute" checkevery="500">
+			<http url="${sonar.host}"/>
+		</waitfor>
+	</target>
+
+	<!-- deploy the war file to the tomcat -->
+	<target name="AMS.deploy" depends="clean-tomcat" description="Install application in Tomcat">
+		<copy todir="${tomcat.webapps}" overwrite="true" file="${project.build}/${project.name}.war" />
+		<echo message="deploying..."/>
+		<antcall target="tomcat.start" />
+	</target>
+</project>

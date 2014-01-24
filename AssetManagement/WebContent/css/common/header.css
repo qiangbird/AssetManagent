@@ -290,3 +290,17 @@ a {
 	background: url("../../img/ICN_Export_Clicked_27x29.png") no-repeat;
 }
 
+#logoutSystem{
+position: relative;
+margin-left: 930px;
+margin-top: 8px;
+z-index: 1;
+font-size: 14px;
+color: #418FB5;
+text-shadow: 1px -1px 12px #FFFFFF;
+}
+#logoutSystem a{
+font-size: 14px;
+color: #418FB5;
+text-shadow: 1px -1px 12px #FFFFFF;
+	}

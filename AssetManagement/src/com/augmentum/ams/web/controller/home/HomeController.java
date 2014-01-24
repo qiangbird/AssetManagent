@@ -2,7 +2,6 @@ package com.augmentum.ams.web.controller.home;
 
 import java.util.List;
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -74,7 +73,7 @@ public class HomeController extends BaseController {
             
             getLocaleLanguage(request);
             
-            logger.info("index() start... ");
+            logger.info("index() end... ");
         }
         
         return "common/header";
@@ -144,4 +143,5 @@ public class HomeController extends BaseController {
     	logger.info("init userCustomColumn end when user login first time, userId is: " + userId);
     	return null;
     }
+    
 }

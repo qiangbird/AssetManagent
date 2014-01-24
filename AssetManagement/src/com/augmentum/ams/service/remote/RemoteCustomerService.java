@@ -125,4 +125,10 @@ public interface RemoteCustomerService {
      */
     List<CustomerVo> getCustomerByEmployeeId(String userId, HttpServletRequest request)
             throws DataException;
+    
+    List<CustomerVo> getCustomerForEmployeeByEmployeeId(String userId, HttpServletRequest request)
+            throws DataException;
+    
+    List<CustomerVo> getCustomersFromIAP(HttpServletRequest httpServletRequest)
+            throws DataException;
 }

@@ -35,7 +35,7 @@
 				<button class="filterBtn filter_no_dropDown">
 				</button>
 				<span class="existedFlag"></span>
-				<div class="filterBox">
+			     <div class="filterBox">
 					<div class="single_condition">
 						<div class="condition_title"><spring:message code="search" /></div>
 						<div class="condition_optional" id="searchFields">
@@ -79,7 +79,7 @@
 			            </div>
 			        </div>
 			        <a class="reset" href="javascript:void(0);"><label id="label_SearchConditionReset"></label></a>
-				</div>
+				</div> 
 			</div>
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>

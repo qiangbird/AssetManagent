@@ -1,8 +1,8 @@
 package com.augmentum.ams.service.asset.impl;
 
-
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -51,144 +51,159 @@ public class TransferLogServiceImpl implements TransferLogService {
 	@Autowired
 	private SessionFactory sessionFactory;
 	@Autowired
-    private BaseHibernateDao<TransferLog> baseHibernateDao;
+	private BaseHibernateDao<TransferLog> baseHibernateDao;
 	@Autowired
 	private TransferLogDao transferLogDao;
 	@Autowired
 	private AssetService assetService;
-	
+
 	@Override
 	public Page<TransferLog> findTransferLogBySearchCondition(
-			SearchCondition searchCondition) {
-        // init base search columns and associate way
-        String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
-        Occur[] clauses = new Occur[fieldNames.length];
+			SearchCondition searchCondition, String id) {
+		// init base search columns and associate way
+		String[] fieldNames = getSearchFieldNames(searchCondition
+				.getSearchFields());
+		Occur[] clauses = new Occur[fieldNames.length];
 
-        for (int i = 0; i < fieldNames.length; i++) {
-            clauses[i] = Occur.SHOULD;
-        }
+		for (int i = 0; i < fieldNames.length; i++) {
+			clauses[i] = Occur.SHOULD;
+		}
 
-        Session session = sessionFactory.openSession();
-        FullTextSession fullTextSession = Search.getFullTextSession(session);
-        
-        QueryBuilder qb =null;
+		Session session = sessionFactory.openSession();
+		FullTextSession fullTextSession = Search.getFullTextSession(session);
+
+		QueryBuilder qb = null;
 		try {
 			qb = fullTextSession.getSearchFactory().buildQueryBuilder()
-			        .forEntity(TransferLog.class).get();
+					.forEntity(TransferLog.class).get();
 		} catch (Exception e1) {
 			logger.error(e1);
 		}
 
-        // create ordinary query, it contains search by keyword and field names
-        BooleanQuery query = new BooleanQuery();
+		// create ordinary query, it contains search by keyword and field names
+		BooleanQuery query = new BooleanQuery();
 
-        String keyWord = searchCondition.getKeyWord();
+		String keyWord = searchCondition.getKeyWord();
 
-        // if keyword is null or "", search condition is "*", it will search all
-        // the value based on some one field
-        if (null == keyWord || "".equals(keyWord) || "*".equals(keyWord)) {
-            Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
-            query.add(defaultQuery, Occur.MUST);
-        } else {
+		// if keyword is null or "", search condition is "*", it will search all
+		// the value based on some one field
+		if (null == keyWord || "".equals(keyWord) || "*".equals(keyWord)) {
+			Query defaultQuery = new TermQuery(new Term("isExpired",
+					Boolean.FALSE.toString()));
+			query.add(defaultQuery, Occur.MUST);
+		} else {
 
-            keyWord = FormatUtil.formatKeyword(keyWord);
+			keyWord = FormatUtil.formatKeyword(keyWord);
 
-            // judge if keyword contains space, if yes, search keyword as a
-            // sentence
-            if (-1 != keyWord.indexOf(" ")) {
-                String[] sentenceFields = SearchFieldHelper.getSentenceFields();
-                query = getSentenceQuery(qb, sentenceFields, keyWord);
-            } else {
+			// judge if keyword contains space, if yes, search keyword as a
+			// sentence
+			if (-1 != keyWord.indexOf(" ")) {
+				String[] sentenceFields = SearchFieldHelper.getSentenceFields();
+				query = getSentenceQuery(qb, sentenceFields, keyWord);
+			} else {
 
-                // if keyword doesn't contain space, search keyword as tokenized
-                // index string
+				// if keyword doesn't contain space, search keyword as tokenized
+				// index string
 
-                BooleanQuery bq = new BooleanQuery();
+				BooleanQuery bq = new BooleanQuery();
 
-                Query parseQuery = null;
+				Query parseQuery = null;
 
-                try {
-                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord,
-                            fieldNames, clauses, new IKAnalyzer());
-                } catch (ParseException e) {
-                    // TODO Auto-generated catch block
-                    logger.error("parse keyword error", e);
-                }
-                bq.add(parseQuery, Occur.SHOULD);
+				try {
+					parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30,
+							keyWord, fieldNames, clauses, new IKAnalyzer());
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					logger.error("parse keyword error", e);
+				}
+				bq.add(parseQuery, Occur.SHOULD);
 
-                for (int i = 0; i < fieldNames.length; i++) {
-                    Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
-                    bq.add(keyWordPrefixQuery, Occur.SHOULD);
-                }
+				for (int i = 0; i < fieldNames.length; i++) {
+					Query keyWordPrefixQuery = new PrefixQuery(new Term(
+							fieldNames[i], keyWord));
+					bq.add(keyWordPrefixQuery, Occur.SHOULD);
+				}
 
-                query.add(bq, Occur.MUST);
-            }
-        }
+				query.add(bq, Occur.MUST);
+			}
+		}
 
-        // create filter based on advanced search condition, it used for further
-        // filtering query result
-        BooleanQuery booleanQuery = new BooleanQuery();
+		// create filter based on advanced search condition, it used for further
+		// filtering query result
+		BooleanQuery booleanQuery = new BooleanQuery();
 
-        booleanQuery
-                .add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())), Occur.MUST);
+		booleanQuery.add(
+				new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
+				Occur.MUST);
 
-        QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
+		QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
 
-        // add entity associate
-        Criteria criteria = session.createCriteria(TransferLog.class);
-        criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("asset", FetchMode.JOIN);
-        criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
+		// add entity associate
+		Criteria criteria = session.createCriteria(TransferLog.class);
+		criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("asset",
+				FetchMode.JOIN);
+		criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
 
-        Page<TransferLog> page = new Page<TransferLog>();
+		if (!StringUtils.isBlank(id)) {
+			booleanQuery.add(new TermQuery(new Term("asset.id", id)),
+					Occur.MUST);
+			criteria.add(Restrictions.eq("asset.id", id));
+		}
 
-        // set page parameters, sort column, sort sign, page size, current page
-        // num
-        page.setPageSize(searchCondition.getPageSize());
-        page.setCurrentPage(searchCondition.getPageNum());
-        page.setSortOrder(searchCondition.getSortSign());
-        page.setSortColumn(transferSortName(searchCondition.getSortName()));
+		Page<TransferLog> page = new Page<TransferLog>();
 
-        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, TransferLog.class)
-                .setCriteriaQuery(criteria);
-        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, TransferLog.class);
-        fullTextSession.close();
-        return page;
+		// set page parameters, sort column, sort sign, page size, current page
+		// num
+		page.setPageSize(searchCondition.getPageSize());
+		page.setCurrentPage(searchCondition.getPageNum());
+		page.setSortOrder(searchCondition.getSortSign());
+		page.setSortColumn(transferSortName(searchCondition.getSortName()));
+
+		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
+				query, TransferLog.class).setCriteriaQuery(criteria);
+		page = baseHibernateDao.findByIndex(fullTextQuery, filter, page,
+				TransferLog.class);
+		fullTextSession.close();
+		return page;
 	}
 
-	 private String[] getSearchFieldNames(String searchConditions) {
-	        String[] fieldNames = FormatUtil.splitString(searchConditions, Constant.SPLIT_COMMA);
+	private String[] getSearchFieldNames(String searchConditions) {
+		String[] fieldNames = FormatUtil.splitString(searchConditions,
+				Constant.SPLIT_COMMA);
 
-	        if (null == fieldNames || 0 == fieldNames.length) {
-	            fieldNames = SearchFieldHelper.getTransferLogFields();
-	        }
-	        return fieldNames;
-	    }
-	 
-	 private BooleanQuery getSentenceQuery(QueryBuilder qb, String[] sentenceFields, String keyWord) {
-	        BooleanQuery sentenceQuery = new BooleanQuery();
+		if (null == fieldNames || 0 == fieldNames.length) {
+			fieldNames = SearchFieldHelper.getTransferLogFields();
+		}
+		return fieldNames;
+	}
 
-	        for (int i = 0; i < sentenceFields.length; i++) {
-	            Query query = qb.phrase().onField(sentenceFields[i]).sentence(keyWord).createQuery();
-	            sentenceQuery.add(query, Occur.SHOULD);
-	        }
-	        return sentenceQuery;
-	    }
-	 
-	    private String transferSortName(String sortName) {
+	private BooleanQuery getSentenceQuery(QueryBuilder qb,
+			String[] sentenceFields, String keyWord) {
+		BooleanQuery sentenceQuery = new BooleanQuery();
 
-	        if ("userName".equals(sortName)) {
-	            sortName = "user.userName";
-	        }
-	        return sortName;
-	    }
+		for (int i = 0; i < sentenceFields.length; i++) {
+			Query query = qb.phrase().onField(sentenceFields[i])
+					.sentence(keyWord).createQuery();
+			sentenceQuery.add(query, Occur.SHOULD);
+		}
+		return sentenceQuery;
+	}
 
-		@Override
-		public void saveTransferLog(String assetIds, String action) {
-			Subject subject = SecurityUtils.getSubject();
-			User user = (User) subject.getSession().getAttribute("currentUser");
-			String ids[] = assetIds.split(",");
-			Date date = UTCTimeUtil.localDateToUTC();
-			for(String id : ids){
+	private String transferSortName(String sortName) {
+
+		if ("userName".equals(sortName)) {
+			sortName = "user.userName";
+		}
+		return sortName;
+	}
+
+	@Override
+	public void saveTransferLog(String assetIds, String action) {
+		Subject subject = SecurityUtils.getSubject();
+		User user = (User) subject.getSession().getAttribute("currentUser");
+		String ids[] = assetIds.split(",");
+		Date date = UTCTimeUtil.localDateToUTC();
+		for (String id : ids) {
 			Asset asset = assetService.getAsset(id);
 			TransferLog transferLog = new TransferLog();
 			transferLog.setAsset(asset);
@@ -196,7 +211,7 @@ public class TransferLogServiceImpl implements TransferLogService {
 			transferLog.setAction(action);
 			transferLog.setTime(date);
 			transferLogDao.save(transferLog);
-			}
-			
 		}
+
+	}
 }

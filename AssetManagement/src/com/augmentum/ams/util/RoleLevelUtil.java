@@ -9,12 +9,10 @@ public class RoleLevelUtil {
         
         String employeeLevel = userVo.getEmployeeLevel();
         RoleEnum role = null;
-        if (employeeLevel.equals("ExtManager") || employeeLevel.equals("Manager")
-                || employeeLevel.equals("SrManager") || employeeLevel.equals("Director")
-                || employeeLevel.equals("SrDirector") || employeeLevel.equals("VP")) {
-            role = RoleEnum.MANAGER;
-        } else {
-            role = RoleEnum.EMPLOYEE;
+        if(employeeLevel.equalsIgnoreCase("employee")||employeeLevel.equalsIgnoreCase("leader")){
+        	role = RoleEnum.EMPLOYEE;
+        }else{
+        	role = RoleEnum.MANAGER;
         }
         return role;
     }

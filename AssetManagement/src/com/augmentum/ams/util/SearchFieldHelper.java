@@ -113,4 +113,15 @@ public class SearchFieldHelper {
 		return fieldNames;
 	}
 
+	public static String[] getOperationLogFields() {
+
+		String[] fieldNames = new String[5];
+		fieldNames[0] = "operatorID";
+		fieldNames[1] = "operatorName";
+		fieldNames[2] = "operationObject";
+		fieldNames[3] = "operation";
+		fieldNames[4] = "operationObjectID";
+
+		return fieldNames;
+	}
 }

@@ -220,16 +220,9 @@ String basePath = request.getScheme() + "://"
 								<p>
 									<span>*</span>
 									<label><spring:message code="asset.machine.subtype" /></label>
-									<form:input path="machine.subtype" id="machineType"
-										class="l-select" readonly="readonly"
-										placeholder="Please select type" />
+									<form:select path="machine.subtype" id="machineType"
+										items="${machineTypes}"></form:select>
 								</p>
-								<div class="machineType" onblur="hideSelect()">
-									<c:forEach var="machineTypeItems" items="${machineTypes}">
-										<li class="machineTypeItems"><c:out
-												value="${machineTypeItems}"></c:out></li>
-									</c:forEach>
-								</div>
 								<p class="p-textarea">
 									<label><spring:message code="asset.machine.speification" /></label>
 									<span class="p-textarea-span"> <form:textarea

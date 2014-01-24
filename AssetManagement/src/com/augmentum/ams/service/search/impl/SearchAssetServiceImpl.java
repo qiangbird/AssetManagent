@@ -157,11 +157,11 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class)
                 .setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
-                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN)
-                .createAlias("user", "user");
+                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
 
         if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
             criteria.add(Restrictions.eq("user.id", searchCondition.getUserUuid()));
+            criteria.createAlias("user", "user");
         }
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         

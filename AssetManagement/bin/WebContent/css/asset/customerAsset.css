@@ -1,0 +1,172 @@
+div.operation_assets_list {
+	width: 150px;
+	position: relative;
+	top: 20px;
+	left: 713px;
+	position: absolute;
+	z-index: 1;
+	background: url("../../image/asset/assetList/BTN_Action_150x30.png")
+		no-repeat;
+	height: 30px;
+	width: 150px;
+	line-height: 30px;
+	font-weight: bold;
+	text-indent: 5px;
+}
+
+a.a_operations_assets_list {
+	color: #FFFFFF !important;
+	text-shadow: 1px 1px 28px #419025;
+}
+
+div.operation_assets_list ul li a {
+	line-height: 28px;
+	text-decoration: none;
+	color: #65a64b;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.operation_assets_list ul li {
+	margin-left: -40px;
+	background-color: #cfe6bb;
+	position: relative;
+	z-index: 1;
+	display: none;
+}
+
+div.operation_assets_list ul li:hover {
+	margin-left: -40px;
+	background-color: #c2ddb6;
+	position: relative;
+	z-index: 1;
+}
+
+div.operation_assets_list:hover {
+	width: 150px;
+	position: relative;
+	top: 20px;
+	left: 713px;
+	position: absolute;
+	z-index: 1;
+	background:
+		url("../../image/asset/assetList/BTN_Action_Hover_150x30.png")
+		no-repeat;
+	height: 30px;
+	width: 150px;
+	line-height: 30px;
+	font-weight: bold;
+	text-indent: 5px;
+}
+
+/*  begin the assign dialog css */
+#dialog {
+	display: none;
+}
+
+.ui-dialog .ui-widget-header {
+	border: 1px solid #71B3D6;
+	background: #71B3D6;
+	height: 40px;
+}
+
+.ui-dialog .ui-dialog-title {
+	margin-top: 5px;
+}
+
+#dialog .submit-div {
+	position: absolute;
+	margin: 150px 150px;
+}
+
+#assginTable {
+	margin: 20px auto;
+}
+
+#assginTable td {
+	width: 80px;
+	text-align: center;
+}
+
+#assginTable tr {
+	line-height: 40px;
+}
+
+#assginTable td input {
+	height: 30px;
+	width: 220px;
+}
+
+#assginTable td select {
+	height: 30px;
+	width: 220px;
+}
+
+#assginTable tr span { /* color: #FF0000; */
+	position: absolute;
+	top: auto;
+	left: 80px;
+}
+
+.submit-button {
+	width: 80px;
+	height: 30px;
+	background: url("../../img/BTN_Create_80x30.png") no-repeat;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+.reset-button {
+	width: 80px;
+	height: 30px;
+	background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+	width: 80px;
+	color: #8A8A8A;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+.dropDownList .dropDownList_icon {
+	margin: 0 10px 0 300;
+}
+
+.dropDownList .dropDownList_text {
+	color: #808080;
+	margin: 0 0 0 110px;
+}
+
+.ui-autocomplete {
+	max-height: 130px;
+	overflow: auto;
+}
+
+#dialog-confirm {
+	display: none;
+}
+
+div.operation_assets_list ul {
+	display: block;
+}
+
+.submit-button {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png")
+		no-repeat;
+}
+
+.submit-button:HOVER {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
+		no-repeat;
+}
+
+.reset-button {
+	background: url("../../image/common/Cancel.png") no-repeat;
+}
+
+.reset-button:hover {
+	background: url("../../image/common/Cancel_Hover.png") no-repeat;
+}

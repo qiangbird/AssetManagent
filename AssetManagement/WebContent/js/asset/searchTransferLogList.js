@@ -60,7 +60,7 @@ var dataListInfo = {
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
-    url : 'transferLog/search',
+    url : 'transferLog/search?id='+$("#assetUuId").val(),
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {

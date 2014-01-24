@@ -1,0 +1,201 @@
+body {
+	width: auto;
+	height: auto;
+	padding: 0;
+	margin: 0;
+	color: #555555;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#listAll {
+	width: 1000px;
+	height: auto;
+	padding: 0;
+	margin: 0;
+	color: #555555;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+td {
+	width: 100px;
+	text-align: center;
+}
+
+#dialog {
+	display: none;
+}
+
+#addButton {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png")
+		no-repeat;
+}
+
+#addButton:hover {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
+		no-repeat;
+}
+
+#addButton {
+	width: 80px;
+	margin-left: 100px;
+	text-align: center;
+	line-height: 30px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+#dialog {
+	display: none;
+}
+
+.ui-dialog .ui-widget-header {
+	border: 1px solid #71B3D6;
+	background: #71B3D6;
+	height: 40px;
+}
+
+.ui-dialog .ui-dialog-title {
+	margin-top: 5px;
+}
+
+#dialog .submit-div {
+	position: absolute;
+	margin: 150px 150px;
+}
+
+#location_table td {
+	width: 80px;
+	text-align: center;
+}
+
+#location_table tr {
+	line-height: 40px;
+}
+
+#location_table td input {
+	height: 30px;
+	width: 220px;
+}
+
+#location_table td select {
+	height: 30px;
+	width: 220px;
+}
+
+#location_table tr span { /* color: #FF0000; */
+	position: absolute;
+	top: auto;
+	left: 80px;
+}
+
+.submit-button {
+	width: 80px;
+	height: 30px;
+	color: #FFFFFF; font-size : 14px; font-weight : bold; font-family :
+	Arial;
+	background: url("../../img/BTN_Create_80x30.png") no-repeat;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+.reset-button {
+	width: 80px;
+	height: 30px;
+	color: #8A8A8A;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+background
+:
+ 
+url
+("../../img/BTN_Cancel_80x30
+.png
+")
+ 
+no-repeat
+;
+
+
+}
+
+/* .dropDownList .dropDownList_icon {
+	margin: 0 10px 0 300;
+}
+
+.dropDownList .dropDownList_text {
+	color: #808080;
+	margin: 0 0 0 110px;
+}
+ */
+.ui-autocomplete {
+	max-height: 130px;
+	overflow: auto;
+}
+
+#dialog-confirm {
+	display: none;
+}
+
+div.operation_assets_list ul {
+	display: block;
+}
+
+.submit-button {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_80x30.png")
+		no-repeat;
+}
+
+.submit-button:HOVER {
+	background:
+		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
+		no-repeat;
+}
+
+.reset-button {
+	background: url("../../image/common/Cancel.png") no-repeat;
+}
+
+.reset-button:hover {
+	background: url("../../image/common/Cancel_Hover.png") no-repeat;
+}
+
+#location_table {
+	margin: 20px auto;
+}
+
+.editLocationIcon {
+	cursor: pointer;
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	background: url("../../image/common/Edit.png") no-repeat;
+}
+
+.deleteLocationIcon {
+	cursor: pointer;
+	position: relative;
+	top: -60px;
+	left: 50px;
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	background: url("../../image/common/Delete.png") no-repeat;
+}
+
+.dataList-div-body .row .Operation {
+	margin-left: -20px;
+}
+.site-error{
+border: solid 1px red !important;
+}

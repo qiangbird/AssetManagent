@@ -17,5 +17,5 @@ public interface TransferLogService {
 	 * @return
 	 */
 	Page<TransferLog> findTransferLogBySearchCondition(
-			SearchCondition searchCondition);
+			SearchCondition searchCondition, String id);
 }

@@ -46,5 +46,6 @@
         <authority>Asset:import_asset</authority>
         <authority>OperationLog:*</authority>
         <authority>User:*</authority>
+        <authority>Location:*</authority>
     </role>
 </authorities>

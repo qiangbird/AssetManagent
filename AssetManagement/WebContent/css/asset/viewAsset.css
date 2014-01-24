@@ -163,7 +163,7 @@ html .ui-autocomplete {
 .asset-input-panel p label {
 	width: 130px;
 	position: absolute;
-	top: 6px;
+	top: 10px;
 }
 
 .asset-input-panel p input {
@@ -957,7 +957,6 @@ li {
 
 #picDiv {
 	float: left;
-	top: 20px;
 	position: relative;
 	left: 60px;
 }
@@ -970,6 +969,7 @@ li {
 }
 
 #operation {
+	margin-top: -20px;
 	height: 30px;
 	width: auto;
 	float: right;
@@ -1000,4 +1000,16 @@ li {
 	font-size: 14px;
 	font-weight: bold;
 	font-family: Arial;
+}
+p label:before {
+content: ":";
+position: absolute;
+margin-left: 130px;
+}
+#viewAuditTrail{
+	margin-left:150px;
+}
+#viewAuditTrail a{
+color: #23A5E3;
+text-decoration: underline;
 }

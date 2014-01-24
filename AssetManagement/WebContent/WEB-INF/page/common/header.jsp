@@ -42,7 +42,7 @@
             <div id="header_top_right">
                 <div id="header_login">
                     <a id="header_login_name"><spring:message code="head.welcome" /> <span id="loginUser">${sessionScope.userVo.employeeName}</span></a>
-                 <%-- <a class="decoration_hover cursor_hand" id="header_login_control" href="<%=path %>/logout">Login out</a> --%>
+                    <%-- <a class="decoration_hover cursor_hand" id="header_login_control" href="<%=path %>/logout">Login out</a> --%>
                 </div>
                 <div id="header_i18n">
                     <c:if test="${'en_US' == localeLanguage || null == localeLanguage}">
@@ -60,8 +60,10 @@
         <div class="headerNavigationStart"></div>
         <div class="menuCotent">
             <ul class="firstMenuUl">
-                <li class="menuLi"><a href="#"><spring:message code="navigator.home" /></a></li>
                 <shiro:authenticated>
+                <li class="menuLi"><a href="#"><spring:message code="navigator.home" /></a></li>
+                 </shiro:authenticated>
+                <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
                     <ul class="sencndMenuUl">
                         <li><a href="asset/allAssets"><spring:message code="navigator.all.assets" /></a></li>
@@ -73,7 +75,7 @@
                         <li><a href="#"><spring:message code="navigator.other.assets" /></a></li>
                     </ul>
                 </li>
-                </shiro:authenticated>
+                </shiro:hasAnyRoles>
                 <shiro:hasRole name="SYSTEM_ADMIN">
                 <li class="menuLi"><a><spring:message code="navigator.system" /></a>
                     <ul class="sencndMenuUl">
@@ -86,7 +88,7 @@
                     </ul>
                 </li>
                 </shiro:hasRole>
-                 <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
+                <shiro:authenticated>
                 <li class="menuLi"><a><spring:message code="navigator.customser.assets" /></a>
                     <ul class="sencndMenuUl">
                     <c:if test="${sessionScope.customerList !=null }">
@@ -109,7 +111,7 @@
                        </c:forEach>
                        </c:if>
                     </ul></li>
-               </shiro:hasAnyRoles>
+              </shiro:authenticated>
                 <li class="menuLi"><a href="customizedView/goToNewCustomizedView"><spring:message code="navigator.my.assets" /></a>
 					<ul class="sencndMenuUl">
                         <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
@@ -119,7 +121,7 @@
                 <li class="menuLi"><a href="transferLog/list"><spring:message code="navigator.transfer.log" /></a></li>
                </shiro:hasAnyRoles>
                <shiro:hasRole name="SYSTEM_ADMIN">
-                <li class="menuLi"><a href="#"><spring:message code="navigator.operation.log" /></a></li>
+                <li class="menuLi"><a href="operationLog/list"><spring:message code="navigator.operation.log" /></a></li>
                 </shiro:hasRole>
             </ul>
         </div>

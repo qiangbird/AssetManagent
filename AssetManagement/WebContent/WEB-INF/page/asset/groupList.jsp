@@ -14,8 +14,6 @@
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="css/common/tip-green/tip-green.css" type="text/css">
 <link rel="stylesheet" href="css/asset/groupManagement.css"type="text/css">
-<!-- <link rel="stylesheet" href="css/asset/locationManagement.css"type="text/css"> -->
-<!-- <link rel="stylesheet" href="css/asset/customerAsset.css"type="text/css"> -->
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
 <link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
@@ -36,13 +34,6 @@
 			<input type="hidden" id="keyword_content" value="">
 			<div id="searchInputTipDiv" class="inputTipDiv"><span id="label_KeywordPlaceholder"></span></div>
 			<input id="keyword" class="input_txt" name="" type="text" value="">
-			<div class="filterDiv filterDiv_common">
-				<button class="filterBtn filter_no_dropDown">
-				</button>
-				<span class="existedFlag"></span>
-				<div class="filterBox">
-				</div>
-			</div> 
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
 	        	<span class="middle" ><spring:message code="search" /></span>

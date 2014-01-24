@@ -171,7 +171,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
     public UserVo getRemoteUserById(String userId, HttpServletRequest request) throws DataException {
 
         IAPDataSearchModel model = new IAPDataSearchModel();
-        model.setColumns(new String[] { IAPConstans.EMPLOYEE_NAME, IAPConstans.POSITION_NAME_EN,
+        model.setColumns(new String[] { IAPConstans.ID,IAPConstans.EMPLOYEE_NAME, IAPConstans.POSITION_NAME_EN,
                 IAPConstans.POSITION_NAME_CN, IAPConstans.DEPARTMENT_NAME_EN,
                 IAPConstans.DEPARTMENT_NAME_CN, IAPConstans.MANAGER_NAME,
                 IAPConstans.EMPLOYEE_LEVEL });
@@ -189,6 +189,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         }
         UserVo user = new UserVo();
         for (Map<String, Object> mapData : responseData) {
+        	user.setId((String) mapData.get(IAPConstans.ID));
             user.setEmployeeId(userId);
             user.setEmployeeName((String) mapData.get(IAPConstans.EMPLOYEE_NAME));
             user.setPositionNameEn((String) mapData.get(IAPConstans.POSITION_NAME_EN));

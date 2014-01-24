@@ -35,6 +35,11 @@
        multiple : false,
        header : false
   });
+   $("#machineType").DropDownList({
+	    multiple : false,
+	    header : false,
+	    noneSelectedText : 'Select machine type',
+	});
    $(".showAsSelfDefine").delegate(".l-select","click",function(){
 	   $(this).datepicker("option", "dateFormat", "ISO 8601 - yy-mm-dd" );
 	 });

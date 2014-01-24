@@ -16,6 +16,7 @@ import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
+import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 
@@ -181,6 +182,28 @@ public class SearchCommonUtil {
 					.getCheckInTime(), "yyyy-MM-dd HH:mm:ss"));
 			array.add(transferLog.getAsset().getSeriesNo());
 			array.add(transferLog.getAsset().getPoNo());
+
+			arrays.add(array);
+		}
+		return arrays;
+
+	}
+	
+	public static JSONArray formatOperationLogListTOJSONArray(
+			List<OperationLog> result,
+			List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
+
+		JSONArray arrays = new JSONArray();
+
+		for (OperationLog operationLog : result) {
+			JSONArray array = new JSONArray();
+			array.add(operationLog.getId());
+			array.add(operationLog.getOperatorName());
+			array.add(operationLog.getOperatorID());
+			array.add(operationLog.getOperation());
+			array.add(operationLog.getOperationObject());
+			array.add(operationLog.getOperationObjectID());
+			array.add(UTCTimeUtil.utcToLocalTime(operationLog.getUpdatedTime(),clientTimeOffset, "yyyy-MM-dd HH:mm:ss"));
 
 			arrays.add(array);
 		}

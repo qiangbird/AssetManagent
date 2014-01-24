@@ -3,11 +3,15 @@ package com.augmentum.ams.web.controller.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -113,4 +117,5 @@ public class UserController extends BaseController{
         modelAndView.addObject("employeeInfo", employeeInfo);
         return modelAndView;
     }
+	
 }

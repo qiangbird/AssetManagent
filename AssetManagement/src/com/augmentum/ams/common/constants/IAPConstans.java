@@ -59,5 +59,5 @@ public class IAPConstans {
     public static final String INACTIVE = "INACTIVE";
   //Remote site constants
     public static final String AUGMENTUM_SITE = "AUGMENTUM_SITE";
-    
+    public static final String PROJECT_DIRECTOR_ID = "projectDirector_id";
 }

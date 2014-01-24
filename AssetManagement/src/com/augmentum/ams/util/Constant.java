@@ -71,5 +71,7 @@ public class Constant {
     public static final String AUDIT = "audit";
     public static final String UNAUDIT = "unAudit";
     public static final String INCONSISTENT = "incons";
+    public static final String SAVE = "save";
+    public static final String UPDATE = "update";
 
 }

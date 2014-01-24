@@ -98,11 +98,11 @@ String basePath = request.getScheme() + "://"
                             <label><spring:message code="asset.check.out.date" /></label>
                             <form:input path="checkOutTime" readonly="true" />
                         </p>
-
                         <p>
                             <label><spring:message code="keeper" /></label>
                             <form:input path="keeper" readonly="true" />
                         </p>
+
                     </div>
 
                     <div id="picDiv">
@@ -150,9 +150,13 @@ String basePath = request.getScheme() + "://"
                             <form:input path="vendor" readonly="true" />
                         </p>
 
-                        <p class="p-textarea">
+                        <p class="textarea">
                             <label><spring:message code="asset.memo" /></label>
                             <form:input path="memo" readonly="true" />
+                        </p>
+                        <p>
+                            <label><spring:message code="audit.trail" /></label>
+                           <span id="viewAuditTrail"> <a href="transferLog/list?id=${id }"> <spring:message code="view" /> </a></span>
                         </p>
                     </div>
                 </div>

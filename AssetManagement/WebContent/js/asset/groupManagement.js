@@ -461,7 +461,7 @@ $(document).ready(function(){
         autoOpen:false,
         closeOnEscape: true,
         draggable: false,
-        height: 400,
+        height: 380,
         width: 600,
         show: "blind",
         hide: "blind",
