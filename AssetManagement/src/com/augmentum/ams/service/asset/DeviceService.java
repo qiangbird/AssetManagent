@@ -30,4 +30,11 @@ public interface DeviceService {
      * @return
      */
     Device findDeviceById(String id);
+
+    /**
+     * @author John.Li
+     * @param id
+     * @return
+     */
+    Device getByAssetId(String id);
 }

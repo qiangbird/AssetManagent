@@ -10,4 +10,12 @@ import com.augmentum.ams.model.asset.OtherAssets;
 @Repository("otherAssetsDao")
 public class OtherAssetsDaoImpl extends BaseDaoImpl<OtherAssets> implements OtherAssetsDao{
 
+    @Override
+    public OtherAssets getOtherAssetsById(String id) {
+        
+        String hql = "from OtherAssets where asset.id = ?";
+        
+        return super.getUnique(hql, id);
+    }
+
 }

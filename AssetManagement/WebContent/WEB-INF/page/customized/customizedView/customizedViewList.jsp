@@ -2,6 +2,9 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %> 
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> -->
 <html>
@@ -21,10 +24,10 @@
   	<input id="cancel" type="button" value=<spring:message code="cancel" />  class="list-cancel" />
     </div>
     <div id="filterContent">
-    <span class="filterSetText"> Custom Views</span><br>
+    <span class="filterSetText"><spring:message code="customized.view"></spring:message></span><br>
     <div class="filterHead">
-      <div class="columnElement viewNameTitleHead" >Filter Name</div>
-      <div class="columnElement criteriaTitle" >Created By</div>
+      <div class="columnElement viewNameTitleHead" ><spring:message code="customized.view.name"></spring:message></div>
+      <div class="columnElement criteriaTitle" ><spring:message code="customized.created.by"></spring:message></div>
     </div>
     <c:forEach items="${customizedViews}" var="customizedView">
       <div class="filterInfo">

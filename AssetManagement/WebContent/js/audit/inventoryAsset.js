@@ -6,7 +6,7 @@ var dataListInfo = {
 	    criteria : criteria,
 	    minHeight : 150,
 	    pageSizes : [10, 20, 30, 50],
-	    hasCheckbox : true,
+	    hasCheckbox : false,
 	    pageItemSize : 5,
 	    url : '',
 	    updateShowField : {
@@ -88,52 +88,50 @@ $(document).ready(function() {
 	
 	var flag = $("#flag").val();
 	if(flag == "audited"){
-		$("#auditLink").css("background", "#418FB5");
-		$("#unAuditLink").css("background", "#71B3D6");
-		$("#inconsistentLink").css("background", "#71B3D6");
+		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink", "#barcodeLink");
 		showInventoryAsset("audited");
 	}
 	else if(flag == "unaudited"){
-		$("#auditLink").css("background", "#71B3D6");
-		$("#unAuditLink").css("background", "#418FB5");
-		$("#inconsistentLink").css("background", "#71B3D6");
+		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink", "#barcodeLink");
 		showInventoryAsset("unaudited");
 	}
 	else if(flag == "inconsistent"){
-		$("#auditLink").css("background", "#71B3D6");
-		$("#unAuditLink").css("background", "#71B3D6");
-		$("#inconsistentLink").css("background", "#418FB5");
+		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink", "#barcodeLink");
 		showInventoryAsset("inconsistent");
 	}
 	
 	$("#auditLink").click(function(){
-		$("#auditLink").css("background", "#418FB5");
-		$("#unAuditLink").css("background", "#71B3D6");
-		$("#inconsistentLink").css("background", "#71B3D6");
+		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink", "#barcodeLink");
+		showFilterbox();
 		showInventoryAsset("audited");
 	});
 	
 	$("#unAuditLink").click(function(){
-		$("#auditLink").css("background", "#71B3D6");
-		$("#unAuditLink").css("background", "#418FB5");
-		$("#inconsistentLink").css("background", "#71B3D6");
+		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink", "#barcodeLink");
+		showFilterbox();
 		showInventoryAsset("unaudited");
 	});
 	
 	$("#inconsistentLink").click(function(){
-		$("#auditLink").css("background", "#71B3D6");
-		$("#unAuditLink").css("background", "#71B3D6");
-		$("#inconsistentLink").css("background", "#418FB5");
+		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink", "#barcodeLink");
+		showFilterbox();
 		showInventoryAsset("inconsistent");
+	});
+	
+	$("#barcodeLink").click(function(){
+		changeLinkBgcolor("#barcodeLink", "#auditLink", "#unAuditLink", "#inconsistentLink");
+		$(".filterDiv").hide();
+		$("#customizedViewButton").hide();
+		$("#searchButton").css("left", "30px");
+		
+		showInconsistentBarcode(fileName);
+		$(".dataList-div-nineSqurt").hide();
 	});
 	
 });
 
 
 function showInventoryAsset(flag) {
-//	$("#auditLink").css({"background":"#23a5e3", "color": "#ffffff","border-bottom":"1px solid #23a5e3"});
-//	$("#unAuditLink").css({"background":"#ffffff","color":"#23a5e3","border-bottom":"1px solid #ffffff"});
-//	$("#inconsistentLink").css({"background":"#ffffff","color":"#23a5e3","border-bottom":"1px solid #ffffff"});
 	$.ajax({
 		type: 'POST',
 	    url: "searchCommon/column/getColumns?category=asset",
@@ -165,6 +163,14 @@ function showInventoryAsset(flag) {
 	});
 }
 
+function showInconsistentBarcode(fileName) {
+	$(".dataList > div:gt(0)").remove();
+	dataListInfo.columns = [{ EN : 'Barcode', ZH : '条形码', sortName : 'barcode', width : 200, headerId: 1, isMustShow : true }];
+	initTableForBarcode(fileName);
+    dataList.setShow("Barcode");
+    dataList.search();
+}
+
 function initTable(flag, fileName) {
 	$.ajax({
         type : 'GET',
@@ -191,6 +197,20 @@ function initTable(flag, fileName) {
     dataListInfo.criteria = criteria;
     dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
     dataListInfo.url = getURLForInventoryAsset(flag);
+    
+    dataList = $(".dataList").DataList(dataListInfo);
+}
+
+function initTableForBarcode(fileName){
+	criteria.pageSize = 10;
+	criteria.pageNum = 1;
+    criteria.sortName = 'barcode';
+    criteria.sortSign = 'desc';
+    criteria.auditFileName = fileName;
+    
+    dataListInfo.criteria = criteria;
+    dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
+    dataListInfo.url = 'inconsistent/viewInconsistentBarcode';
     
     dataList = $(".dataList").DataList(dataListInfo);
 }
@@ -278,4 +298,18 @@ function removePlaceholderForKeyWord() {
         $(this).hide();
         $("#keyword").focus();
     });
+}
+
+function showFilterbox() {
+	$(".filterDiv").show();
+	$(".filterDiv").css("display", "inline-block");
+	$("#searchButton").css("left", "50px");
+	$("#customizedViewButton").show();
+}
+
+function changeLinkBgcolor(link1, link2, link3, link4) {
+	$(link1).addClass("selected-status");
+	$(link2).removeClass("selected-status");
+	$(link3).removeClass("selected-status");
+	$(link4).removeClass("selected-status");
 }

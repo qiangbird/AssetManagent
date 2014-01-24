@@ -10,4 +10,12 @@ import com.augmentum.ams.model.asset.Device;
 @Repository("deviceDao")
 public class DeviceDaoImpl extends BaseDaoImpl<Device> implements DeviceDao{
 
+    @Override
+    public Device getByAssetId(String id) {
+        
+        String hql = "from Device where asset.id = ?";
+        
+        return super.getUnique(hql, id);
+    }
+
 }

@@ -58,4 +58,10 @@ public class MachineServiceImpl implements MachineService {
         machineDao.update(machine);
     }
 
+    @Override
+    public Machine getByAssetId(String assetId) {
+        
+        return machineDao.getByAssetId(assetId);
+    }
+
 }

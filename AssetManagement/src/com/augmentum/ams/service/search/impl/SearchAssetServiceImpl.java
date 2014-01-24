@@ -160,6 +160,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
 
         if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
+        	criteria.createAlias("user", "user");
             criteria.add(Restrictions.eq("user.id", searchCondition.getUserUuid()));
             criteria.createAlias("user", "user");
         }

@@ -1,25 +1,21 @@
 $(document).ready(function() {
-//    i18nForLogin();
     var ridioImgs = ["Radio_14x14_Checked.png", "Radio_14x14_Unchecked.png", "Radio_14x14_Checked_Disabled.png", "Radio_14x14_Unchecked_Disabled.png"];
     var tx = "";
     tx = i18nProp("createImport");
     $(".dialogBody").find("p").text(i18nProp("createImportMsg"));
     $("#create").click(function() {
         removeAllData();
-        $("#update").css("background", "url('img/" + ridioImgs[1] + "') no-repeat")
-        $("#create").css("background", "url('img/" + ridioImgs[0] + "') no-repeat")
-        
-     //   panel2.css("display", "none");
-     //   panel1.css("display", "block");
-        $("#flag").val("true");
+        $("#update").css("background", "url('img/" + ridioImgs[1] + "') no-repeat");
+        $("#create").css("background", "url('img/" + ridioImgs[0] + "') no-repeat");
+        $("#flag").val("create");
     });
     $("#update").click(function() {
         removeAllData();
-        $("#create").css("background", "url('img/" + ridioImgs[1] + "') no-repeat")
-        $("#update").css("background", "url('img/" + ridioImgs[0] + "') no-repeat")
+        $("#create").css("background", "url('img/" + ridioImgs[1] + "') no-repeat");
+        $("#update").css("background", "url('img/" + ridioImgs[0] + "') no-repeat");
         
-        $("#flag").val("false");
-        tx = i18nProp("updateImport");;
+        $("#flag").val("update");
+        tx = i18nProp("updateImport");
         $(".dialogBody").find("p").text(i18nProp("updateImportMsg"));
     });
     
@@ -28,14 +24,10 @@ $(document).ready(function() {
         $("#importForm").ajaxSubmit(
 	        function(data) {
 	        	closeCheckingNote(inId);
-	        	data = data.toString();
-		           data = data.substring(1, data.length-1);
-		           
-				   var arr = data.split(",");
-					
-					$("#allSize").text(arr[2]);
-					$("#sucSize").text(arr[0]);
-					$("#fiaSize").text(arr[1]);
+			    $("#allSize").text(data.all);
+				$("#sucSize").text(data.success);
+				$("#fiaSize").text(data.failure);
+				$("#failureFileName").val(data.failureFileName);
 					
 				$(".start-button").css("background", "url('img/button/BTN_90x30_Secondary_Action_Disabled.png') no-repeat").css("color", "#BBBBBB").attr("disabled", "disabled");
 				
@@ -43,8 +35,7 @@ $(document).ready(function() {
 				$(".import-file").val("");
 				
 				if($("#fiaSize").text() != "0") {
-				    //alert(msg.prop("msg"));
-					$.alert(i18nProp('Error'),i18nProp("msg"));
+					alert(i18nProp("msg"));
 				}
 				
 				if($("#fiaSize").text()!=0) {
@@ -59,8 +50,8 @@ $(document).ready(function() {
         
         $("#exportError").click(function() {
             if($("#fiaSize").text()!=0) {
-		        var f = $("#flag").val();
-		        location.href="exportErrorExcel.action?flag=" + f;
+		        var fileName = $("#failureFileName").val();
+		        location.href="asset/download?fileName=" + fileName;
             }
 	    });
     });
@@ -90,7 +81,6 @@ function showCheckingNote(auditFileName) {
     $("#checkingInventoryNote").css("display", "block");
     
     return inId;
-    
 }
 
 function closeCheckingNote(inId) {
@@ -147,7 +137,7 @@ function uploadFile(file) {
     var len = path.length;
     var expand = path.substring(l, len);
     if(expand != ".xls") {
-    	$.alert(i18nProp('Error'),i18nProp("excelError") + "（*.xls）。");
+    	alert(i18nProp("excelError") + "（*.xls）。");
         return false;
     }
     $(".import-text").val(fileName);

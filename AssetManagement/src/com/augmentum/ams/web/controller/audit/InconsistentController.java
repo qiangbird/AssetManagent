@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.audit.InconsistentService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
@@ -90,6 +91,33 @@ public class InconsistentController extends BaseController {
 		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
 				userCustomColumnList, null);
 		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", page.getRecordCount());
+		modelAndView.addObject("totalPage", page.getTotalPage());
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/viewInconsistentBarcode", method = RequestMethod.GET)
+	public ModelAndView findInconsistentBarcode(SearchCondition searchCondition) throws BaseException {
+		
+		if (null == searchCondition) {
+			searchCondition = new SearchCondition();
+		}
+		Page<Inconsistent> page = inconsistentService.findInconsistentBarcode(searchCondition);
+		
+		JSONArray array = new JSONArray();
+		
+		for (Inconsistent incons : page.getResult()) {
+			
+			JSONArray json = new JSONArray();
+			
+			json.add(incons.getId());
+			json.add(incons.getBarCode());
+			array.add(json);
+		}
+		
+		ModelAndView modelAndView = new ModelAndView();
+
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", page.getRecordCount());
 		modelAndView.addObject("totalPage", page.getTotalPage());

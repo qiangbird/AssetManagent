@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%> 
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -26,19 +27,22 @@
 		<div class="left-control-panel">
 			<div id="processBtn" class="left-control">
 				<div class="processBtn-control-blank"></div>
-				<span>Processing
+				<span>
+					<label class="audit-status-actived"><spring:message code="audit.status.process"/></label>
 					<label class="process-count"></label>
 				</span>
 			</div>
 			<div id="doneBtn" class="left-control">
 				<div class="processBtn-control-blank"></div>
-				<span>Done
+				<span>
+					<label class="audit-status-actived"><spring:message code="audit.status.done"/></label>
 					<label class="done-count"></label>
 				</span>
 			</div>
 		</div>
 		<div id="processFiles" class="right-content-panel">
-	   		<div class="content-title">Audit File
+	   		<div class="content-title">
+				<spring:message code="audit.auditFile"/>
 	   			<label id="content-title-status"></label>
 	   		</div>
 	          <div class="operation-panel">
@@ -78,7 +82,7 @@
 	            						</div>
 	            						<div class="done-operation-info">
 	            							<label class="done-operation-time"></label>
-	            							<label class="operator-title">Operator</label>
+	            							<label class="operator-title"><spring:message code="audit.operator"/></label>
 	            							<label class="done-operator"></label>
 	            						</div>
 	            					</div>
@@ -99,7 +103,7 @@
 		  <p id="warning-message-body"></p>
 		 </div>
 </div>
-
+<input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
 <jsp:include page="inventoryProcessbar.jsp"></jsp:include>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/audit/checkInventory.js"></script>

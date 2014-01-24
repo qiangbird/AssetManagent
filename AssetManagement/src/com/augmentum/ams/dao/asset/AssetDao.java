@@ -48,4 +48,10 @@ public interface AssetDao extends BaseDao<Asset>{
      */
     public List<ExportVo> findAssetsByIdsForExport(String[] assetIds);
     
+    /**
+     * @author John.Li
+     * @param contents
+     */
+    public Asset getByAssetId(String contents);
+    
 }

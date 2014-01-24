@@ -22,7 +22,7 @@ public class UTCTimeUtil {
 
         Date date = null;
 
-        if (null != str && "".equals(str)) {
+        if (null != str && !"".equals(str)) {
             SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_DAY_PATTERN);
 
             try {

@@ -74,4 +74,8 @@ public class Constant {
     public static final String SAVE = "save";
     public static final String UPDATE = "update";
 
+    //Constant of import asset 
+    public static final String CONFIG_TEMPLATES_PATH = "template/";
+    public static final String CREATE = "create";
+    public static final String UPDATE = "update";
 }

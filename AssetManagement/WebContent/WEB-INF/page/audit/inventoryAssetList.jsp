@@ -32,12 +32,16 @@
 	<div id="viewMoreDetailDialog">
    	 	<input id="flag" type="hidden" value="${flag }"></input>
    	 	<input id="auditFileName" type="hidden" value="${auditFileName }"></input>
-      	<div id="checkResult">
-            <a id="auditLink"><spring:message code="viewMoreDialog_auditLink"/></a>
-            <a id="unAuditLink"><spring:message code="viewMoreDialog_unauditLink"/></a>
-            <a id="inconsistentLink"><spring:message code="viewMoreDialog_inconsistentLink"/></a>
+    	<div id="checkResult">
+    		<div class="tab-head"></div>
+    		<div class="inventory-status" id="auditLink"><spring:message code="viewMoreDialog_auditLink"/></div>
+   			<div class="inventory-status" id="unAuditLink"><spring:message code="viewMoreDialog_unauditLink"/></div>
+   			<div class="inventory-status" id="inconsistentLink"><spring:message code="viewMoreDialog_inconsistentLink"/></div>
+   			<div class="inventory-status" id="barcodeLink"><spring:message code="viewMoreDialog_inconsBarcodeLink" /></div>
+   			<div class="clear"></div>
     	</div>
-		<div class="dataList dataList-width">
+    	
+		<div class="dataList dataList-width" id="tabs-target">
     	<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
 			<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
@@ -51,13 +55,13 @@
 						<div class="condition_title"><label><spring:message code="searchBy" /></label></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="assetId" /><label><spring:message code="asset.assetId"/></label></p>
+							<p><input type="checkBox" name="field" value="assetId" /><label><spring:message code="asset.id"/></label></p>
 							<p><input type="checkBox" name="field" value="assetName" /><label><spring:message code="asset.name"/></label></p>
 			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="asset.user"/></label></p>
-			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="asset.project"/></label></p>
-			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="asset.customer"/></label></p>
-			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.poNo" /></label></p>
-			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.barcode"/></label></p>
+			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="project"/></label></p>
+			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="customer"/></label></p>
+			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.po.no" /></label></p>
+			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.bar.code"/></label></p>
 			        	</div>
 					</div>
 					<div class="single_condition">
@@ -82,7 +86,7 @@
 			            </div>
 			        </div>
 			        <div class="single_condition">
-						<div class="condition_title"><spring:message code="asset.checkInDate"/></div>
+						<div class="condition_title"><spring:message code="asset.check.in.date"/></div>
 						<div class="condition_optional" id="checkInTime">
 							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
                             <span class="dateLine">-</span>

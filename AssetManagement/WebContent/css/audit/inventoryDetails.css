@@ -567,3 +567,45 @@ table.dataTable thead th {
 #ui-datepicker-div {
 	z-index: 2000;
 }
+
+#checkResult {
+	width: 1000px;
+	height: 40px;
+	display: inline-block;
+	background: url("../../image/common/IMG_Tab_BKG_4x40.png") repeat-x;
+	margin-left: -60px;
+}
+
+.tab-head {
+	width: 330px;
+	height: 40px;
+	float: left;
+}
+
+.inventory-status {
+	padding-top: 4px;
+	margin-top: 10px;
+	height: 25px;
+	margin-right: 10px;
+	width: 100px;
+	cursor: pointer;
+	color: #71B3D6;
+	float: left;
+	text-align: center;
+	font-weight: bold;
+	border-left: solid 1px #B8D9EA;
+	border-top: solid 1.5px #B8D9EA;
+	border-right: solid 1px #B8D9EA;
+	border-color: #B8D9EA;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.inventory-status:hover {
+	background-color: #B8D9EA;
+	color: #FFFFFF;
+}
+
+.selected-status {
+	background-color: #FFFFFF;
+}

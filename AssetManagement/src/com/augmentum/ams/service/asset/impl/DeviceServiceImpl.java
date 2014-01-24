@@ -28,4 +28,10 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceDao.get(Device.class, id);
     }
 
+    @Override
+    public Device getByAssetId(String id) {
+        
+        return deviceDao.getByAssetId(id);
+    }
+
 }

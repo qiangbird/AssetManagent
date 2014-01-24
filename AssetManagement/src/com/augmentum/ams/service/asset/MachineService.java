@@ -33,4 +33,11 @@ public interface MachineService {
      * @param machine
      */
     void updateMachine(Machine machine);
+
+    /**
+     * @author John.Li
+     * @param id
+     * @return
+     */
+    Machine getByAssetId(String assetId);
 }

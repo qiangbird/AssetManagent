@@ -73,7 +73,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
     public List<ExportVo> findAssetsByIdsForExport(final String[] assetIds) {
         
         final StringBuffer sql = new StringBuffer();
-        sql.append("SELECT asset.id as assetId, asset.asset_name as assetName, asset.manufacturer as manufacturer, asset.type as type, asset.bar_code as barCode, asset.keeper as keeper, " + 
+        sql.append("SELECT asset.asset_id as assetId, asset.asset_name as assetName, asset.manufacturer as manufacturer, asset.type as type, asset.bar_code as barCode, asset.keeper as keeper, " + 
                 " asset.series_no as seriesNo, asset.po_no as poNo, asset.owner_ship as ownerShip, asset.fixed as fixed, asset.status as status, asset.check_in_time as checkInTime, asset.entity as entity, " +  
                 " asset.check_out_time as checkOutTime, asset.warranty_time as warrantyTime, asset.vendor as vendor, asset.memo as memo, machine.sub_type as machineSubtype,  " + 
                 " machine.specification as machineSpecification, machine.address as machineAddress, machine.configuration as machineConfiguration, monitor.size as monitorSize,  " + 
@@ -119,5 +119,13 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
         });
         
         return list;
+    }
+
+    @Override
+    public Asset getByAssetId(String assetId) {
+        
+        String hql = "from Asset where assetId = ?";
+        
+        return super.getUnique(hql, assetId);
     }
 }

@@ -29,4 +29,11 @@ public interface OtherAssetsService {
 	 * @return
 	 */
 	OtherAssets getOtherAssetsById(String id);
+	
+	/**
+	 * @author John.Li
+	 * @param id
+	 * @return
+	 */
+    OtherAssets getByAssetId(String id);
 }

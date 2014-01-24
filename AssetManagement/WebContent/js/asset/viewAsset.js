@@ -10,6 +10,6 @@
 	   window.location.href="asset/delete/"+$("#id").val();
    });
    $("#cancelBtn").click(function(){
-	   window.location.href="asset/redirectSearchAsset";
+	   window.location.href="asset/allAssets";
    }); 
 });

@@ -5,6 +5,7 @@
     margin: 0 auto;
     width: 1000px;
     height: 40px;
+    clear: both;
 }
 
 .bottom_body .bottom_space {

@@ -5,4 +5,6 @@ import com.augmentum.ams.model.asset.Machine;
 
 public interface MachineDao extends BaseDao<Machine>{
 
+    Machine getByAssetId(String assetId);
+
 }

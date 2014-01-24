@@ -28,4 +28,10 @@ public class OtherAssetsServiceImpl implements OtherAssetsService {
         return otherAssetsDao.get(OtherAssets.class, id);
     }
 
+    @Override
+    public OtherAssets getByAssetId(String id) {
+        
+        return otherAssetsDao.getOtherAssetsById(id);
+    }
+
 }
