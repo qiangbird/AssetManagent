@@ -15,6 +15,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,6 @@ import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
 import com.augmentum.ams.service.asset.LocationService;
-import com.augmentum.ams.service.asset.TransferLogService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.remote.RemoteEntityService;
@@ -66,348 +66,355 @@ import com.augmentum.ams.web.vo.user.UserVo;
 @RequestMapping(value = "/asset")
 public class AssetController extends BaseController {
 
-    @Autowired
-    private AssetService assetService;
-    @Autowired
-    private RemoteSiteService remoteSiteService;
-    @Autowired
-    private LocationService locationService;
-    @Autowired
-    private RemoteCustomerService remoteCustomerService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private DeviceSubtypeService deviceSubtypeService;
-    @Autowired
-    private RemoteEmployeeService remoteEmployeeService;
-    @Autowired
-    private RemoteEntityService remoteEntityService;
-    @Autowired
-    private UserCustomColumnsService userCustomColumnsService;
-    @Autowired
-    private SearchAssetService searchAssetService;
-    @Autowired
-    private TransferLogService transferLogService;
+	@Autowired
+	private AssetService assetService;
+	@Autowired
+	private RemoteSiteService remoteSiteService;
+	@Autowired
+	private LocationService locationService;
+	@Autowired
+	private RemoteCustomerService remoteCustomerService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private DeviceSubtypeService deviceSubtypeService;
+	@Autowired
+	private RemoteEmployeeService remoteEmployeeService;
+	@Autowired
+	private RemoteEntityService remoteEntityService;
+	@Autowired
+	private UserCustomColumnsService userCustomColumnsService;
+	@Autowired
+	private SearchAssetService searchAssetService;
 
-    private Page<Asset> pageForAudit;
+	private Page<Asset> pageForAudit;
 
-    private Logger logger = Logger.getLogger(AssetController.class);
-    
-    /**
-     * Size of a byte buffer to read/write file
-     */
-    private static final int BUFFER_SIZE = 4096;
-             
-    /**
-     * Path of the file to be downloaded, relative to application's directory
-     */
-    private String filePath = "/download/Asset_2014-01-16.xls";
+	private Logger logger = Logger.getLogger(AssetController.class);
 
-    @RequestMapping("/software")
-    public String softwareList() {
-        return "asset/assetList";
-    }
+	/**
+	 * Size of a byte buffer to read/write file
+	 */
+	private static final int BUFFER_SIZE = 4096;
 
-    @RequestMapping("/software/detail")
-    public String softwareDetail() {
-        return "asset/assetDetail";
-    }
+	/**
+	 * Path of the file to be downloaded, relative to application's directory
+	 */
+	private String filePath = "/download/Asset_2014-01-16.xls";
 
-    /**
-     * @author Jay.He
-     * @time Nov 15, 2013 10:59:52 AM
-     * @param request
-     * @param assetVo
-     * @return
-     * @throws DataException
-     * @throws ParseException
-     */
-    @RequestMapping("/createAsset")
-    public ModelAndView createAsset(HttpServletRequest request, AssetVo assetVo)
-            throws DataException, ParseException {
+	@RequestMapping("/software")
+	public String softwareList() {
+		return "asset/assetList";
+	}
 
-        logger.info("createAsset method start!");
+	@RequestMapping("/software/detail")
+	public String softwareDetail() {
+		return "asset/assetDetail";
+	}
 
-        ModelAndView modelAndView = getCommonInfoForAsset(request);
-        assetVo.setAssetId(assetService.getGenerateAssetId());
-        modelAndView.setViewName("asset/createAsset");
+	/**
+	 * @author Jay.He
+	 * @time Nov 15, 2013 10:59:52 AM
+	 * @param request
+	 * @param assetVo
+	 * @return
+	 * @throws DataException
+	 * @throws ParseException
+	 */
+	@RequestMapping("/createAsset")
+	public ModelAndView createAsset(HttpServletRequest request, AssetVo assetVo)
+			throws DataException, ParseException {
 
-        logger.info("createAsset method end!");
-        return modelAndView;
+		logger.info("createAsset method start!");
 
-    }
+		ModelAndView modelAndView = getCommonInfoForAsset(request);
+		assetVo.setAssetId(assetService.getGenerateAssetId());
+		modelAndView.setViewName("asset/createAsset");
 
-    private ModelAndView getCommonInfoForAsset(HttpServletRequest request) throws DataException,
-            ParseException {
+		logger.info("createAsset method end!");
+		return modelAndView;
 
-        logger.info("getCommonInfoForAsset method start!");
+	}
 
-        ModelAndView modelAndView = new ModelAndView();
-        List<SiteVo> siteList = remoteSiteService.getSiteFromIAP(request);
-        List<String> locationList = new ArrayList<String>();
-        for (SiteVo siteVo : siteList) {
-            locationList.addAll(AssetUtil.getSiteLocation(locationService.getAllLocation(siteVo
-                    .getSiteNameAbbr())));
-        }
-        List<String> list = remoteEntityService.getAllEntityFromIAP(request);
-        List<DeviceSubtype> deviceSubtypeList = deviceSubtypeService.getAllDeviceSubtype();
+	private ModelAndView getCommonInfoForAsset(HttpServletRequest request)
+			throws DataException, ParseException {
 
-        modelAndView.addObject("siteList", locationList);
-        modelAndView.addObject("allEntity", list);
-        modelAndView.addObject("assetStatus", AssetUtil.getAssetStatus());
-        modelAndView.addObject("assetType", AssetUtil.getAssetTypes());
-        modelAndView.addObject("machineTypes", AssetUtil.getMachineTypes());
-        modelAndView.addObject("deviceSubtypeList", deviceSubtypeList);
+		logger.info("getCommonInfoForAsset method start!");
 
-        logger.info("getCommonInfoForAsset method end!");
-        return modelAndView;
-    }
+		ModelAndView modelAndView = new ModelAndView();
+		List<SiteVo> siteList = remoteSiteService.getSiteFromIAP(request);
+		List<String> locationList = new ArrayList<String>();
+		for (SiteVo siteVo : siteList) {
+			locationList.addAll(AssetUtil.getSiteLocation(locationService
+					.getAllLocation(siteVo.getSiteNameAbbr())));
+		}
+		List<String> list = remoteEntityService.getAllEntityFromIAP(request);
+		List<DeviceSubtype> deviceSubtypeList = deviceSubtypeService
+				.getAllDeviceSubtype();
 
-    /**
-     * 
-     * @author Jay.He
-     * @time Nov 15, 2013 10:59:47 AM
-     * @param request
-     * @param assetVo
-     * @param batchCreate
-     * @param batchCount
-     * @return
-     * @throws DataException
-     * @throws UnsupportedEncodingException
-     */
-    @RequestMapping(value = "/saveAsset", method = RequestMethod.POST)
-    public ModelAndView saveAsset(HttpServletRequest request, AssetVo assetVo, String batchCreate,
-            String batchCount) throws DataException, UnsupportedEncodingException {
+		modelAndView.addObject("siteList", locationList);
+		modelAndView.addObject("allEntity", list);
+		modelAndView.addObject("assetStatus", AssetUtil.getAssetStatus());
+		modelAndView.addObject("assetType", AssetUtil.getAssetTypes());
+		modelAndView.addObject("machineTypes", AssetUtil.getMachineTypes());
+		modelAndView.addObject("deviceSubtypeList", deviceSubtypeList);
 
-        logger.info("saveAsset method start!");
+		logger.info("getCommonInfoForAsset method end!");
+		return modelAndView;
+	}
 
-        logger.info(assetVo.toString());
-        ModelAndView modelAndView = new ModelAndView();
-        Asset asset = new Asset();
+	/**
+	 * 
+	 * @author Jay.He
+	 * @time Nov 15, 2013 10:59:47 AM
+	 * @param request
+	 * @param assetVo
+	 * @param batchCreate
+	 * @param batchCount
+	 * @return
+	 * @throws DataException
+	 * @throws UnsupportedEncodingException
+	 */
+	@RequestMapping(value = "/saveAsset", method = RequestMethod.POST)
+	public ModelAndView saveAsset(HttpServletRequest request, AssetVo assetVo,
+			String batchCreate, String batchCount) throws DataException,
+			UnsupportedEncodingException {
 
-        voToAsset(request, assetVo, asset);
-        AssetUtil.setKeeperForAssetVo(assetVo, asset);
+		logger.info("saveAsset method start!");
 
-        if (null == batchCreate) {
-            asset.setAssetId(assetVo.getAssetId());
-            try {
-                assetService.saveAssetAsType(assetVo, asset, "save");
-            } catch (Exception e) {
-                logger.error("Save asset error", e);
-            }
-        } else {
-            try {
-                // TODO
-                int batchNum = Integer.parseInt(batchCount);
+		logger.info(assetVo.toString());
+		ModelAndView modelAndView = new ModelAndView();
+		Asset asset = new Asset();
 
-                List<String> batchIdList = AssetUtil.getBatchId(assetVo.getAssetId(), batchNum);
-                for (int i = 0; i < batchNum; i++) {
-                    asset.setAssetId(batchIdList.get(i));
-                    assetService.saveAssetAsType(assetVo, asset, "save");
-                }
-            } catch (NumberFormatException e) {
-                // TODO
-                logger.error("Number format error!", e);
-            }
-        }
-        modelAndView.setViewName("redirect:/asset/allAssets");
+		voToAsset(request, assetVo, asset);
+		AssetUtil.setKeeperForAssetVo(assetVo, asset);
 
-        logger.info("saveAsset method end!");
-        return modelAndView;
-    }
+		if (null == batchCreate) {
+			asset.setAssetId(assetVo.getAssetId());
+			try {
+				assetService.saveAssetAsType(assetVo, asset, "save");
+			} catch (Exception e) {
+				logger.error("Save asset error", e);
+			}
+		} else {
+			try {
+				// TODO
+				int batchNum = Integer.parseInt(batchCount);
 
-    /**
-     * 
-     * @description copy assetVo elements to asset
-     * @author Jay.He
-     * @time Nov 11, 2013 3:59:30 PM
-     * @param assetVo
-     * @param asset
-     * @throws UnsupportedEncodingException
-     * @throws DataException
-     */
-    private void voToAsset(HttpServletRequest request, AssetVo assetVo, Asset asset)
-            throws UnsupportedEncodingException {
-        // get Location local with location sent from front page
-        // TODO vo --> User -> username,userId
-        if (!assetVo.getUser().getUserName().equals("")) {
-            User user = userService.getUserByName(assetVo.getUser().getUserName());
-            if (null == user) {
-                UserVo userVo = null;
-                try {
-                    userVo = remoteEmployeeService.getRemoteUserByName(assetVo.getUser()
-                            .getUserName(), request);
-                } catch (DataException e) {
-                    logger.error("Get user error from IAP", e);
-                }
-                userService.saveUserAsUserVo(userVo);
-            }
-        } else {
-            assetVo.setUser(null);
-        }
-        setCustomerToAsset(request, assetVo, asset);
-        assetService.assetVoToAsset(assetVo, asset);
+				List<String> batchIdList = AssetUtil.getBatchId(
+						assetVo.getAssetId(), batchNum);
+				for (int i = 0; i < batchNum; i++) {
+					asset.setAssetId(batchIdList.get(i));
+					assetService.saveAssetAsType(assetVo, asset, "save");
+				}
+			} catch (NumberFormatException e) {
+				// TODO
+				logger.error("Number format error!", e);
+			}
+		}
+		modelAndView.setViewName("redirect:/asset/allAssets");
 
-    }
+		logger.info("saveAsset method end!");
+		return modelAndView;
+	}
 
-    /**
-     * 
-     * @description TODO
-     * @author Jay.He
-     * @time Nov 22, 2013 10:00:15 AM
-     * @param request
-     * @param assetVo
-     * @param asset
-     */
-    private void setCustomerToAsset(HttpServletRequest request, AssetVo assetVo, Asset asset) {
-        String custCode = assetVo.getCustomer().getCustomerCode();
-        Customer cust = null;
-        try {
-            cust = remoteCustomerService.getCustomerByCodefromIAP(request, custCode);
-        } catch (DataException e1) {
-            e1.printStackTrace();
-        }
-        assetService.setAssetCustomer(asset, custCode, cust);
-    }
+	/**
+	 * 
+	 * @description copy assetVo elements to asset
+	 * @author Jay.He
+	 * @time Nov 11, 2013 3:59:30 PM
+	 * @param assetVo
+	 * @param asset
+	 * @throws UnsupportedEncodingException
+	 * @throws DataException
+	 */
+	private void voToAsset(HttpServletRequest request, AssetVo assetVo,
+			Asset asset) throws UnsupportedEncodingException {
+		// get Location local with location sent from front page
+		// TODO vo --> User -> username,userId
+		if (!assetVo.getUser().getUserName().equals("")) {
+			User user = userService.getUserByName(assetVo.getUser()
+					.getUserName());
+			if (null == user) {
+				UserVo userVo = null;
+				try {
+					userVo = remoteEmployeeService.getRemoteUserByName(assetVo
+							.getUser().getUserName(), request);
+				} catch (DataException e) {
+					logger.error("Get user error from IAP", e);
+				}
+				userService.saveUserAsUserVo(userVo);
+			}
+		} else {
+			assetVo.setUser(null);
+		}
+		setCustomerToAsset(request, assetVo, asset);
+		assetService.assetVoToAsset(assetVo, asset);
 
-    @RequestMapping(value = "/allAssets")
-    public String redirectPage() {
+	}
 
-        logger.info("redirectPage method start!");
-        logger.info("redirectPage method end!");
-        return "asset/allAssetsList";
-    }
+	/**
+	 * 
+	 * @description TODO
+	 * @author Jay.He
+	 * @time Nov 22, 2013 10:00:15 AM
+	 * @param request
+	 * @param assetVo
+	 * @param asset
+	 */
+	private void setCustomerToAsset(HttpServletRequest request,
+			AssetVo assetVo, Asset asset) {
+		String custCode = assetVo.getCustomer().getCustomerCode();
+		Customer cust = null;
+		try {
+			cust = remoteCustomerService.getCustomerByCodefromIAP(request,
+					custCode);
+		} catch (DataException e1) {
+			e1.printStackTrace();
+		}
+		assetService.setAssetCustomer(asset, custCode, cust);
+	}
 
-    /**
-     * 
-     * @description Upload and show the file
-     * @author Jay.He
-     * @time Nov 21, 2013 4:15:42 PM
-     * @param file
-     * @param assetVo
-     * @param request
-     * @param response
-     */
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public void uploadFile(@RequestParam(value = "file", required = false) MultipartFile file,
-            AssetVo assetVo, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/allAssets")
+	public String redirectPage() {
 
-        logger.info("uploadFile method start!");
+		logger.info("redirectPage method start!");
+		logger.info("redirectPage method end!");
+		return "asset/allAssetsList";
+	}
 
-        assetService.uploadAndDisplayImage(file, request, response);
+	/**
+	 * 
+	 * @description Upload and show the file
+	 * @author Jay.He
+	 * @time Nov 21, 2013 4:15:42 PM
+	 * @param file
+	 * @param assetVo
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+	public void uploadFile(
+			@RequestParam(value = "file", required = false) MultipartFile file,
+			AssetVo assetVo, HttpServletRequest request,
+			HttpServletResponse response) {
 
-        logger.info("uploadFile method end!");
-    }
+		logger.info("uploadFile method start!");
 
-    @RequestMapping(value = "/edit/{id}")
-    public ModelAndView editAssetById(@PathVariable String id, HttpServletRequest request)
-            throws Exception {
+		assetService.uploadAndDisplayImage(file, request, response);
 
-        logger.info("editAssetById method start!");
+		logger.info("uploadFile method end!");
+	}
 
-        ModelAndView modelAndView = getCommonInfoForAsset(request);
-        Asset asset = assetService.getAsset(id);
-        AssetVo assetVo = new AssetVo();
-        assetVo.setId(id);
-        String timeOffset = (String) request.getSession().getAttribute("timeOffset");
-        AssetUtil.assetToAssetVo(asset, assetVo, timeOffset);
-        // get self-defined properties
-        getSelfDefinedProperties(asset, modelAndView, "show");
-        modelAndView.addObject("asset", assetVo);
-        modelAndView.setViewName("asset/editAsset");
+	@RequestMapping(value = "/edit/{id}")
+	public ModelAndView editAssetById(@PathVariable String id,
+			HttpServletRequest request) throws Exception {
 
-        logger.info("editAssetById method end!");
-        return modelAndView;
-    }
+		logger.info("editAssetById method start!");
 
-    @RequestMapping(value = "/view/{id}")
-    public ModelAndView viewAssetById(@PathVariable String id, HttpServletRequest request, String uuid)
-            throws Exception {
+		ModelAndView modelAndView = getCommonInfoForAsset(request);
+		Asset asset = assetService.getAsset(id);
+		AssetVo assetVo = new AssetVo();
+		assetVo.setId(id);
+		String timeOffset = (String) request.getSession().getAttribute(
+				"timeOffset");
+		AssetUtil.assetToAssetVo(asset, assetVo, timeOffset);
+		// get self-defined properties
+		getSelfDefinedProperties(asset, modelAndView, "show");
+		modelAndView.addObject("asset", assetVo);
+		modelAndView.setViewName("asset/editAsset");
 
-        logger.info("viewAssetById method start!");
+		logger.info("editAssetById method end!");
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = getCommonInfoForAsset(request);
-        Asset asset = assetService.getAsset(id);
-        AssetVo assetVo = new AssetVo();
-        assetVo.setId(id);
-        String timeOffset = (String) request.getSession().getAttribute("timeOffset");
-        AssetUtil.assetToAssetVo(asset, assetVo, timeOffset);
-        // get self-defined properties
-        getSelfDefinedProperties(asset, modelAndView, "view");
-        modelAndView.addObject("asset", assetVo);
-        modelAndView.addObject("uuid", uuid);
-        modelAndView.setViewName("asset/assetDetail");
+	@RequestMapping(value = "/view/{id}")
+	public ModelAndView viewAssetById(@PathVariable String id,
+			HttpServletRequest request, String uuid) throws Exception {
 
-        logger.info("viewAssetById method end!");
-        return modelAndView;
-    }
+		logger.info("viewAssetById method start!");
 
-    private void getSelfDefinedProperties(Asset asset, ModelAndView modelAndView, String operation)
-            throws Exception {
-        List<PropertyTemplate> propertyTemplatesList = assetService
-                .showOrViewSelfDefinedProperties(asset, operation);
-        modelAndView.addObject("selfPropertyCount", propertyTemplatesList.size());
-        modelAndView.addObject("showSelfProperties", propertyTemplatesList);
-    }
+		ModelAndView modelAndView = getCommonInfoForAsset(request);
+		Asset asset = assetService.getAsset(id);
+		AssetVo assetVo = new AssetVo();
+		assetVo.setId(id);
+		String timeOffset = (String) request.getSession().getAttribute(
+				"timeOffset");
+		AssetUtil.assetToAssetVo(asset, assetVo, timeOffset);
+		// get self-defined properties
+		getSelfDefinedProperties(asset, modelAndView, "view");
+		modelAndView.addObject("asset", assetVo);
+		modelAndView.addObject("uuid", uuid);
+		modelAndView.setViewName("asset/assetDetail");
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ModelAndView updateAsset(AssetVo assetVo, HttpServletRequest request)
-            throws UnsupportedEncodingException {
+		logger.info("viewAssetById method end!");
+		return modelAndView;
+	}
 
-        logger.info("updateAsset method start!");
+	private void getSelfDefinedProperties(Asset asset,
+			ModelAndView modelAndView, String operation) throws Exception {
+		List<PropertyTemplate> propertyTemplatesList = assetService
+				.showOrViewSelfDefinedProperties(asset, operation);
+		modelAndView.addObject("selfPropertyCount",
+				propertyTemplatesList.size());
+		modelAndView.addObject("showSelfProperties", propertyTemplatesList);
+	}
 
-        ModelAndView modelAndView = new ModelAndView();
-        Asset asset = assetService.getAsset(assetVo.getId().trim());
-        voToAsset(request, assetVo, asset);
-        AssetUtil.setKeeperForAssetVo(assetVo, asset);
-        try {
-            assetService.saveAssetAsType(assetVo, asset, "update");
-            if(asset.getUser()!=assetVo.getUser()){
-            	transferLogService.saveTransferLog(asset.getId(),"Assign");
-            }
-        } catch (Exception e) {
-            logger.error("Update asset error!", e);
-        }
-        modelAndView.setViewName("redirect:/asset/allAssets");
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public ModelAndView updateAsset(AssetVo assetVo, HttpServletRequest request)
+			throws UnsupportedEncodingException {
 
-        logger.info("updateAsset method end!");
-        return modelAndView;
-    }
+		logger.info("updateAsset method start!");
 
-    @RequestMapping(value = "/copy/{id}")
-    public ModelAndView copyAssetById(@PathVariable String id, HttpServletRequest request)
-            throws DataException, ParseException {
+		ModelAndView modelAndView = new ModelAndView();
+		Asset asset = assetService.getAsset(assetVo.getId().trim());
+		voToAsset(request, assetVo, asset);
+		AssetUtil.setKeeperForAssetVo(assetVo, asset);
+		try {
+			assetService.saveAssetAsType(assetVo, asset, "update");
+		} catch (Exception e) {
+			logger.error("Update asset error!", e);
+		}
+		modelAndView.setViewName("redirect:/asset/allAssets");
 
-        logger.info("copyAssetById method start!");
+		logger.info("updateAsset method end!");
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = getCommonInfoForAsset(request);
-        Asset asset = assetService.getAsset(id);
-        asset.setAssetId(assetService.getGenerateAssetId());
-        AssetVo assetVo = new AssetVo();
-        String timeOffset = (String) request.getSession().getAttribute("timeOffset");
-        AssetUtil.assetToAssetVo(asset, assetVo, timeOffset);
-        modelAndView.addObject("assetVo", assetVo);
-        modelAndView.setViewName("asset/copyAsset");
+	@RequestMapping(value = "/copy/{id}")
+	public ModelAndView copyAssetById(@PathVariable String id,
+			HttpServletRequest request) throws DataException, ParseException {
 
-        logger.info("copyAssetById method end!");
-        return modelAndView;
-    }
+		logger.info("copyAssetById method start!");
 
-    @RequestMapping("/delete/{id}")
-    public ModelAndView deleteAssetById(@PathVariable String id) throws DataException,
-            ParseException {
+		ModelAndView modelAndView = getCommonInfoForAsset(request);
+		Asset asset = assetService.getAsset(id);
+		asset.setAssetId(assetService.getGenerateAssetId());
+		AssetVo assetVo = new AssetVo();
+		String timeOffset = (String) request.getSession().getAttribute(
+				"timeOffset");
+		AssetUtil.assetToAssetVo(asset, assetVo, timeOffset);
+		modelAndView.addObject("assetVo", assetVo);
+		modelAndView.setViewName("asset/copyAsset");
 
-        logger.info("deleteAssetById method satrt!");
+		logger.info("copyAssetById method end!");
+		return modelAndView;
+	}
 
-        ModelAndView modelAndView = new ModelAndView();
-        assetService.deleteAssetById(id);
-        modelAndView.setViewName("redirect:/asset/allAssets");
+	@RequestMapping("/delete/{id}")
+	public ModelAndView deleteAssetById(@PathVariable String id)
+			throws DataException, ParseException {
 
-        logger.info("deleteAssetById method end!");
-        return modelAndView;
-    }
+		logger.info("deleteAssetById method satrt!");
 
-    @RequestMapping(value = "/itAssignAssets")
+		ModelAndView modelAndView = new ModelAndView();
+		assetService.deleteAssetById(id);
+		modelAndView.setViewName("redirect:/asset/allAssets");
+
+		logger.info("deleteAssetById method end!");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/itAssignAssets")
 	public ModelAndView itAssignAssets(AssignAssetCondition condition,
 			HttpServletRequest request) {
 
@@ -426,8 +433,10 @@ public class AssetController extends BaseController {
 	public ModelAndView returnAssetsToCustomer(String assetIds) {
 
 		ModelAndView modelAndView = new ModelAndView();
+		User returner = (User) SecurityUtils.getSubject().getSession()
+				.getAttribute("currentUser");
 		try {
-			assetService.returnAssetsToCustomer(assetIds);
+			assetService.returnAssetsToCustomer(returner, assetIds);
 		} catch (ExceptionHelper e) {
 			modelAndView = this.addErrorCode(e);
 		}
@@ -485,7 +494,7 @@ public class AssetController extends BaseController {
 	}
 
 	public ModelAndView addErrorCode(ExceptionHelper e) {
-		
+
 		ModelAndView modelAndView = new ModelAndView();
 		if (null != e.getErrorCodes()) {
 			JSONArray errorCodes = ErrorCodeConvertToJSON.convertToJSONArray(e
@@ -501,113 +510,119 @@ public class AssetController extends BaseController {
 		return modelAndView;
 	}
 
-    @RequestMapping(value = "/listMyAssets")
-    public String redirectToMyassetsPage(HttpSession session, HttpServletRequest request) {
+	@RequestMapping(value = "/listMyAssets")
+	public String redirectToMyassetsPage(HttpSession session,
+			HttpServletRequest request) {
 
-        logger.info("redirectToMyassetsPage method satrt!");
+		logger.info("redirectToMyassetsPage method satrt!");
 
-        UserVo userVo = (UserVo) session.getAttribute("userVo");
-        User user = userService.getUserByUserId(userVo.getEmployeeId());
-        request.setAttribute("userUuid", user.getId());
+		UserVo userVo = (UserVo) session.getAttribute("userVo");
+		User user = userService.getUserByUserId(userVo.getEmployeeId());
+		request.setAttribute("userUuid", user.getId());
 
-        logger.info("redirectToMyassetsPage method end!");
-        return "asset/allAssetsList";
-    }
+		logger.info("redirectToMyassetsPage method end!");
+		return "asset/allAssetsList";
+	}
 
-    // TODO get asset data list
-    @RequestMapping(value = "/allAssetsList", method = RequestMethod.GET)
-    public ModelAndView findMyAssetsBySearchCondition(SearchCondition searchCondition, String uuid,
-            HttpSession session) throws BaseException {
+	// TODO get asset data list
+	@RequestMapping(value = "/allAssetsList", method = RequestMethod.GET)
+	public ModelAndView findMyAssetsBySearchCondition(
+			SearchCondition searchCondition, String uuid, HttpSession session)
+			throws BaseException {
 
-        logger.info("findMyAssetsBySearchCondition method end!");
+		logger.info("findMyAssetsBySearchCondition method end!");
 
-        if (null == searchCondition) {
-            searchCondition = new SearchCondition();
-        }
-        if (null != uuid && !uuid.equals("")) {
-            searchCondition.setUserUuid(uuid);
-        }
-        Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(searchCondition);
-        pageForAudit = page;
-        String clientTimeOffset = (String) session.getAttribute("timeOffset");
-        List<AssetListVo> list = FormatEntityListToEntityVoList.formatAssetListToAssetVoList(
-                page.getResult(), clientTimeOffset);
-        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
-                .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list, userCustomColumnList, uuid);
+		if (null == searchCondition) {
+			searchCondition = new SearchCondition();
+		}
+		if (null != uuid && !uuid.equals("")) {
+			searchCondition.setUserUuid(uuid);
+		}
+		Page<Asset> page = searchAssetService
+				.findAllAssetsBySearchCondition(searchCondition);
+		pageForAudit = page;
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		List<AssetListVo> list = FormatEntityListToEntityVoList
+				.formatAssetListToAssetVoList(page.getResult(),
+						clientTimeOffset);
+		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+				.findUserCustomColumns("asset", getUserIdByShiro());
+		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
+				userCustomColumnList, uuid);
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("fieldsData", array);
-        modelAndView.addObject("count", page.getRecordCount());
-        modelAndView.addObject("totalPage", page.getTotalPage());
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", page.getRecordCount());
+		modelAndView.addObject("totalPage", page.getTotalPage());
 
-        logger.info("findMyAssetsBySearchCondition method end!");
-        return modelAndView;
-    }
-    
-    @RequestMapping(value = "/export", method = RequestMethod.GET)
-    @ResponseBody
-    public void  exportAssets(HttpServletRequest request, HttpServletResponse response,
-            String assetIds) {
-        
-        String outPutPath = null;
-        try {
-            
-            if (null == assetIds || "".equals(assetIds)) {
-                outPutPath = assetService.exportAssetsForAll(pageForAudit);
-            } else {
-                outPutPath = assetService.exportAssetsByIds(assetIds);
-            }
-            FileOperateUtil.download(request, response, outPutPath);
-            
-        } catch (ExcelException e) {
-            logger.error(e.getMessage());
-        } catch (SQLException e) {
-            logger.error(e.getMessage());
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
-    
-    @RequestMapping(value = "/import")
-    public String  importAssets() {
-        return "asset/importAssets";
-    }
-    
-    @RequestMapping(value = "/upload")
-    @ResponseBody
-    public JSONObject  uploadAssetsExcelFile(MultipartFile file, String flag, HttpServletRequest request,
-            HttpServletResponse response) {
-        
-        File targetFile = FileOperateUtil.upload(request, response, file);
-        ImportVo importVo = null;
-        JSONObject jsonObject = new JSONObject();
-        try {
-            importVo = assetService.analyseUploadExcelFile(targetFile, request, flag);
-        } catch (ExcelException e) {
-            logger.error(e.getMessage(), e);
-        } catch (DataException e) {
-            logger.error(e.getMessage(), e);
-        }
-        jsonObject.put("all", importVo.getAllImportRecords());
-        jsonObject.put("success", importVo.getSuccessRecords());
-        jsonObject.put("failure", importVo.getFailureRecords());
-        jsonObject.put("failureFileName", importVo.getFailureFileName());
-        
-        return jsonObject;
-    }
-    
-    @RequestMapping(value = "/download")
-    public void downloadFailureAssets(String fileName, HttpServletRequest request,
-            HttpServletResponse response) {
-        
-        String outPutPath = FileOperateUtil.getBasePath() + Constant.CONFIG_TEMPLATES_PATH
-                + fileName;
-        try {
-            FileOperateUtil.download(request, response, outPutPath);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
-    
+		logger.info("findMyAssetsBySearchCondition method end!");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/export", method = RequestMethod.GET)
+	@ResponseBody
+	public void exportAssets(HttpServletRequest request,
+			HttpServletResponse response, String assetIds) {
+
+		String outPutPath = null;
+		try {
+
+			if (null == assetIds || "".equals(assetIds)) {
+				outPutPath = assetService.exportAssetsForAll(pageForAudit);
+			} else {
+				outPutPath = assetService.exportAssetsByIds(assetIds);
+			}
+			FileOperateUtil.download(request, response, outPutPath);
+
+		} catch (ExcelException e) {
+			logger.error(e.getMessage());
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/import")
+	public String importAssets() {
+		return "asset/importAssets";
+	}
+
+	@RequestMapping(value = "/upload")
+	@ResponseBody
+	public JSONObject uploadAssetsExcelFile(MultipartFile file, String flag,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		File targetFile = FileOperateUtil.upload(request, response, file);
+		ImportVo importVo = null;
+		JSONObject jsonObject = new JSONObject();
+		try {
+			importVo = assetService.analyseUploadExcelFile(targetFile, request,
+					flag);
+		} catch (ExcelException e) {
+			logger.error(e.getMessage(), e);
+		} catch (DataException e) {
+			logger.error(e.getMessage(), e);
+		}
+		jsonObject.put("all", importVo.getAllImportRecords());
+		jsonObject.put("success", importVo.getSuccessRecords());
+		jsonObject.put("failure", importVo.getFailureRecords());
+		jsonObject.put("failureFileName", importVo.getFailureFileName());
+
+		return jsonObject;
+	}
+
+	@RequestMapping(value = "/download")
+	public void downloadFailureAssets(String fileName,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		String outPutPath = FileOperateUtil.getBasePath()
+				+ Constant.CONFIG_TEMPLATES_PATH + fileName;
+		try {
+			FileOperateUtil.download(request, response, outPutPath);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+	}
+
 }

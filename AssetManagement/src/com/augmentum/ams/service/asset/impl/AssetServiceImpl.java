@@ -5,25 +5,23 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-
-import org.apache.commons.lang.StringUtils;
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
+import net.sf.json.JSONArray;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
 import com.augmentum.ams.dao.audit.AuditFileDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.excel.AssetTemplateParser;
 import com.augmentum.ams.excel.ExcelBuilder;
 import com.augmentum.ams.excel.ExcelUtil;
+import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
@@ -55,6 +54,7 @@ import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.model.enumeration.StatusEnum;
 import com.augmentum.ams.model.enumeration.TransientStatusEnum;
+import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerService;
@@ -97,48 +97,48 @@ import com.augmentum.ams.web.vo.user.UserVo;
 public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		AssetService {
 
-	@Autowired
-	private AssetDao assetDao;
-	@Autowired
-	private SoftwareService softwareService;
-	@Autowired
-	private MachineService machineService;
-	@Autowired
-	private DeviceService deviceService;
-	@Autowired
-	private MonitorService monitorService;
-	@Autowired
-	private OtherAssetsService otherAssetsService;
-	@Autowired
-	private DeviceSubtypeService deviceSubtypeService;
-	@Autowired
-	private PropertyTemplateService propertyTemplateService;
-	@Autowired
-	private CustomizedPropertyService customizedPropertyService;
-	@Autowired
-	private CustomerService customerService;
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private LocationService locationService;
-	@Autowired
-	private RemoteEmployeeService remoteEmployeeService;
-	@Autowired
-	private RemoteCustomerService remoteCustomerService;
-	@Autowired
-	private RemoteProjectService remoteProjectService;
-	@Autowired
-	private RemoteSiteService remoteSiteService;
-	@Autowired
-	private SpecialRoleService specialRoleService;
-	@Autowired
-	private AuditFileDao auditFileDao;
-	@Autowired
-	private AuditDao auditDao;
+    @Autowired
+    private AssetDao assetDao;
+    @Autowired
+    private SoftwareService softwareService;
+    @Autowired
+    private MachineService machineService;
+    @Autowired
+    private DeviceService deviceService;
+    @Autowired
+    private MonitorService monitorService;
+    @Autowired
+    private OtherAssetsService otherAssetsService;
+    @Autowired
+    private DeviceSubtypeService deviceSubtypeService;
+    @Autowired
+    private PropertyTemplateService propertyTemplateService;
+    @Autowired
+    private CustomizedPropertyService customizedPropertyService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private LocationService locationService;
+    @Autowired
+    private RemoteEmployeeService remoteEmployeeService;
+    @Autowired
+    private RemoteCustomerService remoteCustomerService;
+    @Autowired
+    private RemoteProjectService remoteProjectService;
+    @Autowired
+    private SpecialRoleService specialRoleService;
+    @Autowired
+    private AuditFileDao auditFileDao;
+    @Autowired
+    private AuditDao auditDao;
+    @Autowired
+    private ToDoDao todoDao;
 
-	private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
+    private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
 
 	@Override
 	public void saveAsset(Asset asset) {
@@ -509,6 +509,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						asset.setCustomer(customer);
 						asset.setUser(receiver);
 						assetDao.update(asset);
+						
 					} else {
 						asset.setStatus(StatusEnum.IN_USE.name());
 						asset.setProject(project);
@@ -526,7 +527,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	}
 
 	@Override
-	public void returnAssetsToCustomer(String assetIds) throws ExceptionHelper {
+	public void returnAssetsToCustomer(User returner, String assetIds) throws ExceptionHelper {
 
 		logger.info("enter returnAssetsToCustomer service successfully");
 		if (null == assetIds || "".equals(assetIds)) {
@@ -537,7 +538,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 			String[] assetIdArr = FormatUtil.splitString(assetIds,
 					Constant.SPLIT_COMMA);
 			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
-
+			Date date = UTCTimeUtil.localDateToUTC();
+			
 			for (String id : assetIdArr) {
 				Asset asset = assetDao.getAssetById(id);
 
@@ -555,8 +557,14 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 					} else {
 						asset.setStatus(TransientStatusEnum.RETURNING_TO_CUSTOMER
 								.name());
-						asset.setUser(null);
 						assetDao.update(asset);
+						
+						//TODO generate todo list for return operation
+						ToDo todo = new ToDo();
+						todo.setAsset(asset);
+						todo.setReturnedTime(date);
+						todo.setReturner(returner);
+						todoDao.save(todo);
 					}
 				}
 			}
@@ -776,7 +784,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		}
 	}
 
-	@Override
+//	@Override
 	public void analyseUploadExcelFile(File file, HttpServletRequest request)
 			throws ExcelException, DataException {
 
@@ -1152,7 +1160,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 			if (isErrorRecorde || emptySubtype) {
 				AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
 				// assetTemplateParser.fillOneCell(c, r, value, ws);
-				setErrorCommonAsset();
+//				setErrorCommonAsset();
 			} else {
 				Asset newAsset = assetDao.save(asset);
 				// Machine machine = machines.get(i);

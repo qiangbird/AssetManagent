@@ -13,11 +13,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.base.BaseModel;
@@ -30,6 +32,7 @@ import com.augmentum.ams.model.base.PageSize;
 @Entity
 @Table(name = "user")
 @Indexed(index = "user")
+@Analyzer(impl = IKAnalyzer.class)
 public class User extends BaseModel {
 
 	private static final long serialVersionUID = -5454470926592265175L;

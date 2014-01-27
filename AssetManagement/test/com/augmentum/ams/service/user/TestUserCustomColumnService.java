@@ -36,4 +36,10 @@ public class TestUserCustomColumnService extends BaseCaseTest{
         Assert.assertFalse(userCustomColumns.get(0).getShowDefault());
     }
     
+    @Test
+    public void testInitUseCustomColumn() {
+    	String userId = "T00245";
+    	userCustomColumnsService.initUserCustomColumn(userId);
+    }
+    
 }

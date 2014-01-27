@@ -213,4 +213,14 @@ public class UTCTimeUtil {
             return null;
         }
     }
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    public static String formatUTCStringToLocalString(String utcString, String timeOffset, String pattern) {
+    	Date utcTime = formatStringToDate(utcString, Constant.TIME_SECOND_PATTERN);
+    	Date localTime = utcToLocalTime(utcTime, timeOffset);
+    	return formatDateToString(localTime, pattern);
+    }
 }

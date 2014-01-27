@@ -392,3 +392,22 @@ a.green_button_twenty_disable .right {
 .ui-button-text {
 	
 } */
+
+.confirm-button {
+	background: url("../../image/common/BTN_Create_80x30.png") no-repeat;
+	color: #FFFFFF;
+	position: absolute;
+	top: 20px;
+	lef: 0;
+	font-family: arial;
+	font-size: 14px;
+	font-weight: bold;
+	width: 80px;
+	height: 30px;
+	margin-left: 11px;
+	cursor: pointer;
+}
+
+.confirm-button:hover {
+	background: url("../../image/common/BTN_Create_Hover_80x30.png") no-repeat;
+}

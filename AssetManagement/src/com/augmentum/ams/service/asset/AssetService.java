@@ -15,6 +15,7 @@ import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.customized.PropertyTemplate;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
@@ -149,7 +150,7 @@ public interface AssetService {
      * @author Geoffrey.Zhao
      * @param assetIds
      */
-    void returnAssetsToCustomer(String assetIds) throws ExceptionHelper;
+    void returnAssetsToCustomer(User returner, String assetIds) throws ExceptionHelper;
 
     /**
      * @author Geoffrey.Zhao

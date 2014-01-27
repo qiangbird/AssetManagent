@@ -5,18 +5,19 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 
 import net.sf.json.JSONArray;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.operationLog.OperationLog;
+import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 
@@ -186,7 +187,67 @@ public class SearchCommonUtil {
 			arrays.add(array);
 		}
 		return arrays;
+	}
 
+	public static JSONArray formatReturnedAssetTOJSONArray(List<ToDo> todoList,
+			List<UserCustomColumn> userCustomColumnList, String timeOffset) {
+		JSONArray arrays = new JSONArray();
+
+		for (ToDo todo : todoList) {
+
+			JSONArray array = new JSONArray();
+			array.add(todo.getId());
+
+			for (UserCustomColumn column : userCustomColumnList) {
+
+				String columnName = column.getCustomizedColumn().getSortName();
+				String value = "";
+				try {
+
+					Object obj = BeanUtils.getProperty(todo, columnName);
+
+					if (null == obj) {
+						value = "";
+					} else {
+						if ("asset.customer".equals(columnName)) {
+							value = BeanUtils.getProperty(todo,
+									"asset.customer.customerName");
+						} else if ("asset.project".equals(columnName)) {
+							value = BeanUtils.getProperty(todo,
+									"asset.project.projectName");
+						} else if ("asset.user".equals(columnName)) {
+							value = BeanUtils.getProperty(todo,
+									"asset.user.userName");
+						} else if ("assigner".equals(columnName)) {
+							value = BeanUtils.getProperty(todo,
+									"assigner.userName");
+						} else if ("returner".equals(columnName)) {
+							value = BeanUtils.getProperty(todo,
+									"returner.userName");
+						} else if ("returnedTime".equals(columnName)
+								|| "receivedTime".equals(columnName)) {
+							value = UTCTimeUtil.formatUTCStringToLocalString(
+									(String) obj, timeOffset,
+									Constant.TIME_SECOND_PATTERN);
+						} else {
+							value = (String) obj;
+						}
+					}
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					logger.error("format todoList to JSONArray error", e);
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					logger.error("format todoList to JSONArray error", e);
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					logger.error("format todoList to JSONArray error", e);
+				}
+				array.add(value);
+			}
+			arrays.add(array);
+		}
+		return arrays;
 	}
 	
 	public static JSONArray formatOperationLogListTOJSONArray(

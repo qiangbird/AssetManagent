@@ -2,6 +2,7 @@ package com.augmentum.ams.model.todo;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +11,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.base.BaseModel;
@@ -21,19 +29,24 @@ import com.augmentum.ams.model.user.User;
  */
 @Entity
 @Table(name = "todo")
+@Indexed(index = "todo")
+@Analyzer(impl = IKAnalyzer.class)
 public class ToDo extends BaseModel {
 
 	private static final long serialVersionUID = -8600070952058905093L;
 	
 	@Column(name = "task")
+	@Field(name = "task", index = Index.TOKENIZED, store = Store.YES)
 	private String task;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "received_time")
+	@Field(name = "receivedTime", index = Index.UN_TOKENIZED, store = Store.YES)
 	private Date receivedTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "returned_time")
+	@Field(name = "returnedTime", index = Index.UN_TOKENIZED, store = Store.YES)
 	private Date returnedTime;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -44,7 +57,7 @@ public class ToDo extends BaseModel {
 	@JoinColumn(name = "returner_id")
 	private User returner;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "asset_id")
 	private Asset asset;
 
