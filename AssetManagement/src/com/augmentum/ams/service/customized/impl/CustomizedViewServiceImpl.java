@@ -15,7 +15,6 @@ import com.augmentum.ams.dao.customized.CustomizedViewDao;
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.customized.CustomizedView;
 import com.augmentum.ams.service.customized.CustomizedViewService;
-import com.augmentum.ams.util.LogHelper;
 import com.augmentum.ams.web.vo.customized.CustomizedViewVo;
 
 @Service("customizedViewService")
@@ -29,8 +28,6 @@ public class CustomizedViewServiceImpl implements CustomizedViewService{
     @Override
     public CustomizedView saveCustomizedView(CustomizedViewVo customizedViewVo) {
 
-        logger.info(LogHelper.getLogInfo("Save customized view start"));
-        
         CustomizedView customizedView = new CustomizedView();
         
         customizedView.setCreatorId(customizedViewVo.getCreatorId());
@@ -40,27 +37,19 @@ public class CustomizedViewServiceImpl implements CustomizedViewService{
         
         customizedViewDao.save(customizedView);
         
-        logger.info(LogHelper.getLogInfo("Save customized view end"));
-        
         return customizedView;
     }
 
     @Override
     public void deleteCustomizedView(CustomizedViewVo customizedViewVo) throws BaseException {
 
-        logger.info(LogHelper.getLogInfo("Save customized view start"));
-        
         CustomizedView customizedView = this.getCustomizedViewById(customizedViewVo.getCustomizedViewId());
         customizedViewDao.delete(customizedView);
-        
-        logger.info(LogHelper.getLogInfo("Save customized view end"));
     }
 
     @Override
     public CustomizedView updateCustomizedView(CustomizedViewVo customizedViewVo) throws BaseException {
 
-        logger.info(LogHelper.getLogInfo("Update customized view start"));
-        
         CustomizedView customizedView = this.getCustomizedViewById(customizedViewVo.getCustomizedViewId());
         
         customizedView.setOperators(customizedViewVo.getOperator());
@@ -68,28 +57,20 @@ public class CustomizedViewServiceImpl implements CustomizedViewService{
         
         customizedViewDao.update(customizedView);
         
-        logger.info(LogHelper.getLogInfo("Update customized view end"));
-        
         return customizedView;
     }
 
     @Override
     public CustomizedView getCustomizedViewById(String customizedViewId) throws BaseException {
 
-        logger.info(LogHelper.getLogInfo("Get customized view by id start"));
-        
         CustomizedView customizedView = customizedViewDao.get(CustomizedView.class, customizedViewId);
 
-        logger.info(LogHelper.getLogInfo("Get customized view by id end"));
-        
         return customizedView;
     }
 
     @Override
     public List<CustomizedView> findCustomizedViewByUser(String creatorId) {
 
-        logger.info(LogHelper.getLogInfo("Find customized view by user start"));
-        
         List<CustomizedView> customizedViews = new ArrayList<CustomizedView>();
         try {
 			customizedViews = customizedViewDao.findCustomizedViewsByUser(creatorId);
@@ -98,7 +79,6 @@ public class CustomizedViewServiceImpl implements CustomizedViewService{
 			e.printStackTrace();
 		}
         //TODO if customizedViews = null
-        logger.info(LogHelper.getLogInfo("Find customized view by user end"));
         return customizedViews;
     }
     

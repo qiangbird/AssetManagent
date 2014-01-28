@@ -18,7 +18,6 @@ import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.enumeration.PropertyTypeEnum;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.customized.PropertyTemplateService;
-import com.augmentum.ams.util.LogHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.customized.PropertyTemplateVo;
 
@@ -36,8 +35,6 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
 	@Override
 	public void savePropertyTemplate(PropertyTemplateVo propertyTemplateVo, Customer customer, User user){
 		
-	    logger.info(LogHelper.getLogInfo("Save property template start"));
-	    
 		JSONObject selfProperty = null;
 		Date nowTime = UTCTimeUtil.localDateToUTC();
 		List<PropertyTemplate> propertyTemplates = new ArrayList<PropertyTemplate>();
@@ -68,8 +65,6 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
         	e.printStackTrace();
         }
 		propertyTemplateDao.saveOrUpdateAll(propertyTemplates);
-		
-		logger.info(LogHelper.getLogInfo("Save property template end"));
 	}
 	
 	/* (non-Javadoc)
@@ -78,11 +73,7 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
 	@Override
 	public PropertyTemplate getPropertyTemplateById(String id) throws ParseException {
 		
-	    logger.info(LogHelper.getLogInfo("Get property template by id start"));
-	    
 	    PropertyTemplate propertyTemplate = propertyTemplateDao.getPropertyTemplate(id);
-	    
-	    logger.info(LogHelper.getLogInfo("Get property template end"));
 	    
 		return propertyTemplate;
 	}
@@ -94,8 +85,6 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
 	public JSONArray findPropertyTemplateByCustomerAndAssetType(String customerName,
 			String assetType) throws ParseException {
 		
-	    logger.info(LogHelper.getLogInfo("Get property template by customer and assetType start"));
-	    
 	    List<PropertyTemplate> propertyTemplates = propertyTemplateDao
 	            .findSelfDefinedProperties(customerName, assetType);
 	    JSONArray selfPropertyArray = new JSONArray();
@@ -121,7 +110,6 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
             selfProperty.put("propertyDescription", propertyTemplate.getDescription());
             selfPropertyArray.add(selfProperty);
         }
-        logger.info(LogHelper.getLogInfo("Get property template by customer and assetType end"));
 		
 		return selfPropertyArray;
 		
@@ -130,8 +118,6 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
 	private PropertyTemplate setValueOfPropertyTemplate(PropertyTemplate propertyTemplate,
             JSONObject selfProperty, Date nowTime){
         
-	    logger.info(LogHelper.getLogInfo("Set value of property template start"));
-	    
         propertyTemplate.setUpdatedTime(nowTime);
         propertyTemplate.setPropertyType(selfProperty.getString("propertyType"));
         propertyTemplate.setValue(selfProperty.getString("value"));
@@ -141,8 +127,6 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
         propertyTemplate.setRequired(selfProperty.getBoolean("required"));
         propertyTemplate.setSequence(selfProperty.getInt("sequence"));
         propertyTemplate.setDescription(selfProperty.getString("propertyDescription"));
-        
-        logger.info(LogHelper.getLogInfo("Set value of property template end"));
         
         return propertyTemplate;
     }

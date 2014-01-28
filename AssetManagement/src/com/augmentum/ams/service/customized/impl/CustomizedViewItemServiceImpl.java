@@ -23,7 +23,6 @@ import com.augmentum.ams.model.enumeration.ColumnTypeEnum;
 import com.augmentum.ams.service.customized.CustomizedViewItemService;
 import com.augmentum.ams.service.customized.CustomizedViewService;
 import com.augmentum.ams.util.Constant;
-import com.augmentum.ams.util.LogHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.customized.CustomizedViewVo;
 
@@ -57,8 +56,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     @Override
     public void saveCustomizedViewItem(CustomizedViewVo customizedViewVo) {
 
-        logger.info(LogHelper.getLogInfo("Save customized view item start"));
-
         CustomizedView customizedView = customizedViewService.saveCustomizedView(customizedViewVo);
 
         int length = customizedViewVo.getColumns().length;
@@ -83,7 +80,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             }
             customizedViewItemDao.saveCustomizedViewItem(customizedViewItems);
         }
-        logger.info(LogHelper.getLogInfo("Save customized view item end"));
     }
 
     /*
@@ -96,15 +92,12 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     @Override
     public void deleteCustomizedViewItem(CustomizedViewVo customizedViewVo) {
 
-        logger.info(LogHelper.getLogInfo("Delete customized view item start"));
-
         List<CustomizedViewItem> customizedViewItems = this.findByCustomizedViewId(customizedViewVo
                 .getCustomizedViewId());
 
         for (CustomizedViewItem customizedViewItem : customizedViewItems) {
             customizedViewItemDao.delete(customizedViewItem);
         }
-        logger.info(LogHelper.getLogInfo("Delete customized view item end"));
     }
 
     /*
@@ -116,8 +109,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
      */
     @Override
     public void updateCustomizedViewItem(CustomizedViewVo customizedViewVo) throws BaseException {
-
-        logger.info(LogHelper.getLogInfo("Update customized view item start"));
 
         CustomizedView customizedView = customizedViewService
                 .updateCustomizedView(customizedViewVo);
@@ -155,7 +146,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             }
             customizedViewItemDao.saveCustomizedViewItem(customizedViewItems);
         }
-        logger.info(LogHelper.getLogInfo("Update customized view item end"));
     }
 
     /*
@@ -167,14 +157,8 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     @Override
     public CustomizedViewItem getCustomizedViewItemById(String customizedViewItemId) {
 
-        logger.info(LogHelper
-                .getLogInfo("Get customized view item by id start, customizedViewItem id",
-                        customizedViewItemId));
-
         CustomizedViewItem customizedViewItem = customizedViewItemDao.get(CustomizedViewItem.class,
                 customizedViewItemId);
-
-        logger.info(LogHelper.getLogInfo("Get customized view item by id end"));
 
         return customizedViewItem;
     }
@@ -188,25 +172,18 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     @Override
     public List<CustomizedViewItem> findByCustomizedViewId(String customizedViewId) {
 
-        logger.info(LogHelper.getLogInfo("Find by customized view id start, customizedView id",
-                customizedViewId));
-
         List<CustomizedViewItem> customizedViewItems = new ArrayList<CustomizedViewItem>();
         try {
             customizedViewItems = customizedViewItemDao.findByCustomizedViewId(customizedViewId);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        logger.info(LogHelper.getLogInfo("Find by customized view id end"));
 
         return customizedViewItems;
     }
 
     @Override
     public BooleanQuery getCustomizedViewItemQuery(String customizedViewId) throws BaseException {
-
-        logger.info(LogHelper.getLogInfo("Get CustomizedViewItem query start, customizedView id",
-                customizedViewId));
 
         BooleanQuery booleanQuery = new BooleanQuery();
         List<CustomizedViewItem> customizedViewItem = findByCustomizedViewId(customizedViewId);
@@ -217,7 +194,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             booleanQuery = checkCustomizedViewOperator(booleanQuery, customizedViewId,
                     customizedViewItem);
         }
-        logger.info(LogHelper.getLogInfo("Get CustomizedViewItem query end"));
 
         return booleanQuery;
     }
@@ -225,11 +201,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     private BooleanQuery checkCustomizedViewOperator(BooleanQuery booleanQuery,
             String customizedViewId, List<CustomizedViewItem> customizedViewItem)
             throws BaseException {
-
-        logger.info(LogHelper
-                .getLogInfo(
-                        "Check customizedView operator start, customizedViewItem id, customizedViewItem size",
-                        customizedViewId, customizedViewItem.size()));
 
         CustomizedView customizedView = customizedViewService
                 .getCustomizedViewById(customizedViewId);
@@ -244,16 +215,11 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             booleanQuery = searchWithOperator(customizedViewItem, Occur.SHOULD);
             return booleanQuery;
         }
-        logger.info(LogHelper.getLogInfo("Check customizedView operator end"));
 
         return booleanQuery;
     }
 
     private BooleanQuery searchWithOperator(List<CustomizedViewItem> customizedViewItem, Occur occur) {
-
-        logger.info(LogHelper.getLogInfo(
-                "Search with operator start, customizedViewItem size, occur",
-                customizedViewItem.size(), occur));
 
         BooleanQuery booleanQuery = new BooleanQuery();
 
@@ -302,16 +268,12 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
                 continue;
             }
         }
-        logger.info(LogHelper.getLogInfo("Search with operator end"));
 
         return booleanQuery;
     }
 
     private void generateTermQuery(BooleanQuery booleanQuery, String column,
             String searchCondition, String value, Occur occur) {
-
-        logger.info(LogHelper.getLogInfo("Generate term query start, column, value, occur", column,
-                value, occur));
 
         if (Constant.IS_NOT.equals(searchCondition)) {
             BooleanQuery booleanQueryIn = new BooleanQuery();
@@ -321,14 +283,10 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
         } else {
             booleanQuery.add(new TermQuery(new Term(column, value)), occur);
         }
-        logger.info(LogHelper.getLogInfo("Generate term query end"));
     }
 
     private void generateWildcardQuery(BooleanQuery booleanQuery, String column,
             String searchCondition, String value, Occur occur) {
-
-        logger.info(LogHelper.getLogInfo("Generate wildcard query start, column, value, occur",
-                column, value, occur));
 
         if (Constant.CONTAINS.equals(searchCondition)) {
             booleanQuery.add(new WildcardQuery(new Term(column, "*" + value + "*")), occur);
@@ -346,16 +304,10 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             booleanQuery.add(new WildcardQuery(new Term(column, value + "*")), occur);
             return;
         }
-        logger.info(LogHelper.getLogInfo("Generate wildcard query end"));
-
     }
 
     private TermRangeQuery generateTermRangeQuery(String column, String searchCondition,
             String value, String realValue) {
-
-        logger.info(LogHelper.getLogInfo(
-                "Generate term range query start, column, value, realValue", column, value,
-                realValue));
 
         TermRangeQuery termRangeQuery = null;
 
@@ -375,7 +327,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             termRangeQuery = new TermRangeQuery(column, realValue, null, true, true);
             return termRangeQuery;
         }
-        logger.info(LogHelper.getLogInfo("Generate term range query end"));
 
         return termRangeQuery;
     }
@@ -394,9 +345,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
 
     private boolean checkGroup(String searchCondition, String[] arrayGroup) {
 
-        logger.info(LogHelper.getLogInfo("Check group start, searchCondition, arrayGroup.length",
-                searchCondition, arrayGroup.length));
-
         boolean isExist = false;
         for (int i = 0; i < arrayGroup.length; i++) {
             if (searchCondition.equals(arrayGroup[i])) {
@@ -406,8 +354,6 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
                 isExist = false;
             }
         }
-        logger.info(LogHelper.getLogInfo("Check group end"));
-
         return isExist;
     }
 }

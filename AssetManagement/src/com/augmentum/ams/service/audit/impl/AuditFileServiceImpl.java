@@ -170,7 +170,6 @@ public class AuditFileServiceImpl implements AuditFileService {
     @Override
     public Map<AuditFile, Integer> getDoneAuditList() {
     	
-    	logger.info("getDoneAuditList start");
         List<AuditFile> auditFiles = auditFileDao.findDoneAuditList();
         logger.info("get auditFile list when getDoneAuditList, list size: " + auditFiles.size());
 
@@ -181,14 +180,12 @@ public class AuditFileServiceImpl implements AuditFileService {
 
         }
         
-        logger.info("getDoneAuditList end, Map<AuditFile, percentage> size: " + map.size());
         return map;
     }
 
     @Override
     public Map<AuditFile, Integer> getProcessingAuditList() {
     	
-    	logger.info("getProcessingAuditList start");
         List<AuditFile> auditFiles = auditFileDao.findProcessingAuditList();
         logger.info("get auditFile list when getProcessingAuditList, list size: " + auditFiles.size());
 
@@ -199,7 +196,6 @@ public class AuditFileServiceImpl implements AuditFileService {
 
         }
         
-        logger.info("getProcessingAuditList end, Map<AuditFile, percentage> size: " + map.size());
         return map;
     }
 

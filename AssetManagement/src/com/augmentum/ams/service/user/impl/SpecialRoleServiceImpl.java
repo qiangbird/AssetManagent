@@ -10,7 +10,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,6 @@ import com.augmentum.ams.model.user.SpecialRole;
 import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.user.SpecialRoleService;
-import com.augmentum.ams.util.LogHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.user.SpecialRoleVo;
 import com.augmentum.ams.web.vo.user.UserVo;
@@ -42,8 +40,6 @@ public class SpecialRoleServiceImpl implements SpecialRoleService{
 
     @Override
     public void saveOrUpdateSpecialRole(SpecialRoleVo specialRoleVo) {
-        
-        logger.info(LogHelper.getLogInfo("Save or update specialRole at service start", specialRoleVo.getSpecialRoles()));
         
         List<SpecialRole> specialRoles = new ArrayList<SpecialRole>();
         Date date = UTCTimeUtil.localDateToUTC();
@@ -70,7 +66,6 @@ public class SpecialRoleServiceImpl implements SpecialRoleService{
         }
         specialRoleDao.saveOrUpdateAll(specialRoles);
         
-        logger.info(LogHelper.getLogInfo("Save or update specialRole  at service end"));
     }
     
     // shrink-wrap the specialRoleVos from string to object in the specialRoleVo
@@ -96,8 +91,6 @@ public class SpecialRoleServiceImpl implements SpecialRoleService{
     @Override
     public List<SpecialRoleVo> findSpecialRolesByCustomerCodes(List<String> customerCodes) {
         
-        logger.info(LogHelper.getLogInfo("Find pecial roles by customerCodes  at service start, customerCodes size is", customerCodes.size()));
-        
         List<SpecialRole> specialRoles = specialRoleDao.findSpecialRolesByCustomerCodes(customerCodes);
         List<SpecialRoleVo> specialRoleVos = new ArrayList<SpecialRoleVo>();
         
@@ -112,7 +105,6 @@ public class SpecialRoleServiceImpl implements SpecialRoleService{
                 specialRoleVos.add(specialRoleVo);
             }
         }
-        logger.info(LogHelper.getLogInfo("Find pecial roles by customerCodes  at service end"));
         
         return specialRoleVos;
     }
