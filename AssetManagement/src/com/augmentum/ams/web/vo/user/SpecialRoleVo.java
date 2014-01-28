@@ -14,6 +14,10 @@ public class SpecialRoleVo {
 	
 	private String specialRoles;
 	
+	private String department;
+	
+	private String manager;
+	
 	public SpecialRoleVo(){
     }
 	
@@ -76,6 +80,22 @@ public class SpecialRoleVo {
 	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
 	
 	
 }

@@ -1,5 +1,6 @@
 package com.augmentum.ams.model.asset;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ import com.augmentum.ams.model.base.BaseModel;
 @Indexed(index = "customer")
 @Analyzer(impl = IKAnalyzer.class)
 @JsonIgnoreProperties(value={"assets"})    
-public class Customer extends BaseModel {
+public class Customer extends BaseModel implements Serializable {
 
 	private static final long serialVersionUID = -1485320091445990928L;
 

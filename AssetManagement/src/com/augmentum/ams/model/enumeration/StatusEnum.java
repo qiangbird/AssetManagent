@@ -19,4 +19,18 @@ public enum StatusEnum {
     BROKEN,
 
     WRITE_OFF;
+    
+    public static boolean isRightStatus(String assetStatus){
+        
+        StatusEnum[] status = StatusEnum.values();
+        boolean isRightStatu = Boolean.FALSE;
+
+        for (StatusEnum statu : status) {
+            if (statu.name().equals(assetStatus)) {
+                isRightStatu = Boolean.TRUE;
+                break;
+            }
+        }
+        return isRightStatu;
+    }
 }

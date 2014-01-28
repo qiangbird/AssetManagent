@@ -161,23 +161,24 @@ public class AssetTemplateParser extends ExcelParser {
 
         fillOneCell(column++, row, asset.getAssetId(), sheet);
         fillOneCell(column++, row, asset.getAssetName(), sheet);
-        fillOneCell(column++, row, asset.getStatus(), sheet);
-        fillOneCell(column++, row, asset.getUserName(), sheet);
-        fillOneCell(column++, row, asset.getKeeper(), sheet);
-        fillOneCell(column++, row, asset.getCustomerName(), sheet);
-        fillOneCell(column++, row, asset.getProjectName(), sheet);
+        fillOneCell(column++, row, asset.getManufacturer(), sheet);
         fillOneCell(column++, row, asset.getType(), sheet);
         fillOneCell(column++, row, asset.getBarCode(), sheet);
-        fillOneCell(column++, row, asset.getLocationSite() + "_" + asset.getLocationRoom(), sheet);
-        fillOneCell(column++, row, asset.getManufacturer(), sheet);
-        fillOneCell(column++, row, asset.getOwnerShip(), sheet);
-        fillOneCell(column++, row, asset.getEntity(), sheet);
-        fillOneCell(column++, row, asset.getMemo(), sheet);
-        fillOneCell(column++, row, asset.isFixed(), sheet);
-        fillOneCell(column++, row, asset.getSeriesNo(), sheet);
-        fillOneCell(column++, row, asset.getPoNo(), sheet);
         fillOneCell(column++, row, asset.getCheckInTime(), sheet);
         fillOneCell(column++, row, asset.getCheckOutTime(), sheet);
+        fillOneCell(column++, row, asset.getSeriesNo(), sheet);
+        fillOneCell(column++, row, asset.getPoNo(), sheet);
+        fillOneCell(column++, row, asset.getCustomerName(), sheet);
+        fillOneCell(column++, row, asset.getProjectName(), sheet);
+        fillOneCell(column++, row, asset.getOwnerShip(), sheet);
+        fillOneCell(column++, row, asset.getEntity(), sheet);
+        fillOneCell(column++, row, asset.isFixed(), sheet);
+        fillOneCell(column++, row, asset.getLocationSite(), sheet);
+        fillOneCell(column++, row, asset.getLocationRoom(), sheet);
+        fillOneCell(column++, row, asset.getUserName(), sheet);
+        fillOneCell(column++, row, asset.getStatus(), sheet);
+        fillOneCell(column++, row, asset.getKeeper(), sheet);
+        fillOneCell(column++, row, asset.getMemo(), sheet);
         fillOneCell(column++, row, asset.getVendor(), sheet);
         fillOneCell(column++, row, asset.getWarrantyTime(), sheet);
         

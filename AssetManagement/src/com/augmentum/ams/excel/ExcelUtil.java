@@ -83,7 +83,7 @@ public class ExcelUtil {
      * @return
      */
 	public int getRows(Sheet sheet) {
-		int righrRow = 0;
+		int righRow = 0;
 		
 		if (sheet != null) { 
 			int rsCols = sheet.getColumns();
@@ -103,10 +103,10 @@ public class ExcelUtil {
 					afterRows--;
 				}
 			}
-			righrRow = afterRows;
+			righRow = afterRows;
 		}
 		
-		return righrRow;
+		return righRow;
 	}
 
 	/**

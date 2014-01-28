@@ -2,8 +2,11 @@ package com.augmentum.ams.service.user;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONArray;
 
+import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.web.vo.user.SpecialRoleVo;
 
 public interface SpecialRoleService {
@@ -34,8 +37,9 @@ public interface SpecialRoleService {
      * @param specialRoleVos
      * @time Dec 9, 2013 10:19:00 AM
      * @return
+	 * @throws DataException 
      */
-	JSONArray changeVOToJSON(List<SpecialRoleVo> specialRoleVos);
+	JSONArray changeVOToJSON(List<SpecialRoleVo> specialRoleVos, HttpServletRequest httpServletRequest) throws DataException;
 	/**
 	 * 
 	 * @description find if a user is a special by given userId

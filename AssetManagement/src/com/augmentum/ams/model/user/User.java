@@ -1,5 +1,6 @@
 package com.augmentum.ams.model.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,8 @@ import com.augmentum.ams.model.base.PageSize;
 @Table(name = "user")
 @Indexed(index = "user")
 @Analyzer(impl = IKAnalyzer.class)
-public class User extends BaseModel {
+public class User extends BaseModel implements Serializable{
+
 
 	private static final long serialVersionUID = -5454470926592265175L;
 

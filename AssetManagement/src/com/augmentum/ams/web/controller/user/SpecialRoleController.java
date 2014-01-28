@@ -69,7 +69,7 @@ public class SpecialRoleController extends BaseController{
 			customerCodes.add(customer.getCustomerCode());
 		}
 		List<SpecialRoleVo> specialRoleVos = specialRoleService.findSpecialRolesByCustomerCodes(customerCodes);
-		JSONArray specialRoles = specialRoleService.changeVOToJSON(specialRoleVos);
+		JSONArray specialRoles = specialRoleService.changeVOToJSON(specialRoleVos, httpServletRequest);
 		
 		modelAndView.addObject("specialRoles", specialRoles);
 		modelAndView.addObject("customers", customers);

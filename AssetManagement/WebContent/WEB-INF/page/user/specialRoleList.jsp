@@ -48,7 +48,9 @@
 		     <div class="columnData sequenceElement"><span id="sequence"></span></div>
 		     <div class="columnData employeeInfoElement"><span class="employeeIdInRow"></span></div>
 		     <div class="columnData employeeInfoElement"><span class="employeeNameInRow"></span></div>
+		     <div class="columnData departmentElement"><span class="departmentInRow"></span></div>
 		     <div class="columnData customerElement"><span class="customerNameInRow"></span></div>
+		     <div class="columnData managerElement"><span class="managerInRow"></span></div>
 		     <div class="columnData removeElement">
 		          <span class="deleteLink"></span>
 		     </div>    
@@ -60,7 +62,9 @@
 	          <div class="columnElement sequenceElement"><spring:message code="sequence" /></div>
 	          <div class="columnElement employeeInfoElement"><spring:message code="user.employeeId" /></div>
 	          <div class="columnElement employeeInfoElement"><spring:message code="user.employeeName" /></div>
+	          <div class="columnElement departmentElement"><spring:message code="user.department" /></div>
 	          <div class="columnElement customerElement"><spring:message code="customer" /></div>
+	          <div class="columnElement managerElement"><spring:message code="user.manager" /></div>
 	          <div class="columnElement operateElement"><spring:message code="remove" /></div>    
 	       </div>
 	  </div>
@@ -73,7 +77,6 @@
 	  <jsp:include page="userInfoTips.jsp" />
 </div>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-<script type="text/javascript" src="js/user/userInfoTips.js"></script>
 <script type="text/javascript" src="js/user/specialRoleList.js"></script>
 <script type="text/javascript" src="js/common/autocomplete.js"></script>
 <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>

@@ -39,13 +39,13 @@ public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDa
     @Override
     public List<SiteCacheVo> findLocationSiteAndRoom() {
         
-        final String sql = "select location.site as site, location.room as room from location location"; 
+        final String hql = "select site, room from Location location"; 
         
         @SuppressWarnings({"rawtypes", "unchecked" })
         List<SiteCacheVo> list = (List<SiteCacheVo>) getHibernateTemplate().executeFind(new HibernateCallback() {
             public Object doInHibernate(Session session)
                     throws HibernateException, SQLException {
-                List<SiteCacheVo> list = (List<SiteCacheVo>) session.createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(SiteCacheVo.class)).list();
+                List<SiteCacheVo> list = (List<SiteCacheVo>) session.createQuery(hql).setResultTransformer(Transformers.aliasToBean(SiteCacheVo.class)).list();
                        
                 return list;
             }

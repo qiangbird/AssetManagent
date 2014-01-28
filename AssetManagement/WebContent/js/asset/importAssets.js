@@ -24,27 +24,32 @@ $(document).ready(function() {
         $("#importForm").ajaxSubmit(
 	        function(data) {
 	        	closeCheckingNote(inId);
-			    $("#allSize").text(data.all);
-				$("#sucSize").text(data.success);
-				$("#fiaSize").text(data.failure);
-				$("#failureFileName").val(data.failureFileName);
-					
-				$(".start-button").css("background", "url('img/button/BTN_90x30_Secondary_Action_Disabled.png') no-repeat").css("color", "#BBBBBB").attr("disabled", "disabled");
-				
-				$(".import-text").val("");
-				$(".import-file").val("");
-				
-				if($("#fiaSize").text() != "0") {
-					alert(i18nProp("msg"));
-				}
-				
-				if($("#fiaSize").text()!=0) {
-	               $("#exportError").addClass("export-icon-active");
-	            } else {
-	               $("#exportError").removeClass("export-icon-active");
-	            }
-				
-	            return false;
+	        	
+	        	if(null != data.error){
+	        		showMessageBarForMessage (data.error);
+	        	}else{
+	        		$("#allSize").text(data.all);
+	        		$("#sucSize").text(data.success);
+	        		$("#fiaSize").text(data.failure);
+	        		$("#failureFileName").val(data.failureFileName);
+	        		
+	        		$(".start-button").css("background", "url('img/button/BTN_90x30_Secondary_Action_Disabled.png') no-repeat").css("color", "#BBBBBB").attr("disabled", "disabled");
+	        		
+	        		$(".import-text").val("");
+	        		$(".import-file").val("");
+	        		
+	        		if($("#fiaSize").text() != "0") {
+	        			alert(i18nProp("msg"));
+	        		}
+	        		
+	        		if($("#fiaSize").text()!=0) {
+	        			$("#exportError").addClass("export-icon-active");
+	        		} else {
+	        			$("#exportError").removeClass("export-icon-active");
+	        		}
+	        		
+	        		return false;
+	        	}
 	        }
         );
         
@@ -141,6 +146,7 @@ function uploadFile(file) {
         return false;
     }
     $(".import-text").val(fileName);
+    $(".import-text").attr("title", fileName);
 
     $(".start-button").css("background", "url('img/BTN_90x30_Secondary_Action_Normal.png') no-repeat").css("color", "#555555").removeAttr("disabled");
 }

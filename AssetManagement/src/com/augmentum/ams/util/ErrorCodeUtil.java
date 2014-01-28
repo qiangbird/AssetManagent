@@ -34,6 +34,8 @@ public final class ErrorCodeUtil {
     public static final String ASSET_CHANGE_TO_FIXED_FAILED = "0201011";
     public static final String ASSET_CHANGE_TO_NONFIXED_FAILED = "0201012";
     public static final String ASSET_ADD_TO_AUDIT_FAILED = "0201013";
+    public static final String ASSET_IMPORT_FAILED = "0201014";
+    public static final String ASSET_EXPORT_FAILED = "0201015";
     
 
     /**

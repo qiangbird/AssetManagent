@@ -64,8 +64,24 @@
 	border-radius: 3px;
 }
 
+.sequenceElement {
+	width: 10.7%;
+}
+
+.employeeInfoElement{
+	width: 10.9%;
+}
+
 .customerElement {
-	width: 30.7%;
+	width: 19.7%;
+}
+
+.departmentElement {
+	width: 19.8%;
+}
+
+.managerElement {
+	width: 12.7%;
 }
 
 .select-panel {

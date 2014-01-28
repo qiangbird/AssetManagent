@@ -1,5 +1,7 @@
 package com.augmentum.ams.model.asset;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,7 +26,7 @@ import com.augmentum.ams.model.base.BaseModel;
 @Table(name = "project")
 @Indexed(index = "project")
 @Analyzer(impl = IKAnalyzer.class)
-public class Project extends BaseModel {
+public class Project extends BaseModel implements Serializable{
 
 	private static final long serialVersionUID = 7794992399275180367L;
 

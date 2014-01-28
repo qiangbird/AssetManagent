@@ -51,7 +51,7 @@
 	                       <input type="file"  class="import-file" name="file" id="file" onchange="uploadFile(this);" />
 	                       <input type="button" id="uploadButon" class="import-button upload-button" value=<spring:message code="upload" /> Onclick="file.click();"/>
 	                   </form>    
-                       <input type="text" class="import-text" readonly="readonly" />
+                       <input type="text" class="import-text" readonly="readonly" title=""/>
                        <input type="button" class="import-button start-button" value=<spring:message code="start" /> disabled="disabled" />
                    </div>
 	               <div class="process-panel pro-third">

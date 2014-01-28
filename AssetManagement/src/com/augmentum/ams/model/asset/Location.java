@@ -1,5 +1,7 @@
 package com.augmentum.ams.model.asset;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,7 +20,7 @@ import com.augmentum.ams.model.base.BaseModel;
 @Entity
 @Table(name = "location")
 @Indexed(index = "location")
-public class Location extends BaseModel {
+public class Location extends BaseModel implements Serializable{
 
     private static final long serialVersionUID = -6417746800353665624L;
 

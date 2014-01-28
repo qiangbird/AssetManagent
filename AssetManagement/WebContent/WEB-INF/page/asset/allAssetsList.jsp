@@ -24,7 +24,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	<div id ="messageBar"></div>
+	<!-- <div id ="messageBar"></div> -->
     <div class="content">
     	<div class="dataList">
     		<div id="searchCondition">

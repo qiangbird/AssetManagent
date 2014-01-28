@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
 
 <title>Asset Page</title>
 </head>
@@ -147,6 +148,7 @@
  	<div id="dialog-warning" title="Warning">
   		<p id="warning-message-body"></p>
  	</div>
+ 	<div id ="messageBar"></div>
     <script type="text/javascript" src="<%=basePath%>js/common/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui-1.8.18.custom.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/autocomplete.js"></script>
@@ -154,6 +156,8 @@
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/uuid.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/header.js"></script>
-    <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
+    <script type="text/javascript" src="<%=basePath%>js/common/selfDefineDialog.js"></script>
+    <script type="text/javascript" src="<%=basePath%>js/common/messageBarCommon.js"></script>
+    <script type="text/javascript" src="<%=basePath%>messageBar/js/messagebar.js"></script>
 </body>
 </html>

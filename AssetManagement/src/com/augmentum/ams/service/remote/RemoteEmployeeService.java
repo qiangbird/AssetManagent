@@ -1,5 +1,6 @@
 package com.augmentum.ams.service.remote;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,14 +63,14 @@ public interface RemoteEmployeeService {
     /**
      * 
      * @description TODO
-     * @author Jay.He
+     * @author John.Li
      * @time Nov 18, 2013 10:57:36 AM
      * @param userName
      * @param request
      * @return
      * @throws DataException
      */
-    UserVo getRemoteUserByName(String userName, HttpServletRequest request) throws DataException;
+    List<UserVo> getRemoteUserByName(List<String> userNames, HttpServletRequest request) throws DataException;
 
     /**
      * 

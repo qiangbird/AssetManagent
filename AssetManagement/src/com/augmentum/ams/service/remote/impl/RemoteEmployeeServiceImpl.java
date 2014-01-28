@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.augmentum.ams.common.constants.IAPConstans;
 import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.RemoteUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.SqlRestrictionsUtil;
@@ -204,7 +205,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
     }
 
     @Override
-    public UserVo getRemoteUserByName(String userName, HttpServletRequest request)
+    public List<UserVo> getRemoteUserByName(List<String> userNames, HttpServletRequest request)
             throws DataException {
 
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
@@ -212,7 +213,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
                 IAPConstans.EMPLOYEE_EMPLOYEE_ID, IAPConstans.POSITION_NAME_EN,
                 IAPConstans.POSITION_NAME_CN, IAPConstans.DEPARTMENT_NAME_EN,
                 IAPConstans.DEPARTMENT_NAME_CN, IAPConstans.MANAGER_NAME });
-        searchModel.setFilter(SqlRestrictionsUtil.eq(IAPConstans.EMPLOYEE_NAME, userName));
+        searchModel.setFilter(SqlRestrictionsUtil.in(IAPConstans.EMPLOYEE_NAME, userNames));
         Request tmpRequest = RemoteUtil.getRequest(request, DataModelAPI.listEmployee,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_XML);
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
@@ -223,8 +224,11 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         } else {
             logger.info(responseModel.getStatus().getMessage());
         }
-        UserVo user = new UserVo();
+        List<UserVo> users = new ArrayList<UserVo>();
         for (Map<String, Object> mapData : responseData) {
+            
+            UserVo user = new UserVo();
+            
             user.setEmployeeId((String) mapData.get(IAPConstans.EMPLOYEE_EMPLOYEE_ID));
             user.setEmployeeName((String) mapData.get(IAPConstans.EMPLOYEE_NAME));
             user.setPositionNameEn((String) mapData.get(IAPConstans.POSITION_NAME_EN));
@@ -232,8 +236,10 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
             user.setDepartmentNameEn((String) mapData.get(IAPConstans.DEPARTMENT_NAME_EN));
             user.setDepartmentNameCn((String) mapData.get(IAPConstans.DEPARTMENT_NAME_CN));
             user.setManagerName((String) mapData.get(IAPConstans.MANAGER_NAME));
+            
+            users.add(user);
         }
-        return user;
+        return users;
     }
 
     @Override
@@ -270,8 +276,12 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
             String employeeName = (String) employeeeList.get(i).get(IAPConstans.EMPLOYEE_NAME);
             String employeeEmployeeId = (String) employeeeList.get(i).get(
                     IAPConstans.EMPLOYEE_EMPLOYEE_ID);
+/*            String employeeDepartment = (String) employeeeList.get(i).get(
+                    IAPConstans.DEPARTMENT_NAME_EN);
+            String employeeManager = (String) employeeeList.get(i).get(
+                    IAPConstans.MANAGER_NAME);*/
             map.put("label", employeeName);
-            map.put("value", employeeName + "#" + employeeEmployeeId);
+            map.put("value", employeeName + Constant.SPLIT_SHARP + employeeEmployeeId );
             map.put("employeeCode", employeeEmployeeId);
             array.add(map);
         }

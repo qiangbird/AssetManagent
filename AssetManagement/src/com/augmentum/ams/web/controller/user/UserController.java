@@ -93,7 +93,10 @@ public class UserController extends BaseController{
 	public JSONObject getUserInfoTips(String employeeName, HttpServletRequest request) throws Exception {
 		
 		JSONObject object = new JSONObject();
-		UserVo userVo = remoteEmployeeService.getRemoteUserByName(employeeName,request);
+		List<String> userNames = new ArrayList<String>();
+		userNames.add(employeeName);
+		
+		UserVo userVo = remoteEmployeeService.getRemoteUserByName(userNames,request).get(0);
 		object.put(IAPConstans.EMPLOYEE_EMPLOYEE_ID, userVo.getEmployeeId());
 		object.put(IAPConstans.EMPLOYEE_NAME, userVo.getEmployeeName());
 		object.put(IAPConstans.EMPLOYEE_POSITION, userVo.getPositionNameEn());

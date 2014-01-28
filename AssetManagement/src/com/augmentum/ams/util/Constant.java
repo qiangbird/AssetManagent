@@ -34,6 +34,7 @@ public class Constant {
     // split mark
     public static final String SPLIT_COMMA = ",";
     public static final String SPLIT_UNDERLINE = "_";
+    public static final String SPLIT_SHARP = "#";
     
     // ownerShip
     public static final String OWNERSHIP_AUGMENTUM = "Augmentum";

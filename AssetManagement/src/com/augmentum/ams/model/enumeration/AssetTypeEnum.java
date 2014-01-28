@@ -15,4 +15,19 @@ public enum AssetTypeEnum {
     SOFTWARE,
 
     OTHERASSETS;
+    
+    public static boolean isRightType(String assetType){
+        
+        AssetTypeEnum[] assetTypes = AssetTypeEnum.values();
+        boolean isRightType = Boolean.FALSE;
+
+        for (AssetTypeEnum type : assetTypes) {
+            if (type.name().equals(assetType)) {
+                isRightType = Boolean.TRUE;
+                break;
+            }
+        }
+        return isRightType;
+
+    }
 }

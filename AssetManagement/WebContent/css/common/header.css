@@ -73,11 +73,6 @@
 	font-size: 13px;
 }
 
-#header_i18n a {
-    cursor: pointer;
-    margin: 5px 20px 0 0;
-}
-
 .cursor_hand {
     cursor: pointer;
     width: 90px;
@@ -93,7 +88,9 @@
     float: right;
     margin: 5px 20px 0 0;
     padding: 0 5px 0 0;
-    color: #418FB5
+    color: #418FB5;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 body,ul {

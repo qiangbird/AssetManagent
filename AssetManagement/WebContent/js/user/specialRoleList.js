@@ -100,6 +100,8 @@ function checkEmployees(){
 		for(var i=0;i<listEmployees.length;i++) {
 			var employeeName = listEmployees[i].split("#")[0];
 			var employeeId = listEmployees[i].split("#")[1];
+/*			var department = listEmployees[i].split("#")[2];
+			var manager = listEmployees[i].split("#")[3];*/
 			if(employeeName == "") {
 //				showTipMessage($document.find("#showError"),msg.prop("User.error.nullEmployeeNme"),350,30,3000);
 				alert("User is null!");
@@ -137,6 +139,8 @@ function checkEmployees(){
 			employee.employeeName = employeeName;
 			employee.customerName = customerName;
 			employee.customerCode = customerCode;
+/*			employee.customerCode = department;
+			employee.customerCode = manager;*/
 			employee.isNew = "true";
 			employees.push(employee);
 			}
@@ -167,9 +171,11 @@ function displaySpecialRoleList(specialRoles){
 			lastDivToAppend.find("#isNew").text(specialRoles[i].isNew);
 			lastDivToAppend.find(".employeeIdInRow").text(specialRoles[i].employeeId);
 			lastDivToAppend.find(".employeeNameInRow").text(specialRoles[i].employeeName);
+			lastDivToAppend.find(".departmentInRow").text(specialRoles[i].department);
 			lastDivToAppend.find(".customerNameInRow").text(specialRoles[i].customerName);
+			lastDivToAppend.find(".managerInRow").text(specialRoles[i].manager);
 		}
-		tooltips(".employeeNameInRow");
+//		tooltips(".employeeNameInRow");
 	}
 }
 

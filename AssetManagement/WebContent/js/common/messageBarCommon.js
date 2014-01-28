@@ -56,6 +56,6 @@ function messageBarForMessage(messages) {
 
 function showMessageBarForMessage (errorCode) {
 	var messages = [];
-	messages[0] = i18nProp(errorCode.errorCode);
+	messages[0] = i18nProp(errorCode);
 	messageBarForMessage(messages);
 }

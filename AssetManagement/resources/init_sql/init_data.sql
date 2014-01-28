@@ -251,16 +251,6 @@ INSERT INTO `custom_column`(id,created_time,is_expired,updated_time,category_typ
 
 
 -- ----------------------------
--- Records of location
--- ----------------------------
-
-DELETE FROM `location`;
-
-INSERT INTO `location`(id, created_time, is_expired, updated_time, room, site) VALUES ('4028961242c776d30142c78306ce0003', '2013-12-06 10:45:22', '\0', '2013-12-06 10:45:22', '28401', 'IES_SH');
-INSERT INTO `location`(id, created_time, is_expired, updated_time, room, site) VALUES ('4028961242c776d30142c78352aa0004', '2013-12-06 10:45:41', '\0', '2013-12-06 10:45:41', '202020', 'IES_WH');
-INSERT INTO `location`(id, created_time, is_expired, updated_time, room, site) VALUES ('4028961242c776d30142c78386e70005', '2013-12-06 10:45:55', '\0', '2013-12-06 10:45:55', '10101', 'IES_YZ');
-
--- ----------------------------
 -- Records of page_size
 -- ----------------------------
 
@@ -306,3 +296,155 @@ INSERT INTO `page_size`(id, created_time, is_expired, updated_time, category_fla
 INSERT INTO `page_size`(id, created_time, is_expired, updated_time, category_flag, is_default_value, page_size_value) VALUES ('1002', '2013-11-28 09:14:30', '\0', '2013-11-28 09:14:30', '10', '\0', '20');
 INSERT INTO `page_size`(id, created_time, is_expired, updated_time, category_flag, is_default_value, page_size_value) VALUES ('1003', '2013-11-28 09:14:30', '\0', '2013-11-28 09:14:30', '10', '\0', '30');
 INSERT INTO `page_size`(id, created_time, is_expired, updated_time, category_flag, is_default_value, page_size_value) VALUES ('1004', '2013-11-28 09:14:30', '\0', '2013-11-28 09:14:30', '10', '\0', '50');
+
+
+DELETE FROM `location`;
+
+-- ----------------------------
+-- Records of location
+-- ----------------------------
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('00002b97-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4205', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0000a3df-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4206', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('00018f67-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4207', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('000420ba-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4208', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0006c724-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4209', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0009cff4-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4210', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('000bbd1a-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4302', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('00101481-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4303', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0010ac85-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4304', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0015c65a-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4305', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0018b46f-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4306', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('00196924-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4307', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('001fa950-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4401', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0022c328-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4402', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0024934a-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4403', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0029ab50-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', 'A4404', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('002afd15-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', 'A4405', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('002b4a18-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', 'A4406', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('002e16c1-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', 'A4407', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('002f536f-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', 'A4408', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('002fc0df-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '101', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0031c1ac-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '102', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0032483f-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '103', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('003466dd-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '104', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0034dcbb-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '105', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('0038283f-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '106', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('00396ae6-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '107', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('003bb867-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', '108', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('003d9c6e-c421-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:19', '\0', '2013-05-24 11:21:19', 'HR', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('1', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17201', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('10', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', 'A4309', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('11', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '32101', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('12', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '32102', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('2', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17202', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('3', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17203', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17204', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21692160000', '2014-01-24 02:31:35', '\0', '2014-01-24 02:31:35', 'B17F2 Server Room', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c216ccbe0003', '2014-01-24 02:31:50', '\0', '2014-01-24 02:31:50', '17115', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c216fab30006', '2014-01-24 02:32:02', '\0', '2014-01-24 02:32:02', '17307', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c217015a0009', '2014-01-24 02:32:04', '\0', '2014-01-24 02:32:04', '17112', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21706f8000c', '2014-01-24 02:32:05', '\0', '2014-01-24 02:32:05', '18304', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2170a15000f', '2014-01-24 02:32:06', '\0', '2014-01-24 02:32:06', 'B17F2 Server Room', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2170d510012', '2014-01-24 02:32:07', '\0', '2014-01-24 02:32:07', '17404', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c217139a0015', '2014-01-24 02:32:08', '\0', '2014-01-24 02:32:08', '17110', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c217188c0018', '2014-01-24 02:32:10', '\0', '2014-01-24 02:32:10', '17110', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2171be7001b', '2014-01-24 02:32:10', '\0', '2014-01-24 02:32:10', '17110', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c217204c001e', '2014-01-24 02:32:12', '\0', '2014-01-24 02:32:12', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21727410021', '2014-01-24 02:32:13', '\0', '2014-01-24 02:32:13', '17110', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2172b580024', '2014-01-24 02:32:14', '\0', '2014-01-24 02:32:14', '17404', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21731440027', '2014-01-24 02:32:16', '\0', '2014-01-24 02:32:16', '28306', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2173480002a', '2014-01-24 02:32:17', '\0', '2014-01-24 02:32:17', 'yangzhou', 'Augmentum Yangzhou');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21737cc002d', '2014-01-24 02:32:18', '\0', '2014-01-24 02:32:18', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2173bc30030', '2014-01-24 02:32:19', '\0', '2014-01-24 02:32:19', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c2173e440033', '2014-01-24 02:32:19', '\0', '2014-01-24 02:32:19', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21741420036', '2014-01-24 02:32:20', '\0', '2014-01-24 02:32:20', '17312', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21743d20039', '2014-01-24 02:32:21', '\0', '2014-01-24 02:32:21', '17312', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c217472d003c', '2014-01-24 02:32:22', '\0', '2014-01-24 02:32:22', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21749ae003f', '2014-01-24 02:32:22', '\0', '2014-01-24 02:32:22', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21750b30042', '2014-01-24 02:32:24', '\0', '2014-01-24 02:32:24', '17312', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028960f43c2157f0143c21753040045', '2014-01-24 02:32:25', '\0', '2014-01-24 02:32:25', '17312', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028961242c776d30142c78306ce0003', '2013-12-06 10:45:22', '\0', '2013-12-06 10:45:22', '28401', 'IES_SH');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028961242c776d30142c78352aa0004', '2013-12-06 10:45:41', '\0', '2013-12-06 10:45:41', '202020', 'IES_WH');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('4028961242c776d30142c78386e70005', '2013-12-06 10:45:55', '\0', '2013-12-06 10:45:55', '10101', 'IES_YZ');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('5', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17205', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('6', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17408', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('7', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', '17409', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('8', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', 'A4301', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('9', '2014-01-24 11:11:55', '\0', '2014-01-24 11:12:08', 'A4308', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff5a32e7-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17100', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff5c0255-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17101', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff5ede7c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17102', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff5f537c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17103', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff5fe792-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17104', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff605845-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17105', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff612981-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17106', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff63ce07-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17107', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff652093-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17108', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff67c2f7-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17109', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff6858c7-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17110', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff6b7777-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17111', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff6bfe30-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17112', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff6cccd6-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17113', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff72ab71-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17114', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff7489e5-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17115', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff77033d-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17116', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff77f494-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17117', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff786988-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17118', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff7ad337-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17119', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff80e1e5-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17120', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff83b8fd-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17121', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff870d19-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17122', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff8af98c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17123', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff8cc1d9-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:17', '\0', '2013-05-24 11:21:17', '17124', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff8ea671-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17206', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff91bfb0-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17207', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9259c8-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17208', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff94884b-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17209', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9729ed-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17301', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9818e9-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17302', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9add55-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17303', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9e82f6-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17304', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9f02aa-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17305', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ff9fb11b-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17306', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffa24127-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17307', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffa6932c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17308', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffa88f1e-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17309', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffa9db2e-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17310', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffac797c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17311', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffae89ae-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17312', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffb0dd20-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17401', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffb40235-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17402', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffb48a0e-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17403', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffb5a99d-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17404', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffb9bb4d-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17405', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffbde98c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc1cb6c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17407', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc28f0c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '17410', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc343a5-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '18303', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc3b2b4-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '18304', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc49235-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28301', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc4feaf-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28302', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc8cb6a-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28303', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffc9ab45-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28304', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffcbb586-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28305', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffd195e6-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28306', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffd3d649-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28401', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffd65ac5-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28402', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffd7b57d-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28403', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffdc7956-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28404', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffe020fb-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28405', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffe5950a-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28406', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffe9709b-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28407', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('ffeceb07-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28408', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fff02382-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', '28409', 'Augmentum Shanghai');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fff1584d-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4101', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fff60e13-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4102', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fff686ff-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4103', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fff76cf4-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4104', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffa3ec7-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4105', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffa838c-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4106', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffb3880-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4107', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffc9183-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4201', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffd0813-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4202', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffd85d5-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4203', 'Augmentum Wuhan');
+INSERT INTO `location`(id, created_time, is_expired, updated_time,room, site) VALUES ('fffdf575-c420-11e2-99ca-fa163e30ed85', '2013-05-24 11:21:18', '\0', '2013-05-24 11:21:18', 'A4204', 'Augmentum Wuhan');

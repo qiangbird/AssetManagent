@@ -81,9 +81,9 @@ public class SpecialRoleServiceImplTest extends BaseCaseTest{
         Assert.assertNotNull("SpecialRoles is null", specialRoleVos);
     }
 
-    /**
+/*    *//**
      * Test method for {@link com.augmentum.ams.service.user.impl.SpecialRoleServiceImpl#changeVOToJSON(java.util.List)}.
-     */
+     *//*
     @Test
     public void testChangeVOToJSON() {
         
@@ -97,7 +97,7 @@ public class SpecialRoleServiceImplTest extends BaseCaseTest{
         array = specialRoleService.changeVOToJSON(specialRoleVos);
         
         Assert.assertNotNull("JSONArray is null", array);
-    }
+    }*/
 
     /**
      * Test method for {@link com.augmentum.ams.service.user.impl.SpecialRoleServiceImpl#findSpecialRoleByUserId(java.lang.String)}.
