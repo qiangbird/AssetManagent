@@ -61,13 +61,9 @@
         <div class="headerNavigationStart"></div>
         <div class="menuCotent">
             <ul class="firstMenuUl">
-<<<<<<< HEAD
-=======
-                <li class="menuLi"><a href="todo/redirectDashboard"><spring:message code="navigator.home" /></a></li>
->>>>>>> complete confirm returned asset feature
                 <shiro:authenticated>
-                <li class="menuLi"><a href="#"><spring:message code="navigator.home" /></a></li>
-                 </shiro:authenticated>
+                <li class="menuLi"><a href="todo/redirectDashboard"><spring:message code="navigator.home" /></a></li>
+                </shiro:authenticated>
                 <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
                     <ul class="sencndMenuUl">
