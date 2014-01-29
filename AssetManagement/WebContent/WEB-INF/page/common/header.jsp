@@ -62,7 +62,7 @@
         <div class="menuCotent">
             <ul class="firstMenuUl">
                 <shiro:authenticated>
-                <li class="menuLi"><a href="todo/redirectDashboard"><spring:message code="navigator.home" /></a></li>
+                	<li class="menuLi"><a href="todo/redirectDashboard"><spring:message code="navigator.home" /></a></li>
                 </shiro:authenticated>
                 <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>

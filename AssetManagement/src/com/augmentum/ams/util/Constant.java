@@ -78,4 +78,7 @@ public class Constant {
     //Constant of import asset 
     public static final String CONFIG_TEMPLATES_PATH = "template/";
     public static final String CREATE = "create";
+    
+    // asset type array
+    public static final String[] ASSET_TYPE_ARRAY = {"DEVICE", "MACHINE", "MONITOR", "SOFTWARE", "OTHERASSETS"};
 }

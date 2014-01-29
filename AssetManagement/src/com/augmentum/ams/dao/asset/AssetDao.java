@@ -1,9 +1,12 @@
 package com.augmentum.ams.dao.asset;
 
 import java.util.List;
+import java.util.Map;
 
 import com.augmentum.ams.dao.base.BaseDao;
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.web.vo.asset.ExportVo;
 
 public interface AssetDao extends BaseDao<Asset>{
@@ -53,5 +56,17 @@ public interface AssetDao extends BaseDao<Asset>{
      * @param contents
      */
     public Asset getByAssetId(String contents);
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    public Map<String, Integer> getAssetCountForIT(User user);
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    public Map<String, Integer> getAssetCountForManager(User user, List<Customer> customers);
     
 }

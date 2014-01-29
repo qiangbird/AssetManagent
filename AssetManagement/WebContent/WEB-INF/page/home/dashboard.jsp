@@ -34,13 +34,14 @@
 		<table border="1">
 			<tr>
 				<td></td>
-				<td>Software</td>
-				<td>Machine</td>
 				<td>Device</td>
+				<td>Machine</td>
 				<td>Monitor</td>
 				<td>Other</td>
+				<td>Software</td>
 				<td>Total</td>
 			</tr>
+			<shiro:hasRole name="IT">
 			<tr>
 				<td>All Asset</td>
 				<td></td>
@@ -50,8 +51,10 @@
 				<td></td>
 				<td></td>
 			</tr>
+			</shiro:hasRole>
+			<shiro:hasAnyRoles name="MANAGER,EMPLOYEE,SPECIAL_ROLE">
 			<tr>
-				<td>Project Asset</td>
+				<td>Customer Asset</td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -59,6 +62,7 @@
 				<td></td>
 				<td></td>
 			</tr>
+			</shiro:hasAnyRoles>
 			<tr>
 				<td>My Asset</td>
 				<td></td>
@@ -68,6 +72,7 @@
 				<td></td>
 				<td></td>
 			</tr>
+			<shiro:hasRole name="IT">
 			<tr>
 				<td>Fixed</td>
 				<td></td>
@@ -77,15 +82,7 @@
 				<td></td>
 				<td></td>
 			</tr>
-			<tr>
-				<td>Idle</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
+			</shiro:hasRole>
 			<tr>
 				<td>Available</td>
 				<td></td>
@@ -104,6 +101,7 @@
 				<td></td>
 				<td></td>
 			</tr>
+			<shiro:hasRole name="IT">
 			<tr>
 				<td>Returned</td>
 				<td></td>
@@ -140,6 +138,7 @@
 				<td></td>
 				<td></td>
 			</tr>
+			</shiro:hasRole>
 		</table>
 	</div>
 

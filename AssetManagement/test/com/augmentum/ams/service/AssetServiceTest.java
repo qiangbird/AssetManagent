@@ -4,10 +4,18 @@
 package com.augmentum.ams.service;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +31,8 @@ import com.augmentum.ams.dao.asset.MachineDao;
 import com.augmentum.ams.dao.asset.MonitorDao;
 import com.augmentum.ams.dao.asset.OtherAssetsDao;
 import com.augmentum.ams.dao.asset.SoftwareDao;
+import com.augmentum.ams.dao.base.BaseDao;
+import com.augmentum.ams.dao.user.UserDao;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Device;
@@ -36,6 +46,7 @@ import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.model.enumeration.MachineSubtypeEnum;
 import com.augmentum.ams.model.enumeration.StatusEnum;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.CustomerService;
@@ -72,6 +83,10 @@ public class AssetServiceTest {
     private CustomerService customerService;
     @Autowired
     private CustomerAssetService customerAssetService;
+    @Autowired
+    private BaseDao baseDao;
+    @Autowired
+    private UserDao userDao;
     
     @Test
     public void testSaveAsset() {
@@ -425,4 +440,85 @@ public class AssetServiceTest {
         System.out.println(list.size());
         Assert.assertTrue(list.size()>0);
     }
+    
+	@Test
+    public void testGetAssetCount() {
+    	String hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false GROUP BY type ORDER BY type";
+		List list = baseDao.getHibernateTemplate().find(hql);
+		List<Integer> result = new ArrayList<Integer>();
+		String[] type = {"DEVICE", "MACHINE", "MONITOR", "OTHERASSETS", "SOFTWARE"};
+		
+		if (0 == list.size()) {
+			for (int i = 0; i < type.length; i++) {
+				result.add(0);
+			}
+		} else {
+			
+			for (int i = 0; i < type.length; i++) {
+				
+				loop: for (int j = 0; j < list.size(); j++) {
+					
+					Object[] obj = (Object[])list.get(j);
+					if (type[i].equals(obj[0])) {
+						result.add(Integer.valueOf((obj[1]).toString()));
+						break loop;
+					}
+					if (j == list.size() - 1) {
+						result.add(0);
+					}
+				}
+			}
+		}
+		
+		for (int i = 0; i < list.size(); i++) {
+			Object[] obj = (Object[])list.get(i);
+			logger.info(obj[0] + "--" + obj[1]);
+		}
+		
+		for (Integer i : result) {
+			logger.info(i);
+		}
+    }
+	
+	@Test
+	public void testGetAssetCountForPanel() {
+		User user = userDao.getUserByUserId("T00245");
+		Map<String, Integer> map = assetService.getAssetCountForPanel(user);
+		logger.info(map.size());
+		
+		for (Map.Entry<String, Integer> entry : map.entrySet()) {
+			   logger.info(entry.getKey() + "----" + entry.getValue());
+		}
+		
+		logger.info(map);
+		logger.info("convertToJSONObject" + JSONObject.fromObject(map));
+	}
+	
+	@Test
+	public void testGetAssetCountForManagerInHql() {
+		String[] customerIds = {"402896124300cb0e014300cc3c7d0000", "402896124303f9f7014303fe41300001"};
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		
+		String hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false AND customer.id in (:customerIds) GROUP BY type ORDER BY type";
+		Session session = baseDao.getHibernateTemplate().getSessionFactory().openSession();
+		Query query = null;
+		query = session.createQuery(hql).setParameterList("customerIds", customerIds);
+		List list = query.list();
+		map.put("type", query.list().size());
+		logger.info("type: " + query.list().size());
+		
+		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND customer.id in (:customerIds)";
+		query = session.createQuery(hql).setParameterList("customerIds", customerIds);
+		map.put("count", Integer.parseInt(query.list().get(0).toString()));
+		logger.info("count: " + query.list().get(0));
+		
+		for (int i = 0; i < list.size(); i++) {
+			Object[] obj = (Object[])list.get(i);
+			logger.info(obj[0] + "--" + obj[1]);
+		}
+		for (Entry<String, Integer> entry : map.entrySet()) {
+			logger.info(entry.getKey() + "--" + entry.getValue());
+		}
+	}
+	
 }
