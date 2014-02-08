@@ -6,7 +6,6 @@ import java.util.Date;
 public class OperationRecordUtil<T> {
 
 	/**
-	 * 支持自己定义一个RecordUtil对象并保存入库.
 	 * 
 	 * @param RecordUtil
 	 */
@@ -16,7 +15,6 @@ public class OperationRecordUtil<T> {
 	}
 
 	/**
-	 * 比较两个对象哪些属性发生变化,将变化的属性保存为RecordUtil对象.
 	 * 
 	 * @param clazz
 	 *            Operation Class
@@ -32,7 +30,7 @@ public class OperationRecordUtil<T> {
 	public void record(Class<T> clazz, T oldObj, T newObj, String entityId,
 			String user) {
 		if (oldObj == newObj) {
-			return;// 如果两个对象相同直接退出
+			return;
 		}
 
 		Field[] allFields = clazz.getDeclaredFields();// 得到指定类的所有属性Field.
@@ -60,8 +58,8 @@ public class OperationRecordUtil<T> {
 		}
 
 		RecordUtil.setModifyDate(new Date());
-		RecordUtil.setEntityId(entityId);// 记录修改的对象的主键Id.
-		RecordUtil.setUser(user);// 记录修改者
+		RecordUtil.setEntityId(entityId);
+		RecordUtil.setUser(user);
 		RecordUtil.setDesc("From " + oldProperty + " to " + newProperty);
 		record(RecordUtil);
 	}

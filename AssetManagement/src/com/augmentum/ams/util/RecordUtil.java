@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class RecordUtil {
 	private int id;
-	private String entity; // 实体类名,标记是哪个实体类
-	private String entityId; // 实体对象的Id
-	private String property; // 实体的属性名,标记实体的哪个属性发生修改
-	private String user; // 修改人
-	private Date modifyDate; // 修改时间
-	private String desc; // 描述
+	private String entity; 
+	private String entityId; 
+	private String property; 
+	private String user; 
+	private Date modifyDate; 
+	private String desc; 
 
 
 	@Override
