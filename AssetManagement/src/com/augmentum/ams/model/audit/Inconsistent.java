@@ -11,6 +11,7 @@ import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
@@ -38,6 +39,7 @@ public class Inconsistent extends BaseModel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "asset_id", unique = false)
+	@IndexedEmbedded(depth = 1)
 	private Asset asset;
 
 	@ManyToOne(fetch = FetchType.LAZY)

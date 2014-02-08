@@ -6,6 +6,27 @@ $(document).ready(function() {
     initCriteria(1);
     findDataListInfo("asset");
     $(".filterDiv").filterBox({});
+    
+    // update filterbox style for dashboard link and search as condition  ------ start
+    var type = $("#type").val();
+    $("#assetType p input").each(function(){
+    	var value = $(this).val();
+    	if (value == type) {
+    		$(this).attr("checked", "checked");
+    		$(this).siblings("span").addClass("span_checked");
+    	}
+    });
+    
+    var status = $("#status").val();
+    $("#assetStatus p input").each(function(){
+    	var value = $(this).val();
+    	if (value == status) {
+    		$(this).attr("checked", "checked");
+    		$(this).siblings("span").addClass("span_checked");
+    	}
+    });
+    // ------------------------------------------------------------------------- end 
+    
     $("#searchButton").click(function() {
         
         setCriteria();
@@ -117,6 +138,7 @@ var dataListInfo = {
 };
 function searchList() {
     dataList = $(".dataList").DataList(dataListInfo);
+    dataList.criteria = setCriteria();
     dataList.search();
 }
 
@@ -159,6 +181,8 @@ function setCriteria() {
         }
     });
     criteria.assetStatus = assetStatus;
+    
+    return criteria;
 }
 
 

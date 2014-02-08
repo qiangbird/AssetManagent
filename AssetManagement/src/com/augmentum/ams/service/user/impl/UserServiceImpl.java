@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.augmentum.ams.dao.user.UserDao;
 import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.model.enumeration.RoleEnum;
-import com.augmentum.ams.model.enumeration.UserLevelEnum;
 import com.augmentum.ams.model.user.Role;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.user.RoleService;
@@ -180,11 +179,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User validateEmployee(UserVo userVo) {
         if (null == userVo) {
-            // TODO Exception
-            logger.info("TODO");
+            logger.error("userVo is null when validate employee");
             return null;
         }else{
-
+ 
         User user = this.getUserById(userVo.getEmployeeId());
         if (null == user) {
             user = new User();

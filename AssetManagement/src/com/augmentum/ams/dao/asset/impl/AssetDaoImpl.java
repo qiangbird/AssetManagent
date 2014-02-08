@@ -353,20 +353,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 			map.put(customer.getCustomerName() + "OtherAssetsCount", result.get("OTHERASSETS"));
 		}
 		
-		// my assets
-		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND user.userId = ?";
-		map.put("myAssetTotal", getCountByHql(hql, user.getUserId()));
-		
-		hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false AND user.userId = ? GROUP BY type ORDER BY type";
-		result = getAssetTypeCountList(getHibernateTemplate().find(hql, user.getUserId()));
-		
-		map.put("myAssetDeviceCount", result.get("DEVICE"));
-		map.put("myAssetMachineCount", result.get("MACHINE"));
-		map.put("myAssetMonitorCount", result.get("MONITOR"));
-		map.put("myAssetOtherAssetsCount", result.get("OTHERASSETS"));
-		map.put("myAssetSoftwareCount", result.get("SOFTWARE"));
-		
-		// Manager: all customers available assets
+		// manager: all customers available assets
 		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = 'AVAILABLE' AND customer.id in (:customerIds)";
 		query = session.createQuery(hql).setParameterList("customerIds", customerIds);
 		map.put("allCustomersAvailableAssetTotal", Integer.valueOf(query.list().get(0).toString()));
@@ -381,7 +368,23 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 		map.put("allCustomersAvailableOtherAssetsCount", result.get("OTHERASSETS"));
 		map.put("allCustomersAvailableSoftwareCount", result.get("SOFTWARE"));
 		
-		// Manager: all customers idle assets
+		// manager: each customer available asset
+		for (Customer customer : customers) {
+			
+			hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = 'AVAILABLE' AND customer.id = ?";
+			map.put(customer.getCustomerName() + "AvailableAssetTotal", getCountByHql(hql, customer.getId()));
+			
+			hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false AND status = 'AVAILABLE' AND customer.id = ? GROUP BY type ORDER BY type";
+			result = getAssetTypeCountList(getHibernateTemplate().find(hql, customer.getId()));
+			
+			map.put(customer.getCustomerName() + "AvailableSoftwareCount", result.get("SOFTWARE"));
+			map.put(customer.getCustomerName() + "AvailableDeviceCount", result.get("DEVICE"));
+			map.put(customer.getCustomerName() + "AvailableMachineCount", result.get("MACHINE"));
+			map.put(customer.getCustomerName() + "AvailableMonitorCount", result.get("MONITOR"));
+			map.put(customer.getCustomerName() + "AvailableOtherAssetsCount", result.get("OTHERASSETS"));
+		}
+				
+		// manager: all customers idle assets
 		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = 'IDLE' AND customer.id in (:customerIds)";
 		query = session.createQuery(hql).setParameterList("customerIds", customerIds);
 		map.put("allCustomersIdleAssetTotal", Integer.valueOf(query.list().get(0).toString()));
@@ -396,7 +399,7 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 		map.put("allCustomersIdleMonitorCount", result.get("MONITOR"));
 		map.put("allCustomersIdleOtherAssetsCount", result.get("OTHERASSETS"));
 		
-		// Manager: in use assets
+		// manager: in use assets
 		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = 'IN_USE' AND customer.id in (:customerIds)";
 		query = session.createQuery(hql).setParameterList("customerIds", customerIds);
 		map.put("allCustomersInUseAssetTotal", Integer.valueOf(query.list().get(0).toString()));
@@ -410,6 +413,22 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 		map.put("allCustomersInUseMachineCount", result.get("MACHINE"));
 		map.put("allCustomersInUseMonitorCount", result.get("MONITOR"));
 		map.put("allCustomersInUseOtherAssetsCount", result.get("OTHERASSETS"));
+		
+		// manager: each customer in use asset
+		for (Customer customer : customers) {
+			
+			hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = 'IN_USE' AND customer.id = ?";
+			map.put(customer.getCustomerName() + "InUseAssetTotal", getCountByHql(hql, customer.getId()));
+			
+			hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false AND status = 'IN_USE' AND customer.id = ? GROUP BY type ORDER BY type";
+			result = getAssetTypeCountList(getHibernateTemplate().find(hql, customer.getId()));
+			
+			map.put(customer.getCustomerName() + "InUseSoftwareCount", result.get("SOFTWARE"));
+			map.put(customer.getCustomerName() + "InUseDeviceCount", result.get("DEVICE"));
+			map.put(customer.getCustomerName() + "InUseMachineCount", result.get("MACHINE"));
+			map.put(customer.getCustomerName() + "InUseMonitorCount", result.get("MONITOR"));
+			map.put(customer.getCustomerName() + "InUseOtherAssetsCount", result.get("OTHERASSETS"));
+		}
 		
 		return map;
 	}

@@ -15,6 +15,7 @@
 		<div id="left"></div>
 		<div id="right"></div>
 	</div>
+	<shiro:hasRole name="IT">
 	<div class="returnedAssetPanel">
 		<div class="panel_title">
 			<span>ReturnedAsset</span>
@@ -30,6 +31,7 @@
 		</table>
 		<input id="returnedAsset" type="button" value="Return"/>
 	</div>
+	</shiro:hasRole>
 	<div class="mainPanel">
 		<table border="1">
 			<tr>
@@ -52,6 +54,15 @@
 				<td></td>
 			</tr>
 			</shiro:hasRole>
+			<tr>
+				<td>My Asset</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
 			<shiro:hasAnyRoles name="MANAGER,EMPLOYEE,SPECIAL_ROLE">
 			<tr>
 				<td>Customer Asset</td>
@@ -62,9 +73,8 @@
 				<td></td>
 				<td></td>
 			</tr>
-			</shiro:hasAnyRoles>
 			<tr>
-				<td>My Asset</td>
+				<td>Available Customer Asset</td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -72,6 +82,16 @@
 				<td></td>
 				<td></td>
 			</tr>
+			<tr>
+				<td>In Use Customer Asset</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			</shiro:hasAnyRoles>
 			<shiro:hasRole name="IT">
 			<tr>
 				<td>Fixed</td>
@@ -82,7 +102,6 @@
 				<td></td>
 				<td></td>
 			</tr>
-			</shiro:hasRole>
 			<tr>
 				<td>Available</td>
 				<td></td>
@@ -101,7 +120,6 @@
 				<td></td>
 				<td></td>
 			</tr>
-			<shiro:hasRole name="IT">
 			<tr>
 				<td>Returned</td>
 				<td></td>

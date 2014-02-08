@@ -11,7 +11,7 @@
 <head>
 <base href="<%=basePath%>">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Asset List</title>
+<title>Customer Asset List</title>
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
 <link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
@@ -177,6 +177,8 @@
     </div>
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
+    <input type="hidden" id="status" value="${status }" />
+    <input type="hidden" id="type" value="${type }" />
     
      <table>
             <tr>

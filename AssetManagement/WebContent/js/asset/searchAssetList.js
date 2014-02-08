@@ -34,6 +34,26 @@ $(document).ready(function() {
         dataList.search();
     });
     
+    // update filterbox style for dashboard link and search as condition  ------ start
+    var type = $("#type").val();
+    $("#assetType p input").each(function(){
+    	var value = $(this).val();
+    	if (value == type) {
+    		$(this).attr("checked", "checked");
+    		$(this).siblings("span").addClass("span_checked");
+    	}
+    });
+    
+    var status = $("#status").val();
+    $("#assetStatus p input").each(function(){
+    	var value = $(this).val();
+    	if (value == status) {
+    		$(this).attr("checked", "checked");
+    		$(this).siblings("span").addClass("span_checked");
+    	}
+    });
+    // ------------------------------------------------------------------------- end 
+    
     // add keypress event for search feature
     $("#keyword").keydown(function() {
         if(event.keyCode == 13) {
@@ -287,6 +307,7 @@ var dataListInfo = {
 // call dataList
 function searchList() {
     dataList = $(".dataList").DataList(dataListInfo);
+    dataList.criteria = setCriteria();
     dataList.search();
 }
 
@@ -329,6 +350,8 @@ function setCriteria() {
         }
     });
     criteria.assetStatus = assetStatus;
+    
+    return criteria;
 }
 
 // get value according to index sequence

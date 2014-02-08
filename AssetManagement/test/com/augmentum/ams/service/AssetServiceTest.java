@@ -521,4 +521,19 @@ public class AssetServiceTest {
 		}
 	}
 	
+	@Test
+	public void testGetAssetountForManager() {
+		User user = userDao.getUserByUserId("T04300");
+		Customer c1 = customerService.getCustomerByName("Augmentum");
+		Customer c2 = customerService.getCustomerByName("Internal Systems");
+		List<Customer> list = new ArrayList<Customer>();
+		list.add(c1);
+		list.add(c2);
+		Map<String, Integer> map = assetService.getAssetCountForManager(user, list);
+		
+		for (Entry<String, Integer> entry : map.entrySet()) {
+			logger.info(entry.getKey() + "--" + entry.getValue() + "\n");
+		}
+	}
+	
 }

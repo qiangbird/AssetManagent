@@ -281,11 +281,12 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/allAssets")
-	public String redirectPage() {
+	public ModelAndView redirectPage(String type, String status) {
 
-		logger.info("redirectPage method start!");
-		logger.info("redirectPage method end!");
-		return "asset/allAssetsList";
+		ModelAndView modelAndView = new ModelAndView("asset/allAssetsList");
+		modelAndView.addObject("type", type);
+		modelAndView.addObject("status", status);
+		return modelAndView;
 	}
 
 	/**
@@ -518,13 +519,14 @@ public class AssetController extends BaseController {
 
 	@RequestMapping(value = "/listMyAssets")
 	public String redirectToMyassetsPage(HttpSession session,
-			HttpServletRequest request) {
+			HttpServletRequest request, String type) {
 
 		logger.info("redirectToMyassetsPage method satrt!");
 
 		UserVo userVo = (UserVo) session.getAttribute("userVo");
 		User user = userService.getUserByUserId(userVo.getEmployeeId());
 		request.setAttribute("userUuid", user.getId());
+		request.setAttribute("type", type);
 
 		logger.info("redirectToMyassetsPage method end!");
 		return "asset/allAssetsList";
@@ -560,6 +562,7 @@ public class AssetController extends BaseController {
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", page.getRecordCount());
 		modelAndView.addObject("totalPage", page.getTotalPage());
+		modelAndView.addObject("searchCondition", searchCondition);
 
 		logger.info("findMyAssetsBySearchCondition method end!");
 		return modelAndView;

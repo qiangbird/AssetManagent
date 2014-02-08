@@ -80,7 +80,7 @@ public class CustomerAssetController extends BaseController {
 	// goCustomerAsset
 	@RequestMapping(value = "listCustomerAsset", method = RequestMethod.GET)
 	public String listCustomerAsset(String customerCode,
-			HttpServletRequest request) throws DataException {
+			HttpServletRequest request, String status, String type) throws DataException {
 
 		logger.info("listCustomerAsset method start!");
 
@@ -91,6 +91,8 @@ public class CustomerAssetController extends BaseController {
 				.getProjectByCustomerCode(customerCode, request);
 		request.setAttribute("customer", customer);
 		request.setAttribute("projectList", projectList);
+		request.setAttribute("status", status);
+		request.setAttribute("type", type);
 
 		logger.info("listCustomerAsset method start!");
 		return "asset/customerAssetList";

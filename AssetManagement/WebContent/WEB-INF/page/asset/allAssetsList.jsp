@@ -156,6 +156,8 @@
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
     <input type="hidden" id="userUuid" value="${requestScope.userUuid }">
+    <input type="hidden" id="status" value="${status }" />
+    <input type="hidden" id="type" value="${type }" />
 
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
