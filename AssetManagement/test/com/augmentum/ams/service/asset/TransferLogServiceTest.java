@@ -1,5 +1,6 @@
 package com.augmentum.ams.service.asset;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.Machine;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.user.User;
@@ -43,5 +45,17 @@ public class TransferLogServiceTest {
     	transferLogService.saveTransferLog("40289613438b32ca01438b388260000e", "Take Over");
     	*/
     }
+    
+    @Test 
+	public void createIndexForTransferLogTest() throws ParseException{
+	    List<TransferLog> list = transferLogService.findAllTransferLog();
+        Class<TransferLog>[] clazzes = new Class[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+        	TransferLog transferLog = list.get(i);
+            Class clazz =  transferLog.getClass();
+            clazzes[i] = clazz;
+        }
+        transferLogService.createIndexForTransferLog(clazzes);
+	}
     
 }

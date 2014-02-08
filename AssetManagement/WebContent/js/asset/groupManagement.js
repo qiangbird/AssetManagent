@@ -1,85 +1,3 @@
-/*$(document).ready(function(){
-	$(".groupItem").mouseover(function(){
-		$(this).css("background", "#23A5E3");
-	});
-	$("#dialog").dialog({
-        autoOpen:false,
-        closeOnEscape: true,
-        draggable: false,
-        height: 280,
-        width: 500,
-        show: "blind",
-        hide: "blind",
-        modal: true,
-        position: "center",
-        resizable: false,
-        title: "Group operation",
-        bgiframe: true
-    });
-	
-    $("#addButton").click(function(){
-//    	$("#groupId").empty();
-        $("#dialog").dialog("open");
-        $("#groupId").val("");
-        $("#groupName").val("");
-        $("#description").val("");
-
-    });
-    //edit group
-    $(".editIcon").each(function(i){
-    	$(this).click(function(){
-    		var groupId = $(this).attr("id").trim();
-    		  $.ajax({
-    		       type : 'get',
-    		       contentType : 'application/json',
-    		       url : 'group/edit?id='+ groupId,
-    		       dataType : 'json',
-    		       success : function(data) {
-    		    	   $("#dialog").dialog("open");
-    		    	   $("#groupId").val(data.customerGroup.id);
-                      $("#groupName").val(data.customerGroup.groupName);
-              	      $("#description").val(data.customerGroup.description);
-              	      $("#processType").val(data.customerGroup.processType);
-    		          
-    		       },
-    		       error : function() {
-    		          alert("error");
-    		       }
-    		    });
-    	  });
-    });
-    //delete group
-    $(".removeIcon").each(function(i){
-    	$(this).click(function(){
-    		var groupId = $(this).attr("id").trim();
-    		$(this).parent().parent().remove();
-    		console.log(groupId);
-    		  $.ajax({
-    		       type : 'get',
-    		       contentType : 'application/json',
-    		       url : 'group/delete?id='+ groupId,
-    		       dataType : 'json',
-    		       success : function(data) {
-    		       },
-    		       error : function() {
-    		          alert("error");
-    		       }
-    		    });
-    	  });
-    });
-    
-    $(".groupName").each(function(){
-    	$(this).click(function(){
-    		groupId = $(this).parent().attr("id");
-    		window.location.href = "group/manageGroupCustomer?id="+groupId;
-    	});
-    });
- });*/
-
-
-
-//below add dataList function
-
 var dataList;
 var criteria = {};
 
@@ -88,7 +6,6 @@ $(document).ready(function() {
     initCriteria(10);
     findDataListInfo("group");
     
-//    $(".filterDiv").filterBox({});
     $("#searchButton").click(function() {
         
         setCriteria();
@@ -130,7 +47,6 @@ var dataListInfo = {
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
-//    url : 'asset/searchAsset',
     url : 'group/search',
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
@@ -349,57 +265,6 @@ function checkActivedAssetIds() {
     return true;
 }
 
-// check acticed assets status for assign
-function checkActivedAssetsStatusForAssign() {
-    var flag = true;
-    $('.row .dataList-checkbox-active').each(function(){
-        if ($(this).siblings(".Status").html() == "ASSIGNING") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Assigning asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_CUSTOMER") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to customer asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_IT") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to IT asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNED") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returned asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "BORROWED") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Borrowed asset can not be assigned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "IDLE") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Idle asset can not be assigned");
-            flag = false;
-        } 
-    });
-    return flag;
-}
-
-// check actived assets status and ownership for return to customer
-function checkActivedAssetsStatusForReturn() {
-    var flag = true;
-    $('.row .dataList-checkbox-active').each(function(){
-        if ($(this).siblings(".Status").html() == "ASSIGNING") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Assigning asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_CUSTOMER") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to customer asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNING_TO_IT") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returning to IT asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Status").html() == "RETURNED") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Returned asset can not be returned");
-            flag = false;
-        } else if ($(this).siblings(".Ownership").html() == "Augmentum") {
-            ShowMsg("Line " + $(this).siblings(".w-30").html() + ": Ownership is Augmentum, asset can not be returned to customer");
-            flag = false;
-        }
-    });
-    return flag;
-}
-
 // confirm assign assets
 $("#confirm_assign").click(function() {
     
@@ -451,10 +316,6 @@ function closeDialog() {
     
     $("#dialog_assign").dialog("close");
 }
-
-
-
-
 
 $(document).ready(function(){
 	$("#dialog").dialog({
@@ -599,19 +460,11 @@ $(document).ready(function(){
 			flag = 1;
 			alert("aaaa");
 		}
-//		if(inputProcessType.trim()==""){
-//			$("#processType").addClass("group-error");
-//			flag = 2;
-//			alert("bbb");
-//		}
-		
-//		$("tr").delegate("#token-input-customers","blur",function(){
 		$(".token-input-token-facebook").each(function(i){
 			if($(this).attr("error")){
 				$(this).addClass("input-error-autocomplete");
 				flag = 3;
 			}
-//		});
 		
 	});
 		

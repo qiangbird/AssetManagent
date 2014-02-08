@@ -37,7 +37,7 @@
             <input type="hidden" id="keyword_content" value="">
             <div id="searchInputTipDiv" class="inputTipDiv"><span></span></div>
             <input id="keyword" class="input_txt" name="" type="text" value="">
-            <div class="filterDiv filterDiv_common">
+            <!-- <div class="filterDiv filterDiv_common">
                 <button class="filterBtn filter_no_dropDown">
                 </button>
                 <div class="filterBox">
@@ -85,7 +85,59 @@
                     </div>
                     <a class="reset" href="javascript:void(0);">Reset</a>
                 </div>
-            </div>
+            </div> -->
+            
+            <div class="filterDiv filterDiv_common">
+				<button class="filterBtn filter_no_dropDown">
+				</button>
+				<span class="existedFlag"></span>
+			     <div class="filterBox">
+					<div class="single_condition">
+						<div class="condition_title"><spring:message code="searchBy" /></div>
+						<div class="condition_optional" id="searchFields">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="assetId"/><label><spring:message code="asset.id"/></label></p>
+							<p><input type="checkBox" name="field" value="assetName"/><label><spring:message code="asset.name"/></label></p>
+			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="asset.user"/></label></p>
+			                <p><input type="checkBox" name="field" value="project.projectName"/><label><spring:message code="project"/></label></p>
+			                <p><input type="checkBox" name="field" value="customer.customerName"/><label><spring:message code="customer"/></label></p>
+			                <p><input type="checkBox" name="field" value="poNo"/><label><spring:message code="asset.po.no" /></label></p>
+			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.bar.code"/></label></p>
+			        	</div>
+					</div>
+					<div class="single_condition">
+						<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
+						<div class="condition_optional" id="assetType">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="MACHINE" /><label><spring:message code="asset.machine"/></label></p>
+							<p><input type="checkBox" name="field" value="MONITOR" /><label><spring:message code="asset.monitor"/></label></p>
+							<p><input type="checkBox" name="field" value="DEVICE" /><label><spring:message code="asset.device"/></label></p>
+							<p><input type="checkBox" name="field" value="SOFTWARE" /><label><spring:message code="asset.software"/></label></p>
+							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label><spring:message code="asset.otherAssets"/></label></p>
+			            </div>
+			        </div>
+			        <div class="single_condition">
+						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
+						<div class="condition_optional" id="assetStatus">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="AVAILABLE" /><label><spring:message code="asset.available"/></label></p>
+							<p><input type="checkBox" name="field" value="IN_USE" /><label><spring:message code="asset.inUse"/></label></p>
+							<p><input type="checkBox" name="field" value="IDLE" /><label><spring:message code="asset.idle"/></label></p>
+							<p><input type="checkBox" name="field" value="RETURNED" /><label><spring:message code="asset.returned"/></label></p>
+			            </div>
+			        </div>
+			        <div class="single_condition">
+						<div class="condition_title"><spring:message code="asset.check.in.date"/></div>
+						<div class="condition_optional" id="checkInTime">
+							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
+                            <span class="dateLine">-</span>
+                            <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>
+			            </div>
+			        </div>
+			        <a class="reset" href="javascript:void(0);"><spring:message code="reset"/></a>
+				</div>
+			</div>
+            
             <a id="searchButton" class="a_common_button green_button_thirty">
                 <span class="left"></span>
                 <span class="middle" ><spring:message code="SearchButton" /> </span>

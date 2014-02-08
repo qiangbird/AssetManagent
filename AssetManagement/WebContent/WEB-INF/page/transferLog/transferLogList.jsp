@@ -28,7 +28,7 @@
     	<div class="dataList">
     		<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
-			<div id="searchInputTipDiv" class="inputTipDiv"><span id="label_KeywordPlaceholder"></span></div>
+			<%-- <div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div> --%>
 			<input id="keyword" class="input_txt" name="" type="text" value="">
 			<div class="filterDiv filterDiv_common">
 				<button class="filterBtn filter_no_dropDown">
@@ -39,17 +39,17 @@
 						<div class="condition_title"><spring:message code="search" /></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="CheckedAllFields" /></label></p>
-							<p><input type="checkBox" name="field" value="operatorName"/><label><spring:message code="operationLog.operatorName" /></label></p>
-							<p><input type="checkBox" name="field" value="operation"/><label><spring:message code="operationLog.operation" /></label></p>
-			                <p><input type="checkBox" name="field" value="operationObject"/><label><spring:message code="operationLog.operationObject" /></label></p>
+							<p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="operationLog.operatorName" /></label></p>
+							<p><input type="checkBox" name="field" value="action"/><label><spring:message code="operationLog.operation" /></label></p>
+			                <p><input type="checkBox" name="field" value="asset.assetName"/><label><spring:message code="operationLog.operationObject" /></label></p>
 							<p><input type="checkBox" name="field" value="asset.manufacturer"/><label><spring:message code="asset.manufacture" /></label></p>
 			                <p><input type="checkBox" name="field" value="asset.poNo"/><label><spring:message code="asset.po.no" /></label></p>
-			                <p><input type="checkBoxd" name="field" value="asset.barCode"/><label><spring:message code="asset.bar.code" /></label></p>
+			                <p><input type="checkBox" name="field" value="asset.barCode"/><label><spring:message code="asset.bar.code" /></label></p>
 			        	</div>
 					</div>
 			        <div class="single_condition">
 						<div class="condition_title"><spring:message code="searchAsTime" /></div>
-						<div class="condition_optional" id="checkInTime">
+						<div class="condition_optional" id="time">
 							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
                             <span class="dateLine">-</span>
                             <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>

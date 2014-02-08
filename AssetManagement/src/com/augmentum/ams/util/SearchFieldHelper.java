@@ -99,28 +99,30 @@ public class SearchFieldHelper {
 	public static String[] getTransferLogFields() {
 
 		String[] fieldNames = new String[10];
-		fieldNames[0] = "assetId";
-		fieldNames[1] = "assetName";
-		fieldNames[2] = "userName";
+		fieldNames[0] = "asset.assetId";
+		fieldNames[1] = "asset.assetName";
+		fieldNames[2] = "user.userName";
 		fieldNames[3] = "time";
 		fieldNames[4] = "action";
-		fieldNames[5] = "manufacturer";
-		fieldNames[6] = "barcode";
-		fieldNames[7] = "checkInTime";
-		fieldNames[8] = "seriesNo";
-		fieldNames[9] = "poNo";
+		fieldNames[5] = "asset.manufacturer";
+		fieldNames[6] = "asset.barCode";
+		fieldNames[7] = "asset.checkInTime";
+		fieldNames[8] = "asset.seriesNo";
+		fieldNames[9] = "asset.poNo";
 
 		return fieldNames;
 	}
 
 	public static String[] getOperationLogFields() {
 
-		String[] fieldNames = new String[5];
+//		String[] fieldNames = new String[5];
+		String[] fieldNames = new String[6];
 		fieldNames[0] = "operatorID";
 		fieldNames[1] = "operatorName";
 		fieldNames[2] = "operationObject";
 		fieldNames[3] = "operation";
 		fieldNames[4] = "operationObjectID";
+		fieldNames[5] = "updatedTime";
 
 		return fieldNames;
 	}

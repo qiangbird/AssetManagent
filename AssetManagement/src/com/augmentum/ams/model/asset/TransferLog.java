@@ -43,11 +43,12 @@ public class TransferLog extends BaseModel {
     private Date time;
 
     @Column(nullable = false, length = 64)
-    @Field(name = "action", index = Index.UN_TOKENIZED, store = Store.YES)
+    @Field(name = "action", index = Index.TOKENIZED, store = Store.YES)
     private String action;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @IndexedEmbedded(depth = 1)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -24,6 +24,7 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.user.RoleService;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
+import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.user.UserVo;
 
@@ -194,23 +195,15 @@ public class UserServiceImpl implements UserService {
             user.setUpdatedTime(date);
             userDao.save(user);
         }
-
-        List<Role> roles = this.validatePosition(userVo.getEmployeeLevel());
+        List<Role> roles = new ArrayList<Role>();
+        RoleEnum companyRole = RoleLevelUtil.getRoleByUserVo(userVo);
         roles.addAll(user.getRoles());
+        Role role = new Role();
+        role.setRoleName(companyRole);
+        roles.add(role);
         user.setRoles(roles);
         return user;
         }
-    }
-
-    public List<Role> validatePosition(String position) {
-
-        List<Role> roles = new ArrayList<Role>();
-        if (UserLevelEnum.hasLevel(position)) {
-            Role role = new Role();
-            role.setRoleName(RoleEnum.MANAGER);
-            roles.add(role);
-        }
-        return roles;
     }
 
 	@Override

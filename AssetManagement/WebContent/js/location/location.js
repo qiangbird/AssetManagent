@@ -7,7 +7,6 @@ $(document).ready(function() {
     initCriteria(7);
     findDataListInfo("location");
     
-//    $(".filterDiv").filterBox({});
     $("#searchButton").click(function() {
         
         setCriteria();

@@ -328,3 +328,6 @@ border: solid 1px red !important;
 .input-error-autocomplete{
 border: solid 1px red !important;
 }
+.dataList-div-checkbox,.dataList-div-checkbox-all{
+	display:none;
+}

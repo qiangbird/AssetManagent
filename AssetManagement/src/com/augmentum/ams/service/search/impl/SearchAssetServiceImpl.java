@@ -162,7 +162,6 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
         	criteria.createAlias("user", "user");
             criteria.add(Restrictions.eq("user.id", searchCondition.getUserUuid()));
-            criteria.createAlias("user", "user");
         }
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         

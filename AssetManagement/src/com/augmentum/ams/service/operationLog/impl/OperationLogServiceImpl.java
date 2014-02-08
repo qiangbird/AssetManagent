@@ -10,6 +10,7 @@ import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
@@ -34,6 +35,7 @@ import com.augmentum.ams.service.operationLog.OperationLogService;
 import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
+import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -134,7 +136,11 @@ public class OperationLogServiceImpl implements OperationLogService{
 				booleanQuery.add(
 						new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
 						Occur.MUST);
-
+				Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
+	                    searchCondition.getToTime());
+				booleanQuery.add(trq, Occur.MUST);
+				
+				
 				QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
 
 				// add entity associate
@@ -190,4 +196,25 @@ public class OperationLogServiceImpl implements OperationLogService{
 		return sortName;
 	}
 
+    private Query getTimeRangeQuery(String fromTime, String toTime) {
+        boolean isNullFromTime = (null == fromTime || "".equals(fromTime));
+        boolean isNullToTime = (null == toTime || "".equals(toTime));
+
+        if (isNullFromTime && !isNullToTime) {
+            fromTime = Constant.SEARCH_MIN_DATE;
+            toTime = UTCTimeUtil.formatFilterTime(toTime);
+            return new TermRangeQuery("updatedTime", fromTime, toTime, true, true);
+        } else if (isNullToTime && !isNullFromTime) {
+            toTime = Constant.SEARCH_MAX_DATE;
+            fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+            return new TermRangeQuery("updatedTime", fromTime, toTime, true, true);
+        } else if (!isNullFromTime && !isNullToTime) {
+            fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+            toTime = UTCTimeUtil.formatFilterTime(toTime);
+            return new TermRangeQuery("updatedTime", fromTime, toTime, true, true);
+        } else {
+            return new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
+        }
+    }
+    
 }

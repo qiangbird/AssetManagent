@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.asset.impl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.apache.shiro.SecurityUtils;
@@ -32,6 +34,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 import com.augmentum.ams.dao.asset.TransferLogDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
@@ -136,6 +139,10 @@ public class TransferLogServiceImpl implements TransferLogService {
 				new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
 				Occur.MUST);
 
+		Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
+				searchCondition.getToTime());
+		booleanQuery.add(trq, Occur.MUST);
+
 		QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
 
 		// add entity associate
@@ -213,5 +220,41 @@ public class TransferLogServiceImpl implements TransferLogService {
 			transferLogDao.save(transferLog);
 		}
 
+	}
+
+	private Query getTimeRangeQuery(String fromTime, String toTime) {
+		boolean isNullFromTime = (null == fromTime || "".equals(fromTime));
+		boolean isNullToTime = (null == toTime || "".equals(toTime));
+
+		if (isNullFromTime && !isNullToTime) {
+			fromTime = Constant.SEARCH_MIN_DATE;
+			toTime = UTCTimeUtil.formatFilterTime(toTime);
+			return new TermRangeQuery("time", fromTime, toTime, true, true);
+		} else if (isNullToTime && !isNullFromTime) {
+			toTime = Constant.SEARCH_MAX_DATE;
+			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+			return new TermRangeQuery("time", fromTime, toTime, true, true);
+		} else if (!isNullFromTime && !isNullToTime) {
+			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+			toTime = UTCTimeUtil.formatFilterTime(toTime);
+			return new TermRangeQuery("time", fromTime, toTime, true, true);
+		} else {
+			return new TermQuery(
+					new Term("isExpired", Boolean.FALSE.toString()));
+		}
+	}
+
+	@Override
+	public List<TransferLog> findAllTransferLog() {
+		return transferLogDao.findAll(TransferLog.class);
+	}
+
+	@Override
+	public void createIndexForTransferLog(Class<TransferLog>... classes) {
+		try {
+			baseHibernateDao.createIndex(classes);
+		} catch (InterruptedException e) {
+			logger.error(e);
+		}
 	}
 }

@@ -70,17 +70,15 @@ public class CustomerGroupController {
 
 		Page<CustomerGroup> groupPage = customerGroupService
 				.findCustomerGroupBySearchCondition(searchCondition);
-		String clientTimeOffset = (String) session.getAttribute("timeOffset");
 		List<CustomerGroup> groupList = groupPage.getResult();
-		System.out.println(groupList.size());
 		JSONArray array = new JSONArray();
 		array = SearchCommonUtil.formatGroupListTOJSONArray(groupList);
 		List processTypeList = AssetUtil.getProcessTypes();
 
-		modelAndView.addObject("processTypeList", processTypeList);
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", groupPage.getRecordCount());
 		modelAndView.addObject("totalPage", groupPage.getTotalPage());
+		modelAndView.addObject("processTypeList", processTypeList);
 
 		logger.info("searchCustomerGroup method in CustomerGroupController end!");
 		return modelAndView;

@@ -203,3 +203,6 @@ border: solid 1px red !important;
 #location_table td{
 	text-align:left;
 }
+.dataList-div-checkbox,.dataList-div-checkbox-all{
+	display:none;
+}

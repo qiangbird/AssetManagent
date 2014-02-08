@@ -59,7 +59,6 @@ public class LocationController extends BaseController {
 
         Page<Location> page = locationService.findAllLocationBySearchCondition(searchCondition);
         List<Location> locationList = page.getResult();
-        System.out.println(locationList.size());
         JSONArray array = new JSONArray();
         array = SearchCommonUtil.formatLocationListTOJSONArray(locationList);
 

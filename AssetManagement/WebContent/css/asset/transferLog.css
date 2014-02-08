@@ -1,3 +1,6 @@
 .Id{
 	color: #555;
 }
+.dataList-div-checkbox,.dataList-div-checkbox-all{
+	display:none;
+}
