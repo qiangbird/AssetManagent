@@ -22,52 +22,55 @@ import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("baseController")
-@RequestMapping(value="/base")
+@RequestMapping(value = "/base")
 public class BaseController {
 
-    private Logger logger = Logger.getLogger(BaseController.class);
-    
-    @Autowired
-	private RemoteEmployeeService remoteEmployeeService;
-    @Autowired
-    private RemoteCustomerService remoteCustomerService;
-    
-    public String getUserIdByShiro() {
-        
-        String userId = getUserVoByShiro().getEmployeeId();
-        
-        return userId;
-    }
-    
-    public String getUserNameByShiro() {
-        
-        String userName = getUserVoByShiro().getEmployeeName();
+	private Logger logger = Logger.getLogger(BaseController.class);
 
-        return userName;
-    }
-    
-    public UserVo getUserVoByShiro(){
-        
-        Subject subject = SecurityUtils.getSubject();
-        Session session = subject.getSession();
-        UserVo userVo = (UserVo) session.getAttribute("userVo");
-        
-        return userVo;
-    }
-    
-	@RequestMapping(value = "/getEmployeeDataSource",method=RequestMethod.POST)
-	public ModelAndView getEmployeeDataSource(HttpServletRequest request) throws DataException {
-		JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployees(request);
-		ModelAndView modelAndView = new ModelAndView(); 
-		modelAndView.addObject("employeeInfo", employeeInfo);
-     	return modelAndView;
+	@Autowired
+	private RemoteEmployeeService remoteEmployeeService;
+	@Autowired
+	private RemoteCustomerService remoteCustomerService;
+
+	public String getUserIdByShiro() {
+
+		String userId = getUserVoByShiro().getEmployeeId();
+
+		return userId;
 	}
-	
-	  @RequestMapping("/getCustomerInfo")
-	    public ModelAndView getCustomerInfo(HttpServletRequest request) throws DataException {
-	        ModelAndView modelAndView = new ModelAndView();
-	        List<CustomerVo> customerList = remoteCustomerService.getAllCustomerFromIAP(request);
-	        modelAndView.addObject("customerList", customerList);
-	        return modelAndView;
-	    }
+
+	public String getUserNameByShiro() {
+
+		return getUserVoByShiro().getEmployeeName();
+	}
+
+	public UserVo getUserVoByShiro() {
+
+		Subject subject = SecurityUtils.getSubject();
+		Session session = subject.getSession();
+
+		return (UserVo) session.getAttribute("userVo");
+	}
+
+	@RequestMapping(value = "/getEmployeeDataSource", method = RequestMethod.POST)
+	public ModelAndView getEmployeeDataSource(HttpServletRequest request)
+			throws DataException {
+
+		JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployees(request);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("employeeInfo", employeeInfo);
+
+		return modelAndView;
+	}
+
+	@RequestMapping("/getCustomerInfo")
+	public ModelAndView getCustomerInfo(HttpServletRequest request)
+			throws DataException {
+
+		ModelAndView modelAndView = new ModelAndView();
+		List<CustomerVo> customerList = remoteCustomerService.getAllCustomerFromIAP(request);
+		modelAndView.addObject("customerList", customerList);
+
+		return modelAndView;
+	}
 }
