@@ -174,7 +174,7 @@
 </div>                              
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/common/json2.js"></script>
-<script type="text/javascript" src="js/customize/customizedProperty/customizedProperty.js"></script>
+<script type="text/javascript" src="js/customized/customizedProperty/customizedProperty.js"></script>
 <script type="text/javascript" src="js/common/commonFunction.js"></script>
 </body>
 </html>

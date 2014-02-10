@@ -43,6 +43,6 @@
   </div>
 
   <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-  <script type="text/javascript" src="js/customize/customizedView/customizedViewList.js"></script>
+  <script type="text/javascript" src="js/customized/customizedView/customizedViewList.js"></script>
    </body>
  </html>
