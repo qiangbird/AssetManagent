@@ -57,14 +57,12 @@ public class ExceptionAop {
     @AfterThrowing(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)", throwing = "e")
     public void catchException(JoinPoint joinPoint, Exception e) {
     	
-    	StringBuilder logInfo = getMethodAndParams(joinPoint);
     	setUserAndIP();
     	
         if((e instanceof BaseException)) {
         	BaseException baseException = (BaseException) e;
-            logger.error(((BaseException) e).getErrorCode() + "\t" +baseException.getErrorMessage()+"\n"+baseException);
+            logger.error("Error code: " + ((BaseException) e).getErrorCode() + ",\t Error message: " +baseException.getErrorMessage()+"\n"+baseException);
             logger.error(e.getMessage(), e);
-            //Encapsulate primitive exception to BaseException then throw it
         }
         else {
             logger.error(e.getMessage(), e);
@@ -86,7 +84,7 @@ public class ExceptionAop {
         } else {
             loginName = "anonymousUser";
         }
-        logger.error("Login user: " + loginName + "\t ," + "IP address: " + ip);
+        logger.error("Login user: " + loginName + ",\t" + "IP address: " + ip);
     }
 
     /**

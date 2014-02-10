@@ -36,6 +36,7 @@ import com.augmentum.ams.model.asset.DeviceSubtype;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
+import com.augmentum.ams.service.asset.AssetImportParserService;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
@@ -91,20 +92,12 @@ public class AssetController extends BaseController {
 	private SearchAssetService searchAssetService;
 	@Autowired
 	private CustomerAssetService customerAssetService;
+	@Autowired
+	private AssetImportParserService assetImportParserService;
 
 	private Page<Asset> pageForAudit;
 
 	private Logger logger = Logger.getLogger(AssetController.class);
-
-	/**
-	 * Size of a byte buffer to read/write file
-	 */
-	private static final int BUFFER_SIZE = 4096;
-
-	/**
-	 * Path of the file to be downloaded, relative to application's directory
-	 */
-	private String filePath = "/download/Asset_2014-01-16.xls";
 
 	@RequestMapping("/software")
 	public String softwareList() {
@@ -598,28 +591,30 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/upload")
-	@ResponseBody
-	public JSONObject uploadAssetsExcelFile(MultipartFile file, String flag,
-			HttpServletRequest request, HttpServletResponse response) {
-
-		File targetFile = FileOperateUtil.upload(request, response, file);
-		ImportVo importVo = null;
-		JSONObject jsonObject = new JSONObject();
-		try {
-			importVo = assetService.analyseUploadExcelFile(targetFile, request,
-					flag);
-		} catch (ExcelException e) {
-			logger.error(e.getMessage(), e);
-		} catch (DataException e) {
-			logger.error(e.getMessage(), e);
-		}
-		jsonObject.put("all", importVo.getAllImportRecords());
-		jsonObject.put("success", importVo.getSuccessRecords());
-		jsonObject.put("failure", importVo.getFailureRecords());
-		jsonObject.put("failureFileName", importVo.getFailureFileName());
-
-		return jsonObject;
-	}
+    @ResponseBody
+    public JSONObject  uploadAssetsExcelFile(MultipartFile file, String flag, HttpServletRequest request,
+            HttpServletResponse response) {
+        
+        File targetFile = FileOperateUtil.upload(request, response, file);
+        ImportVo importVo = null;
+        JSONObject jsonObject = new JSONObject();
+        
+        try {
+            importVo = assetImportParserService.importAsset(targetFile, request, flag);
+        } catch (ExcelException e) {
+            jsonObject.put("error", e.getErrorCode());
+            return jsonObject;
+        } catch (DataException e) {
+            jsonObject.put("error", e.getErrorCode());
+            return jsonObject;
+        }
+        jsonObject.put("all", importVo.getAllImportRecords());
+        jsonObject.put("success", importVo.getSuccessRecords());
+        jsonObject.put("failure", importVo.getFailureRecords());
+        jsonObject.put("failureFileName", importVo.getFailureFileName());
+        
+        return jsonObject;
+    }
 
 	@RequestMapping(value = "/download")
 	public void downloadFailureAssets(String fileName,

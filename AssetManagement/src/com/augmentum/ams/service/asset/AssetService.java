@@ -1,6 +1,5 @@
 package com.augmentum.ams.service.asset;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.augmentum.ams.exception.DataException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
@@ -20,7 +18,6 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
-import com.augmentum.ams.web.vo.asset.ImportVo;
 import com.augmentum.ams.web.vo.system.Page;
 
 public interface AssetService {
@@ -201,14 +198,6 @@ public interface AssetService {
      */
     String exportAssetsForAll(Page<Asset> page) throws ExcelException, SQLException;
 
-    /**
-     * @author John.li
-     * @param file
-     * @throws ExcelException 
-     * @throws DataException 
-     */
-    ImportVo analyseUploadExcelFile(File file, HttpServletRequest request, String flag) throws ExcelException, DataException;
-    
     /**
      * @author Geoffrey.Zhao
      * @param user
