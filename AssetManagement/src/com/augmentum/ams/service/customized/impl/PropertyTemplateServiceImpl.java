@@ -106,8 +106,8 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
             selfProperty.put("enName", propertyTemplate.getEnName());
             selfProperty.put("zhName", propertyTemplate.getZhName());
             selfProperty.put("sequence", propertyTemplate.getSequence());
-            selfProperty.put("required", propertyTemplate.isRequired());
-            selfProperty.put("propertyDescription", propertyTemplate.getDescription());
+            selfProperty.put("isRequired", propertyTemplate.isRequired());
+            selfProperty.put("description", propertyTemplate.getDescription());
             selfPropertyArray.add(selfProperty);
         }
 		
