@@ -1,4 +1,12 @@
 ﻿$(document).ready(function(){
+	//below is about front page validation
+	$("#assetName,#ownership,#customerName,#assetUser,#maxUseNum").delegate(this,"blur",function(){
+		//delete the tips when input data exists
+		if( "" != $(this).val()){
+		$(this).clearValidationMessage();
+		}
+	});
+	 window.entityType = "Asset";
 	
    var localeCode = $("#localeCode").val();
    if (localeCode == 'en') {
@@ -116,6 +124,57 @@
 		   
    //submit and validate
  $("#submitForm").click(function() {
+	 
+	 
+	 if ("success" == validateAssetForm()) {
+	       	disableButton();
+	           var routinePath = null;
+	           var rotationFormVo = getRotationFormVo(rotationType);
+
+	           if ("Rotation" === rotationType){
+	               routinePath = "rotationRequest/rotation";
+	           } else if ("Assignment" === rotationType) {
+	               routinePath = "rotationRequest/assignment";
+	           } else if ("Rotation Out" === rotationType) {
+	               routinePath = "rotationRequest/rotationOut";
+	           }
+	           
+	           $.ajax({
+	               url : path + routinePath,
+	               dataType : 'json',
+	               data : rotationFormVo,
+	               type : 'POST',
+	               success : function(data){
+	                  window.location.href = path;
+	                  enableButton();
+	               },
+	               error : function(data){
+	                  var j = data.responseJSON.error;
+	                  var placeholderMessage = data.responseJSON.placeholderMessage;
+	                  
+	                  //Garrett modified.
+	                  if(j.errorCode != undefined && j.errorCode != ""){
+	                      $("#errorCode").val(j.errorCode);
+	                      var params = new Array();
+	                      if(placeholderMessage != undefined && placeholderMessage != ""){
+	                          params = placeholderMessage.split(",");
+	                      }
+	                      switchLanguage(j.errorCode,params);
+	                  } else{
+	                      window.location.href = $("#basePath").val()+"serverError";
+	                  }
+	                  
+	                  enableButton();
+	              }, 
+	              complete : function(){
+	           	   enableButton();
+	              }
+	           });
+	       }
+	 
+	 
+	 
+	 
   var name = $("#assetName").val();
   var type = $("#assetType").val();
   var ownership = $("#ownership").val();
@@ -134,7 +193,7 @@
      $("#machineType").addClass("l-select-error");
      flag = 1;
   } else if (type == "software") {
-     if (maxUseNum == ""|| !numberCheck(maxUseNum)) {
+     if (maxUseNum == ""|| !numberCheck(maxUseNum)||maxUseNum=="0") {
         $("#maxUseNum").addClass("l-select-error");
         flag = 1;
      }
@@ -203,12 +262,10 @@
 	  $("#selectedStatus").val("IN_USE");
   }
   
-  if (flag != 0) {
-     return false;
-  } else {
-     $("#assetFrom").submit();
-         return true;
-      }
+  if (flag == 0) {
+	     $("#assetFrom").submit();
+	      }
+  
    });
    
 
@@ -289,7 +346,7 @@ function TextMouseEnter(id) {
     $(id).addClass("l-text-hover").removeClass("l-text l-text-error");
 }
 function TextMouseOutNormal(id) {
-    $(id).addClass("l-text").removeClass("l-text-hover l-text-error");
+    $(id).addClass("l-text").removeClass("l-text-hover l-text-error input-text-error");
 }
 function TextMouseOutError(id) {
     $(id).addClass("l-text-error").removeClass("l-text-hover l-textr");

@@ -21,7 +21,7 @@ String basePath = request.getScheme() + "://"
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="autocomplete/css/autocomplete.css"
 	type="text/css">
-
+<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
@@ -384,5 +384,10 @@ String basePath = request.getScheme() + "://"
 		<script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 		<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 		<script type="text/javascript" src="js/asset/assetCommon.js"></script>
+		
+		<!-- add front page validation -->
+		<script type="text/javascript" src="js/common/validation.js"></script>
+		<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/asset/assetValidation.js"></script>
 </body>
 </html>

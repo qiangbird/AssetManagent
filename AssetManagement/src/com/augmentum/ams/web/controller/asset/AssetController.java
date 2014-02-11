@@ -41,6 +41,7 @@ import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
 import com.augmentum.ams.service.asset.LocationService;
+import com.augmentum.ams.service.asset.TransferLogService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.remote.RemoteEntityService;
@@ -94,6 +95,8 @@ public class AssetController extends BaseController {
 	private CustomerAssetService customerAssetService;
 	@Autowired
 	private AssetImportParserService assetImportParserService;
+	@Autowired
+	private TransferLogService transferLogService;
 
 	private Page<Asset> pageForAudit;
 
@@ -370,21 +373,24 @@ public class AssetController extends BaseController {
 	public ModelAndView updateAsset(AssetVo assetVo, HttpServletRequest request)
 			throws UnsupportedEncodingException {
 
-		logger.info("updateAsset method start!");
+	    logger.info("updateAsset method start!");
 
-		ModelAndView modelAndView = new ModelAndView();
-		Asset asset = assetService.getAsset(assetVo.getId().trim());
-		voToAsset(request, assetVo, asset);
-		AssetUtil.setKeeperForAssetVo(assetVo, asset);
-		try {
-			assetService.saveAssetAsType(assetVo, asset, "update");
-		} catch (Exception e) {
-			logger.error("Update asset error!", e);
-		}
-		modelAndView.setViewName("redirect:/asset/allAssets");
+        ModelAndView modelAndView = new ModelAndView();
+        Asset asset = assetService.getAsset(assetVo.getId().trim());
+        voToAsset(request, assetVo, asset);
+        AssetUtil.setKeeperForAssetVo(assetVo, asset);
+        try {
+            assetService.saveAssetAsType(assetVo, asset, "update");
+            if(asset.getUser()!=assetVo.getUser()){
+                transferLogService.saveTransferLog(asset.getId(),"Assign");
+            }
+        } catch (Exception e) {
+            logger.error("Update asset error!", e);
+        }
+        modelAndView.setViewName("redirect:/asset/allAssets");
 
-		logger.info("updateAsset method end!");
-		return modelAndView;
+        logger.info("updateAsset method end!");
+        return modelAndView;
 	}
 
 	@RequestMapping(value = "/copy/{id}")

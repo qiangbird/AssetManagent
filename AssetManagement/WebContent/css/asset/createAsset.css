@@ -160,13 +160,19 @@ html .ui-autocomplete {
 	height: 70px;
 }
 
-.asset-input-panel p span {
+.asset-input-panel p div span {
 	color: #FF0000;
 	position: absolute;
 	top: 10px;
-	left: 0;
+	left: 0; 
 }
 
+.asset-input-panel p span {
+color: #FF0000;
+position: absolute;
+top: 6px;
+left: -2;
+}
 .asset-input-panel p label {
 	width: 125px;
 	position: absolute;

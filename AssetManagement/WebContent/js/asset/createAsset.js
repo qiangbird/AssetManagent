@@ -1,5 +1,6 @@
 ﻿$(document).ready(function() {
 // get the needed data from background
+	
 $("#assetType").DropDownList({
     multiple : false,
     header : false
@@ -314,6 +315,7 @@ $.ajax({
             }
         });
     });
+
 });
 
 $(document).ready(function() {
@@ -323,4 +325,5 @@ $("#projectCode").val("");
 $("#assetUser").change(function() {
 $("#userId").val("");
     });
+
 })

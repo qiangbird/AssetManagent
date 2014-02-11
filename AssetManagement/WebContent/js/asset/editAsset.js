@@ -44,12 +44,6 @@
 	   $(this).datepicker("option", "dateFormat", "ISO 8601 - yy-mm-dd" );
 	 });
    var userArray = new Array();
-//   $("#main li").mouseover(function() {
-//      $(this).css("background", "#23A5E3");
-//   });
-//   $("#main li").mouseout(function() {
-//      $(this).css("background", "");
-//   });
 
    $(".showElementItems").click(
    function() {
@@ -117,7 +111,8 @@
                   }); 
                  $("#assetUser").blur(
                   function() {
-                      if ($(this).val().trim() == "") {
+                	  TextMouseOutNormal(this);
+                      if ($(this).val().trim() == ""&&$("#selectedStatus").val()=="IN_USE") {
                       TextMouseOutError(this);
                       }else{
                        if (!checkInArr(userArray, $("#assetUser").val())) {
@@ -214,8 +209,8 @@
     	  try 
     	   { 
     		  if (!checkInArr(employeeName, $("#assetUser").val())) {
-    	             $("#assetUser").css("background","url(img/IPX_300x30_Error.png) no-repeat");
-    	             flag = 17;
+    			  $("#assetUser").addClass("input-text-error");   
+    			  flag = 17;
     	          }
     	   } 
     	catch(err) 

@@ -3,54 +3,54 @@
 }
 
 #header_top {
-    position: relative;
-    margin: 0 auto;
-    width: 1000px;
-    height: 60px;
-    background: url("../../image/home/IMG_Head_1000x60.png");
+	position: relative;
+	margin: 0 auto;
+	width: 1000px;
+	height: 60px;
+	background: url("../../image/home/IMG_Head_1000x60.png");
 }
 
 #header_logo {
-    position: relative;
-    float: left;
-    margin: 15px 12px 0 20px;
-    width: 209px;
-    height: 36px;
-    background: url("../../image/home/IMG_Augmentum_Logo_209x36.png")
-        no-repeat;
+	position: relative;
+	float: left;
+	margin: 15px 12px 0 20px;
+	width: 209px;
+	height: 36px;
+	background: url("../../image/home/IMG_Augmentum_Logo_209x36.png")
+		no-repeat;
 }
 
 #header_text {
-    position: relative;
-    float: left;
-    margin: 34px 0 0 0;
+	position: relative;
+	float: left;
+	margin: 34px 0 0 0;
 }
 
 #header_text a {
 	font-family: arial;
-    float: left;
-    font-weight: bold;
-    color: #418FB5;
-    text-shadow: 1px -1px 14px #FFFFFF;
+	float: left;
+	font-weight: bold;
+	color: #418FB5;
+	text-shadow: 1px -1px 14px #FFFFFF;
 }
 
 #header_top_right {
-    float: right;
-    font-size: 12px;
-    color: #418FB5;
-    height: 60px;
-    text-shadow: 1px -1px 12px #FFFFFF;
+	float: right;
+	font-size: 12px;
+	color: #418FB5;
+	height: 60px;
+	text-shadow: 1px -1px 12px #FFFFFF;
 }
 
 #header_login {
-    height: 20px;
-    margin: 10px 25px 0 0;
+	height: 20px;
+	margin: 10px 25px 0 0;
 }
 
 #header_login_name {
-    height: 20px;
-    margin: 0;
-    font-family: arial;
+	height: 20px;
+	margin: 0;
+	font-family: arial;
 }
 
 #loginUser {
@@ -59,38 +59,38 @@
 }
 
 #header_login_control {
-    height: 20px;
-    margin: 0 20px 0 28px;
-    padding: 0 5px 0 0;
-    display: none;
+	height: 20px;
+	margin: 0 20px 0 28px;
+	padding: 0 5px 0 0;
+	display: none;
 }
 
 #header_i18n {
-    height: 30px;
-    width: 120px;
-    float: right;
-    font-family: arial;
+	height: 30px;
+	width: 120px;
+	float: right;
+	font-family: arial;
 	font-size: 13px;
 }
 
 .cursor_hand {
-    cursor: pointer;
-    width: 90px;
-    height: 33px;
+	cursor: pointer;
+	width: 90px;
+	height: 33px;
 }
 
 .cursor_hand a {
-    display: block;
-    width: 90px;
+	display: block;
+	width: 90px;
 }
 
 #header_i18n a {
-    float: right;
-    margin: 5px 20px 0 0;
-    padding: 0 5px 0 0;
-    color: #418FB5;
-    cursor: pointer;
-    text-decoration: none;
+	float: right;
+	margin: 5px 20px 0 0;
+	padding: 0 5px 0 0;
+	color: #418FB5;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 body,ul {
@@ -277,27 +277,35 @@ a {
 	background: url("../../img/ICN_Export_Normal_27x29.png") no-repeat;
 	cursor: pointer;
 	position: absolute;
-	top:21px;
-	left:887px;
+	top: 21px;
+	left: 887px;
 }
+
 #exportIcon:hover {
 	background: url("../../img/ICN_Export_Hovered_27x29.png") no-repeat;
 }
- #exportIcon:active {
+
+#exportIcon:active {
 	background: url("../../img/ICN_Export_Clicked_27x29.png") no-repeat;
 }
 
-#logoutSystem{
-position: relative;
-margin-left: 930px;
-margin-top: 8px;
-z-index: 1;
-font-size: 14px;
-color: #418FB5;
-text-shadow: 1px -1px 12px #FFFFFF;
+#logoutSystem {
+	position: relative;
+	margin-left: 930px;
+	margin-top: 8px;
+	z-index: 1;
+	font-size: 14px;
+	color: #418FB5;
+	text-shadow: 1px -1px 12px #FFFFFF;
 }
-#logoutSystem a{
-font-size: 14px;
-color: #418FB5;
-text-shadow: 1px -1px 12px #FFFFFF;
-	}
+
+#logoutSystem a {
+	font-size: 14px;
+	color: #418FB5;
+	text-shadow: 1px -1px 12px #FFFFFF;
+}
+
+.validation_fail {
+	border: 1px solid rgb(223, 24, 50);
+	border-color: red !important;
+}

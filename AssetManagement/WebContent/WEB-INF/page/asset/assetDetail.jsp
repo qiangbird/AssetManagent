@@ -29,14 +29,14 @@ String basePath = request.getScheme() + "://"
             <span class="catelog-in-line">></span>
             <span class="breadCrum"><spring:message code="view.asset" /></span>
         </div>
-        <c:if test="${uuid==null }">
         <div id="operation">
+        <c:if test="${uuid==null }">
             <a id="editBtn"><spring:message code="edit" /></a>
             <a id="copyBtn"><spring:message code="copy" /></a>
             <a id="deleteBtn"><spring:message code="delete" /></a>
+        </c:if>
             <a id="cancelBtn"><spring:message code="cancel" /></a>
         </div>
-        </c:if>
 
         <div id="createAssetContent">
             <div class="commons ng-binding">
