@@ -16,4 +16,11 @@ public interface ToDoService {
 	 * @author Geoffrey.Zhao
 	 */
 	void confirmReturnedAndReceivedAsset(String ids, String status);
+	
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	List<ToDo> findReceivedAsset();
+	
 }

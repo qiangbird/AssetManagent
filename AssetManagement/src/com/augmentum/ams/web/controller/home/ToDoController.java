@@ -2,6 +2,7 @@ package com.augmentum.ams.web.controller.home;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
@@ -41,7 +42,7 @@ public class ToDoController extends BaseController{
 				.findUserCustomColumns("todo", getUserIdByShiro());
 		String timeOffset = (String) session.getAttribute("timeOffset");
 		
-		JSONArray array = SearchCommonUtil.formatReturnedAssetTOJSONArray(todoList, userCustomColumnList, timeOffset);
+		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(todoList, userCustomColumnList, timeOffset);
 		
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", todoList.size());
@@ -85,6 +86,60 @@ public class ToDoController extends BaseController{
 		return null;
 	}
 	
+	@RequestMapping(value = "/viewReceivedAsset", method = RequestMethod.GET)
+	public ModelAndView viewReceivedAsset(HttpSession session) {
+		
+		ModelAndView modelAndView = new ModelAndView("todo/returnedAssetList");
+		
+		List<ToDo> todoList = todoService.findReceivedAsset();
+		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+				.findUserCustomColumns("todo", getUserIdByShiro());
+		String timeOffset = (String) session.getAttribute("timeOffset");
+		
+		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(todoList, userCustomColumnList, timeOffset);
+		
+		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", todoList.size());
+		modelAndView.addObject("totalPage", 1);
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/viewReceivedAssetPanel", method = RequestMethod.GET)
+	public JSONObject viewReceivedAssetPanel() {
+		
+		List<ToDo> todoList = todoService.findReceivedAsset();
+		
+		JSONArray jsonArray = new JSONArray();
+		for (int i = 0; i < todoList.size() && i < 3; i++) {
+			
+			JSONObject obj = new JSONObject();
+			ToDo todo = todoList.get(i);
+			
+			obj.put("id", todo.getId());
+			obj.put("assetName", todo.getAsset().getAssetName());
+			if (null == todo.getAsset().getProject()) {
+				obj.put("projectName", "");
+			} else {
+				obj.put("projectName", todo.getAsset().getProject().getProjectName());
+			}
+			obj.put("receivedTime", UTCTimeUtil.formatDateToString(todo.getReceivedTime()));
+			
+			jsonArray.add(obj);
+		}
+		
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("todoList", jsonArray);
+		return jsonObject;
+	}
+	
+	@RequestMapping(value = "/confirmReceivedAsset")
+	@ResponseBody
+	public String confirmReceivedAsset(String ids) {
+		
+		todoService.confirmReturnedAndReceivedAsset(ids, "IN_USE");
+		return null;
+	}
+	
 	// TODO temp redirect test
 	@RequestMapping(value = "/redirectDashboard")
 	public String redirect() {
@@ -93,7 +148,9 @@ public class ToDoController extends BaseController{
 	
 	//TODO redirect returnedAssetList page
 	@RequestMapping(value = "/redirectReturnedAssetList")
-	public String redirectListPage() {
+	public String redirectReturnedListPage(String todoFlag, HttpServletRequest request) {
+		request.setAttribute("todoFlag", todoFlag);
 		return "asset/returnedAssetList";
 	}
+	
 }

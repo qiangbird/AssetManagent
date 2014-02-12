@@ -32,7 +32,7 @@ public class ToDoServiceTest extends BaseCaseTest {
 		}
 		
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService.findUserCustomColumns("todo", "T00245");
-		JSONArray array = SearchCommonUtil.formatReturnedAssetTOJSONArray(list, userCustomColumnList, "8,0");
+		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(list, userCustomColumnList, "8,0");
 		logger.info(array.size() + "--" + array);
 	} 
 	
@@ -40,4 +40,16 @@ public class ToDoServiceTest extends BaseCaseTest {
 	public void testConfirmReturnedAsset() {
 		todoService.confirmReturnedAndReceivedAsset("4028961242fa20eb0142fb206b5c123d", "RETURNED");
 	}
+	
+	@Test
+	public void testFindReceivedAsset() {
+		List<ToDo> list = todoService.findReceivedAsset();
+		for (ToDo todo : list) {
+			logger.info(list.size() + "--" + todo.getAsset().getAssetId());
+		}
+		
+		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService.findUserCustomColumns("todo", "T00690");
+		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(list, userCustomColumnList, "8,0");
+		logger.info(array.size() + "--" + array);
+	} 
 }

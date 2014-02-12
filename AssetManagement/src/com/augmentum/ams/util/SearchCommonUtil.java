@@ -189,7 +189,7 @@ public class SearchCommonUtil {
 		return arrays;
 	}
 
-	public static JSONArray formatReturnedAssetTOJSONArray(List<ToDo> todoList,
+	public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(List<ToDo> todoList,
 			List<UserCustomColumn> userCustomColumnList, String timeOffset) {
 		JSONArray arrays = new JSONArray();
 

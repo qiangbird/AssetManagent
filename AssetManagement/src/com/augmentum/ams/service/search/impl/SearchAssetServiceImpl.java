@@ -69,7 +69,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
     @Override
     public Page<Asset> findAllAssetsBySearchCondition(SearchCondition searchCondition)
             throws BaseException {
-
+    	
         // init base search columns and associate way
         String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
         Occur[] clauses = new Occur[fieldNames.length];
@@ -145,6 +145,11 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
             Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
                     searchCondition.getToTime());
+            
+            if (null != searchCondition.getIsFixedAsset() && searchCondition.getIsFixedAsset()) {
+            	booleanQuery.add(new TermQuery(new Term("fixed", Boolean.TRUE.toString())),
+                        Occur.MUST);
+            }
 
             booleanQuery.add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
                     Occur.MUST);

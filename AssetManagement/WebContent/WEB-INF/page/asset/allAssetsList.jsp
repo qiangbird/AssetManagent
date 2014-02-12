@@ -158,6 +158,7 @@
     <input type="hidden" id="userUuid" value="${requestScope.userUuid }">
     <input type="hidden" id="status" value="${status }" />
     <input type="hidden" id="type" value="${type }" />
+    <input type="hidden" id="isFixedAsset" value="${isFixedAsset }" />
 
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>

@@ -43,12 +43,21 @@ public class ToDoServiceImpl implements ToDoService{
 			
 			if (null != asset) {
 				asset.setStatus(status);
-				asset.setUser(null);
+				
+				if ("RETURNED".equals(status)) {
+					asset.setUser(null);
+				} 
+				
 				baseDao.update(todo);
 			}
 			baseDao.delete(todo);
 		}
 		logger.info("leave confirmReturnedAndReceivedAsset method successfully");
+	}
+
+	@Override
+	public List<ToDo> findReceivedAsset() {
+		return todoDao.findReceivedAsset();
 	}
 	
 }

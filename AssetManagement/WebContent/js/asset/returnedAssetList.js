@@ -7,7 +7,7 @@ var dataListInfo = {
 	    pageSizes : [10, 20, 30, 50],
 	    hasCheckbox : true,
 	    pageItemSize : 5,
-	    url : 'todo/viewReturnedAsset',
+	    url : getToDoURL(),
 	    updateShowField : {
 	        url : 'searchCommon/column/updateColumns',
 	        callback : function(data) {
@@ -97,9 +97,34 @@ $(document).ready(function(){
                     return;
                 }
               });
-        
     	}
     });
+    
+ // confirm received asset event
+    $("#confirmReceivedButton").click(function(){
+    	if (checkActivedAssetIds()) {
+            ShowMsg(i18nProp('message_confirm_returnedAsset', $('.row .dataList-checkbox-active').size().toString()), function(yes){
+                if (yes) {
+                	$.ajax({
+                        type : 'GET',
+                        contentType : 'application/json',
+                        url : 'todo/confirmReturnedAsset',
+                        dataType : 'json',
+                        data: {
+                        	ids: getActivedAssetIds()
+                        },
+                        success : function(data) {
+                            criteria.pageNum = 1;
+                            dataList.search();
+                        }
+                    });
+                }else{
+                    return;
+                }
+              });
+    	}
+    });
+    
 });
 
 function searchList() {
@@ -122,4 +147,19 @@ function checkActivedAssetIds() {
         return false;
     }
     return true;
+}
+
+function getToDoURL() {
+	var todoFlag = $("#todoFlag").val();
+	var url = "todo/viewReturnedAsset";
+	
+	if (todoFlag == "returned") {
+		url = "todo/viewReturnedAsset";
+	} else if (todoFlag == "received") {
+		url = "todo/viewReceivedAsset";
+	} else {
+		url = "todo/viewReturnedAsset";
+	}
+	return url;
+	
 }

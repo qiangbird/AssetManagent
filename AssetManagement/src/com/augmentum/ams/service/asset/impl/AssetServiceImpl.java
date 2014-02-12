@@ -394,7 +394,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	 */
 
 	@Override
-	public void itAssignAssets(AssignAssetCondition condition,
+	public void itAssignAssets(User assigner, AssignAssetCondition condition,
 			HttpServletRequest request) throws ExceptionHelper {
 
 		logger.info("enter itAssignAssets service successfully");
@@ -477,6 +477,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 
 		String[] ids = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
 		Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
+		Date date = UTCTimeUtil.localDateToUTC();
 
 		for (String id : ids) {
 			Asset asset = assetDao.getAssetById(id);
@@ -501,7 +502,14 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						asset.setCustomer(customer);
 						asset.setUser(receiver);
 						assetDao.update(asset);
-
+						
+						// generate todo list for assign to manager operation
+						ToDo todo = new ToDo();
+						todo.setAsset(asset);
+						todo.setReceivedTime(date);
+						todo.setAssigner(assigner);
+						todoDao.save(todo);
+						
 					} else {
 						asset.setStatus(StatusEnum.IN_USE.name());
 						asset.setProject(project);
@@ -551,8 +559,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						asset.setStatus(TransientStatusEnum.RETURNING_TO_CUSTOMER
 								.name());
 						assetDao.update(asset);
-
-						// TODO generate todo list for return operation
+						
+						// generate todo list for return operation
 						ToDo todo = new ToDo();
 						todo.setAsset(asset);
 						todo.setReturnedTime(date);

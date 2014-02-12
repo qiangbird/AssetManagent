@@ -141,7 +141,7 @@ public interface AssetService {
      * @param condition
      * @throws ExceptionHelper
      */
-    void itAssignAssets(AssignAssetCondition condition, HttpServletRequest request)
+    void itAssignAssets(User assigner, AssignAssetCondition condition, HttpServletRequest request)
             throws ExceptionHelper;
 
     /**

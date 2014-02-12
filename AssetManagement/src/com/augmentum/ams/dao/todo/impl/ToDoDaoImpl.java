@@ -42,4 +42,21 @@ public class ToDoDaoImpl extends BaseDaoImpl<ToDo> implements ToDoDao{
 		return getUnique(criteria);
 	}
 
+	@Override
+	public List<ToDo> findReceivedAsset() {
+		DetachedCriteria criteria = DetachedCriteria.forClass(ToDo.class);
+		criteria.setFetchMode("asset", FetchMode.JOIN)
+				.setFetchMode("returner", FetchMode.JOIN)
+				.setFetchMode("assigner", FetchMode.JOIN)
+				.setFetchMode("asset.customer", FetchMode.JOIN)
+				.setFetchMode("asset.project", FetchMode.JOIN)
+				.setFetchMode("asset.user", FetchMode.JOIN);
+		
+		criteria.add(Restrictions.eq("isExpired", Boolean.FALSE))
+				.add(Restrictions.isNotNull("receivedTime"))
+				.addOrder(Order.desc("receivedTime"));
+		
+		return findByCriteria(criteria);
+	}
+
 }

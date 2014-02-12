@@ -318,6 +318,8 @@ function setCriteria() {
     criteria.fromTime = $("#fromTime").val();
     criteria.toTime = $("#toTime").val();
     criteria.userUuid = $("#userUuid").val();
+    criteria.isFixedAsset = $("#isFixedAsset").val();
+    
     // set search fields
     var searchFields = "";
     $("#searchFields").find(":checked").each(function() {

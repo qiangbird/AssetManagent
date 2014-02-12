@@ -18,4 +18,11 @@ public interface ToDoDao extends BaseDao<ToDo>{
 	 * @return
 	 */
 	ToDo getToDoById(String id);
+	
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	List<ToDo> findReceivedAsset();
+	
 }

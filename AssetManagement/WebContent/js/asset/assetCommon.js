@@ -1,27 +1,11 @@
 ﻿$(document).ready(function(){
-//about i18n
-	// for warning or confirm prop information
-//	function i18nProp(message) {
-//		return $.i18n.prop(message);
-//	};
 	
-   function AddI18n(message) {
-	      $("#label_" + message).html(msg(message));
-   }
    var localeCode = $("#localeCode").val();
    if (localeCode == 'en') {
       i18n = 'en_US';
    } else {
       i18n = 'zh_CN';
    }
-   jQuery.i18n.properties({
-      name : 'message',
-      path : 'i18n/',
-      mode : 'map',
-      language : i18n,
-      callback : function() {
-      }
-   });
    
 //change language
    $("#goChinese").click(function() {

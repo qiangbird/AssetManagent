@@ -274,11 +274,12 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/allAssets")
-	public ModelAndView redirectPage(String type, String status) {
+	public ModelAndView redirectPage(String type, String status, Boolean isFixedAsset) {
 
 		ModelAndView modelAndView = new ModelAndView("asset/allAssetsList");
 		modelAndView.addObject("type", type);
 		modelAndView.addObject("status", status);
+		modelAndView.addObject("isFixedAsset", isFixedAsset);
 		return modelAndView;
 	}
 
@@ -417,12 +418,15 @@ public class AssetController extends BaseController {
 	@RequestMapping(value = "/itAssignAssets")
 	public ModelAndView itAssignAssets(AssignAssetCondition condition,
 			HttpServletRequest request) {
+		
+		User assigner = (User) SecurityUtils.getSubject().getSession()
+				.getAttribute("currentUser");
 
 		ModelAndView modelAndView = new ModelAndView();
 		// TODO test condition is null
 		// condition = null;
 		try {
-			assetService.itAssignAssets(condition, request);
+			assetService.itAssignAssets(assigner, condition, request);
 		} catch (ExceptionHelper e) {
 			modelAndView = this.addErrorCode(e);
 		}

@@ -30,6 +30,8 @@ public class SearchCondition {
     
     private String auditFlag;
     
+    private Boolean isFixedAsset;
+    
     public String getCustomizedViewId() {
         return customizedViewId;
     }
@@ -139,5 +141,13 @@ public class SearchCondition {
 
 	public void setAuditFlag(String auditFlag) {
 		this.auditFlag = auditFlag;
+	}
+
+	public Boolean getIsFixedAsset() {
+		return isFixedAsset;
+	}
+
+	public void setIsFixedAsset(Boolean isFixedAsset) {
+		this.isFixedAsset = isFixedAsset;
 	}
 }

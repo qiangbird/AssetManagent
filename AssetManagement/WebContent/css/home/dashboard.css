@@ -1,8 +1,245 @@
 #main {
 	height: auto;  
 	padding: 5px 0px 5px 0px;
-	width:940px;
+	width:1000px;
+	margin-left: 133px;
+	font-family: Arial;
 }
+
+#main a {
+	text-decoration: underline;
+ 	font-weight: bold;
+}
+
+td{
+	text-align: center;
+	vertical-align: middle;
+	font-size: 14px;
+}
+
+tr {
+	height: 25px;
+}
+
+#left {
+    width: 580px;
+	height: auto;
+	float: left;
+	margin-bottom: 5px;
+	margin-right: 10px;
+}
+
+.mainPanel {
+	margin-top: 30px;
+}
+
+.mainPanel table {
+	border-color: #418FB5;
+}
+
+.mainPanel a {
+	color: #418FB5;
+}
+
+#right {
+    width: auto;
+    height: auto;
+    float: right;
+}
+
+.td-header {
+	background-image: url(../../searchList/images/IMG_ListTitle_Middle_1x30.png);
+	color: #FFFFFF;
+}
+
+.tr-header {
+	width: 140px;
+	height: 30px;
+	text-align: left;
+	text-indent: 13px;
+	font-size: 14px;
+}
+
+.treeIndent {
+	width: 140px;
+	height: 25px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+	
+}
+
+.mainPanel tr td {
+	width: 70px;
+}
+
+.afterTR,.afterTR-available,.afterTR-inuse,.afterTR-idle {
+	background-color: #BFEFFF; 
+}
+
+.afterTR td div,.afterTR-available td div,.afterTR-inuse td div,.afterTR-idle td div{
+	margin-top: 6px;
+	text-indent: 31px;
+}
+
+.panel_title {
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px;
+	font-weight: bold;
+	background-image: url(../../searchList/images/IMG_ListTitle_Middle_1x30.png);
+	color: #FFFFFF;
+	padding-left: 10px;
+}
+
+.panel_title span a {
+	float: right;
+	padding-right: 10px;
+	color: #FFFFFF;
+}
+
+.todo_content{
+	border: 1px solid #418FB5;
+	padding: 6px 10px 10px 10px;
+}
+
+.todo_content table {
+	height: auto;
+	margin: 4px 0 0 0;
+	color: #555555;
+	border-spacing: 0;
+	border-bottom: 1px solid #E6E6E6;
+}
+
+.todo_content table td{
+	text-align: center;
+}
+
+.todo_content table th{
+	font-size: 14px;
+	height: 25px;
+	line-height: 25px;
+	border-bottom: 1px solid #23A5E3;
+	color: #555555;
+	text-align: center;
+}
+
+.tr_checkbox {
+	width: 30px;
+}
+
+.confirmButton {
+	background: url("../../image/common/BTN_Create_Hover_80x30.png") no-repeat;
+	cursor: pointer;
+	height: 30px;
+	width: 80px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFFFFF;
+	margin: 3px 0px -6px 7px;
+}
+
+.newlyComingAssetPanel,.returnedAssetPanel,.receivedAssetPanel,.idleAssetPanel {
+	margin-top: 30px;
+}
+
+.warrantyTimeExpired,.licenseTimeExpired {
+	width: 568px;
+	margin-top: 30px;
+}
+
+.leftPanel_content{
+	border: 1px solid #418FB5;
+	padding: 6px 10px 10px 10px;
+}
+
+.leftPanel_content table {
+	width: 540px;
+	height: auto;
+	margin: 4px 0 0 0;
+	color: #555555;
+	border-spacing: 0;
+	border-bottom: 1px solid #E6E6E6;
+}
+
+.leftPanel_content table td{
+	text-align: center;
+	width: auto;
+}
+
+.leftPanel_content table th{
+	font-size: 14px;
+	height: 25px;
+	line-height: 25px;
+	border-bottom: 1px solid #23A5E3;
+	color: #555555;
+	text-align: center;
+	width: auto;
+}
+
+.tr-header-customer {
+	text-align: left;
+	text-indent: 3px;
+	font-size: 14px;
+}
+
+.tree_icons {
+	background: url("../../image/common/tree_icons.png") no-repeat;
+	display: inline-block;
+	width: 16px;
+    line-height: 16px;
+}
+
+.tree_icon_close {
+	background-position: -96px -0px;
+}
+
+.tree_icon_open {
+	background-position: -112px -0px;
+}
+
+.tr-customer-asset {
+	background-color: #EEEED1;
+}
+
+.tr-all-asset {
+	background-color: #EEEED1;
+}
+
+.tr-my-asset {
+	background-color: #EEEED1;
+}
+
+.tr-all-asset .tr-header,.tr-my-asset .tr-header {
+	font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+/* ----------------------------------------  separation line    ----------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .middlePanel {
 	width: 940px;
 	margin: 0px;
@@ -44,9 +281,7 @@
 	color: #555555;
 	table-layout:fixed;
 }
-.middleContent table tr, th {
-	height: 30px;
-}
+
 .middleContent table th {
 	background-color: #38C3E7;
 	color: #FFFFFF;
@@ -104,18 +339,7 @@
 
 
 
-#left {
-    width: 430px;
-    height: auto;
-    float: left;
-    margin-bottom: 5px;
-    margin-right:10px;
-}
-#right {
-    width: 500px;
-    height: auto;
-    float: right;
-}
+
 .leftPanel {
     width: 430px;
     height: auto;
@@ -163,10 +387,7 @@
 	margin: 0 10px;
 	border-bottom: 1px solid #E6E6E6;
 }
-.leftContent table th, td {
-	text-align: left;
-	text-indent: 20px;
-}
+
 .leftContent table th {
 	height: 30px;
 	color: #555555;

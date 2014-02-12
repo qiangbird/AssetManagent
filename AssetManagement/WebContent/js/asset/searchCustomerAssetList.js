@@ -52,53 +52,6 @@ $(document).ready(function() {
         yearRange: "2000:2030"
     });
     
-    function AddI18n(message) {
-        $("#label_" + message).html(msg(message));
-        if (message == "CheckInTime") {
-            var $temp = $("#label_" + message).parent().siblings(".condition_optional").children("p").children("input");
-            $temp.attr("content", msg(message));
-        } 
-        $("#label_" + message).siblings("input").attr("content", msg(message));
-     }
-//     var localeCode = $("#localeCode").val();
-    var i18n = $("#language").val();
-     jQuery.i18n.properties({
-        name : 'message',
-        path : 'i18n/',
-        mode : 'map',
-        language : i18n,
-        callback : function() {
-//           msg = jQuery.i18n.prop;
-//           AddI18n('SearchButton');
-//           AddI18n('SearchConditionReset');
-//           AddI18n('KeywordPlaceholder');
-//           AddI18n('SearchBy');
-//           AddI18n('CheckedAllFields');
-//           AddI18n('CheckedAllTypes');
-//           AddI18n('CheckedAllStatus');
-//           AddI18n('AssetId');
-//           AddI18n('AssetName');
-//           AddI18n('User');
-//           AddI18n('Project');
-//           AddI18n('Customer');
-//           AddI18n('PoNo');
-//           AddI18n('BarCode');
-//           AddI18n('AssetType');
-//           AddI18n('Machine');
-//           AddI18n('Monitor');
-//           AddI18n('Device');
-//           AddI18n('Software');
-//           AddI18n('OtherAssets');
-//           AddI18n('AssetStatus');
-//           AddI18n('Available');
-//           AddI18n('InUse');
-//           AddI18n('Idle');
-//           AddI18n('Returned');
-//           AddI18n('CheckInTime');
-//           AddI18n('Operation_Warning');
-        }
-     });
-     
 });
 
 //search list
@@ -444,13 +397,6 @@ $(document).ready(function(){
 	});
 });
 
-//function i18nProp(message,line) {
-//	if(line==""||line==null){
-//		return $.i18n.prop(message);
-//	}else{
-//		return $.i18n.prop(message,line.substr(0,line.length-1));
-//	}
-//}
 function checkInArr(Arr, ele) {
     console.log(Arr);
     for ( var i = 0; i < Arr.length; i++) {
