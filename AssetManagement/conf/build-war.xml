@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="${project.name}" default="war-ams" basedir="..">
+
+	<!-- import the properties file -->
+	<property file="conf/build.properties"/>
+
+	<!-- libs for the project -->
+	<path id="lib_classpath">
+		<fileset dir="${project.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+
+	<!-- libs in the tomcat -->
+	<path id="lib_tomcat">
+		<fileset dir="${tomcat.lib}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<!-- delete the build file and bin file -->
+	<target name="clean" description="delete relevant files">
+		<delete dir="${project.build}"/>
+		<echo>Clean up the ${project.build} folder!</echo>
+		<delete dir="${project.bin}"/>
+		<echo>Clean up the ${project.bin} folder!</echo>
+	</target>
+
+
+	<!-- create the files needs to use -->
+	<target name="init" depends="clean" description="create relevant files">
+		<mkdir dir="${project.build}"/>
+		<echo>successfullly created the ${project.build} folder!</echo>
+		<mkdir dir="${project.bin}"/>
+		<echo>successfullly created the ${project.bin} folder!</echo>
+		<mkdir dir="${project.sonar}"/>
+		<echo>successfullly created the sonar folder!</echo>
+	</target>
+
+	<!-- prepare the xml,properties or other kinds of files needed in the project -->
+	<target name="prepare" depends="init" description="prepare the xml,properties or other kinds of files needed in the project">
+		<copy todir="${project.bin}">
+			<fileset dir="${project.conf}">
+				<include name="**/*.xml"/>
+				<exclude name="**/build.xml"/>
+				<exclude name="**/sonar-ams.xml"/>
+			</fileset>
+		</copy>
+		<copy todir="${project.bin}">
+			<fileset dir="${project.conf}">
+				<include name="**/*.properties"/>
+				<exclude name="**/build.properties"/>
+			</fileset>
+		</copy>
+		<echo>successfullly prepared the xml,properties or other kinds of files needed in the project </echo>
+	</target>
+
+	<!-- compile the source codes (exclude the codes for test) -->
+	<target name="compile.src" depends="prepare" description="compile the source codes (exclude the codes for test)">
+		<javac encoding = "utf-8" srcdir="${project.src}" destdir="${project.bin}" debug="yes">
+			<classpath refid="lib_classpath"/>
+			<classpath refid="lib_tomcat"/>
+		</javac>
+		<echo>successfullly compiled source codes (exclude the codes for test) from ${project.src} to ${project.bin}</echo>
+	</target>
+
+	<!-- compile the source codes for test -->
+	<target name="compile.test" depends="compile.src" description="compile the source codes for test">
+		<javac encoding = "utf-8" srcdir="${project.test}" destdir="${project.bin}" debug="yes">
+			<classpath>
+				<path refid="lib_classpath" />
+				<path refid="lib_tomcat"/>
+				<pathelement path="${project.bin}"/>
+			</classpath>
+		</javac>
+		<echo>successfullly compiled source codes for test from ${project.test} to ${project.bin}</echo>
+	</target>
+    
+	
+	<!-- Creat the war file -->
+	<target name="war-ams" depends="compile.test" description="Creat the war file">
+		<war destfile="${project.build}/${project.name}.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent" includes="**/*.*"/>
+			<lib dir="${project.lib}"/>
+			<classes dir="${project.bin}" excludes="*Test*.*"/>
+		</war>
+	</target>
+
+
+</project>

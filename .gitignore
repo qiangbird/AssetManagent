@@ -1,2 +1,5 @@
 /AssetManagement/build
 /AssetManagement/WebContent/WEB-INF/web.xml
+/AssetManagement/bin
+/AssetManagement/sonar
+/AssetManagement/conf/build.properties
