@@ -235,12 +235,13 @@ public class AssetController extends BaseController {
 			if (null == user) {
 				UserVo userVo = null;
 				try {
-                    List<String> userNames = new ArrayList<String>();
-                    userNames.add(assetVo.getUser().getUserName());
-                    userVo = remoteEmployeeService.getRemoteUserByName(userNames, request).get(0);
-                } catch (DataException e) {
-                    logger.error("Get user error from IAP", e);
-                }
+					List<String> userNames = new ArrayList<String>();
+					userNames.add(assetVo.getUser().getUserName());
+					userVo = remoteEmployeeService.getRemoteUserByName(
+							userNames, request).get(0);
+				} catch (DataException e) {
+					logger.error("Get user error from IAP", e);
+				}
 				userService.saveUserAsUserVo(userVo);
 			}
 		} else {
@@ -274,12 +275,17 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/allAssets")
-	public ModelAndView redirectPage(String type, String status, Boolean isFixedAsset) {
+	public ModelAndView redirectPage(String type, String status,
+			Boolean isFixedAsset, Boolean isWarrantyExpired,
+			Boolean isLicenseExpired) {
 
 		ModelAndView modelAndView = new ModelAndView("asset/allAssetsList");
 		modelAndView.addObject("type", type);
 		modelAndView.addObject("status", status);
 		modelAndView.addObject("isFixedAsset", isFixedAsset);
+		modelAndView.addObject("isWarrantyExpired", isWarrantyExpired);
+		modelAndView.addObject("isLicenseExpired", isLicenseExpired);
+		
 		return modelAndView;
 	}
 
@@ -418,7 +424,7 @@ public class AssetController extends BaseController {
 	@RequestMapping(value = "/itAssignAssets")
 	public ModelAndView itAssignAssets(AssignAssetCondition condition,
 			HttpServletRequest request) {
-		
+
 		User assigner = (User) SecurityUtils.getSubject().getSession()
 				.getAttribute("currentUser");
 
@@ -595,30 +601,31 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/upload")
-    @ResponseBody
-    public JSONObject  uploadAssetsExcelFile(MultipartFile file, String flag, HttpServletRequest request,
-            HttpServletResponse response) {
-        
-        File targetFile = FileOperateUtil.upload(request, response, file);
-        ImportVo importVo = null;
-        JSONObject jsonObject = new JSONObject();
-        
-        try {
-            importVo = assetImportParserService.importAsset(targetFile, request, flag);
-        } catch (ExcelException e) {
-            jsonObject.put("error", e.getErrorCode());
-            return jsonObject;
-        } catch (DataException e) {
-            jsonObject.put("error", e.getErrorCode());
-            return jsonObject;
-        }
-        jsonObject.put("all", importVo.getAllImportRecords());
-        jsonObject.put("success", importVo.getSuccessRecords());
-        jsonObject.put("failure", importVo.getFailureRecords());
-        jsonObject.put("failureFileName", importVo.getFailureFileName());
-        
-        return jsonObject;
-    }
+	@ResponseBody
+	public JSONObject uploadAssetsExcelFile(MultipartFile file, String flag,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		File targetFile = FileOperateUtil.upload(request, response, file);
+		ImportVo importVo = null;
+		JSONObject jsonObject = new JSONObject();
+
+		try {
+			importVo = assetImportParserService.importAsset(targetFile,
+					request, flag);
+		} catch (ExcelException e) {
+			jsonObject.put("error", e.getErrorCode());
+			return jsonObject;
+		} catch (DataException e) {
+			jsonObject.put("error", e.getErrorCode());
+			return jsonObject;
+		}
+		jsonObject.put("all", importVo.getAllImportRecords());
+		jsonObject.put("success", importVo.getSuccessRecords());
+		jsonObject.put("failure", importVo.getFailureRecords());
+		jsonObject.put("failureFileName", importVo.getFailureFileName());
+
+		return jsonObject;
+	}
 
 	@RequestMapping(value = "/download")
 	public void downloadFailureAssets(String fileName,
@@ -632,49 +639,103 @@ public class AssetController extends BaseController {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	@RequestMapping(value = "/getAssetCountForPanel", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getAssetCountForPanel(HttpServletRequest request) {
 		User user = (User) SecurityUtils.getSubject().getSession()
 				.getAttribute("currentUser");
 		Map<String, Integer> map = assetService.getAssetCountForPanel(user);
-		
+
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("assetCount", JSONObject.fromObject(map));
 		return jsonObject;
 	}
-	
+
 	@RequestMapping(value = "/getAssetCountForManager", method = RequestMethod.GET)
 	@ResponseBody
 	public JSONObject getAssetCountForManager(HttpServletRequest request) {
-		
-		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession().getAttribute("userVo");
-		User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
-		
+
+		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
+				.getAttribute("userVo");
+		User user = (User) SecurityUtils.getSubject().getSession()
+				.getAttribute("currentUser");
+
 		List<CustomerVo> list = null;
 		try {
-			list = remoteCustomerService.getCustomerByEmployeeId(userVo.getEmployeeId(), request);
+			list = remoteCustomerService.getCustomerByEmployeeId(
+					userVo.getEmployeeId(), request);
 		} catch (DataException e) {
 			logger.error("get customerVo failed from IAP", e);
 		}
-		
-		List<Customer> customers = customerAssetService.findVisibleCustomerList(userVo, list);
-		Map<String, Integer> map = assetService.getAssetCountForManager(user, customers);
-		
+
+		List<Customer> customers = customerAssetService
+				.findVisibleCustomerList(userVo, list);
+		Map<String, Integer> map = assetService.getAssetCountForManager(user,
+				customers);
+
 		JSONArray jsonArray = new JSONArray();
-		
+
 		for (Customer customer : customers) {
 			JSONObject obj = new JSONObject();
 			obj.put("customerName", customer.getCustomerName());
 			obj.put("customerCode", customer.getCustomerCode());
-			
+
 			jsonArray.add(obj);
 		}
-		
+
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("assetCount", JSONObject.fromObject(map));
 		jsonObject.put("customer", jsonArray);
 		return jsonObject;
 	}
+
+	@RequestMapping(value = "/viewIdleAssetPanel", method = RequestMethod.GET)
+	public JSONObject viewIdleAssetPanel(HttpServletRequest request) {
+
+		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
+				.getAttribute("userVo");
+
+		List<CustomerVo> list = null;
+		try {
+			list = remoteCustomerService.getCustomerByEmployeeId(
+					userVo.getEmployeeId(), request);
+		} catch (DataException e) {
+			logger.error("get customerVo failed from IAP", e);
+		}
+
+		List<Customer> customers = customerAssetService
+				.findVisibleCustomerList(userVo, list);
+
+		JSONArray jsonArray = assetService.findIdleAssetForPanel(customers);
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("idleAssetList", jsonArray);
+		return jsonObject;
+	}
+
+	@RequestMapping(value = "/viewWarrantyExpiredAssetPanel", method = RequestMethod.GET)
+	public JSONObject viewWarranyExpiredAssetPanel(HttpSession session) {
+
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		JSONArray jsonArray = assetService
+				.findWarrantyExpiredAssetForPanel(clientTimeOffset);
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("warrantyExpiredAssetList", jsonArray);
+		return jsonObject;
+	}
+
+	@RequestMapping(value = "/viewLicenseExpiredAssetPanel", method = RequestMethod.GET)
+	public JSONObject viewLicenseExpiredAssetPanel(HttpSession session) {
+
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		JSONArray jsonArray = assetService
+				.findLicenseExpiredAssetForPanel(clientTimeOffset);
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("licenseExpiredAssetList", jsonArray);
+		return jsonObject;
+	}
+
 }

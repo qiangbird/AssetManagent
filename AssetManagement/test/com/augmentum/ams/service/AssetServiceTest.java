@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -50,6 +51,8 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.CustomerService;
+import com.augmentum.ams.util.Constant;
+import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 
 /**
@@ -534,6 +537,31 @@ public class AssetServiceTest {
 		for (Entry<String, Integer> entry : map.entrySet()) {
 			logger.info(entry.getKey() + "--" + entry.getValue() + "\n");
 		}
+	}
+	
+	@Test
+	public void testFindIdleAssetList() {
+		
+		Customer c1 = customerService.getCustomerByName("Augmentum");
+		Customer c2 = customerService.getCustomerByName("Internal Systems");
+		List<Customer> list = new ArrayList<Customer>();
+		list.add(c1);
+		list.add(c2);
+		JSONArray jsonArray = assetService.findIdleAssetForPanel(list);
+		logger.info(jsonArray.size());
+	}
+	
+	@Test
+	public void testFindWarrantyExpiredAssetForPanel() {
+		JSONArray jsonArray = assetService.findWarrantyExpiredAssetForPanel("8,0");
+		logger.info(jsonArray.size());
+	}
+	
+	@Test
+	public void testFindLicenseExpiredAssetForPanel() {
+		JSONArray jsonArray = assetService.findLicenseExpiredAssetForPanel("8,0");
+		logger.info(jsonArray.size());
+		logger.info(jsonArray);
 	}
 	
 }

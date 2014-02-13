@@ -133,3 +133,7 @@ label{
 .span_checked {
     background: url("../images/ICN_Checkbox_Active_14x15.png") no-repeat;
 }
+
+.span_checked_disabled {
+	background: url("../images/ICN_Checkbox_Active_Disable_14x15.png") no-repeat;
+}

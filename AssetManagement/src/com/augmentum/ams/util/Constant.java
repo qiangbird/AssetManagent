@@ -81,4 +81,7 @@ public class Constant {
     
     // asset type array
     public static final String[] ASSET_TYPE_ARRAY = {"DEVICE", "MACHINE", "MONITOR", "SOFTWARE", "OTHERASSETS"};
+    
+    // set expired time
+    public static final int EXPIRED_TIME_SETTING = 30;
 }

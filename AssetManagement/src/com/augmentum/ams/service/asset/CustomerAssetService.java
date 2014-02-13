@@ -80,4 +80,11 @@ public interface CustomerAssetService {
      */
     void assginCustomerAsset(String customerCode, String ids, String projectCode, String userName,
             String assetUserCode, HttpServletRequest request) throws DataException;
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @param customers
+     * @return
+     */
+    List<Asset> getIdleCustomerAsset(List<Customer> customers);
 }

@@ -63,10 +63,10 @@ public class ToDoController extends BaseController{
 			
 			obj.put("id", todo.getId());
 			obj.put("assetName", todo.getAsset().getAssetName());
-			if (null == todo.getAsset().getProject()) {
-				obj.put("projectName", "");
+			if (null == todo.getAsset().getCustomer()) {
+				obj.put("customerName", "");
 			} else {
-				obj.put("projectName", todo.getAsset().getProject().getProjectName());
+				obj.put("customerName", todo.getAsset().getCustomer().getCustomerName());
 			}
 			obj.put("returnedTime", UTCTimeUtil.formatDateToString(todo.getReturnedTime()));
 			
@@ -117,10 +117,10 @@ public class ToDoController extends BaseController{
 			
 			obj.put("id", todo.getId());
 			obj.put("assetName", todo.getAsset().getAssetName());
-			if (null == todo.getAsset().getProject()) {
-				obj.put("projectName", "");
+			if (null == todo.getAsset().getCustomer()) {
+				obj.put("customerName", "");
 			} else {
-				obj.put("projectName", todo.getAsset().getProject().getProjectName());
+				obj.put("customerName", todo.getAsset().getCustomer().getCustomerName());
 			}
 			obj.put("receivedTime", UTCTimeUtil.formatDateToString(todo.getReceivedTime()));
 			
@@ -140,17 +140,11 @@ public class ToDoController extends BaseController{
 		return null;
 	}
 	
-	// TODO temp redirect test
-	@RequestMapping(value = "/redirectDashboard")
-	public String redirect() {
-		return "home/dashboard";
-	}
-	
 	//TODO redirect returnedAssetList page
-	@RequestMapping(value = "/redirectReturnedAssetList")
+	@RequestMapping(value = "/redirectTodoList")
 	public String redirectReturnedListPage(String todoFlag, HttpServletRequest request) {
 		request.setAttribute("todoFlag", todoFlag);
-		return "asset/returnedAssetList";
+		return "asset/todoList";
 	}
 	
 }

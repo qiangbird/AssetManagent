@@ -12,7 +12,7 @@ $(document).ready(function(){
 				for (var i = 0; i < todoList.length; i++) {
 					$(".returnedAssetPanel table").append("<tr><td><input class='returnedAssetId' type='checkbox' value=" 
 							+ todoList[i].id + " /></td><td>" + todoList[i].assetName + "</td>" + "<td>" 
-							+ todoList[i].projectName + "</td>" + "<td>" + todoList[i].returnedTime 
+							+ todoList[i].customerName + "</td>" + "<td>" + todoList[i].returnedTime 
 							+ "</td></tr>");
 				}
 			}
@@ -37,6 +37,10 @@ $(document).ready(function(){
         });
 	});
 	
+	$("#viewMore_returnedAsset").click(function(){
+		window.location.href = "todo/redirectTodoList?todoFlag=returned";
+	});
+	
 	// get received asset panel
 	function getReceivedAsset() {
 		$.ajax({
@@ -49,7 +53,7 @@ $(document).ready(function(){
 				for (var i = 0; i < todoList.length; i++) {
 					$(".receivedAssetPanel table").append("<tr><td><input class='receivedAssetId' type='checkbox' value=" 
 							+ todoList[i].id + " /></td><td>" + todoList[i].assetName + "</td>" + "<td>" 
-							+ todoList[i].projectName + "</td>" + "<td>" + todoList[i].receivedTime 
+							+ todoList[i].customerName + "</td>" + "<td>" + todoList[i].receivedTime 
 							+ "</td></tr>");
 				}
 			}
@@ -73,6 +77,75 @@ $(document).ready(function(){
             }
         });
 	});
+	
+	$("#viewMore_receivedAsset").click(function(){
+		window.location.href = "todo/redirectTodoList?todoFlag=received";
+	});
+	
+	// get idle asset panel
+	function getIdleAsset() {
+		$.ajax({
+			type : 'GET',
+			contentType : 'application/json',
+			dataType : 'json',
+			url: "asset/viewIdleAssetPanel",
+			success: function(data){
+				var assetList = data.idleAssetList;
+				for (var i = 0; i < assetList.length; i++) {
+					$(".idleAssetPanel table").append("<tr><td><input class='idleAssetId' type='checkbox' value=" 
+							+ assetList[i].id + " /></td><td>" + assetList[i].assetName + "</td>" + "<td>" + assetList[i].customerName 
+							+ "</td>" + "<td>" + assetList[i].userName + "</td></tr>");
+				}
+			}
+		});
+	}
+	
+	getIdleAsset();
+	
+	$("#idleAsset").click(function(){
+		alert();
+	});
+	
+	// get warranty expired asset panel
+	$.ajax({
+		type : 'GET',
+		contentType : 'application/json',
+		dataType : 'json',
+		url: "asset/viewWarrantyExpiredAssetPanel",
+		success: function(data){
+			var assetList = data.warrantyExpiredAssetList;
+			for (var i = 0; i < assetList.length; i++) {
+				$(".warrantyExpiredPanel table").append("<tr><td>" + assetList[i].assetId + "</td><td>" 
+						+ assetList[i].assetName + "</td><td>" + assetList[i].customerName 
+						+ "</td><td>" + assetList[i].warrantyTime + "</td></tr>");
+			}
+		}
+	});
+	
+	$("#viewMore_warrantyExpired").click(function(){
+		window.location.href = "asset/allAssets?isWarrantyExpired=true";
+	});
+	
+	// get software license expired asset panel
+	$.ajax({
+		type : 'GET',
+		contentType : 'application/json',
+		dataType : 'json',
+		url: "asset/viewLicenseExpiredAssetPanel",
+		success: function(data){
+			var assetList = data.licenseExpiredAssetList;
+			for (var i = 0; i < assetList.length; i++) {
+				$(".licenseExpiredPanel table").append("<tr><td>" + assetList[i].assetId + "</td><td>" 
+						+ assetList[i].assetName + "</td><td>" + assetList[i].customerName 
+						+ "</td><td>" + assetList[i].licenseExpiredTime + "</td></tr>");
+			}
+		}
+	});
+	
+	$("#viewMore_licenseExpired").click(function(){
+		window.location.href = "asset/allAssets?isLicenseExpired=true";
+	});
+	
 	
 	// generate link and parameters for IT number   --------------------------------- start
 	function formatType(type) {
@@ -155,7 +228,7 @@ $(document).ready(function(){
         		var type = $(this).children("td:eq(0)").html();
         		
         		// all asset line
-        		if ("All Asset" == type) {
+        		if ("All Assets" == type) {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, data.assetCount.allAssetMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, data.assetCount.allAssetMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, data.assetCount.allAssetSoftwareCount);
@@ -164,7 +237,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, data.assetCount.allAssetTotal);
         		} 
         		//my asset line
-        		else if ("My Asset" == type) {
+        		else if ("My Assets" == type) {
         			addLinkForMyAssetNum($(this).children("td:eq(1)"), 1, data.assetCount.myAssetMachineCount);
         			addLinkForMyAssetNum($(this).children("td:eq(2)"), 2, data.assetCount.myAssetMonitorCount);
         			addLinkForMyAssetNum($(this).children("td:eq(3)"), 3, data.assetCount.myAssetSoftwareCount);

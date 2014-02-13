@@ -39,7 +39,7 @@
 			</tr>
 			<shiro:hasRole name="IT">
 			<tr class="tr-all-asset">
-				<td class="tr-header">All Asset</td>
+				<td class="tr-header">All Assets</td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -114,7 +114,7 @@
 			<shiro:hasAnyRoles name="MANAGER,EMPLOYEE,SPECIAL_ROLE">
 			<tr class="tr-customer-asset">
 				<td class="tr-header-customer" style="cursor: pointer; font-weight: bold;" content="Customer Asset">
-					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>Customer Asset
+					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>Customer Assets
 				</td>
 				<td></td>
 				<td></td>
@@ -158,7 +158,7 @@
 			</tr>
 			</shiro:hasAnyRoles>
 			<tr class="tr-my-asset">
-				<td class="tr-header">My Asset</td>
+				<td class="tr-header">My Assets</td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -170,34 +170,40 @@
 	</div>
 	
 	<shiro:hasRole name="IT">
-		<div class="warrantyTimeExpired">
+		<div class="warrantyExpiredPanel">
 			<div class="panel_title">
 				<span>Asset Warranty Time Will Be Expired</span>
-				<span><a href="todo/redirectReturnedAssetList?todoFlag=returned">View More</a></span>
+				<span id="viewMore_warrantyExpired" class="viewMore">
+					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span class="viewMoreContent">More</span>
+				</span>
 			</div>
 			<div class="leftPanel_content">
 				<table>
 					<tr>
 						<th>AssetId</th>
 						<th>AssetName</th>
-						<th>ProjectName</th>
+						<th>CustomerName</th>
 						<th>WarrantyTime</th>
 					</tr>
 				</table>
 			</div>
 		</div>
 		
-		<div class="licenseTimeExpired">
+		<div class="licenseExpiredPanel">
 			<div class="panel_title">
 				<span>Asset License Time Will Be Expired</span>
-				<span><a href="todo/redirectReturnedAssetList?todoFlag=returned">View More</a></span>
+				<span id="viewMore_licenseExpired" class="viewMore">
+					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span class="viewMoreContent">More</span>
+				</span>
 			</div>
 			<div class="leftPanel_content">
 				<table>
 					<tr>
 						<th>AssetId</th>
 						<th>AssetName</th>
-						<th>ProjectName</th>
+						<th>CustomerName</th>
 						<th>LicensesExpiredTime</th>
 					</tr>
 				</table>
@@ -212,13 +218,16 @@
 	<div class="newlyComingAssetPanel">
 		<div class="panel_title">
 			<span>Newly Coming Assets</span>
-			<span><a href="todo/redirectReturnedAssetList?todoFlag=returned">View More</a></span>
+			<span id="" class="viewMore">
+				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="viewMoreContent">More</span>
+			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
 					<th style="width: 100px;">AssetName</th>
-					<th style="width: 130px;">ProjectName</th>
+					<th style="width: 130px;">CustomerName</th>
 					<th style="width: 115px;">CheckInTime</th>
 				</tr>
 			</table>
@@ -228,14 +237,17 @@
 	<div class="returnedAssetPanel">
 		<div class="panel_title">
 			<span>Returned Assets</span>
-			<span><a href="todo/redirectReturnedAssetList?todoFlag=returned">View More</a></span>
+			<span id="viewMore_returnedAsset" class="viewMore">
+				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="viewMoreContent">More</span>
+			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
 					<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
 					<th style="width: 100px;">AssetName</th>
-					<th style="width: 130px;">ProjectName</th>
+					<th style="width: 130px;">CustomerName</th>
 					<th style="width: 115px;">ReturnedTime</th>
 				</tr>
 			</table>
@@ -248,14 +260,17 @@
 	<div class="receivedAssetPanel">
 		<div class="panel_title">
 			<span>Received Assets</span>
-			<span><a href="todo/redirectReturnedAssetList?todoFlag=received">View More</a></span>
+			<span id="viewMore_receivedAsset" class="viewMore">
+				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="viewMoreContent">More</span>
+			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
 					<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
 					<th style="width: 100px;">AssetName</th>
-					<th style="width: 130px;">ProjectName</th>
+					<th style="width: 130px;">CustomerName</th>
 					<th style="width: 115px;">ReceivedTime</th>
 				</tr>
 			</table>
@@ -268,18 +283,21 @@
 		<div class="idleAssetPanel">
 			<div class="panel_title">
 				<span>Idle Assets</span>
-				<span><a href="todo/redirectReturnedAssetList?todoFlag=received">View More</a></span>
+				<span id="viewMore_returnedAsset" class="viewMore">
+					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span class="viewMoreContent">More</span>
+				</span>
 			</div>
 			<div class="todo_content">
 				<table>
 					<tr>
 						<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
 						<th style="width: 100px;">AssetName</th>
-						<th style="width: 130px;">ProjectName</th>
+						<th style="width: 130px;">CustomerName</th>
 						<th style="width: 115px;">User</th>
 					</tr>
 				</table>
-				<input class="confirmButton" id="receivedAsset" type="button" value="ReturnToIT"/>
+				<input class="confirmButton" id="idleAsset" type="button" value="ReturnToIT"/>
 			</div>
 		</div>
 	</shiro:hasAnyRoles>

@@ -10,7 +10,7 @@
 <head>
 <base href="<%=basePath%>">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Returned Asset</title>
+<title>Idle Asset</title>
 
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
@@ -24,26 +24,13 @@
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
 	
-	<c:choose>
-		<c:when test="${todoFlag == 'returned' }">
-			<div class="content">
-				<div class="dataList">
-					<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReturnedButton"/>
-				</div>
-			</div>
-		</c:when>
-		<c:when test="${todoFlag == 'received' }">
-			<div class="content">
-				<div class="dataList">
-					<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReceivedButton"/>
-				</div>
-			</div>
-		</c:when>
-		<c:otherwise></c:otherwise>
-	</c:choose>
+	<div class="content">
+		<div class="dataList">
+			<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReturnToITButton"/>
+		</div>
+	</div>
 	
 	<input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
-	<input type="hidden" id="todoFlag" value="${todoFlag }">
 	
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 	

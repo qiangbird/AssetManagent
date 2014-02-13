@@ -319,6 +319,8 @@ function setCriteria() {
     criteria.toTime = $("#toTime").val();
     criteria.userUuid = $("#userUuid").val();
     criteria.isFixedAsset = $("#isFixedAsset").val();
+    criteria.isWarrantyExpired = $("#isWarrantyExpired").val();
+    criteria.isLicenseExpired = $("#isLicenseExpired").val();
     
     // set search fields
     var searchFields = "";

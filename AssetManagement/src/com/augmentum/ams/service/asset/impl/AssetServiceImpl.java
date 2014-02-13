@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -502,14 +503,14 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						asset.setCustomer(customer);
 						asset.setUser(receiver);
 						assetDao.update(asset);
-						
+
 						// generate todo list for assign to manager operation
 						ToDo todo = new ToDo();
 						todo.setAsset(asset);
 						todo.setReceivedTime(date);
 						todo.setAssigner(assigner);
 						todoDao.save(todo);
-						
+
 					} else {
 						asset.setStatus(StatusEnum.IN_USE.name());
 						asset.setProject(project);
@@ -559,7 +560,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						asset.setStatus(TransientStatusEnum.RETURNING_TO_CUSTOMER
 								.name());
 						assetDao.update(asset);
-						
+
 						// generate todo list for return operation
 						ToDo todo = new ToDo();
 						todo.setAsset(asset);
@@ -791,6 +792,92 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	public Map<String, Integer> getAssetCountForManager(User user,
 			List<Customer> customers) {
 		return assetDao.getAssetCountForManager(user, customers);
+	}
+
+	@Override
+	public JSONArray findIdleAssetForPanel(List<Customer> customers) {
+
+		List<Asset> list = assetDao.findIdleAssetForPanel(customers);
+
+		JSONArray jsonArray = new JSONArray();
+		for (int i = 0; i < list.size() && i < 3; i++) {
+
+			JSONObject obj = new JSONObject();
+			Asset asset = list.get(i);
+
+			obj.put("id", asset.getId());
+			obj.put("assetName", asset.getAssetName());
+			if (null == asset.getCustomer()) {
+				obj.put("customerName", "");
+			} else {
+				obj.put("customerName", asset.getCustomer().getCustomerName());
+			}
+
+			if (null == asset.getUser()) {
+				obj.put("userName", "");
+			} else {
+				obj.put("userName", asset.getUser().getUserName());
+			}
+
+			jsonArray.add(obj);
+		}
+		return jsonArray;
+	}
+
+	@Override
+	public JSONArray findWarrantyExpiredAssetForPanel(String clientTimeOffset) {
+
+		List<Asset> list = assetDao.findWarrantyExpiredAssetForPanel();
+
+		JSONArray jsonArray = new JSONArray();
+		for (int i = 0; i < list.size() && i < 3; i++) {
+
+			JSONObject obj = new JSONObject();
+			Asset asset = list.get(i);
+
+			obj.put("id", asset.getId());
+			obj.put("assetId", asset.getAssetId());
+			obj.put("assetName", asset.getAssetName());
+			if (null == asset.getCustomer()) {
+				obj.put("customerName", "");
+			} else {
+				obj.put("customerName", asset.getCustomer().getCustomerName());
+			}
+
+			obj.put("warrantyTime", UTCTimeUtil.utcToLocalTime(
+					asset.getWarrantyTime(), clientTimeOffset,
+					Constant.DATE_DAY_PATTERN));
+			jsonArray.add(obj);
+		}
+		return jsonArray;
+	}
+
+	@Override
+	public JSONArray findLicenseExpiredAssetForPanel(String clientTimeOffset) {
+
+		List<Asset> list = assetDao.findLicenseExpiredAssetForPanel();
+
+		JSONArray jsonArray = new JSONArray();
+		for (int i = 0; i < list.size() && i < 3; i++) {
+
+			JSONObject obj = new JSONObject();
+			Asset asset = list.get(i);
+
+			obj.put("id", asset.getId());
+			obj.put("assetId", asset.getAssetId());
+			obj.put("assetName", asset.getAssetName());
+			if (null == asset.getCustomer()) {
+				obj.put("customerName", "");
+			} else {
+				obj.put("customerName", asset.getCustomer().getCustomerName());
+			}
+
+			obj.put("licenseExpiredTime", UTCTimeUtil.utcToLocalTime(asset
+					.getSoftware().getSoftwareExpiredTime(), clientTimeOffset,
+					Constant.DATE_DAY_PATTERN));
+			jsonArray.add(obj);
+		}
+		return jsonArray;
 	}
 
 }

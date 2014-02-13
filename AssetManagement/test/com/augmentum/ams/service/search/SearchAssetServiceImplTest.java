@@ -1,5 +1,7 @@
 package com.augmentum.ams.service.search;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -14,7 +16,7 @@ import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.service.BaseCaseTest;
 import com.augmentum.ams.service.asset.AssetService;
-import com.augmentum.ams.util.SearchCommonUtil;
+import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -68,6 +70,29 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
     	for (Asset asset : list) {
     		logger.info(asset.getAssetId() + "---" + asset.getUser().getUserName());
     	}
+    }
+    
+    @Test
+    public void testGetWarrantyExpired() {
+    	Calendar cal = Calendar.getInstance();
+    	logger.info("date: " + cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH));
+    	String s1 = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+    	logger.info(UTCTimeUtil.localDateToUTC(s1));
+    	
+    	cal.add(Calendar.DAY_OF_MONTH, 30);
+    	logger.info("date: " + cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH));
+    	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
+    	logger.info(UTCTimeUtil.formatFilterTime(s));
+    }
+    
+    @Test
+    public void testGetAssetExpiredTime() {
+    	logger.info(UTCTimeUtil.getAssetExpiredTime());
+    }
+    
+    @Test
+    public void testFormatCurrentDateToUTC() {
+    	logger.info(UTCTimeUtil.formatCurrentDateToUTC());
     }
         
 }

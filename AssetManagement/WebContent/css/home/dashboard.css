@@ -2,12 +2,12 @@
 	height: auto;  
 	padding: 5px 0px 5px 0px;
 	width:1000px;
-	margin-left: 133px;
 	font-family: Arial;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 #main a {
-	text-decoration: underline;
  	font-weight: bold;
 }
 
@@ -38,11 +38,12 @@ tr {
 }
 
 .mainPanel a {
+	text-decoration: underline;
 	color: #418FB5;
 }
 
 #right {
-    width: auto;
+    width: 410px;;
     height: auto;
     float: right;
 }
@@ -74,7 +75,7 @@ tr {
 }
 
 .afterTR,.afterTR-available,.afterTR-inuse,.afterTR-idle {
-	background-color: #BFEFFF; 
+	background-color: #F5F6F5; 
 }
 
 .afterTR td div,.afterTR-available td div,.afterTR-inuse td div,.afterTR-idle td div{
@@ -94,8 +95,9 @@ tr {
 
 .panel_title span a {
 	float: right;
-	padding-right: 10px;
+	padding-right: 5px;
 	color: #FFFFFF;
+	text-decoration: none;
 }
 
 .todo_content{
@@ -143,7 +145,7 @@ tr {
 	margin-top: 30px;
 }
 
-.warrantyTimeExpired,.licenseTimeExpired {
+.warrantyExpiredPanel,.licenseExpiredPanel {
 	width: 568px;
 	margin-top: 30px;
 }
@@ -198,25 +200,29 @@ tr {
 	background-position: -112px -0px;
 }
 
-.tr-customer-asset {
-	background-color: #EEEED1;
-}
-
-.tr-all-asset {
-	background-color: #EEEED1;
-}
-
-.tr-my-asset {
-	background-color: #EEEED1;
+.tr-all-asset,.tr-my-asset,.tr-customer-asset {
+	background-color: #DDF1F9;
 }
 
 .tr-all-asset .tr-header,.tr-my-asset .tr-header {
 	font-weight: bold;
 }
 
+.viewMoreIcon {
+	background: url("../../image/common/view-more.png") no-repeat;
+	float: right;
+	margin-top: 9px;
+	margin-right: 5px;
+}
 
+.viewMore {
+	cursor: pointer;
+}
 
-
+.viewMoreContent {
+	float: right;
+	padding-right: 3px;
+}
 
 
 

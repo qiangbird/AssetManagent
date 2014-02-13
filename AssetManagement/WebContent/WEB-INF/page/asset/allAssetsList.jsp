@@ -5,6 +5,7 @@
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
     %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <html>
@@ -60,7 +61,7 @@
 							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label><spring:message code="asset.otherAssets"/></label></p>
 			            </div>
 			        </div>
-			        <div class="single_condition">
+	        		<div class="single_condition">
 						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
 						<div class="condition_optional" id="assetStatus">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
@@ -68,8 +69,8 @@
 							<p><input type="checkBox" name="field" value="IN_USE" /><label><spring:message code="asset.inUse"/></label></p>
 							<p><input type="checkBox" name="field" value="IDLE" /><label><spring:message code="asset.idle"/></label></p>
 							<p><input type="checkBox" name="field" value="RETURNED" /><label><spring:message code="asset.returned"/></label></p>
-			            </div>
-			        </div>
+	            		</div>
+	        		</div>
 			        <div class="single_condition">
 						<div class="condition_title"><spring:message code="asset.check.in.date"/></div>
 						<div class="condition_optional" id="checkInTime">
@@ -97,6 +98,7 @@
 	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
 	            </ul>
             </div>
+            
             <shiro:hasRole name="IT">
 	        <div class="operation_assets_list">
 		        <a class="a_operations_assets_list"><spring:message code="operation" /></a>
@@ -159,6 +161,8 @@
     <input type="hidden" id="status" value="${status }" />
     <input type="hidden" id="type" value="${type }" />
     <input type="hidden" id="isFixedAsset" value="${isFixedAsset }" />
+    <input type="hidden" id="isWarrantyExpired" value="${isWarrantyExpired }" />
+    <input type="hidden" id="isLicenseExpired" value="${isLicenseExpired }" />
 
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>

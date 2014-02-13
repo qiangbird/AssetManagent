@@ -398,4 +398,12 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
     }
 
+	@Override
+	public List<Asset> getIdleCustomerAsset(List<Customer> customers) {
+//		Page<Asset> page = findCustomerAssetsBySearchCondition(searchCondition, customerId);
+		return null;
+	}
+    
+    
+
 }

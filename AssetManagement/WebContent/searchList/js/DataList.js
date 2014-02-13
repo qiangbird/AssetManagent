@@ -150,7 +150,7 @@
 
             // //init the thing about column
             // because the setShow must to be invoke.
-            // this.refreshColumn();
+            // this.refreshColumn();  ' + all + '
 
             //init the perPage
             $perPage.append(this.$first).append(' - ');

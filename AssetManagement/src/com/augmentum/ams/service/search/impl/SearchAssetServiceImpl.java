@@ -146,10 +146,26 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
                     searchCondition.getToTime());
             
+            // get fixed assets list
             if (null != searchCondition.getIsFixedAsset() && searchCondition.getIsFixedAsset()) {
             	booleanQuery.add(new TermQuery(new Term("fixed", Boolean.TRUE.toString())),
                         Occur.MUST);
             }
+            
+            // get warranty expired asset list
+            if (null != searchCondition.getIsWarrantyExpired() && searchCondition.getIsWarrantyExpired()) {
+            	String fromTime = UTCTimeUtil.formatCurrentTimeForFilterTime();
+            	String toTime = UTCTimeUtil.getAssetExpiredTimeForFilterTime();
+            	booleanQuery.add(new TermRangeQuery("warrantyTime", fromTime, toTime, true, true), Occur.MUST);
+            }
+            
+            // get license expired asset list
+            if (null != searchCondition.getIsLicenseExpired() && searchCondition.getIsLicenseExpired()) {
+            	String fromTime = UTCTimeUtil.formatCurrentTimeForFilterTime();
+            	String toTime = UTCTimeUtil.getAssetExpiredTimeForFilterTime();
+            	booleanQuery.add(new TermRangeQuery("software.softwareExpiredTime", fromTime, toTime, true, true), Occur.MUST);
+            }
+            
 
             booleanQuery.add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
                     Occur.MUST);

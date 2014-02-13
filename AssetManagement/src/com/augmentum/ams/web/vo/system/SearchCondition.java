@@ -1,5 +1,6 @@
 package com.augmentum.ams.web.vo.system;
 
+
 public class SearchCondition {
 
     private String keyWord;
@@ -31,6 +32,10 @@ public class SearchCondition {
     private String auditFlag;
     
     private Boolean isFixedAsset;
+    
+    private Boolean isWarrantyExpired;
+    
+    private Boolean isLicenseExpired;
     
     public String getCustomizedViewId() {
         return customizedViewId;
@@ -150,4 +155,21 @@ public class SearchCondition {
 	public void setIsFixedAsset(Boolean isFixedAsset) {
 		this.isFixedAsset = isFixedAsset;
 	}
+
+	public Boolean getIsWarrantyExpired() {
+		return isWarrantyExpired;
+	}
+
+	public void setIsWarrantyExpired(Boolean isWarrantyExpired) {
+		this.isWarrantyExpired = isWarrantyExpired;
+	}
+
+	public Boolean getIsLicenseExpired() {
+		return isLicenseExpired;
+	}
+
+	public void setIsLicenseExpired(Boolean isLicenseExpired) {
+		this.isLicenseExpired = isLicenseExpired;
+	}
+
 }

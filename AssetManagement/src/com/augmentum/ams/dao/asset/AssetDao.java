@@ -9,7 +9,7 @@ import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.web.vo.asset.ExportVo;
 
-public interface AssetDao extends BaseDao<Asset>{
+public interface AssetDao extends BaseDao<Asset> {
 	/**
 	 * 
 	 * @description Find all assets
@@ -18,6 +18,7 @@ public interface AssetDao extends BaseDao<Asset>{
 	 * @return
 	 */
 	public List<Asset> findAllAssets();
+
 	/**
 	 * 
 	 * @description Get the number of asset
@@ -26,7 +27,7 @@ public interface AssetDao extends BaseDao<Asset>{
 	 * @return
 	 */
 	public int getAllAssetCount();
-	
+
 	/**
 	 * 
 	 * @description Get asset by given id
@@ -36,37 +37,57 @@ public interface AssetDao extends BaseDao<Asset>{
 	 * @return
 	 */
 	public Asset getAssetById(String id);
-	
+
 	/**
 	 * Find the assets by barCode
+	 * 
 	 * @param auditBarCode
 	 * @return
 	 */
-    public List<Asset> findAssetByBarCode(String auditBarCode);
-    
-    /**
-     * Find the assets by ids for export
-     * @param assetIdArr
-     * @return
-     */
-    public List<ExportVo> findAssetsByIdsForExport(String[] assetIds);
-    
-    /**
-     * @author John.Li
-     * @param contents
-     */
-    public Asset getByAssetId(String contents);
-    
-    /**
-     * @author Geoffrey.Zhao
-     * @return
-     */
-    public Map<String, Integer> getAssetCountForIT(User user);
-    
-    /**
-     * @author Geoffrey.Zhao
-     * @return
-     */
-    public Map<String, Integer> getAssetCountForManager(User user, List<Customer> customers);
-    
+	public List<Asset> findAssetByBarCode(String auditBarCode);
+
+	/**
+	 * Find the assets by ids for export
+	 * 
+	 * @param assetIdArr
+	 * @return
+	 */
+	public List<ExportVo> findAssetsByIdsForExport(String[] assetIds);
+
+	/**
+	 * @author John.Li
+	 * @param contents
+	 */
+	public Asset getByAssetId(String contents);
+
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	public Map<String, Integer> getAssetCountForIT(User user);
+
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	public Map<String, Integer> getAssetCountForManager(User user,
+			List<Customer> customers);
+
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	public List<Asset> findIdleAssetForPanel(List<Customer> customers);
+	
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	List<Asset> findWarrantyExpiredAssetForPanel();
+	
+	/**
+	 * @author Geoffrey.Zhao
+	 * @return
+	 */
+	List<Asset> findLicenseExpiredAssetForPanel();
 }

@@ -102,13 +102,13 @@ public class HomeController extends BaseController {
 			initCacheData(request);
 		}
 
-		modelAndView.setViewName("redirect:/todo/redirectDashboard");
+		modelAndView.setViewName("home/dashboard");
 		
 		logger.info("index() end... ");
 		
 		return modelAndView;
 	}
-
+	
 	private void initCacheData(HttpServletRequest request) {
 
 		Map<String, User> localEmployees = userService.findAllUsersFromLocal();

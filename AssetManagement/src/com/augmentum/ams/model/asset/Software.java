@@ -45,7 +45,7 @@ public class Software extends BaseModel {
 	 * The license key of software
 	 */
 	@Column(length = 256, name = "license_key")
-	@Field(name = "licenseKey", index = Index.TOKENIZED, store = Store.YES)
+	@Field(name = "licenseKey", index = Index.UN_TOKENIZED, store = Store.YES)
 	private String licenseKey;
 
 	@Temporal(TemporalType.TIMESTAMP)

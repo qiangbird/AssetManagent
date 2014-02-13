@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.augmentum.ams.exception.ExcelException;
@@ -211,4 +213,23 @@ public interface AssetService {
      * @return
      */
     Map<String, Integer> getAssetCountForManager(User user, List<Customer> customers);
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    JSONArray findIdleAssetForPanel(List<Customer> customers);
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    JSONArray findWarrantyExpiredAssetForPanel(String clientTimeOffset);
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    JSONArray findLicenseExpiredAssetForPanel(String clientTimeOffset);
+    
 }
