@@ -5,6 +5,7 @@ package com.augmentum.ams.shiro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -127,6 +128,18 @@ public class AmsRealm extends AuthorizingRealm {
 					.setAttribute("userVo", userVo);
 			SecurityUtils.getSubject().getSession()
 					.setAttribute("currentUser", user);
+			
+			// initiate the locale language according to the browser language
+            String localeLanguage = request.getLocale().getLanguage();
+            Locale locale = null;
+            // Check the locale
+            if ("en".equals(localeLanguage)) {
+                locale = new Locale("en", "US");
+                request.getSession().setAttribute("localeLanguage", locale);
+            } else {
+                locale = new Locale("zh", "CN");
+                request.getSession().setAttribute("localeLanguage", locale);
+            }
 			try {
 				return new SimpleAuthenticationInfo(user, userAccountName,
 						getName());
