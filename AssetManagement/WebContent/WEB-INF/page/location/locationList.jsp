@@ -45,7 +45,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
     	</div>
     </div>
     
-    
     <div id="dialog_location">
      <table>
             <tr>
@@ -71,6 +70,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
             </c:if> --%>
 <%--             <input class="input-80-30 submit-button" type="submit" value='<spring:message code="submit" />' />
             <input class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> /> --%>
+          <%--  <c:if test='${location.id==null }'>sssss</c:if>
+           <c:if test='${location.id=="" }'><c:out value="${location.id }"></c:out> </c:if> --%>
+           <c:out value="${location.id }"></c:out>
             <input id="submitLocation" class="input-80-30 submit-button" type="button" value='<spring:message code="submit" />' />
             <input id="resetLocation" class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> />
             </tr>

@@ -214,6 +214,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 				soft.setMaxUseNum(newSoft.getMaxUseNum());
 				soft.setAdditionalInfo(newSoft.getAdditionalInfo());
 				soft.setLicenseKey(newSoft.getLicenseKey());
+				soft.setSoftwareExpiredTime(newSoft.getSoftwareExpiredTime());
 				softwareService.updateSoftware(soft);
 				asset.setSoftware(soft);
 				updateAsset(asset);

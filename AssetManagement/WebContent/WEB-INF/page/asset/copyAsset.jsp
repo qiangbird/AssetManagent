@@ -163,10 +163,7 @@ String basePath = request.getScheme() + "://"
 						</p>
 						<p>
                             <span>*</span> <label><spring:message code="asset.site" /></label>
-                            <form:select path="site" id="selectedSite" class="select">
-                                <c:forEach var="siteListItems" items="${siteList}">
-                                    <option value='${siteListItems.replace(" ","_") }'>${siteListItems}</option>
-                                </c:forEach>
+                            <form:select path="site" id="selectedSite" class="select" items='${siteList}'>
                             </form:select>
                         </p>
 						<p>
@@ -314,6 +311,12 @@ String basePath = request.getScheme() + "://"
 								<form:input path="software.licenseKey" id="licenseKey"
 									class="l-text" />
 							</p>
+							 <p>
+                                <label><spring:message code="asset.software.additional.info" /></label>
+
+                                <form:input path="software.additionalInfo" id="additionalInfo"
+                                    class="l-text" />
+                            </p>
 						</div>
 						<div class="asset-input-right asset-input-panel">
 							<p>
@@ -333,12 +336,6 @@ String basePath = request.getScheme() + "://"
 
                                 <form:input path="softwareExpiredTime" id="softwareExpiredTime"
                                     class="l-date" />
-                            </p>
-                            <p>
-                                <label><spring:message code="asset.software.additional.info" /></label>
-
-                                <form:input path="software.additionalInfo" id="additionalInfo"
-                                    class="l-text" />
                             </p>
 
 						</div>

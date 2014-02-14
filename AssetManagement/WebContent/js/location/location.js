@@ -420,7 +420,7 @@ $(document).ready(function(){
 			    	console.log(data.siteList);
 			    	length = data.siteList.length;
 			    	for(i = 0;i< length; i++){
-			    		sites[i] = data.siteList[i].siteNameAbbr;
+			    		sites[i] = data.siteList[i].siteNameEn.replace(",","");
 			    	}
 			    	$("#site").autocomplete({
 			            minLength : 0,
@@ -492,8 +492,12 @@ $(document).ready(function(){
     		if(checkInArr(sites,$("#site").val())){
     			$("#dialog").submit();
     		}else{
+    			if(sites==""){
+    				$("#dialog").submit();
+    			}else{
     			$("#site").addClass("site-error");
     			return;
+    			}
     		}
     		}
     		

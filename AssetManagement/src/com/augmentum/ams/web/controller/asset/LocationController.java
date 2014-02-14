@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -93,9 +94,16 @@ public class LocationController extends BaseController {
         logger.info("saveLocation method start!");
 
         ModelAndView modelAndView = new ModelAndView();
+        if(StringUtils.isBlank(location.getId())){
         location.setCreatedTime(new Date());
         location.setUpdatedTime(new Date());
         locationService.saveLocation(location);
+        }else{
+            Location location1 = locationService.getLocationById(location.getId());
+            location1.setRoom(location.getRoom());
+            location1.setSite(location.getSite());
+            locationService.updateLcoation(location1);
+        }
         modelAndView.setViewName("redirect:/location/listLocation");
 
         logger.info("saveLocation method end!");

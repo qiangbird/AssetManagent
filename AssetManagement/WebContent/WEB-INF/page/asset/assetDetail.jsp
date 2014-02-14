@@ -261,6 +261,10 @@ String basePath = request.getScheme() + "://"
                                 <form:input path="software.licenseKey" id="licenseKey"
                                     class="l-text"  readonly="true" />
                             </p>
+                             <p>
+                                <label><spring:message code="asset.software.additional.info" /></label>
+                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
+                            </p> 
                         </div>
                         <div class="asset-input-right asset-input-panel">
                             <p>
@@ -272,10 +276,6 @@ String basePath = request.getScheme() + "://"
                                 <label><spring:message code="asset.software.expired.time" /></label>
                                 <form:input path="softwareExpiredTime" id="softwareExpiredTime" class="l-text"  readonly="true" />
                             </p>
-                            <p>
-                                <label><spring:message code="asset.software.additional.info" /></label>
-                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
-                            </p> 
 
                         </div>
                     </div>
