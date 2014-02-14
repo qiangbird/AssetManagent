@@ -3,7 +3,7 @@
 }
 
 .customerAsset {
-	overflow: scroll;
+	overflow: auto;
 	overflow-x: hidden;
 	height: auto; 
 	max-height: 400px;
