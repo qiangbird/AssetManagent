@@ -39,7 +39,7 @@ $(document).ready(function() {
 	        		$(".import-file").val("");
 	        		
 	        		if($("#fiaSize").text() != "0") {
-	        			alert(i18nProp("msg"));
+	        			showMessageBarForMessage("msg");
 	        		}
 	        		
 	        		if($("#fiaSize").text()!=0) {
