@@ -115,6 +115,15 @@
 			    $self.$elm.poshytip('disable');
 				return false;
 			});
+			$(document).ready(function(e){
+				var flag = false;
+				flag = $self.hasCondition();
+				if(flag) {
+					$(".existedFlag", $self.$elm).css("display","inline-block");
+				}else {
+					$(".existedFlag", $self.$elm).css("display","none");
+				}
+			});
 			$(document).click(function(e){
 			    $self.$elm.poshytip('disable');
 				if($('#ui-datepicker-div')[0] === undefined || !$.contains($('#ui-datepicker-div')[0], e.target)) {
