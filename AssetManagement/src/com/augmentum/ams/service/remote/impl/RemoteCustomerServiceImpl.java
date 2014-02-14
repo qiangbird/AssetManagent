@@ -153,7 +153,7 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 						IAPConstans.CUSTOMER_NAME, customerName),
 						SqlRestrictionsUtil.eq(IAPConstans.PROJECTSTATUS,
 								IAPConstans.INACTIVE)));
-
+		
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
 				DataModelAPI.listProject, IAPConstans.ADMIN_ROLE,
@@ -384,8 +384,12 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		IAPDataSearchModel model = new IAPDataSearchModel();
 		model.setColumns(new String[] { IAPConstans.CUSTOMER_CODE,
 				IAPConstans.CUSTOMER_NAME });
-		model.setFilter(SqlRestrictionsUtil.eq(
-				IAPConstans.EMPLOYEE_EMPLOYEE_ID, userId));
+//		model.setFilter(SqlRestrictionsUtil.eq(
+//				IAPConstans.EMPLOYEE_EMPLOYEE_ID, userId));
+		model.setFilter(SqlRestrictionsUtil.and(SqlRestrictionsUtil.eq(
+              IAPConstans.EMPLOYEE_EMPLOYEE_ID, userId),
+                SqlRestrictionsUtil.ne(IAPConstans.CUSTOMER_STATUS,
+                        IAPConstans.INACTIVE)));
 		Request clientRequest = RemoteUtil.getRequest(request,
 				"dataModel_listEmployeeProject", IAPConstans.ADMIN_ROLE,
 				IAPResponseType.APPLICATION_XML);

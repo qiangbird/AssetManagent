@@ -121,7 +121,24 @@
     } else if (currentType.trim() == "OTHERASSETS") {
        $("#otherAssetsDetails").show().siblings().hide();
     }
-		   
+// below is about location
+   $("#selectedLocation").click(function(){
+   	currentSite = "Augmentum "+$("#selectedSite").val();
+   	 $.ajax({
+   		    type : 'GET',
+   		    contentType : 'application/json',
+   		    url : 'location/getLocationRoom?currentSite='+currentSite,
+   		    dataType : 'json',
+   		    success : function(data) {
+   		        console.log(data);
+   		        length = data.locationRoomList.length;
+   		        $("#selectedLocation").autocomplete({
+   		            source : data.locationRoomList
+   		        })
+   		        
+   		    }
+   });
+   });
    //submit and validate
  $("#submitForm").click(function() {
 	 
@@ -172,19 +189,29 @@
 	           });
 	       }
 	 
+
+// $("#selectedLocationList").delegate(this,
+//	"click", function() {
+//		alert("ddd");
+//	});
 	 
+//	 $("#selectedLocation").click(function(){
+//		 alert("ddf");
+//	 });
 	 
 	 
   var name = $("#assetName").val();
   var type = $("#assetType").val();
   var ownership = $("#ownership").val();
   var customerName = $("#customerName").val();
-  var selectedLocation = $("#selectedLocation").val();
+  var selectedSite = $("#selectedSite").val();
   var selectedStatus = $("#selectedStatus").val();
   var selectedEntity = $("#selectedEntity").val();
   var machineType = $("#machineType").val();
   var maxUseNum = $("#maxUseNum").val();
   var user = $("#assetUser").val();
+  var checkedInTime = $("#checkedInTime").val();
+  var checkedOutTime = $("#checkedOutTime").val();
   var flag = 0;
   if (type == "") {
      $("#assetType").addClass("l-select-error");
@@ -206,13 +233,22 @@
   if (ownership == "") {
       $("#ownership").addClass("l-select-error");
       flag = 6;
+   }else{
+	   try{
+   if(!checkInArr(custName, ownership)){
+	   $("#ownership").addClass("l-select-error");
+	   flag = 6;
+   }
+	   }catch (e) {
+		flag = 0;
+	}
    }
   if (customerName == "") {
      $("#customerName").addClass("l-select-error");
      flag = 7;
   }
-  if (selectedLocation == "") {
-     $("#selectedLocation").addClass("l-select-error");
+  if (selectedSite == "") {
+     $("#selectedSite").addClass("l-select-error");
      flag = 8;
   }
   if (selectedStatus == "") {
@@ -255,12 +291,18 @@
 	$("#assetUser").addClass("input-text-error");
     flag = 18;
   }
+  if("" != checkedInTime && "" != checkedOutTime){
+	  if(dateCompare(checkedInTime, checkedOutTime)){
+		  flag = 19;
+	  }
+  }
   if(selectedStatus=="AVAILABLE"&&user!=""){
 	  $("#assetUser").empty();
   }
   if(user!=""&&selectedStatus!="IN_USE"){
 	  $("#selectedStatus").val("IN_USE");
   }
+  
   
   if (flag == 0) {
 	     $("#assetFrom").submit();
@@ -280,7 +322,6 @@ $("#seriesNo,#barCode,#poNo,#manufacturer,#monitorVendor").blur(function() {
 
 //common method
 function checkInArr(Arr, ele) {
-	    console.log(Arr);
 	    for ( var i = 0; i < Arr.length; i++) {
 	        if (ele == Arr[i]) {
 	            return true;

@@ -54,6 +54,7 @@ public class RemoteSiteServiceImpl implements RemoteSiteService {
         for (Map<String, Object> mapData : responseData) {
             SiteVo siteVo = new SiteVo();
             siteVo.setSiteNameAbbr((String) mapData.get(IAPConstans.SITE_NAME_ABBR));
+            siteVo.setSiteNameEn(((String) mapData.get(IAPConstans.SITE_NAME_EN)));
             siteVoList.add(siteVo);
         }
         return siteVoList;

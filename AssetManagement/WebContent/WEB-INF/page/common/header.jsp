@@ -43,7 +43,7 @@
             <div id="header_top_right">
                 <div id="header_login">
                     <a id="header_login_name"><spring:message code="head.welcome" /> <span id="loginUser">${sessionScope.userVo.employeeName}</span></a>
-                    <%-- <a class="decoration_hover cursor_hand" id="header_login_control" href="<%=path %>/logout">Login out</a> --%>
+                    <a class="decoration_hover cursor_hand" id="header_login_control" href="https://sso.staging.com.cn:8443/cas/logout">Login out</a>
                 </div>
                 <div id="header_i18n">
                     <c:if test="${'en_US' == localeLanguage || null == localeLanguage}">

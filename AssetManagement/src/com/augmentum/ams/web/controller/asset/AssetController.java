@@ -33,6 +33,7 @@ import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.DeviceSubtype;
+import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
@@ -143,16 +144,19 @@ public class AssetController extends BaseController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		List<SiteVo> siteList = remoteSiteService.getSiteFromIAP(request);
-		List<String> locationList = new ArrayList<String>();
+		//get site and location room
+		List<String> sitesList = new ArrayList<String>();
+		List<Location> locationList = new ArrayList<Location>();
 		for (SiteVo siteVo : siteList) {
-			locationList.addAll(AssetUtil.getSiteLocation(locationService
-					.getAllLocation(siteVo.getSiteNameAbbr())));
+		    sitesList.add(siteVo.getSiteNameEn().replace("Augmentum, ",""));
 		}
+		locationList = locationService.getAllLocation(sitesList.get(0));
 		List<String> list = remoteEntityService.getAllEntityFromIAP(request);
 		List<DeviceSubtype> deviceSubtypeList = deviceSubtypeService
 				.getAllDeviceSubtype();
 
-		modelAndView.addObject("siteList", locationList);
+		modelAndView.addObject("siteList", sitesList);
+		modelAndView.addObject("locationList", locationList);
 		modelAndView.addObject("allEntity", list);
 		modelAndView.addObject("assetStatus", AssetUtil.getAssetStatus());
 		modelAndView.addObject("assetType", AssetUtil.getAssetTypes());
@@ -377,11 +381,13 @@ public class AssetController extends BaseController {
 
         ModelAndView modelAndView = new ModelAndView();
         Asset asset = assetService.getAsset(assetVo.getId().trim());
+        Asset oldAsset = new Asset();
+        oldAsset.setUser(asset.getUser());
         voToAsset(request, assetVo, asset);
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
         try {
             assetService.saveAssetAsType(assetVo, asset, "update");
-            if(asset.getUser()!=assetVo.getUser()){
+            if(!oldAsset.getUser().getUserName().equals(assetVo.getUser().getUserName())){
                 transferLogService.saveTransferLog(asset.getId(),"Assign");
             }
         } catch (Exception e) {

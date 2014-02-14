@@ -35,10 +35,14 @@ $("#selectedEntity").DropDownList({
     header : false,
     noneSelectedText : 'Select entity',
 });
-$("#selectedLocation").DropDownList({
+$("#selectedSite").DropDownList({
     multiple : false,
     header : false
 });
+//$("#selectedLocation").DropDownList({
+//    multiple : false,
+//    header : false
+//});
 $("#ownership").click(function() {
     $.ajax({
     type : 'GET',
@@ -47,12 +51,12 @@ $("#ownership").click(function() {
     dataType : 'json',
     success : function(data) {
         length = data.customerList.length;
-        customerName = [];
+        custName = [];
         for ( var i = 0; i < length; i++) {
-            customerName[i] = data.customerList[i].customerName;
+            custName[i] = data.customerList[i].customerName;
         }
         $("#ownership").autocomplete({
-            source : customerName
+            source : custName
         });
      }
   });
@@ -189,6 +193,26 @@ $("#assetUser").click(function() {
     });
 });
 
+//// below is about location
+//$("#selectedLocation").click(function(){
+//	currentSite = $("#selectedSite").val();
+//	 $.ajax({
+//		    type : 'GET',
+//		    contentType : 'application/json',
+//		    url : 'location/getLocationRoom?currentSite='+currentSite.replace("_"," "),
+//		    dataType : 'json',
+//		    success : function(data) {
+//		        console.log(data);
+//		        length = data.locationRoomList.length;
+//		        $("#selectedLocation").autocomplete({
+//		            source : data.locationRoomList
+//		        })
+//		        
+//		    }
+//});
+//});
+
+
 $("#deviceSubtypeSelect").click(function() {
     $.ajax({
     type : 'GET',
@@ -237,7 +261,7 @@ function() {
     if ($(this).val().trim() == "") {
     DropdownMouseOutError(this);
 } else {
-    if (!checkInArr(customerName, $("#ownership").val())) {
+    if (!checkInArr(custName, $("#ownership").val())) {
         DropdownMouseOutError(this);
     } else {
         DropdownMouseOutNormal(this);

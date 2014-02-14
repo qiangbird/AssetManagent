@@ -166,13 +166,23 @@ String basePath = request.getScheme() + "://"
 						</p>
 
 						<p>
-							<span>*</span> <label><spring:message code="asset.location" /></label>
-							<form:select path="location" id="selectedLocation" class="select">
-								<c:forEach var="siteListItems" items="${siteList}">
-									<option value="${siteListItems }">${siteListItems}</option>
-								</c:forEach>
+							<span>*</span> <label><spring:message code="asset.site" /></label>
+							<form:select path="site" id="selectedSite" class="select" items="${siteList}">
+								<%-- <c:forEach var="siteListItems" items="${siteList}">
+									<option value='${siteListItems.replace(" ","_") }'>${siteListItems}</option>
+								</c:forEach> --%>
 							</form:select>
 						</p>
+						<p>
+                            <span>*</span> <label><spring:message code="asset.location" /></label>
+                                <form:input path="location" id="selectedLocation" maxlength="36"
+                                cssClass="l-text" placeholder="Please input a user" />
+                            <%-- <form:select path="location" id="selectedLocation" class="select">
+                                <c:forEach var="locationListItems" items="${locationList }">
+                                    <option>${locationListItems.room}</option>
+                                </c:forEach>
+                            </form:select> --%>
+                        </p>
 						<p>
 							<label><spring:message code="asset.user" /></label>
 							<form:input path="user.userName" id="assetUser" maxlength="36"
@@ -320,6 +330,12 @@ String basePath = request.getScheme() + "://"
 								<form:input path="software.maxUseNum" id="maxUseNum"
 									class="l-text" />
 							</p>
+							<p>
+                                <label><spring:message code="asset.software.expired.time" /></label>
+
+                                <form:input path="softwareExpiredTime" id="softwareExpiredTime"
+                                    class="l-date" />
+                            </p>
 							<p>
 								<label><spring:message code="asset.software.additional.info" /></label>
 

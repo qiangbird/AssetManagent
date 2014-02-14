@@ -1,5 +1,7 @@
 package com.augmentum.ams.web.controller.asset;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -155,6 +157,26 @@ public class LocationController extends BaseController {
         modelAndView.addObject("siteList", siteList);
 
         logger.info("getLocationSites method end!");
+        return modelAndView;
+    }
+    @RequestMapping("getLocationRoom")
+    public ModelAndView getLocationRoomBySite(HttpServletRequest request, String currentSite){
+        logger.info("getLocationRoomBySite method start!");
+
+        ModelAndView modelAndView = new ModelAndView();
+        List<Location> locationList = null;
+        List<String> locationRoomList = new ArrayList<String>();
+        try {
+            locationList = locationService.getAllLocation(currentSite);
+        } catch (ParseException e) {
+           logger.error("Get location error",e);
+        }
+        for(Location location : locationList){
+            locationRoomList.add(location.getRoom());
+        }
+        modelAndView.addObject("locationRoomList", locationRoomList);
+
+        logger.info("getLocationRoomBySite method end!");
         return modelAndView;
     }
 }

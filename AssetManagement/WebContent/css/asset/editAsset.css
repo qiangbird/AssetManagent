@@ -683,7 +683,7 @@ div.type-details {
 	margin-left: auto;
 }
 
-#assetType,#customerName,#project {
+#assetType,#customerName,#project,#ownership {
 	background: rgb(245, 247, 240);
 }
 

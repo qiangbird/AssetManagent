@@ -30,13 +30,21 @@ public class AssetUtil {
     public static void assetToAssetVo(Asset asset, AssetVo assetVo, String timeOffset) {
         try {
             BeanUtils.copyProperties(assetVo, asset);
-            assetVo.setLocation(asset.getLocation().getSite() + asset.getLocation().getRoom());
+            assetVo.setSite(asset.getLocation().getSite().replace("Augmentum ",""));
+            assetVo.setLocation(asset.getLocation().getRoom());
+            
             assetVo.setCheckInTime(UTCTimeUtil.formatDateToUTCString(asset.getCheckInTime(),
                     timeOffset));
             assetVo.setCheckOutTime(UTCTimeUtil.formatDateToUTCString(asset.getCheckOutTime(),
                     timeOffset));
             assetVo.setWarrantyTime(UTCTimeUtil.formatDateToUTCString(asset.getWarrantyTime(),
                     timeOffset));
+            assetVo.setSoftwareExpiredTime(UTCTimeUtil.formatDateToUTCString(asset.getSoftware().getSoftwareExpiredTime(),
+                    timeOffset));
+            System.out.println(UTCTimeUtil.formatDateToUTCString(asset.getSoftware().getSoftwareExpiredTime(),
+                    timeOffset));
+            System.out.println(UTCTimeUtil.utcToLocalTime(asset.getSoftware().getSoftwareExpiredTime(),
+                    timeOffset,"yyyy-MM-dd"));
         } catch (Exception e) {
             logger.error("Asset to assetVo error!", e);
         }

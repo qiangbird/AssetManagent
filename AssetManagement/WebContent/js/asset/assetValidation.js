@@ -24,22 +24,13 @@ function validateAssetForm(){
     	if("" == assetUser || $("#assetUser").hasClass("input-text-error")){
     		$("#assetUser").push($("#assetUser").validateNull(assetUser,"Asset user cannot be null and must be a employee name !"));
     	}
+    	}else{
+    		if($("#assetUser").hasClass("input-text-error")){
+        		$("#assetUser").push($("#assetUser").validateNull(assetUser,"Asset must be a employee name !"));
+        	}
     	}
-    	validations.push(validateFromProjectEqToProject("create"));
-    } /*else if (rotationType == "Assignment"){
-    	validations.push($("#toCustomer").validateNull($("#toCustomer").data("toCustomer").getValue().join()));
-    	validations.push($("#toProject").validateNull($("#toProject").data("toProject").getValue().join()));
-    	validations.push($("#toBubbleType").validateNull($("#toBubbleType").data("toBubbleType").getValue().join()));
-    	validations.push($(".employee_list").validateNull(employees));
-    	validations.push($("#planTime").validateNull(planTime));
-    	validations.push($("#reason").validateLength(reason, 100));
-    } else {
-    	validations.push($("#fromCustomer").validateNull($("#fromCustomer").data("fromCustomer").getValue().join()));
-    	validations.push($("#fromProject").validateNull($("#fromProject").data("fromProject").getValue().join()));
-    	validations.push($(".employee_list").validateNull(employees));
-    	validations.push($("#planTime").validateNull(planTime));
-    	validations.push($("#reason").validateLength(reason, 100));
-    }*/
+    	validations.push("failed");
+    } 
     
     validation = recordFailInfo(validations);
 
@@ -48,31 +39,5 @@ function validateAssetForm(){
 
 function clearValidationMessage(){
 	$(".validation_fail").removeClass("validation_fail").poshytip('destroy');
-}
-//Edit rotation.
-function validateEditRotation(){
-    var validations = new Array();
-    var validation = "success";
-    
-    if($("#rotationType").val() != "ROTATION_OUT"){
-    	validations.push($("#toCustomerText").validateNull($("#toCustomerText").data("toCustomer").getValue().join()));
-		validations.push($("#toProjectText").validateNull($("#toProjectText").data("toProject").getValue().join()));
-		validations.push($("#toBubbleType").validateNull($("#toBubbleTypeText").data("toBubbleType").getValue().join()));
-		
-		if($("#rotationType").text() == "ROTATION"){
-		    validations.push(validateFromProjectEqToProject("edit"));
-		}
-    }
-    if($("#rotationStatus").text() == "REQUEST"){
-    	validations.push($("#planTimeText").validateNull($("#planTimeText").val()));
-    }
-    validations.push($("#reason").validateLength($("#reason").val(), 100));
-    validation = recordFailInfo(validations);
-
-    return validation;
-}
-
-function validateFromProjectEqToProject(flag){
-	return "failed";
 }
 

@@ -14,13 +14,13 @@
 	      console.log(data.customerList);
 	      length = data.customerList.length;
 	      console.log(length);
-	      customerName=[];
+	      custName=[];
 	      for ( var i = 0; i < length; i++) {
-	    	  customerName[i] = data.customerList[i].customerName;
+	    	  custName[i] = data.customerList[i].customerName;
 		      }
 	      $("#ownership").autocomplete(
               {
-                 source : customerName
+                 source : custName
               });
 	   }
 	});
@@ -31,7 +31,7 @@
        header : false,
        noneSelectedText: 'Select entity'
   });
-   $("#selectedLocation").DropDownList({
+   $("#selectedSite").DropDownList({
        multiple : false,
        header : false
   });
@@ -166,6 +166,8 @@
       var machineType = $("#machineType").val();
       var maxUseNum = $("#maxUseNum").val();
       var user = $("#assetUser").val();
+      var checkedInTime = $("#checkedInTime").val();
+      var checkedOutTime = $("#checkedOutTime").val();
       var flag = 0;
 
       if (type == "") {
@@ -185,10 +187,15 @@
          $("#assetName").unbind("click");
          flag = 3;
       }
-      if (ownership == "") {
-         $("#ownership").addClass("l-select-error");
-         flag = 6;
-      }
+//      if (ownership == "") {
+//          $("#ownership").addClass("l-select-error");
+//          flag = 6;
+//       }else{
+//       if(!checkInArr(custName, ownership)){
+//    	   $("#ownership").addClass("l-select-error");
+//    	   flag = 6;
+//       }
+//       }
       if (customerName == "") {
          $("#customerName").addClass("l-select-error");
          flag = 7;
@@ -225,6 +232,11 @@
       if(selectedStatus=="IN_USE"&&user==""){
     	$("#assetUser").addClass("input-text-error");
         flag = 18;
+      }
+      if("" != checkedInTime && "" != checkedOutTime){
+    	  if(dateCompare(checkedInTime, checkedOutTime)){
+    		  flag = 19;
+    	  }
       }
       if(selectedStatus=="AVAILABLE"&&user!=""){
     	  $("#assetUser").empty();
@@ -302,7 +314,7 @@
 	   if ($(this).val().trim() == "") {
 	       	DropdownMouseOutError(this);
 	       }else{
-	       	 if (!checkInArr(customerName, $("#ownership").val())) {
+	       	 if (!checkInArr(custName, $("#ownership").val())) {
 	         	   DropdownMouseOutError(this);
 	            }else{
 	              DropdownMouseOutNormal(this);

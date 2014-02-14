@@ -851,9 +851,10 @@ margin-left: 130px;
 	left: 140px;
 }
 
-#assetType,#selectedStatus,#selectedEntity,#selectedLocation {
+#assetType,#selectedStatus,#selectedEntity{
 	display: none;
 }
+
 
 p .dropDownList .dropDownList_text {
 	padding-left: 10px;

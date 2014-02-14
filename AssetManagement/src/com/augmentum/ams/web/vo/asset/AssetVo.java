@@ -68,11 +68,15 @@ public class AssetVo {
     private Project project;
 
     private Customer customer;
-
+    
+    private String site;
+    
     private User user;
 
     private String keeper;
 
+    private String softwareExpiredTime;
+    
     public String getId() {
         return id;
     }
@@ -310,6 +314,22 @@ public class AssetVo {
 
     public void setKeeper(String keeper) {
         this.keeper = keeper;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getSoftwareExpiredTime() {
+        return softwareExpiredTime;
+    }
+
+    public void setSoftwareExpiredTime(String softwareExpiredTime) {
+        this.softwareExpiredTime = softwareExpiredTime;
     }
 
 }

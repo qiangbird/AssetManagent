@@ -62,7 +62,7 @@
 	height: 20px;
 	margin: 0 20px 0 28px;
 	padding: 0 5px 0 0;
-	display: none;
+	display: block;
 }
 
 #header_i18n {

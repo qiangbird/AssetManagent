@@ -34,7 +34,7 @@
        header : false,
        noneSelectedText: 'Select entity',
   });
-   $("#selectedLocation").DropDownList({
+   $("#selectedSite").DropDownList({
        multiple : false,
        header : false
   });
@@ -193,13 +193,13 @@
 			      console.log(data.customerList);
 			      length = data.customerList.length;
 			      console.log(length);
-			      customerName=[];
+			      custName=[];
 			      for ( var i = 0; i < length; i++) {
-			    	  customerName[i] = data.customerList[i].customerName;
+			    	  custName[i] = data.customerList[i].customerName;
 				      }
 			      $("#ownership").autocomplete(
 			                  {
-			                     source : customerName
+			                     source : custName
 			                  });
 			   }
 			});
@@ -238,6 +238,17 @@
    $("#selectOwnerShip,#customerName").click(function() {
 	    DropdownMouseEnter(this);
 	});
+   $("#ownership").blur(function() {
+       if ($(this).val().trim() == "") {
+       	DropdownMouseOutError(this);
+       }else{
+       	 if (!checkInArr(custName, $("#ownership").val())) {
+         	   DropdownMouseOutError(this);
+            }else{
+              DropdownMouseOutNormal(this);
+            }
+       }
+    });
    $("#customerName").blur(function() {
             if ($(this).val().trim() == "") {
             	DropdownMouseOutError(this);

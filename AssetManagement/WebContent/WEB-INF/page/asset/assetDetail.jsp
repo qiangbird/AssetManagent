@@ -127,6 +127,10 @@ String basePath = request.getScheme() + "://"
                             <label> <spring:message code="asset.entity" /></label>
                             <form:input path="entity" readonly="true" />
                         </p>
+                         <p>
+                            <label><spring:message code="asset.site" /></label>
+                            <form:input path="site" readonly="true" />
+                        </p>
                         <p>
                             <label><spring:message code="asset.location" /></label>
                             <form:input path="location" readonly="true" />
@@ -265,9 +269,13 @@ String basePath = request.getScheme() + "://"
                                     class="l-text"  readonly="true" />
                             </p>
                             <p>
+                                <label><spring:message code="asset.software.expired.time" /></label>
+                                <form:input path="softwareExpiredTime" id="softwareExpiredTime" class="l-text"  readonly="true" />
+                            </p>
+                            <p>
                                 <label><spring:message code="asset.software.additional.info" /></label>
                                 <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
-                            </p>
+                            </p> 
 
                         </div>
                     </div>

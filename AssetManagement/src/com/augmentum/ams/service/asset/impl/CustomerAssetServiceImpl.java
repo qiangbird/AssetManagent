@@ -317,8 +317,11 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
                         }
                     } else {
-                        flag = true;
+//                        flag = true;
+                        if(!userVo.getEmployeeLevel().equals("Employee")){
+                            flag = true;
                         customerVisibleList.add(customer);
+                        }
                     }
                 }
             }

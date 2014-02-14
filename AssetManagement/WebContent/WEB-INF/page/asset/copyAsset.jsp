@@ -162,9 +162,17 @@ String basePath = request.getScheme() + "://"
 								items="${allEntity}"></form:select>
 						</p>
 						<p>
+                            <span>*</span> <label><spring:message code="asset.site" /></label>
+                            <form:select path="site" id="selectedSite" class="select">
+                                <c:forEach var="siteListItems" items="${siteList}">
+                                    <option value='${siteListItems.replace(" ","_") }'>${siteListItems}</option>
+                                </c:forEach>
+                            </form:select>
+                        </p>
+						<p>
 							<span>*</span> <label><spring:message code="asset.location" /></label>
-							<form:select path="location" id="selectedLocation"
-								items="${siteList}"></form:select>
+							<form:input path="location" id="selectedLocation" maxlength="36"
+                                cssClass="l-text" placeholder="Please input a user" />
 						</p>
 						<p>
 							<label><spring:message code="asset.user" /></label>
@@ -314,12 +322,24 @@ String basePath = request.getScheme() + "://"
 								<form:input path="software.maxUseNum" id="maxUseNum"
 									class="l-text" />
 							</p>
-							<p>
+							<%-- <p>
 								<label><spring:message code="asset.software.additional.info" /></label>
 
 								<form:input path="software.additionalInfo" id="additionalInfo"
 									class="l-text" />
-							</p>
+							</p> --%>
+							<p>
+                                <label><spring:message code="asset.software.expired.time" /></label>
+
+                                <form:input path="softwareExpiredTime" id="softwareExpiredTime"
+                                    class="l-date" />
+                            </p>
+                            <p>
+                                <label><spring:message code="asset.software.additional.info" /></label>
+
+                                <form:input path="software.additionalInfo" id="additionalInfo"
+                                    class="l-text" />
+                            </p>
 
 						</div>
 					</div>
