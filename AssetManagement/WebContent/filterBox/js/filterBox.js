@@ -123,6 +123,10 @@
 				}else {
 					$(".existedFlag", $self.$elm).css("display","none");
 				}
+				$(".filterBox", $self.$elm).slideUp();
+				$self.isShowToolTip = true;
+				//set tooltip for exsitedFlag
+				$self.showExsitedCondition();
 			});
 			$(document).click(function(e){
 			    $self.$elm.poshytip('disable');
