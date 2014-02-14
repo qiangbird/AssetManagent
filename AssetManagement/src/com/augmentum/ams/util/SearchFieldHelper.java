@@ -115,7 +115,6 @@ public class SearchFieldHelper {
 
 	public static String[] getOperationLogFields() {
 
-//		String[] fieldNames = new String[5];
 		String[] fieldNames = new String[6];
 		fieldNames[0] = "operatorID";
 		fieldNames[1] = "operatorName";

@@ -1,5 +1,6 @@
 package com.augmentum.ams.web.controller.asset;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -146,5 +147,35 @@ public class CustomerAssetController extends BaseController {
 		logger.info("takeOver method in CustomerAssetController end!");
 		return null;
 	}
+	
+	@RequestMapping(value = "/listIdleCustomerAsset")
+	public ModelAndView findIdleCustomerAsset(SearchCondition searchCondition, HttpSession session) {
+		
+		ModelAndView modelAndView = new ModelAndView();
 
+		if (null == searchCondition) {
+			searchCondition = new SearchCondition();
+		}
+		
+		List<Customer> customers = new ArrayList<Customer>();
+		
+		Page<Asset> page = customerAssetService
+				.findAllCustomerAssetBySearchCondition(searchCondition, customers);
+		
+		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		List<AssetListVo> list = FormatEntityListToEntityVoList
+				.formatAssetListToAssetVoList(page.getResult(),
+						clientTimeOffset);
+		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+				.findUserCustomColumns("asset", getUserIdByShiro());
+
+//		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("count", page.getRecordCount());
+		modelAndView.addObject("totalPage", page.getTotalPage());
+		modelAndView.addObject("searchCondition", searchCondition);
+
+		logger.info("findMyAssetsBySearchCondition method end!");
+		return modelAndView;
+	}
+	
 }

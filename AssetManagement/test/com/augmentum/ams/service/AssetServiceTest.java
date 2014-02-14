@@ -51,9 +51,9 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.CustomerService;
-import com.augmentum.ams.util.Constant;
-import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.AssetVo;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 /**
  * @author Grylls.Xu
@@ -562,6 +562,22 @@ public class AssetServiceTest {
 		JSONArray jsonArray = assetService.findLicenseExpiredAssetForPanel("8,0");
 		logger.info(jsonArray.size());
 		logger.info(jsonArray);
+	}
+	
+	@Test
+	public void testFindIdleAssetBySearchCondition() {
+		
+		SearchCondition searchCondition = new SearchCondition();
+		searchCondition.setAssetStatus("IDLE");
+		
+		Customer c1 = customerService.getCustomerByName("Augmentum");
+		Customer c2 = customerService.getCustomerByName("Internal Systems");
+		List<Customer> list = new ArrayList<Customer>();
+		list.add(c1);
+		list.add(c2);
+		
+		Page<Asset> page = customerAssetService.findIdleCustomerAssetBySearchCondition(searchCondition, list);
+		logger.info(page.getResult().size());
 	}
 	
 }

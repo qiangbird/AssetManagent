@@ -86,5 +86,5 @@ public interface CustomerAssetService {
      * @param customers
      * @return
      */
-    List<Asset> getIdleCustomerAsset(List<Customer> customers);
+    Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition, List<Customer> customers);
 }

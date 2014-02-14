@@ -9,13 +9,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -90,7 +90,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     @Override
     public Page<Asset> findCustomerAssetsBySearchCondition(SearchCondition searchCondition,
             String customerId) {
-
+    	
         // init base search columns and associate way
         String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
         Occur[] clauses = new Occur[fieldNames.length];
@@ -402,11 +402,122 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     }
 
 	@Override
-	public List<Asset> getIdleCustomerAsset(List<Customer> customers) {
-//		Page<Asset> page = findCustomerAssetsBySearchCondition(searchCondition, customerId);
-		return null;
+	public Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition, List<Customer> customers) {
+
+		String[] customerIds = new String[customers.size()];
+
+		for (int i = 0; i < customers.size(); i++) {
+			customerIds[i] = customers.get(i).getId();
+		}
+		
+        // init base search columns and associate way
+        String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
+        Occur[] clauses = new Occur[fieldNames.length];
+
+        for (int i = 0; i < fieldNames.length; i++) {
+            clauses[i] = Occur.SHOULD;
+        }
+
+        Session session = sessionFactory.openSession();
+        FullTextSession fullTextSession = Search.getFullTextSession(session);
+        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder()
+                .forEntity(Asset.class).get();
+
+        // create ordinary query, it contains search by keyword and field names
+        BooleanQuery query = new BooleanQuery();
+
+        String keyWord = searchCondition.getKeyWord();
+
+        // if keyword is null or "", search condition is "*", it will search all
+        // the value based on some one field
+        if (null == keyWord || "".equals(keyWord) || "*".equals(keyWord)) {
+            Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
+            query.add(defaultQuery, Occur.MUST);
+        } else {
+
+            keyWord = FormatUtil.formatKeyword(keyWord);
+
+            // judge if keyword contains space, if yes, search keyword as a
+            // sentence
+            if (-1 != keyWord.indexOf(" ")) {
+                String[] sentenceFields = SearchFieldHelper.getSentenceFields();
+                query = getSentenceQuery(qb, sentenceFields, keyWord);
+            } else {
+
+                // if keyword doesn't contain space, search keyword as tokenized
+                // index string
+
+                BooleanQuery bq = new BooleanQuery();
+
+                Query parseQuery = null;
+
+                try {
+                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord,
+                            fieldNames, clauses, new IKAnalyzer());
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    logger.error("parse keyword error", e);
+                }
+                bq.add(parseQuery, Occur.SHOULD);
+
+                for (int i = 0; i < fieldNames.length; i++) {
+                    Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
+                    bq.add(keyWordPrefixQuery, Occur.SHOULD);
+                }
+
+                query.add(bq, Occur.MUST);
+            }
+        }
+
+        // create filter based on advanced search condition, it used for further
+        // filtering query result
+        BooleanQuery booleanQuery = new BooleanQuery();
+        
+        BooleanQuery statusQuery = getStatusQuery(searchCondition.getAssetStatus());
+        BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
+        Query trq = getTimeRangeQuery(searchCondition.getFromTime(), searchCondition.getToTime());
+
+        booleanQuery
+                .add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())), Occur.MUST);
+        booleanQuery.add(getCustomerQuery(customerIds), Occur.MUST);
+        booleanQuery.add(statusQuery, Occur.MUST);
+        booleanQuery.add(typeQuery, Occur.MUST);
+        booleanQuery.add(trq, Occur.MUST);
+
+        QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
+
+        // add entity associate
+        Criteria criteria = session.createCriteria(Asset.class);
+        criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
+                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN)
+                .setFetchMode("customer", FetchMode.JOIN);
+
+        Page<Asset> page = new Page<Asset>();
+
+        // set page parameters, sort column, sort sign, page size, current page
+        // num
+        page.setPageSize(searchCondition.getPageSize());
+        page.setCurrentPage(searchCondition.getPageNum());
+        page.setSortOrder(searchCondition.getSortSign());
+        page.setSortColumn(transferSortName(searchCondition.getSortName()));
+
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
+                .setCriteriaQuery(criteria);
+        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
+        fullTextSession.close();
+        return page;
+    
 	}
     
-    
+    private BooleanQuery getCustomerQuery(String[] customerIds) {
+    	
+    	BooleanQuery customerQuery = new BooleanQuery();
+    	
+    	for (int i = 0; i < customerIds.length; i++) {
+    		TermQuery termQery = new TermQuery(new Term("customer.id", customerIds[i]));
+    		customerQuery.add(termQery, Occur.SHOULD);
+    	}
+    	return customerQuery;
+    }
 
 }
