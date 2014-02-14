@@ -664,6 +664,8 @@ public class AssetController extends BaseController {
 	@ResponseBody
 	public JSONObject getAssetCountForManager(HttpServletRequest request) {
 
+		JSONObject jsonObject = new JSONObject();
+		
 		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
 				.getAttribute("userVo");
 		User user = (User) SecurityUtils.getSubject().getSession()
@@ -679,28 +681,35 @@ public class AssetController extends BaseController {
 
 		List<Customer> customers = customerAssetService
 				.findVisibleCustomerList(userVo, list);
-		Map<String, Integer> map = assetService.getAssetCountForManager(user,
-				customers);
-
-		JSONArray jsonArray = new JSONArray();
-
-		for (Customer customer : customers) {
-			JSONObject obj = new JSONObject();
-			obj.put("customerName", customer.getCustomerName());
-			obj.put("customerCode", customer.getCustomerCode());
-
-			jsonArray.add(obj);
+		
+		if (null == customers) {
+			return jsonObject;
+		} else {
+			
+			Map<String, Integer> map = assetService.getAssetCountForManager(user,
+					customers);
+		
+			JSONArray jsonArray = new JSONArray();
+		
+			for (Customer customer : customers) {
+				JSONObject obj = new JSONObject();
+				obj.put("customerName", customer.getCustomerName());
+				obj.put("customerCode", customer.getCustomerCode());
+		
+				jsonArray.add(obj);
+			}
+		
+			jsonObject.put("assetCount", JSONObject.fromObject(map));
+			jsonObject.put("customer", jsonArray);
+			return jsonObject;
 		}
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("assetCount", JSONObject.fromObject(map));
-		jsonObject.put("customer", jsonArray);
-		return jsonObject;
 	}
 
 	@RequestMapping(value = "/viewIdleAssetPanel", method = RequestMethod.GET)
 	public JSONObject viewIdleAssetPanel(HttpServletRequest request) {
 
+		JSONObject jsonObject = new JSONObject();
+		
 		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
 				.getAttribute("userVo");
 
@@ -714,12 +723,16 @@ public class AssetController extends BaseController {
 
 		List<Customer> customers = customerAssetService
 				.findVisibleCustomerList(userVo, list);
-
-		JSONArray jsonArray = assetService.findIdleAssetForPanel(customers);
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("idleAssetList", jsonArray);
-		return jsonObject;
+		
+		if (null == customers) {
+			return jsonObject;
+		} else {
+			
+			JSONArray jsonArray = assetService.findIdleAssetForPanel(customers);
+			
+			jsonObject.put("idleAssetList", jsonArray);
+			return jsonObject;
+		}
 	}
 
 	@RequestMapping(value = "/viewWarrantyExpiredAssetPanel", method = RequestMethod.GET)

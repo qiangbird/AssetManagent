@@ -80,12 +80,11 @@ public class HomeController extends BaseController {
 		
 		return modelAndView;
 	}
-
+	
 	@RequestMapping(value = "/changeLocale")
 	public void changeLocale(@RequestParam("locale") String newLocale,
 			HttpServletRequest request, HttpServletResponse response) {
 
-	    logger.info("setLocaleToSession() start... ");
         logger.info("newLocale: " + newLocale);
         logger.info("SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME: "
                 + request.getSession().getAttribute(
@@ -100,7 +99,6 @@ public class HomeController extends BaseController {
             locale = new Locale("zh", "CN");
             request.getSession().setAttribute("localeLanguage", locale);
         }
-        logger.info("setLocaleToSession() end... ");
 	}
 
 	@RequestMapping("/getTimeOffset")
@@ -143,4 +141,9 @@ public class HomeController extends BaseController {
     public String showLoginError() {
         return "/error/error_404";
     }
+	
+	@RequestMapping(value = "/home")
+	public String redirectIndex() {
+		return "home/dashboard";
+	}
 }

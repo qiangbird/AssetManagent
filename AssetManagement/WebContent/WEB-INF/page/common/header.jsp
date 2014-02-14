@@ -62,7 +62,7 @@
         <div class="menuCotent">
             <ul class="firstMenuUl">
                 <shiro:authenticated>
-                	<li class="menuLi"><a href="#"><spring:message code="navigator.home" /></a></li>
+                	<li class="menuLi"><a href="home"><spring:message code="navigator.home" /></a></li>
                 </shiro:authenticated>
                 <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
@@ -90,7 +90,7 @@
                 </li>
                 </shiro:hasRole>
                 <shiro:authenticated>
-                <li class="menuLi"><a><spring:message code="navigator.customser.assets" /></a>
+                <li class="menuLi"><a href="customerAsset/listAllCustomerAssets"><spring:message code="navigator.customser.assets" /></a>
                     <ul class="sencndMenuUl customerAsset">
                     <c:if test="${sessionScope.customerList !=null }">
                        <c:forEach var="customer" items="${sessionScope.customerList }">

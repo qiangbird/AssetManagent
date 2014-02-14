@@ -1,6 +1,5 @@
 package com.augmentum.ams.web.controller.asset;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 
 import org.apache.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +30,11 @@ import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
+import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.ProjectVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
+import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("customerAssetController")
 @RequestMapping(value = "/customerAsset")
@@ -81,7 +83,8 @@ public class CustomerAssetController extends BaseController {
 	// goCustomerAsset
 	@RequestMapping(value = "listCustomerAsset", method = RequestMethod.GET)
 	public String listCustomerAsset(String customerCode,
-			HttpServletRequest request, String status, String type) throws BusinessException {
+			HttpServletRequest request, String status, String type)
+			throws BusinessException {
 
 		logger.info("listCustomerAsset method start!");
 
@@ -148,34 +151,57 @@ public class CustomerAssetController extends BaseController {
 		return null;
 	}
 	
-	@RequestMapping(value = "/listIdleCustomerAsset")
-	public ModelAndView findIdleCustomerAsset(SearchCondition searchCondition, HttpSession session) {
+	@RequestMapping(value = "/listAllCustomerAssets")
+	public String redirectAllCustomerAssetList(HttpServletRequest request, String type, String status) {
 		
+		request.setAttribute("type", type);
+		request.setAttribute("status", status);
+		return "asset/customerAssetList";
+	}
+
+	@RequestMapping(value = "/findAllCustomersAssets")
+	public ModelAndView findAllCustomersAssets(SearchCondition searchCondition,
+			HttpSession session, HttpServletRequest request) {
+
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (null == searchCondition) {
 			searchCondition = new SearchCondition();
 		}
-		
-		List<Customer> customers = new ArrayList<Customer>();
-		
+
+		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
+				.getAttribute("userVo");
+
+		List<CustomerVo> list = null;
+		try {
+			list = remoteCustomerService.getCustomerByEmployeeId(
+					userVo.getEmployeeId(), request);
+		} catch (BusinessException e) {
+			logger.error("get customerVo failed from IAP", e);
+		}
+
+		List<Customer> customers = customerAssetService
+				.findVisibleCustomerList(userVo, list);
+
 		Page<Asset> page = customerAssetService
-				.findAllCustomerAssetBySearchCondition(searchCondition, customers);
-		
+				.findAllCustomerAssetBySearchCondition(searchCondition,
+						customers);
+
 		String clientTimeOffset = (String) session.getAttribute("timeOffset");
-		List<AssetListVo> list = FormatEntityListToEntityVoList
+		List<AssetListVo> assetVoList = FormatEntityListToEntityVoList
 				.formatAssetListToAssetVoList(page.getResult(),
 						clientTimeOffset);
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
 				.findUserCustomColumns("asset", getUserIdByShiro());
+		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(
+				assetVoList, userCustomColumnList, "");
 
-//		modelAndView.addObject("fieldsData", array);
+		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", page.getRecordCount());
 		modelAndView.addObject("totalPage", page.getTotalPage());
 		modelAndView.addObject("searchCondition", searchCondition);
 
-		logger.info("findMyAssetsBySearchCondition method end!");
 		return modelAndView;
 	}
-	
+
 }

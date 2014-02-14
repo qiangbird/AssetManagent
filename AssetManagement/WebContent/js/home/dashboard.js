@@ -90,11 +90,17 @@ $(document).ready(function(){
 			dataType : 'json',
 			url: "asset/viewIdleAssetPanel",
 			success: function(data){
-				var assetList = data.idleAssetList;
-				for (var i = 0; i < assetList.length; i++) {
-					$(".idleAssetPanel table").append("<tr><td><input class='idleAssetId' type='checkbox' value=" 
-							+ assetList[i].id + " /></td><td>" + assetList[i].assetName + "</td>" + "<td>" + assetList[i].customerName 
-							+ "</td>" + "<td>" + assetList[i].userName + "</td></tr>");
+				
+				if (data.idleAssetList == null) {
+					return;
+				} else {
+					
+					var assetList = data.idleAssetList;
+					for (var i = 0; i < assetList.length; i++) {
+						$(".idleAssetPanel table").append("<tr><td><input class='idleAssetId' type='checkbox' value=" 
+								+ assetList[i].id + " /></td><td>" + assetList[i].assetName + "</td>" + "<td>" + assetList[i].customerName 
+								+ "</td>" + "<td>" + assetList[i].userName + "</td></tr>");
+					}
 				}
 			}
 		});
@@ -104,6 +110,10 @@ $(document).ready(function(){
 	
 	$("#idleAsset").click(function(){
 		alert();
+	});
+	
+	$("#viewMore_idleAsset").click(function(){
+		window.location.href = "customerAsset/listAllCustomerAssets?status=IDLE";
 	});
 	
 	// get warranty expired asset panel
@@ -326,6 +336,18 @@ $(document).ready(function(){
 		}
 	}
 	
+	// generate link and parameters for customer Asset number
+	function addLinkForAllCustomerNum($element, posY, status, count) {
+		if (count == 0) {
+			$element.html(count);
+		} else {
+			var type = $element.parent().siblings("tr:eq(0)").children("th:eq(" + posY + ")").html();
+			type = formatType(type);
+			
+			$element.html("<a href='customerAsset/listAllCustomerAssets?type=" + type + "&status=" + status + "'>" + count + "</a>");
+		}
+	}
+	
 	// get asset count for manager
 	$.ajax({
 		type : 'GET',
@@ -334,195 +356,201 @@ $(document).ready(function(){
         url: "asset/getAssetCountForManager",
         success : function(data){
         	
-        	$(".mainPanel table tr:gt(0)").each(function(i){
+        	if (data.customer == null || data.assetCount == null) {
+        		return;
+        	} else {
         		
-	    		// get first column name: All Asset, My Asset, Customer Asset, Available, etc...
-	    		var type = $(this).children("td:eq(0)").attr("content");
-	    		
-	    		if ("Customer Asset" == type) {
-	    			$(this).children("td:eq(1)").html(data.assetCount.allCustomersMachineCount);
-					$(this).children("td:eq(2)").html(data.assetCount.allCustomersMonitorCount);
-					$(this).children("td:eq(3)").html(data.assetCount.allCustomersSoftwareCount);
-					$(this).children("td:eq(4)").html(data.assetCount.allCustomersDeviceCount);
-					$(this).children("td:eq(5)").html(data.assetCount.allCustomersOtherAssetsCount);
-					$(this).children("td:eq(6)").html(data.assetCount.allCustomersAssetTotal);
-					
-					//append each customer asset
-					for (var i = 0; i < data.customer.length; i++) {
-						var customerName = data.customer[i].customerName;
-						var customerCode = data.customer[i].customerCode;
-						
-						var deviceCount = customerName + "DeviceCount";
-						var machineCount = customerName + "MachineCount";
-						var monitorCount = customerName + "MonitorCount";
-						var otherAssetsCount = customerName + "OtherAssetsCount";
-						var softwareCount = customerName + "SoftwareCount";
-						var total = customerName + "AssetTotal";
-						
-						$(this).after("<tr class='afterTR' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
-								+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
-								+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
-								+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
-								+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
-					}
-					
-					$(".afterTR").hide();
-					$(".afterTR").each(function(){
-						var customerCode = $(this).attr("content");
-						
-						addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "", $(this).children("td:eq(1)").html());
-						addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "", $(this).children("td:eq(2)").html());
-						addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "", $(this).children("td:eq(3)").html());
-						addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "", $(this).children("td:eq(4)").html());
-						addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "", $(this).children("td:eq(5)").html());
-						addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "", $(this).children("td:eq(6)").html());
-					});
-					
-					
-					$(this).children("td:eq(0)").bind("click", function(){
-						$(this).parent().siblings(".afterTR").toggle();
-						changeTreeIcon($(this).children("div"));
-					});
-	    		} 
-	    		// available customer asset count
-	    		else if ("Available Customer Asset" == type) {
-	    			$(this).children("td:eq(1)").html(data.assetCount.allCustomersAvailableMachineCount);
-					$(this).children("td:eq(2)").html(data.assetCount.allCustomersAvailableMonitorCount);
-					$(this).children("td:eq(3)").html(data.assetCount.allCustomersAvailableSoftwareCount);
-					$(this).children("td:eq(4)").html(data.assetCount.allCustomersAvailableDeviceCount);
-					$(this).children("td:eq(5)").html(data.assetCount.allCustomersAvailableOtherAssetsCount);
-					$(this).children("td:eq(6)").html(data.assetCount.allCustomersAvailableAssetTotal);
-					
-					//append each customer asset
-					for (var i = 0; i < data.customer.length; i++) {
-						var customerName = data.customer[i].customerName;
-						var customerCode = data.customer[i].customerCode;
-						
-						var deviceCount = customerName + "AvailableDeviceCount";
-						var machineCount = customerName + "AvailableMachineCount";
-						var monitorCount = customerName + "AvailableMonitorCount";
-						var otherAssetsCount = customerName + "AvailableOtherAssetsCount";
-						var softwareCount = customerName + "AvailableSoftwareCount";
-						var total = customerName + "AvailableAssetTotal";
-						
-						$(this).after("<tr class='afterTR-available' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
-								+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
-								+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
-								+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
-								+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
-					}
-					
-					$(".afterTR-available").hide();
-					$(".afterTR-available").each(function(){
-						var customerCode = $(this).attr("content");
-						
-						addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "AVAILABLE", $(this).children("td:eq(1)").html());
-						addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "AVAILABLE", $(this).children("td:eq(2)").html());
-						addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "AVAILABLE", $(this).children("td:eq(3)").html());
-						addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "AVAILABLE", $(this).children("td:eq(4)").html());
-						addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "AVAILABLE", $(this).children("td:eq(5)").html());
-						addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "AVAILABLE", $(this).children("td:eq(6)").html());
-					});
-					
-					
-					$(this).children("td:eq(0)").bind("click", function(){
-						$(this).parent().siblings(".afterTR-available").toggle();
-						changeTreeIcon($(this).children("div"));
-					});
-	    		}
-	    		// in use customer asset count
-	    		else if ("In Use Customer Asset" == type) {
-	    			$(this).children("td:eq(1)").html(data.assetCount.allCustomersInUseMachineCount);
-					$(this).children("td:eq(2)").html(data.assetCount.allCustomersInUseMonitorCount);
-					$(this).children("td:eq(3)").html(data.assetCount.allCustomersInUseSoftwareCount);
-					$(this).children("td:eq(4)").html(data.assetCount.allCustomersInUseDeviceCount);
-					$(this).children("td:eq(5)").html(data.assetCount.allCustomersInUseOtherAssetsCount);
-					$(this).children("td:eq(6)").html(data.assetCount.allCustomersInUseAssetTotal);
-					
-					//append each customer asset
-					for (var i = 0; i < data.customer.length; i++) {
-						var customerName = data.customer[i].customerName;
-						var customerCode = data.customer[i].customerCode;
-						
-						var deviceCount = customerName + "InUseDeviceCount";
-						var machineCount = customerName + "InUseMachineCount";
-						var monitorCount = customerName + "InUseMonitorCount";
-						var otherAssetsCount = customerName + "InUseOtherAssetsCount";
-						var softwareCount = customerName + "InUseSoftwareCount";
-						var total = customerName + "InUseAssetTotal";
-						
-						$(this).after("<tr class='afterTR-inuse' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
-								+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
-								+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
-								+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
-								+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
-					}
-					
-					$(".afterTR-inuse").hide();
-					$(".afterTR-inuse").each(function(){
-						var customerCode = $(this).attr("content");
-						
-						addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "IN_USE", $(this).children("td:eq(1)").html());
-						addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "IN_USE", $(this).children("td:eq(2)").html());
-						addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "IN_USE", $(this).children("td:eq(3)").html());
-						addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "IN_USE", $(this).children("td:eq(4)").html());
-						addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "IN_USE", $(this).children("td:eq(5)").html());
-						addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "IN_USE", $(this).children("td:eq(6)").html());
-					});
-					
-					$(this).children("td:eq(0)").bind("click", function(){
-						$(this).parent().siblings(".afterTR-inuse").toggle();
-						changeTreeIcon($(this).children("div"));
-					});
-	    		}
-	    		
-	    		// idle customer asset count
-	    		else if ("Idle Customer Asset" == type) {
-	    			$(this).children("td:eq(1)").html(data.assetCount.allCustomersIdleMachineCount);
-					$(this).children("td:eq(2)").html(data.assetCount.allCustomersIdleMonitorCount);
-					$(this).children("td:eq(3)").html(data.assetCount.allCustomersIdleSoftwareCount);
-					$(this).children("td:eq(4)").html(data.assetCount.allCustomersIdleDeviceCount);
-					$(this).children("td:eq(5)").html(data.assetCount.allCustomersIdleOtherAssetsCount);
-					$(this).children("td:eq(6)").html(data.assetCount.allCustomersIdleAssetTotal);
-					
-					//append each customer asset
-					for (var i = 0; i < data.customer.length; i++) {
-						var customerName = data.customer[i].customerName;
-						var customerCode = data.customer[i].customerCode;
-						
-						var deviceCount = customerName + "IdleDeviceCount";
-						var machineCount = customerName + "IdleMachineCount";
-						var monitorCount = customerName + "IdleMonitorCount";
-						var otherAssetsCount = customerName + "IdleOtherAssetsCount";
-						var softwareCount = customerName + "IdleSoftwareCount";
-						var total = customerName + "IdleAssetTotal";
-						
-						$(this).after("<tr class='afterTR-idle' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
-								+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
-								+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
-								+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
-								+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
-					}
-					
-					$(".afterTR-idle").hide();
-					$(".afterTR-idle").each(function(){
-						var customerCode = $(this).attr("content");
-						
-						addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "IDLE", $(this).children("td:eq(1)").html());
-						addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "IDLE", $(this).children("td:eq(2)").html());
-						addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "IDLE", $(this).children("td:eq(3)").html());
-						addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "IDLE", $(this).children("td:eq(4)").html());
-						addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "IDLE", $(this).children("td:eq(5)").html());
-						addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "IDLE", $(this).children("td:eq(6)").html());
-					});
-					
-					$(this).children("td:eq(0)").bind("click", function(){
-						$(this).parent().siblings(".afterTR-idle").toggle();
-						changeTreeIcon($(this).children("div"));
-					});
-	    		}
-	    		
-        	});
+        		$(".mainPanel table tr:gt(0)").each(function(i){
+        			
+        			// get first column name: All Asset, My Asset, Customer Asset, Available, etc...
+        			var type = $(this).children("td:eq(0)").attr("content");
+        			
+        			if ("Customer Asset" == type) {
+        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "", data.assetCount.allCustomersMachineCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "", data.assetCount.allCustomersMonitorCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "", data.assetCount.allCustomersSoftwareCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "", data.assetCount.allCustomersDeviceCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "", data.assetCount.allCustomersOtherAssetsCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "", data.assetCount.allCustomersAssetTotal);
+        				
+        				//append each customer asset
+        				for (var i = 0; i < data.customer.length; i++) {
+        					var customerName = data.customer[i].customerName;
+        					var customerCode = data.customer[i].customerCode;
+        					
+        					var deviceCount = customerName + "DeviceCount";
+        					var machineCount = customerName + "MachineCount";
+        					var monitorCount = customerName + "MonitorCount";
+        					var otherAssetsCount = customerName + "OtherAssetsCount";
+        					var softwareCount = customerName + "SoftwareCount";
+        					var total = customerName + "AssetTotal";
+        					
+        					$(this).after("<tr class='afterTR' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
+        							+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
+        					+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
+        					+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
+        					+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
+        				}
+        				
+        				$(".afterTR").hide();
+        				$(".afterTR").each(function(){
+        					var customerCode = $(this).attr("content");
+        					
+        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "", $(this).children("td:eq(1)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "", $(this).children("td:eq(2)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "", $(this).children("td:eq(3)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "", $(this).children("td:eq(4)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "", $(this).children("td:eq(5)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "", $(this).children("td:eq(6)").html());
+        				});
+        				
+        				
+        				$(this).children("td:eq(0)").bind("click", function(){
+        					$(this).parent().siblings(".afterTR").toggle();
+        					changeTreeIcon($(this).children("div"));
+        				});
+        			} 
+        			// available customer asset count
+        			else if ("Available Customer Asset" == type) {
+        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "AVAILABLE", data.assetCount.allCustomersAvailableMachineCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "AVAILABLE", data.assetCount.allCustomersAvailableMonitorCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "AVAILABLE", data.assetCount.allCustomersAvailableSoftwareCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "AVAILABLE", data.assetCount.allCustomersAvailableDeviceCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "AVAILABLE", data.assetCount.allCustomersAvailableOtherAssetsCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "AVAILABLE", data.assetCount.allCustomersAvailableAssetTotal);
+        				
+        				//append each customer asset
+        				for (var i = 0; i < data.customer.length; i++) {
+        					var customerName = data.customer[i].customerName;
+        					var customerCode = data.customer[i].customerCode;
+        					
+        					var deviceCount = customerName + "AvailableDeviceCount";
+        					var machineCount = customerName + "AvailableMachineCount";
+        					var monitorCount = customerName + "AvailableMonitorCount";
+        					var otherAssetsCount = customerName + "AvailableOtherAssetsCount";
+        					var softwareCount = customerName + "AvailableSoftwareCount";
+        					var total = customerName + "AvailableAssetTotal";
+        					
+        					$(this).after("<tr class='afterTR-available' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
+        							+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
+        					+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
+        					+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
+        					+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
+        				}
+        				
+        				$(".afterTR-available").hide();
+        				$(".afterTR-available").each(function(){
+        					var customerCode = $(this).attr("content");
+        					
+        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "AVAILABLE", $(this).children("td:eq(1)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "AVAILABLE", $(this).children("td:eq(2)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "AVAILABLE", $(this).children("td:eq(3)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "AVAILABLE", $(this).children("td:eq(4)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "AVAILABLE", $(this).children("td:eq(5)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "AVAILABLE", $(this).children("td:eq(6)").html());
+        				});
+        				
+        				
+        				$(this).children("td:eq(0)").bind("click", function(){
+        					$(this).parent().siblings(".afterTR-available").toggle();
+        					changeTreeIcon($(this).children("div"));
+        				});
+        			}
+        			// in use customer asset count
+        			else if ("In Use Customer Asset" == type) {
+        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "IN_USE", data.assetCount.allCustomersInUseMachineCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "IN_USE", data.assetCount.allCustomersInUseMonitorCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "IN_USE", data.assetCount.allCustomersInUseSoftwareCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "IN_USE", data.assetCount.allCustomersInUseDeviceCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "IN_USE", data.assetCount.allCustomersInUseOtherAssetsCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "IN_USE", data.assetCount.allCustomersInUseAssetTotal);
+        				
+        				//append each customer asset
+        				for (var i = 0; i < data.customer.length; i++) {
+        					var customerName = data.customer[i].customerName;
+        					var customerCode = data.customer[i].customerCode;
+        					
+        					var deviceCount = customerName + "InUseDeviceCount";
+        					var machineCount = customerName + "InUseMachineCount";
+        					var monitorCount = customerName + "InUseMonitorCount";
+        					var otherAssetsCount = customerName + "InUseOtherAssetsCount";
+        					var softwareCount = customerName + "InUseSoftwareCount";
+        					var total = customerName + "InUseAssetTotal";
+        					
+        					$(this).after("<tr class='afterTR-inuse' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
+        							+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
+        					+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
+        					+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
+        					+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
+        				}
+        				
+        				$(".afterTR-inuse").hide();
+        				$(".afterTR-inuse").each(function(){
+        					var customerCode = $(this).attr("content");
+        					
+        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "IN_USE", $(this).children("td:eq(1)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "IN_USE", $(this).children("td:eq(2)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "IN_USE", $(this).children("td:eq(3)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "IN_USE", $(this).children("td:eq(4)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "IN_USE", $(this).children("td:eq(5)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "IN_USE", $(this).children("td:eq(6)").html());
+        				});
+        				
+        				$(this).children("td:eq(0)").bind("click", function(){
+        					$(this).parent().siblings(".afterTR-inuse").toggle();
+        					changeTreeIcon($(this).children("div"));
+        				});
+        			}
+        			
+        			// idle customer asset count
+        			else if ("Idle Customer Asset" == type) {
+        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "IDLE", data.assetCount.allCustomersIdleMachineCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "IDLE", data.assetCount.allCustomersIdleMonitorCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "IDLE", data.assetCount.allCustomersIdleSoftwareCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "IDLE", data.assetCount.allCustomersIdleDeviceCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "IDLE", data.assetCount.allCustomersIdleOtherAssetsCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "IDLE", data.assetCount.allCustomersIdleAssetTotal);
+        				
+        				//append each customer asset
+        				for (var i = 0; i < data.customer.length; i++) {
+        					var customerName = data.customer[i].customerName;
+        					var customerCode = data.customer[i].customerCode;
+        					
+        					var deviceCount = customerName + "IdleDeviceCount";
+        					var machineCount = customerName + "IdleMachineCount";
+        					var monitorCount = customerName + "IdleMonitorCount";
+        					var otherAssetsCount = customerName + "IdleOtherAssetsCount";
+        					var softwareCount = customerName + "IdleSoftwareCount";
+        					var total = customerName + "IdleAssetTotal";
+        					
+        					$(this).after("<tr class='afterTR-idle' content='" + customerCode + "'><td><div class='tr-header treeIndent' title='" 
+        							+ customerName + "'>" + customerName + "</div></td><td>" + data.assetCount[machineCount]
+        					+ "</td><td>" + data.assetCount[monitorCount] + "</td><td>" + data.assetCount[softwareCount]
+        					+ "</td><td>" + data.assetCount[deviceCount] + "</td><td>" + data.assetCount[otherAssetsCount]
+        					+ "</td><td>" + data.assetCount[total] + "</td></td></tr>");
+        				}
+        				
+        				$(".afterTR-idle").hide();
+        				$(".afterTR-idle").each(function(){
+        					var customerCode = $(this).attr("content");
+        					
+        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "IDLE", $(this).children("td:eq(1)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "IDLE", $(this).children("td:eq(2)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "IDLE", $(this).children("td:eq(3)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "IDLE", $(this).children("td:eq(4)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "IDLE", $(this).children("td:eq(5)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "IDLE", $(this).children("td:eq(6)").html());
+        				});
+        				
+        				$(this).children("td:eq(0)").bind("click", function(){
+        					$(this).parent().siblings(".afterTR-idle").toggle();
+        					changeTreeIcon($(this).children("div"));
+        				});
+        			}
+        			
+        		});
+        	}
+        	
         }
 	});
 });

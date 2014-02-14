@@ -54,6 +54,14 @@ $(document).ready(function() {
     
 });
 
+function getURL() {
+	if ($("#customerCode").val() != "") {
+		return "customerAsset/searchCustomerAssetsList?customerCode=" + $("#customerCode").val();
+	} else {
+		return "customerAsset/findAllCustomersAssets";
+	}
+}
+
 //search list
 var dataListInfo = {
     columns : [],
@@ -62,7 +70,7 @@ var dataListInfo = {
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
-    url : 'customerAsset/searchCustomerAssetsList?customerCode='+$("#customerCode").val(),
+    url : getURL(),
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {
@@ -101,6 +109,8 @@ function setCriteria() {
     criteria.keyWord = $("#keyword").val();
     criteria.fromTime = $("#fromTime").val();
     criteria.toTime = $("#toTime").val();
+    criteria.assetStatus = $("#status").val();
+    criteria.assetType = $("#type").val();
     
     // set search fields
     var searchFields = "";

@@ -48,15 +48,6 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Fixed</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
 				<td class="tr-header">Available</td>
 				<td></td>
 				<td></td>
@@ -67,6 +58,15 @@
 			</tr>
 			<tr>
 				<td class="tr-header">In Use</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="tr-header">Idle</td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -110,8 +110,35 @@
 				<td></td>
 				<td></td>
 			</tr>
+			<tr>
+				<td class="tr-header">ReturningToIT</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="tr-header">Assigning</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr class="tr-my-asset">
+				<td class="tr-header">Fixed</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
 			</shiro:hasRole>
-			<shiro:hasAnyRoles name="MANAGER,EMPLOYEE,SPECIAL_ROLE">
+			<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
 			<tr class="tr-customer-asset">
 				<td class="tr-header-customer" style="cursor: pointer; font-weight: bold;" content="Customer Asset">
 					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>Customer Assets
@@ -283,7 +310,7 @@
 		<div class="idleAssetPanel">
 			<div class="panel_title">
 				<span>Idle Assets</span>
-				<span id="viewMore_returnedAsset" class="viewMore">
+				<span id="viewMore_idleAsset" class="viewMore">
 					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 					<span class="viewMoreContent">More</span>
 				</span>
