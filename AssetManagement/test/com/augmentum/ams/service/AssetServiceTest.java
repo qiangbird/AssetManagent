@@ -576,7 +576,7 @@ public class AssetServiceTest {
 		list.add(c1);
 		list.add(c2);
 		
-		Page<Asset> page = customerAssetService.findIdleCustomerAssetBySearchCondition(searchCondition, list);
+		Page<Asset> page = customerAssetService.findAllCustomerAssetBySearchCondition(searchCondition, list);
 		logger.info(page.getResult().size());
 	}
 	

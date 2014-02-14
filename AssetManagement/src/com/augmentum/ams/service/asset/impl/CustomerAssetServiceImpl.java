@@ -305,7 +305,6 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                             List<Customer> groupCustomerList = customerService
                                     .getCustomerByGroup(customer.getCustomerGroup().getId());
                             customerVisibleList.addAll(groupCustomerList);
-                            // customerVisibleList.add(customer);
                         }
                         if (customer.getCustomerGroup().getProcessType() == ProcessTypeEnum.NONSHARE) {
                             if (userVo.getEmployeeLevel().equals("Manager")
@@ -317,7 +316,6 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
                         }
                     } else {
-//                        flag = true;
                         if(!userVo.getEmployeeLevel().equals("Employee")){
                             flag = true;
                         customerVisibleList.add(customer);
