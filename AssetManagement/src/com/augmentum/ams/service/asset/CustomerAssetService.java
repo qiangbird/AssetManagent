@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
@@ -76,10 +76,10 @@ public interface CustomerAssetService {
      * @param userName
      * @param assetUserCode
      * @param request
-     * @throws DataException 
+     * @throws BusinessException 
      */
     void assginCustomerAsset(String customerCode, String ids, String projectCode, String userName,
-            String assetUserCode, HttpServletRequest request) throws DataException;
+            String assetUserCode, HttpServletRequest request) throws BusinessException;
     
     /**
      * @author Geoffrey.Zhao

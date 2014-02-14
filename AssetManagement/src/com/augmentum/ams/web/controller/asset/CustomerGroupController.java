@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.dao.asset.CustomerDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
@@ -110,7 +110,7 @@ public class CustomerGroupController {
 							customerList.add(customer1);
 						}
 					}
-				} catch (DataException e) {
+				} catch (BusinessException e) {
 					logger.error(e);
 				}
 				group.setCustomers(customerList);
@@ -138,7 +138,7 @@ public class CustomerGroupController {
 							customerList.add(customer1);
 						}
 					}
-				} catch (DataException e) {
+				} catch (BusinessException e) {
 					logger.error(e);
 				}
 				customerGroup.setCustomers(customerList);

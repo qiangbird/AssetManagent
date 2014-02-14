@@ -8,6 +8,8 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.augmentum.ams.constants.SystemConstants;
+
 public class UTCTimeUtil {
 
     private static Logger logger = Logger.getLogger(UTCTimeUtil.class);
@@ -23,7 +25,7 @@ public class UTCTimeUtil {
         Date date = null;
 
         if (null != str && !"".equals(str)) {
-            SimpleDateFormat sdf = new SimpleDateFormat(Constant.DATE_DAY_PATTERN);
+            SimpleDateFormat sdf = new SimpleDateFormat(SystemConstants.DATE_DAY_PATTERN);
 
             try {
                 date = sdf.parse(str);
@@ -70,7 +72,7 @@ public class UTCTimeUtil {
         if (null == date) {
             return "";
         }
-        DateFormat df = new SimpleDateFormat(Constant.DATE_DAY_PATTERN);
+        DateFormat df = new SimpleDateFormat(SystemConstants.DATE_DAY_PATTERN);
         return df.format(date);
     }
 
@@ -99,7 +101,7 @@ public class UTCTimeUtil {
      */
     public static Date utcToLocalTime(Date date, String clientTimeOffset) {
 
-        String[] timeOffset = clientTimeOffset.split(Constant.SPLIT_COMMA);
+        String[] timeOffset = clientTimeOffset.split(SystemConstants.SPLIT_COMMA);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -124,7 +126,7 @@ public class UTCTimeUtil {
      */
     public static String utcToLocalTime(Date date, String clientTimeOffset, String pattern) {
 
-        String[] timeOffset = clientTimeOffset.split(Constant.SPLIT_COMMA);
+        String[] timeOffset = clientTimeOffset.split(SystemConstants.SPLIT_COMMA);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -149,7 +151,7 @@ public class UTCTimeUtil {
             return null;
         } else {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTime(formatStringToDate(localDate, Constant.DATE_DAY_PATTERN));
+            calendar.setTime(formatStringToDate(localDate, SystemConstants.DATE_DAY_PATTERN));
             int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);
             int dstOffset = calendar.get(Calendar.DST_OFFSET);
             calendar.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
@@ -160,7 +162,7 @@ public class UTCTimeUtil {
     public static Date localDateToUTCForSearchIndex(String localDate) {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(formatStringToDate(localDate, Constant.TIME_SECOND_PATTERN));
+        calendar.setTime(formatStringToDate(localDate, SystemConstants.TIME_SECOND_PATTERN));
         int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);
         int dstOffset = calendar.get(Calendar.DST_OFFSET);
         calendar.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
@@ -187,12 +189,12 @@ public class UTCTimeUtil {
         StringBuilder stringBuilder = new StringBuilder();
         Date firstFormatDate = UTCTimeUtil.localDateToUTC(filterTime);
         String secondTimeString = UTCTimeUtil.formatDateToString(firstFormatDate,
-                Constant.TIME_SECOND_PATTERN);
+                SystemConstants.TIME_SECOND_PATTERN);
         Date secondFormatDate = UTCTimeUtil.localDateToUTCForSearchIndex(secondTimeString);
         String newFilterTime = UTCTimeUtil.formatDateToString(secondFormatDate,
-                Constant.FILTER_TIME_PATTERN);
+                SystemConstants.FILTER_TIME_PATTERN);
         stringBuilder.append(newFilterTime);
-        stringBuilder.append(Constant.FILTER_MILLISECOND_SUFFIX);
+        stringBuilder.append(SystemConstants.FILTER_MILLISECOND_SUFFIX);
         return stringBuilder.toString();
     }
 
@@ -208,7 +210,7 @@ public class UTCTimeUtil {
     public static String formatDateToUTCString(Date date, String timeOffset) {
         if(null!=date){
         return UTCTimeUtil.formatDateToString(UTCTimeUtil.utcToLocalTime(date, timeOffset),
-                Constant.DATE_DAY_PATTERN);
+                SystemConstants.DATE_DAY_PATTERN);
         }else{
             return null;
         }
@@ -219,7 +221,7 @@ public class UTCTimeUtil {
      * @return
      */
     public static String formatUTCStringToLocalString(String utcString, String timeOffset, String pattern) {
-    	Date utcTime = formatStringToDate(utcString, Constant.TIME_SECOND_PATTERN);
+    	Date utcTime = formatStringToDate(utcString, SystemConstants.TIME_SECOND_PATTERN);
     	Date localTime = utcToLocalTime(utcTime, timeOffset);
     	return formatDateToString(localTime, pattern);
     }
@@ -230,7 +232,7 @@ public class UTCTimeUtil {
      */
     public static String getAssetExpiredTimeForFilterTime() {
     	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.DAY_OF_MONTH, Constant.EXPIRED_TIME_SETTING);
+    	cal.add(Calendar.DAY_OF_MONTH, SystemConstants.EXPIRED_TIME_SETTING);
     	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
     	return formatFilterTime(s);
     }
@@ -251,7 +253,7 @@ public class UTCTimeUtil {
      */
     public static Date getAssetExpiredTime() {
     	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.DAY_OF_MONTH, Constant.EXPIRED_TIME_SETTING);
+    	cal.add(Calendar.DAY_OF_MONTH, SystemConstants.EXPIRED_TIME_SETTING);
     	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DAY_OF_MONTH));
     	return localDateToUTC(s);
     }

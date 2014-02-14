@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 /**
@@ -23,9 +23,9 @@ public interface RemoteEmployeeService {
      * @time Sep 12, 2013 12:58:53 PM
      * @param request
      * @return JSONArray
-     * @throws DataException
+     * @throws BusinessException
      */
-    JSONArray findRemoteEmployees(HttpServletRequest request) throws DataException;
+    JSONArray findRemoteEmployees(HttpServletRequest request) throws BusinessException;
     
     /**
      * @description Get all employees info from IAP, then encapsulated them in
@@ -34,9 +34,9 @@ public interface RemoteEmployeeService {
      * @time Sep 12, 2013 12:58:53 PM
      * @param request
      * @return JSONArray
-     * @throws DataException
+     * @throws BusinessException
      */
-    Map<String, String> findRemoteEmployeesForCache(HttpServletRequest request) throws DataException;
+    Map<String, String> findRemoteEmployeesForCache(HttpServletRequest request) throws BusinessException;
 
     /**
      * @author Grylls.Xu
@@ -44,9 +44,9 @@ public interface RemoteEmployeeService {
      * @description TODO
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
-    UserVo getLoginUser(HttpServletRequest request) throws DataException;
+    UserVo getLoginUser(HttpServletRequest request) throws BusinessException;
 
     /**
      * 
@@ -56,9 +56,9 @@ public interface RemoteEmployeeService {
      * @param userId
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
-    UserVo getRemoteUserById(String userId, HttpServletRequest request) throws DataException;
+    UserVo getRemoteUserById(String userId, HttpServletRequest request) throws BusinessException;
 
     /**
      * 
@@ -68,9 +68,9 @@ public interface RemoteEmployeeService {
      * @param userName
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
-    List<UserVo> getRemoteUserByName(List<String> userNames, HttpServletRequest request) throws DataException;
+    List<UserVo> getRemoteUserByName(List<String> userNames, HttpServletRequest request) throws BusinessException;
 
     /**
      * 
@@ -80,10 +80,10 @@ public interface RemoteEmployeeService {
      * @param customerCode
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     JSONArray findRemoteEmployeeByCustomerCode(String customerCode, HttpServletRequest request)
-            throws DataException;
+            throws BusinessException;
     /**
      * 
      * @description TODO
@@ -92,8 +92,8 @@ public interface RemoteEmployeeService {
      * @param projectCode
      * @param request
      * @return
-     * @throws DataException 
+     * @throws BusinessException 
      */
-    JSONArray findRemoteEmployeeByProjectCode(String projectCode, HttpServletRequest request) throws DataException;
+    JSONArray findRemoteEmployeeByProjectCode(String projectCode, HttpServletRequest request) throws BusinessException;
 
 }

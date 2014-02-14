@@ -8,6 +8,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.service.BaseCaseTest;
 
 public class UTCTimeUtilTest extends BaseCaseTest{
@@ -17,9 +18,9 @@ public class UTCTimeUtilTest extends BaseCaseTest{
     public void testUTCToLocalTime() throws ParseException {
         String clientTimeOffset = "8,0";
         Date date = null;
-        Date utcTime = UTCTimeUtil.formatStringToDate("2013-11-14 10:00:00", Constant.TIME_SECOND_PATTERN);
+        Date utcTime = UTCTimeUtil.formatStringToDate("2013-11-14 10:00:00", SystemConstants.TIME_SECOND_PATTERN);
         date = UTCTimeUtil.utcToLocalTime(utcTime, clientTimeOffset);
-        String localTime = UTCTimeUtil.formatDateToString(date, Constant.TIME_SECOND_PATTERN);
+        String localTime = UTCTimeUtil.formatDateToString(date, SystemConstants.TIME_SECOND_PATTERN);
         Assert.assertEquals("2013-11-14 18:00:00", localTime);
     }
     
@@ -28,9 +29,9 @@ public class UTCTimeUtilTest extends BaseCaseTest{
     public void testUTCToLocalTime1() throws ParseException {
         String clientTimeOffset = "-5,-30";
         Date date = null;
-        Date utcTime = UTCTimeUtil.formatStringToDate("2013-11-14 10:00:00", Constant.TIME_SECOND_PATTERN);
+        Date utcTime = UTCTimeUtil.formatStringToDate("2013-11-14 10:00:00", SystemConstants.TIME_SECOND_PATTERN);
         date = UTCTimeUtil.utcToLocalTime(utcTime, clientTimeOffset);
-        String localTime = UTCTimeUtil.formatDateToString(date, Constant.TIME_SECOND_PATTERN);
+        String localTime = UTCTimeUtil.formatDateToString(date, SystemConstants.TIME_SECOND_PATTERN);
         Assert.assertEquals("2013-11-14 04:30:00", localTime);
     }
     

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.augmentum.ams.dao.user.UserDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.model.user.Role;
 import com.augmentum.ams.model.user.User;
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
      * com.augmentum.ams.service.user.UserService#saveUserRole(java.util.List)
      */
     @Override
-    public void saveUserRole(List<UserVo> userVos) throws DataException {
+    public void saveUserRole(List<UserVo> userVos) throws BusinessException {
 
         // Before save user and role info in database, clear user_role table
         // records.

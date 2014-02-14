@@ -166,7 +166,7 @@
 /***  Dialog Window  **/
 .shady {
     width: 100%;
-    height: 120%;
+    height: 100%;
     position: absolute;
     left:0;
     top: 0;
@@ -192,7 +192,7 @@
 .dialogTitle {
     height: 29px;
     width: auto;
-    line-height: 29px;
+    line-height: 0px;
     background: url("../../img/BKG_Header_560x30.png") no-repeat;
 }
 .dialogTitle h3 {

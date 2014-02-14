@@ -145,7 +145,7 @@ $("#customerName").focus(function() {
     $.ajax({
         type : 'GET',
         contentType : 'application/json',
-        url : 'base/getCustomerInfo',
+        url : 'customer/getCustomerInfo',
         dataType : 'json',
         success : function(data) {
            var length = data.customerList.length;

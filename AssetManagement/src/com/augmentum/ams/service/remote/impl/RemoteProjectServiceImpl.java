@@ -1,20 +1,19 @@
 package com.augmentum.ams.service.remote.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.augmentum.ams.common.constants.IAPConstans;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.constants.IAPConstans;
 import com.augmentum.ams.service.remote.RemoteProjectService;
 import com.augmentum.ams.util.RemoteUtil;
 import com.augmentum.ams.util.SqlRestrictionsUtil;
@@ -30,11 +29,17 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
 
     @Override
     public String getManagerIdByProjectCode(String projectCode,
-            HttpServletRequest httpServletRequest) throws DataException {
+            HttpServletRequest httpServletRequest)  {
+        
+        logger.info("projectCode: " + projectCode);
+        
         // Prepare the condition for searching.
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         searchModel.setColumns(new String[] { IAPConstans.MANAGER_MANAGER_ID });
         searchModel.setFilter(SqlRestrictionsUtil.eq(IAPConstans.PROJECT_CODE, projectCode));
+        
+        logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
         // Communicate with IAP.
         Request tmpRequest = RemoteUtil.getRequest(httpServletRequest, DataModelAPI.listProject,
@@ -42,14 +47,7 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
                 ContentType.APPLICATION_XML, tmpRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-
-        // Gain the response and encapsulate them.
-        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-            responseData = responseModel.getRequestModel().getDataList();
-        } else {
-            logger.info(responseModel.getStatus().getMessage());
-        }
-
+        responseData = responseModel.getRequestModel().getDataList();
         String projectManagerId = null;
 
         for (Map<String, Object> mapData : responseData) {
@@ -60,11 +58,16 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
 
     @Override
     public List<ProjectVo> getProjectByEmployeeId(String employeeId, HttpServletRequest request)
-            throws DataException {
+             {
+        
+        logger.info("employeeId: " + employeeId);
+        
         // Prepare the condition for searching.
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         // searchModel.setColumns(new String[] {"projectName","projectCode"});
         searchModel.setFilter(SqlRestrictionsUtil.eq(IAPConstans.EMPLOYEE_EMPLOYEE_ID, employeeId));
+        
+        logger.info("Search filter: " + searchModel.getFilter());
 
         // Communicate with IAP.
         Request tmpRequest = RemoteUtil.getRequest(request, "dataModel_listEmployeeProject",
@@ -72,13 +75,7 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
                 ContentType.APPLICATION_XML, tmpRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-
-        // Gain the response and encapsulate them.
-        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-            responseData = responseModel.getRequestModel().getDataList();
-        } else {
-            logger.info(responseModel.getStatus().getMessage());
-        }
+        responseData = responseModel.getRequestModel().getDataList();
         List<ProjectVo> projectVoList = new ArrayList<ProjectVo>();
 
         for (Map<String, Object> mapData : responseData) {
@@ -93,11 +90,17 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
 
     @Override
     public ProjectVo getProjectByProjectCode(String projectCode, HttpServletRequest request)
-            throws DataException {
+             {
+        
+        logger.info("projectCode: " + projectCode);
+        
         // Prepare the condition for searching.
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         searchModel.setColumns(new String[] { IAPConstans.PROJECT_NAME, IAPConstans.PROJECT_CODE });
         searchModel.setFilter(SqlRestrictionsUtil.eq(IAPConstans.PROJECT_CODE, projectCode));
+        
+        logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
         // Communicate with IAP.
         Request tmpRequest = RemoteUtil.getRequest(request, DataModelAPI.listProject,
@@ -106,13 +109,9 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
                 ContentType.APPLICATION_XML, tmpRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
-        // Gain the response and encapsulate them.
-        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-            responseData = responseModel.getRequestModel().getDataList();
-        } else {
-            logger.info(responseModel.getStatus().getMessage());
-        }
+        responseData = responseModel.getRequestModel().getDataList();
         ProjectVo projectVo = new ProjectVo();
+        
         for (Map<String, Object> mapData : responseData) {
 
             projectVo.setProjectName((String) mapData.get(IAPConstans.PROJECT_NAME));
@@ -122,11 +121,13 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
     }
     
     @Override
-    public Map<String, String> findAllProjectsFromIAP(HttpServletRequest request) throws DataException{
+    public Map<String, String> findAllProjectsFromIAP(HttpServletRequest request) {
         
      // Prepare the condition for searching.
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         searchModel.setColumns(new String[] { IAPConstans.PROJECT_NAME, IAPConstans.PROJECT_CODE });
+        
+        logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
 
         // Communicate with IAP.
         Request tmpRequest = RemoteUtil.getRequest(request, DataModelAPI.listProject,
@@ -134,13 +135,7 @@ public class RemoteProjectServiceImpl implements RemoteProjectService {
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
                 ContentType.APPLICATION_XML, tmpRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-
-        // Gain the response and encapsulate them.
-        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-            responseData = responseModel.getRequestModel().getDataList();
-        } else {
-            logger.info(responseModel.getStatus().getMessage());
-        }
+        responseData = responseModel.getRequestModel().getDataList();
         Map<String, String> projects = new HashMap<String, String>();
         
         for (Map<String, Object> mapData : responseData) {

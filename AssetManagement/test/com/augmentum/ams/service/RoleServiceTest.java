@@ -3,7 +3,7 @@ package com.augmentum.ams.service;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.service.user.RoleService;
 
@@ -22,7 +22,7 @@ public class RoleServiceTest extends BaseCaseTest{
 	}
 
 	@Test
-	public void testGetRoleByName() throws DataException {
+	public void testGetRoleByName() throws BusinessException {
 		roleService.getRoleByName(RoleEnum.IT);
 	}
 }

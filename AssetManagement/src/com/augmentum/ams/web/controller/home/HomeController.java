@@ -1,9 +1,7 @@
 package com.augmentum.ams.web.controller.home;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,45 +19,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
-import com.augmentum.ams.model.asset.Location;
-import com.augmentum.ams.model.asset.Project;
-import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.CustomerAssetService;
-import com.augmentum.ams.service.asset.CustomerService;
-import com.augmentum.ams.service.asset.LocationService;
-import com.augmentum.ams.service.asset.ProjectService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
-import com.augmentum.ams.service.remote.RemoteEmployeeService;
-import com.augmentum.ams.service.remote.RemoteProjectService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
-import com.augmentum.ams.util.MemcachedUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("homeController")
-@RequestMapping(value = "/home")
+@RequestMapping(value = "/")
 public class HomeController extends BaseController {
 
-	@Autowired
-	private RemoteEmployeeService remoteEmployeeService;
 	@Autowired
 	private RemoteCustomerService remoteCustomerService;
 	@Autowired
 	private CustomerAssetService customerAssetService;
 	@Autowired
-	private RemoteProjectService remoteProjectService;
-	@Autowired
 	private UserService userService;
-	@Autowired
-	private CustomerService customerService;
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private LocationService locationService;
 	@Autowired
 	private UserCustomColumnsService userCustomColumnsService;
 
@@ -67,8 +46,6 @@ public class HomeController extends BaseController {
 
 	@RequestMapping("/index")
 	public ModelAndView index(HttpServletRequest request) {
-
-		logger.info("index() start... ");
 
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -86,7 +63,7 @@ public class HomeController extends BaseController {
 			try {
 				list = remoteCustomerService.getCustomerByEmployeeId(
 						userVo.getEmployeeId(), request);
-			} catch (DataException e) {
+			} catch (BusinessException e) {
 				logger.error(
 						"Get customer by employeeId[ " + userVo.getEmployeeId()
 								+ " ] from IAP error", e);
@@ -97,102 +74,39 @@ public class HomeController extends BaseController {
 			String userRole = userService.getUserRole(userVo);
 			session.setAttribute("userRole", userRole);
 			session.setAttribute("customerList", customerVisibleList);
-
-			getLocaleLanguage(request);
-			initCacheData(request);
 		}
 
 		modelAndView.setViewName("home/dashboard");
 		
-		logger.info("index() end... ");
-		
 		return modelAndView;
-	}
-	
-	private void initCacheData(HttpServletRequest request) {
-
-		Map<String, User> localEmployees = userService.findAllUsersFromLocal();
-		// temporary store the customer
-		Map<String, Customer> localCustomers = customerService
-				.findAllCustomersFromLocal();
-		// temporary store the project
-		Map<String, Project> localProjects = projectService
-				.findAllCustomersFromLocal();
-		// temporary store the location
-		Map<String, Location> localLocations = locationService
-				.findAllLocationsFromIAP();
-
-		Map<String, String> remoteEmployees = new HashMap<String, String>();
-		Map<String, String> remoteProjects = new HashMap<String, String>();
-		Map<String, String> remoteCustomers = new HashMap<String, String>();
-
-		try {
-			remoteEmployees = remoteEmployeeService
-					.findRemoteEmployeesForCache(request);
-			remoteProjects = remoteProjectService
-					.findAllProjectsFromIAP(request);
-
-			List<CustomerVo> customers = remoteCustomerService
-					.getAllCustomerFromIAP(request);
-			for (CustomerVo customerVo : customers) {
-				remoteCustomers.put(customerVo.getCustomerName(),
-						customerVo.getCustomerCode());
-			}
-		} catch (DataException e) {
-			logger.error("Get date from IAP failure!", e);
-		}
-		MemcachedUtil.put("remoteEmployees", remoteEmployees);
-		MemcachedUtil.put("localEmployees", localEmployees);
-		MemcachedUtil.put("localCustomers", localCustomers);
-		MemcachedUtil.put("remoteCustomers", remoteCustomers);
-		MemcachedUtil.put("localProjects", localProjects);
-		MemcachedUtil.put("remoteProjects", remoteProjects);
-		MemcachedUtil.put("localLocations", localLocations);
-	}
-
-	private void getLocaleLanguage(HttpServletRequest request) {
-
-		logger.info("getLocaleLanguage() start... ");
-
-		// Get locale of browser
-		String locale = request.getLocale().getLanguage();
-		setLocaleToSession(request, locale);
-
-		logger.info("getLocaleLanguage() end... ");
 	}
 
 	@RequestMapping(value = "/changeLocale")
 	public void changeLocale(@RequestParam("locale") String newLocale,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		setLocaleToSession(request, newLocale);
-	}
+	    logger.info("setLocaleToSession() start... ");
+        logger.info("newLocale: " + newLocale);
+        logger.info("SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME: "
+                + request.getSession().getAttribute(
+                        SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME));
 
-	private void setLocaleToSession(HttpServletRequest request, String newLocale) {
-
-		logger.info("setLocaleToSession() start... ");
-		logger.info("newLocale: " + newLocale);
-		logger.info("SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME: "
-				+ request.getSession().getAttribute(
-						SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME));
-
-		Locale locale = null;
-		// Check the locale
-		if ("en".equals(newLocale)) {
-			locale = new Locale("en", "US");
-			request.getSession().setAttribute("localeLanguage", locale);
-		} else {
-			locale = new Locale("zh", "CN");
-			request.getSession().setAttribute("localeLanguage", locale);
-		}
-		logger.info("setLocaleToSession() end... ");
+        Locale locale = null;
+        // Check the locale
+        if ("en".equals(newLocale)) {
+            locale = new Locale("en", "US");
+            request.getSession().setAttribute("localeLanguage", locale);
+        } else {
+            locale = new Locale("zh", "CN");
+            request.getSession().setAttribute("localeLanguage", locale);
+        }
+        logger.info("setLocaleToSession() end... ");
 	}
 
 	@RequestMapping("/getTimeOffset")
 	@ResponseBody
 	public String getTimeOffset(String timeOffset, HttpSession session) {
 
-		logger.info("getTimeOffset() start... ");
 		logger.info("timeOffset: " + timeOffset);
 
 		if (session.getAttribute("timeOffset") == null) {
@@ -201,13 +115,13 @@ public class HomeController extends BaseController {
 
 		logger.info("client browser timeOffset: "
 				+ session.getAttribute("timeOffset"));
-		logger.info("getTimeOffset() end... ");
 		return null;
 	}
 
 	@RequestMapping("/initUserCustomColumn")
 	@ResponseBody
 	public String initUserCustomColumn(HttpSession session) {
+	    
 		UserVo userVo = (UserVo) session.getAttribute("userVo");
 		logger.info("get userVo from session when user login, userVo is null: "
 				+ (null == userVo));
@@ -220,4 +134,13 @@ public class HomeController extends BaseController {
 		return null;
 	}
 
+	@RequestMapping("/authorityError")
+    public String showAuthorityError() {
+        return "/error/authorityError";
+    }
+	
+	@RequestMapping("/error_404")
+    public String showLoginError() {
+        return "/error/error_404";
+    }
 }

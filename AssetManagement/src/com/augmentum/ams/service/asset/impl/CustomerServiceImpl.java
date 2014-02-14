@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.augmentum.ams.dao.asset.CustomerDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
@@ -85,7 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 	@Override
-	public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request) throws DataException {
+	public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request) throws BusinessException {
 		List<Customer> list = new ArrayList<Customer>();
 		for(String code : codes){
 			Customer customer = getCustomerByCode(code);

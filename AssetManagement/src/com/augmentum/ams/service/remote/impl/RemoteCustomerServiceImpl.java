@@ -1,8 +1,10 @@
 package com.augmentum.ams.service.remote.impl;
 
 import java.util.ArrayList;
-import com.augmentum.ams.common.constants.IAPConstans;
 
+import com.augmentum.ams.constants.IAPConstans;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,14 +20,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Project;
 import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.util.RemoteUtil;
-import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.SqlRestrictionsUtil;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.ProjectVo;
@@ -48,8 +49,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public List<Customer> getCustomerCodesByEmployeeId(String employeeId,
-			HttpServletRequest httpServletRequest) throws DataException {
+			HttpServletRequest httpServletRequest) throws BusinessException {
 
+	    logger.info("employeeId: " + employeeId);
+	    
 		if (StringUtils.isEmpty(employeeId)) {
 			String message = "employeeId is null or ''";
 			logger.warn(message);
@@ -63,6 +66,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 				IAPConstans.MANAGER_EMPLOYEEID, employeeId),
 				SqlRestrictionsUtil.eq(IAPConstans.DIRECTOR_EMPLOYEEID,
 						employeeId)));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
@@ -73,13 +79,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
 		// Gain the response and encapsulate them.
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
+		responseData = responseModel.getRequestModel().getDataList();
 		Set<String> customerCodes = new HashSet<String>();
 		List<Customer> customers = new ArrayList<Customer>();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String customerCode = (String) mapData
 					.get(IAPConstans.CUSTOMER_CODE);
@@ -99,8 +102,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public String[] getProjectManagerIdByCustomerCodes(String customerCode,
-			HttpServletRequest httpServletRequest) throws DataException {
+			HttpServletRequest httpServletRequest) throws BusinessException {
 
+	    logger.info("customerCode: " + customerCode);
 		// Prepare the condition for searching.
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
 		searchModel.setColumns(new String[] { IAPConstans.PROJECT_CODE,
@@ -111,6 +115,8 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 						SqlRestrictionsUtil.eq(IAPConstans.PROJECTSTATUS,
 								IAPConstans.INACTIVE)));
 
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
 				DataModelAPI.listProject, IAPConstans.ADMIN_ROLE,
@@ -120,14 +126,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
 		// Gain the response and encapsulate them.
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
-
+		responseData = responseModel.getRequestModel().getDataList();
 		List<Project> projectList = new ArrayList<Project>();
 		StringBuffer pmids = new StringBuffer();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String projectCode = (String) mapData.get(IAPConstans.PROJECT_CODE);
 			String managerId = (String) mapData
@@ -143,7 +145,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public String[] getProjectManagerIdByCustomerName(String customerName,
-			HttpServletRequest httpServletRequest) throws DataException {
+			HttpServletRequest httpServletRequest) throws BusinessException {
+	    
+	    logger.info("customerName: " + customerName);
 		// Prepare the condition for searching.
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
 		searchModel.setColumns(new String[] { IAPConstans.PROJECT_CODE,
@@ -154,6 +158,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 						SqlRestrictionsUtil.eq(IAPConstans.PROJECTSTATUS,
 								IAPConstans.INACTIVE)));
 		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
+		
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
 				DataModelAPI.listProject, IAPConstans.ADMIN_ROLE,
@@ -163,15 +170,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
 		// Gain the response and encapsulate them.
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
-
+		responseData = responseModel.getRequestModel().getDataList();
 		List<Project> projectList = new ArrayList<Project>();
-
 		StringBuffer pmids = new StringBuffer();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String projectCode = (String) mapData.get(IAPConstans.PROJECT_CODE);
 			String managerId = (String) mapData
@@ -187,7 +189,7 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public List<CustomerVo> getAllCustomerFromIAP(
-			HttpServletRequest httpServletRequest) throws DataException {
+			HttpServletRequest httpServletRequest) throws BusinessException {
 
 		// Prepare the condition for searching.
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
@@ -195,6 +197,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 				IAPConstans.CUSTOMER_NAME });
 		searchModel.setFilter(SqlRestrictionsUtil.ne(IAPConstans.PROJECTSTATUS,
 				IAPConstans.INACTIVE));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
@@ -205,14 +210,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
 		// Gain the response and encapsulate them.
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
-
+		responseData = responseModel.getRequestModel().getDataList();
 		List<CustomerVo> customerList = new ArrayList<CustomerVo>();
 		Set<CustomerVo> customerSet = new HashSet<CustomerVo>();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String custCode = (String) mapData.get(IAPConstans.CUSTOMER_CODE);
 			String custName = (String) mapData.get(IAPConstans.CUSTOMER_NAME);
@@ -230,7 +231,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 	@Override
 	public Customer getCustomerByNamefromIAP(
 			HttpServletRequest httpServletRequest, String customerName)
-			throws DataException {
+			throws BusinessException {
+	    
+	    logger.info("customerName: " + customerName);
 		Customer cust = new Customer();
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
 		searchModel.setColumns(new String[] { IAPConstans.ID,
@@ -240,17 +243,18 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 						"customerStatus", IAPConstans.INACTIVE),
 						SqlRestrictionsUtil.eq(IAPConstans.CUSTOMER_NAME,
 								customerName)));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
+        
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
 				DataModelAPI.listCustomer, IAPConstans.ADMIN_ROLE,
 				IAPResponseType.APPLICATION_XML);
 		IAPDataResponseModel responseModel = RemoteUtil.getResponse(
 				searchModel, ContentType.APPLICATION_XML, tmpRequest);
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
+		responseData = responseModel.getRequestModel().getDataList();
+		
 		for (Map<String, Object> mapData : responseData) {
 			cust.setId((String) mapData.get(IAPConstans.ID));
 			cust.setCustomerName((String) mapData
@@ -264,23 +268,26 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 	@Override
 	public String getCustomerIdByNamefromIAP(
 			HttpServletRequest httpServletRequest, String customerName)
-			throws DataException {
+			throws BusinessException {
+	    
+	    logger.info("customerName: " + customerName);
 		String customerId = "";
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
 		searchModel.setColumns(new String[] { IAPConstans.ID });
 		searchModel.setFilter(SqlRestrictionsUtil.ne(
 				IAPConstans.CUSTOMER_STATUS, IAPConstans.INACTIVE));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
+        
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
 				DataModelAPI.listCustomer, IAPConstans.ADMIN_ROLE,
 				IAPResponseType.APPLICATION_XML);
 		IAPDataResponseModel responseModel = RemoteUtil.getResponse(
 				searchModel, ContentType.APPLICATION_XML, tmpRequest);
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
+		responseData = responseModel.getRequestModel().getDataList();
+		
 		for (Map<String, Object> mapData : responseData) {
 			customerId = (String) mapData.get(IAPConstans.ID);
 		}
@@ -290,13 +297,18 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 	@Override
 	public Customer getCustomerByCodefromIAP(
 			HttpServletRequest httpServletRequest, String customerCode)
-			throws DataException {
+			throws BusinessException {
+	    
+	    logger.info("customerCode: " + customerCode);
 		// Prepare the condition for searching.
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
 		searchModel.setColumns(new String[] { IAPConstans.CUSTOMER_CODE,
 				IAPConstans.CUSTOMER_NAME });
 		searchModel.setFilter(SqlRestrictionsUtil.eq(IAPConstans.CUSTOMER_CODE,
 				customerCode));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
@@ -307,12 +319,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
 		// Gain the response and encapsulate them.
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
+		responseData = responseModel.getRequestModel().getDataList();
 		Customer newCustomer = new Customer();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String custCode = (String) mapData.get(IAPConstans.CUSTOMER_CODE);
 			String custName = (String) mapData.get(IAPConstans.CUSTOMER_NAME);
@@ -324,8 +333,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public List<ProjectVo> getProjectByCustomerCode(String customerCode,
-			HttpServletRequest httpServletRequest) throws DataException {
+			HttpServletRequest httpServletRequest) throws BusinessException {
 
+	    logger.info("customerCode: " + customerCode);
 		// Prepare the condition for searching.
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
 		searchModel.setColumns(new String[] { IAPConstans.PROJECT_CODE,
@@ -336,6 +346,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 						IAPConstans.CUSTOMER_CODE, customerCode),
 						SqlRestrictionsUtil.ne(IAPConstans.PROJECTSTATUS,
 								IAPConstans.INACTIVE)));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
@@ -379,7 +392,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public List<CustomerVo> getCustomerForEmployeeByEmployeeId(String userId,
-			HttpServletRequest request) throws DataException {
+			HttpServletRequest request) throws BusinessException {
+	    
+	    logger.info("userId: " + userId);
 
 		IAPDataSearchModel model = new IAPDataSearchModel();
 		model.setColumns(new String[] { IAPConstans.CUSTOMER_CODE,
@@ -390,6 +405,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
               IAPConstans.EMPLOYEE_EMPLOYEE_ID, userId),
                 SqlRestrictionsUtil.ne(IAPConstans.CUSTOMER_STATUS,
                         IAPConstans.INACTIVE)));
+		
+		logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search filter: " + model.getFilter());
+        
 		Request clientRequest = RemoteUtil.getRequest(request,
 				"dataModel_listEmployeeProject", IAPConstans.ADMIN_ROLE,
 				IAPResponseType.APPLICATION_XML);
@@ -397,13 +416,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
 				ContentType.APPLICATION_XML, clientRequest);
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
+		responseData = responseModel.getRequestModel().getDataList();
 		List<CustomerVo> customerList = new ArrayList<CustomerVo>();
 		Set<CustomerVo> customerSet = new HashSet<CustomerVo>();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String custCode = (String) mapData.get(IAPConstans.CUSTOMER_CODE);
 			String custName = (String) mapData.get(IAPConstans.CUSTOMER_NAME);
@@ -421,7 +437,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public List<CustomerVo> getCustomerByEmployeeId(String userId,
-			HttpServletRequest request) throws DataException {
+			HttpServletRequest request) throws BusinessException {
+	    
+	    logger.info("userId: " + userId);
 
 		List<CustomerVo> customerList = new ArrayList<CustomerVo>();
 		Set<CustomerVo> customerSet = new HashSet<CustomerVo>();
@@ -440,6 +458,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 				IAPConstans.PROJECT_DIRECTOR_ID, userVo.getId()),
 				SqlRestrictionsUtil.ne(IAPConstans.CUSTOMER_STATUS,
 						IAPConstans.INACTIVE)));
+		
+		logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search filter: " + model.getFilter());
+        
 		Request clientRequest = RemoteUtil.getRequest(request,
 				DataModelAPI.listProject, IAPConstans.ADMIN_ROLE,
 				IAPResponseType.APPLICATION_XML);
@@ -447,11 +469,8 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
 				ContentType.APPLICATION_XML, clientRequest);
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
+		responseData = responseModel.getRequestModel().getDataList();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String custCode = (String) mapData.get(IAPConstans.CUSTOMER_CODE);
 			String custName = (String) mapData.get(IAPConstans.CUSTOMER_NAME);
@@ -468,7 +487,7 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 
 	@Override
 	public List<CustomerVo> getCustomersFromIAP(
-			HttpServletRequest httpServletRequest) throws DataException {
+			HttpServletRequest httpServletRequest) throws BusinessException {
 
 		// Prepare the condition for searching.
 		IAPDataSearchModel searchModel = new IAPDataSearchModel();
@@ -476,6 +495,9 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 				IAPConstans.CUSTOMER_NAME });
 		searchModel.setFilter(SqlRestrictionsUtil.ne(
 				IAPConstans.CUSTOMER_STATUS, IAPConstans.INACTIVE));
+		
+		logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
 
 		// Communicate with IAP.
 		Request tmpRequest = RemoteUtil.getRequest(httpServletRequest,
@@ -486,14 +508,10 @@ public class RemoteCustomerServiceImpl implements RemoteCustomerService {
 		List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
 
 		// Gain the response and encapsulate them.
-		if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-			responseData = responseModel.getRequestModel().getDataList();
-		} else {
-			logger.info("Cannot get responseData from IAP");
-		}
-
+		responseData = responseModel.getRequestModel().getDataList();
 		List<CustomerVo> customerList = new ArrayList<CustomerVo>();
 		Set<CustomerVo> customerSet = new HashSet<CustomerVo>();
+		
 		for (Map<String, Object> mapData : responseData) {
 			String custCode = (String) mapData.get(IAPConstans.CUSTOMER_CODE);
 			String custName = (String) mapData.get(IAPConstans.CUSTOMER_NAME);

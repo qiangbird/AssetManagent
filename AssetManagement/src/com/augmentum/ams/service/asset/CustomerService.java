@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 
 public interface CustomerService {
@@ -51,7 +51,7 @@ public interface CustomerService {
      */
     public List<Customer> getCustomerByGroup(String groupId);
     
-    public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request)  throws DataException;
+    public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request)  throws BusinessException;
     
     public void updateCustomer(Customer customer);
 

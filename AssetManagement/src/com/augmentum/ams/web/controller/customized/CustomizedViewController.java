@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ParameterException;
 import com.augmentum.ams.model.customized.CustomizedView;
 import com.augmentum.ams.model.customized.CustomizedViewItem;
@@ -39,7 +39,7 @@ public class CustomizedViewController extends BaseController {
 
     @RequestMapping(value = "/newCustomizedView", method = RequestMethod.POST)
     public ModelAndView saveCustomizedViewAndItem(CustomizedViewVo customizedViewVo)
-            throws ParameterException, DataException {
+            throws ParameterException, BusinessException {
 
     	RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
     	ModelAndView modelAndView = new ModelAndView(redirectView);

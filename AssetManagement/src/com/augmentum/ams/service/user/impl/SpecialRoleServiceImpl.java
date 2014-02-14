@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.augmentum.ams.dao.user.SpecialRoleDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.user.SpecialRole;
 import com.augmentum.ams.service.asset.CustomerService;
@@ -111,7 +111,7 @@ public class SpecialRoleServiceImpl implements SpecialRoleService{
     
     @Override
     public JSONArray changeVOToJSON(List<SpecialRoleVo> specialRoleVos,
-            HttpServletRequest request) throws DataException{
+            HttpServletRequest request) throws BusinessException{
         
         List<String> employeeNames = new ArrayList<String>();
         

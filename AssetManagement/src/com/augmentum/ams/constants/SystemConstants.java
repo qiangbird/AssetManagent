@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.augmentum.ams.util;
+package com.augmentum.ams.constants;
 
 /**
  * @author Grylls.Xu
  * @time Oct 16, 2013 7:27:33 PM
  */
-public class Constant {
+public class SystemConstants {
 
     // DateTime pattern
     public static final String TIME_SECOND_PATTERN = "yyyy-MM-dd HH:mm:ss";
@@ -84,4 +84,8 @@ public class Constant {
     
     // set expired time
     public static final int EXPIRED_TIME_SETTING = 30;
+    
+    public static final String SERVER_ERROR_PAGE = "error/error_500";
+    
+    public static final String AUTHORITY_ERROR_PAGE = "error/authorityError";
 }

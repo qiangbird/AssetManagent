@@ -18,12 +18,12 @@ import org.hibernate.transform.Transformers;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.stereotype.Repository;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.base.impl.BaseDaoImpl;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.user.User;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.ExportVo;
 
@@ -161,23 +161,23 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 		Map<String, Integer> result = new HashMap<String, Integer>();
 
 		if (0 == list.size()) {
-			for (int i = 0; i < Constant.ASSET_TYPE_ARRAY.length; i++) {
-				result.put(Constant.ASSET_TYPE_ARRAY[i], 0);
+			for (int i = 0; i < SystemConstants.ASSET_TYPE_ARRAY.length; i++) {
+				result.put(SystemConstants.ASSET_TYPE_ARRAY[i], 0);
 			}
 		} else {
 
-			for (int i = 0; i < Constant.ASSET_TYPE_ARRAY.length; i++) {
+			for (int i = 0; i < SystemConstants.ASSET_TYPE_ARRAY.length; i++) {
 
 				loop: for (int j = 0; j < list.size(); j++) {
 
 					Object[] obj = (Object[]) list.get(j);
-					if (Constant.ASSET_TYPE_ARRAY[i].equals(obj[0])) {
-						result.put(Constant.ASSET_TYPE_ARRAY[i],
+					if (SystemConstants.ASSET_TYPE_ARRAY[i].equals(obj[0])) {
+						result.put(SystemConstants.ASSET_TYPE_ARRAY[i],
 								Integer.valueOf((obj[1]).toString()));
 						break loop;
 					}
 					if (j == list.size() - 1) {
-						result.put(Constant.ASSET_TYPE_ARRAY[i], 0);
+						result.put(SystemConstants.ASSET_TYPE_ARRAY[i], 0);
 					}
 				}
 			}

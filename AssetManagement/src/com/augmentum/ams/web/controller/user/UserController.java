@@ -3,15 +3,11 @@ package com.augmentum.ams.web.controller.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.augmentum.ams.common.constants.IAPConstans;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.constants.IAPConstans;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ParameterException;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.user.UserService;
@@ -43,7 +39,7 @@ public class UserController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/getEmployeeDataSource")
-	public ModelAndView getEmployeeDataSource(HttpServletRequest request) throws DataException {
+	public ModelAndView getEmployeeDataSource(HttpServletRequest request) throws BusinessException {
 		JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployees(request);
 		ModelAndView modelAndView = new ModelAndView(); 
 		modelAndView.addObject("employeeInfo", employeeInfo);
@@ -52,7 +48,7 @@ public class UserController extends BaseController{
 	
 	@RequestMapping (value = "/saveUserRole", method=RequestMethod.POST)
 	@ResponseBody
-	public String saveUserRole(String usersRoleInfo) throws DataException {
+	public String saveUserRole(String usersRoleInfo) throws BusinessException {
 
 		List<UserVo> userVos = new ArrayList<UserVo>();
 		JSONArray usersRoleInfoArray = JSONArray.fromObject(usersRoleInfo);
@@ -72,7 +68,7 @@ public class UserController extends BaseController{
 	}
 	
 	@RequestMapping(value = "/getUserRoleInfo", method=RequestMethod.POST)
-	public ModelAndView getUserInfo() throws DataException {
+	public ModelAndView getUserInfo() throws BusinessException {
 		List<UserVo> userVos = userService.findUserRole();
 		ModelAndView modelAndView = new ModelAndView(); 
 		JSONArray userRoleInfo = new JSONArray();
@@ -106,7 +102,7 @@ public class UserController extends BaseController{
 	}
 	
 	@RequestMapping("getEmployeeAsProject")
-	public ModelAndView getEmployeeAsProject(String projectCode, HttpServletRequest request) throws DataException {
+	public ModelAndView getEmployeeAsProject(String projectCode, HttpServletRequest request) throws BusinessException {
         JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployeeByProjectCode(projectCode,request);
         ModelAndView modelAndView = new ModelAndView(); 
         modelAndView.addObject("employeeInfo", employeeInfo);
@@ -114,7 +110,7 @@ public class UserController extends BaseController{
     }
 
 	@RequestMapping("getEmployeeAsCustomer")
-    public ModelAndView getEmployeeAsCustomer(String customerCode, HttpServletRequest request) throws DataException {
+    public ModelAndView getEmployeeAsCustomer(String customerCode, HttpServletRequest request) throws BusinessException {
         JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployeeByCustomerCode(customerCode,request);
         ModelAndView modelAndView = new ModelAndView(); 
         modelAndView.addObject("employeeInfo", employeeInfo);

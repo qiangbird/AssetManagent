@@ -102,8 +102,8 @@
     </bean>
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"></property>
-        <property name="loginUrl" value="/error/error"></property>
-        <property name="unauthorizedUrl" value="/home/error"></property> 
+        <property name="loginUrl" value="/error_404"></property>
+        <property name="unauthorizedUrl" value="/authorityError"></property> 
         <property name="filters">
             <map>
                 <entry key="authc" value-ref="authorityFilter" />
@@ -115,7 +115,6 @@
                 /css/**=anon
                 /js/**=anon
                 /images/**=anon
-                /**=authc
                 /asset/listAsset/** = authc,perms[Asset:view_all]
                 /asset/assignAsset/** = authc,perms[Asset:assign_asset]
                 /asset/checkInAsset/** = authc,perms[Asset:check_in_asset]
@@ -123,7 +122,7 @@
 				/asset/createAsset/** = authc,perms[Asset:create]
 				/asset/checkInventory/** = authc,perms[Asset:check_inventory]
 				/asset/importAssets/** = authc,perms[Asset:import_asset]
-				/tansferLog/** = authc,perms[TransferLog:*]
+				/transferLog/** = authc,perms[TransferLog:*]
 				/operationLog/** = authc,perms[OperationLog:*]
 				/user/** = authc,perms[User:*]
 				/location/** = authc,perms[Location:*]

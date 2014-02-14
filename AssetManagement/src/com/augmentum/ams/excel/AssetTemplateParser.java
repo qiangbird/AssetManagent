@@ -8,9 +8,9 @@ import java.util.List;
 import jxl.write.WritableSheet;
 import org.apache.log4j.Logger;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.enumeration.AssetTypeEnum;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.ExportVo;
 
@@ -28,7 +28,7 @@ public class AssetTemplateParser extends ExcelParser {
         logger.info("Export excel for asset detail, total: " + collection.size());
 
         writableWorkbook = ExcelBuilder.createWritableWorkbook(getOutputPath("Asset", UTCTimeUtil
-                .formatDateToString(new Date(),Constant.FILTER_TIME_PATTERN)), getWorkbook(ASSET_TEMPLATE));
+                .formatDateToString(new Date(),SystemConstants.FILTER_TIME_PATTERN)), getWorkbook(ASSET_TEMPLATE));
         fillAssetToTemplate((Collection<ExportVo>) collection);
         super.close();
 

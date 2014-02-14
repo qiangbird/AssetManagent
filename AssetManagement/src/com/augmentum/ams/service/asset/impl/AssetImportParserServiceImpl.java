@@ -2,6 +2,8 @@ package com.augmentum.ams.service.asset.impl;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +18,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.excel.AssetTemplateParser;
 import com.augmentum.ams.excel.ExcelBuilder;
 import com.augmentum.ams.excel.ExcelUtil;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
@@ -39,16 +42,20 @@ import com.augmentum.ams.service.asset.AssetImportParserService;
 import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.asset.DeviceService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
+import com.augmentum.ams.service.asset.LocationService;
 import com.augmentum.ams.service.asset.MachineService;
 import com.augmentum.ams.service.asset.MonitorService;
 import com.augmentum.ams.service.asset.OtherAssetsService;
 import com.augmentum.ams.service.asset.ProjectService;
 import com.augmentum.ams.service.asset.SoftwareService;
+import com.augmentum.ams.service.remote.RemoteCustomerService;
+import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.service.remote.RemoteProjectService;
 import com.augmentum.ams.service.user.UserService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.MemcachedUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
+import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.ImportVo;
 
 @Service("assetImportParserService")
@@ -74,15 +81,24 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     private ProjectService projectService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RemoteEmployeeService remoteEmployeeService;
+    @Autowired
+    private RemoteCustomerService remoteCustomerService;
+    @Autowired
+    private RemoteProjectService remoteProjectService;
+    @Autowired
+    private LocationService locationService;
 
     private static Logger logger = Logger.getLogger(AssetImportParserService.class);
 
     @Override
     public ImportVo importAsset(File file, HttpServletRequest request, String flag)
-            throws ExcelException, DataException {
+            throws ExcelException, BusinessException {
 
         ExcelUtil excelUtil = ExcelUtil.getInstance();
         Workbook workbookImport = null;
+        initCacheData(request);
 
         // Get the uploaded file
         try {
@@ -98,7 +114,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
 
         // Create the excel file that contains the illegal assets
         String outPutPath = assetTemplateParser.getOutputPath("Asset",
-                UTCTimeUtil.formatDateToString(new Date(), Constant.FILTER_TIME_PATTERN));
+                UTCTimeUtil.formatDateToString(new Date(), SystemConstants.FILTER_TIME_PATTERN));
         WritableWorkbook writableWorkbook = ExcelBuilder.createWritableWorkbook(outPutPath,
                 workbookTemplate);
 
@@ -117,6 +133,47 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         importVo.setFailureFileName(failureFile.getName());
 
         return importVo;
+    }
+    
+    private void initCacheData(HttpServletRequest request) {
+
+        Map<String, User> localEmployees = userService.findAllUsersFromLocal();
+        // temporary store the customer
+        Map<String, Customer> localCustomers = customerService
+                .findAllCustomersFromLocal();
+        // temporary store the project
+        Map<String, Project> localProjects = projectService
+                .findAllCustomersFromLocal();
+        // temporary store the location
+        Map<String, Location> localLocations = locationService
+                .findAllLocationsFromIAP();
+
+        Map<String, String> remoteEmployees = new HashMap<String, String>();
+        Map<String, String> remoteProjects = new HashMap<String, String>();
+        Map<String, String> remoteCustomers = new HashMap<String, String>();
+
+        try {
+            remoteEmployees = remoteEmployeeService
+                    .findRemoteEmployeesForCache(request);
+            remoteProjects = remoteProjectService
+                    .findAllProjectsFromIAP(request);
+
+            List<CustomerVo> customers = remoteCustomerService
+                    .getAllCustomerFromIAP(request);
+            for (CustomerVo customerVo : customers) {
+                remoteCustomers.put(customerVo.getCustomerName(),
+                        customerVo.getCustomerCode());
+            }
+        } catch (BusinessException e) {
+            logger.error("Get date from IAP failure!", e);
+        }
+        MemcachedUtil.put("remoteEmployees", remoteEmployees);
+        MemcachedUtil.put("localEmployees", localEmployees);
+        MemcachedUtil.put("localCustomers", localCustomers);
+        MemcachedUtil.put("remoteCustomers", remoteCustomers);
+        MemcachedUtil.put("localProjects", localProjects);
+        MemcachedUtil.put("remoteProjects", remoteProjects);
+        MemcachedUtil.put("localLocations", localLocations);
     }
 
     private ImportVo checkSheetTitle(Workbook workbookImport, Workbook workbookTemplate,
@@ -291,7 +348,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                     || "".equals(currentRowCells[22].getContents())) {
                 emptySubtype = Boolean.TRUE;
             }
-            if (Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde() && !emptySubtype
+            if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde() && !emptySubtype
                     && AssetTypeEnum.MACHINE.toString().equals(importVo.getAsset().getType())) {
 
                 machine = machineService.getByAssetId(importVo.getAsset().getId());
@@ -311,7 +368,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 sheet = setErrorMachine(machine, sheet, column, errorRecords);
                 failureRecords++;
             } else {
-                if (Constant.CREATE.equals(flag)) {
+                if (SystemConstants.CREATE.equals(flag)) {
                     Asset newAsset = assetDao.save(importVo.getAsset());
                     machine.setAsset(newAsset);
                     machineService.saveMachine(machine);
@@ -337,7 +394,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             ImportVo importVo = setExcelToAsset(currentRowCells, flag);
             Monitor monitor = new Monitor();
 
-            if (Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde()
+            if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
                     && AssetTypeEnum.MONITOR.name().equals(importVo.getAsset().getType())) {
 
                 monitor = monitorService.getByAssetId(importVo.getAsset().getId());
@@ -354,7 +411,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 sheet = setErrorMonitor(monitor, sheet, column, errorRecords);
                 failureRecords++;
             } else {
-                if (Constant.CREATE.equals(flag)) {
+                if (SystemConstants.CREATE.equals(flag)) {
                     Asset newAsset = assetDao.save(importVo.getAsset());
                     monitor.setAsset(newAsset);
                     monitorService.saveMonitor(monitor);
@@ -381,7 +438,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             Device device = new Device();
             DeviceSubtype deviceSubtype = new DeviceSubtype();
 
-            if (Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde()
+            if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
                     && AssetTypeEnum.DEVICE.name().equals(importVo.getAsset().getType())) {
 
                 device = deviceService.getByAssetId(importVo.getAsset().getId());
@@ -400,7 +457,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 sheet = setErrorDevice(device, sheet, column, errorRecords);
                 failureRecords++;
             } else {
-                if (Constant.CREATE.equals(flag)) {
+                if (SystemConstants.CREATE.equals(flag)) {
                     if(null == deviceSubtype.getSubtypeName() || "".equals(deviceSubtype.getSubtypeName())){
                         device.setDeviceSubtype(null);
                     }else{
@@ -431,7 +488,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             Software software = new Software();
             ImportVo importVo = setExcelToAsset(currentRowCells, flag);
 
-            if (Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde()
+            if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
                     && AssetTypeEnum.SOFTWARE.name().equals(importVo.getAsset().getType())) {
 
                 software = importVo.getAsset().getSoftware();
@@ -461,7 +518,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                         currentRowCells[25].getContents());
                 failureRecords++;
             } else {
-                if (Constant.CREATE.equals(flag)) {
+                if (SystemConstants.CREATE.equals(flag)) {
                     softwareService.saveSoftware(software);
                     importVo.getAsset().setSoftware(software);
                     assetDao.save(importVo.getAsset());
@@ -487,7 +544,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             ImportVo importVo = setExcelToAsset(currentRowCells, flag);
             OtherAssets otherAsset = new OtherAssets();
 
-            if (Constant.UPDATE.equals(flag) && !importVo.isErrorRecorde()
+            if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
                     && AssetTypeEnum.OTHERASSETS.name().equals(importVo.getAsset().getType())) {
 
                 otherAsset = otherAssetsService.getByAssetId(importVo.getAsset().getId());
@@ -503,7 +560,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 sheet = setErrorOtherAsset(otherAsset, sheet, column, errorRecords);
                 failureRecords++;
             } else {
-                if (Constant.CREATE.equals(flag)) {
+                if (SystemConstants.CREATE.equals(flag)) {
                     Asset newAsset = assetDao.save(importVo.getAsset());
                     otherAsset.setAsset(newAsset);
                     otherAssetsService.saveOtherAssets(otherAsset);
@@ -660,7 +717,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
 
     private ImportVo setCommonAssetId(ImportVo importVo, String assetId, String flag) {
 
-        if (Constant.CREATE.equals(flag)) {
+        if (SystemConstants.CREATE.equals(flag)) {
             if (null != assetId && !"".equals(assetId)) {
                 importVo.setErrorRecorde(Boolean.TRUE);
                 importVo.getAsset().setAssetId(assetId);
@@ -841,7 +898,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             importVo.setErrorRecorde(Boolean.TRUE);
         } else {
             if (localLocations.containsKey(assetLocationSite + 
-                    Constant.SPLIT_UNDERLINE + assetLocationRoom)) {
+                    SystemConstants.SPLIT_UNDERLINE + assetLocationRoom)) {
                 
                 location = localLocations.get(assetLocationSite);
             } else {

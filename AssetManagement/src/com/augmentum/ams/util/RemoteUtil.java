@@ -7,7 +7,7 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.apache.log4j.Logger;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.RemoteException;
 import com.augmentum.iaphelper.constans.RequestConstants;
 import com.augmentum.iaphelper.exception.NoAppNameException;
 import com.augmentum.iaphelper.model.IAPDataResponseModel;
@@ -58,7 +58,7 @@ public final class RemoteUtil {
 	 */
 	public static Request getRequest(HttpServletRequest httpServletRequest,
 			String key, String roleName, final String responseType,
-			Object... other) throws DataException {
+			Object... other) {
 
 		// Gain the url with the ticket
 		String ticketUrl = RequestHelper.getTicketURLByKey(httpServletRequest,
@@ -71,7 +71,7 @@ public final class RemoteUtil {
 					responseType);
 
 		} catch (NoAppNameException e) {
-			ExceptionUtil.dataException(e, ErrorCodeUtil.DATA_IAP_0204001);
+		    throw new RemoteException(ErrorCodeUtil.DATA_IAP_0204001, "Error from getting data from IAP!");
 		}
 		return request;
 	}
@@ -94,28 +94,33 @@ public final class RemoteUtil {
 	 * @time Sep 12, 2013 1:09:29 PM
 	 */
 	public static IAPDataResponseModel getResponse(IAPDataSearchModel model,
-			final ContentType requestType, Request request)
-			throws DataException {
+			final ContentType requestType, Request request){
 		String requestBody = IAPDataModelRequestUtil.buildSearchString(
 				requestType, model);
 
 		// If you use JOSN, requestType should be ContentType.APPLICATION_JSON
 		// else ContentType.APPLICATION_XML;
 		String responseBody = null;
-		try {
-			// Get response from IAP
-			responseBody = RequestHelper.sendRequest(request, requestBody,
-					requestType);
-		} catch (ClientProtocolException e) {
-
-			ExceptionUtil.dataException(e, ErrorCodeUtil.DATA_IAP_0204002);
-			logger.info("Error from getting data from IAP!" + e.getMessage(), e);
-
-		} catch (IOException e) {
-
-			ExceptionUtil.dataException(e, ErrorCodeUtil.DATA_IAP_0204003,
-					requestType.toString());
-		}
-		return IAPDataModelResponseUtil.getResponseModel(responseBody);
+        try {
+            // Get response from IAP
+            responseBody = RequestHelper.sendRequest(request, requestBody,
+                    requestType);
+        } catch (ClientProtocolException e) {
+            throw new RemoteException(ErrorCodeUtil.DATA_IAP_0204001, "Error from getting data from IAP!");
+        } catch (IOException e) {
+            throw new RemoteException(ErrorCodeUtil.DATA_IAP_0204001, "Error from getting data from IAP!");
+        }
+        IAPDataResponseModel responseModel = IAPDataModelResponseUtil.getResponseModel(responseBody);
+        
+        if (responseModel.getStatus().getStatusCode() != 200 && 
+                responseModel.getStatus().getStatusCode() != 201) {
+            throw new RemoteException(ErrorCodeUtil.DATA_IAP_0204001, "Error from getting data from IAP!");
+        }
+        
+        if (responseModel.getStatus().getStatusCode() == 201) {
+            logger.info("Get empty set from IAP!");
+        }
+        
+        return responseModel;
 	}
 }

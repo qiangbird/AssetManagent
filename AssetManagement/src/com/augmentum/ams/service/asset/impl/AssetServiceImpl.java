@@ -20,12 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
 import com.augmentum.ams.dao.audit.AuditFileDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.excel.AssetTemplateParser;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
@@ -66,7 +67,6 @@ import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.AssetStatusOperateUtil;
 import com.augmentum.ams.util.AssetUtil;
 import com.augmentum.ams.util.CommonUtil;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FileOperateUtil;
@@ -157,7 +157,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 
 		String assetType = assetVo.getType().trim();
 
-		if (operation.equals(Constant.SAVE)) {
+		if (operation.equals(SystemConstants.SAVE)) {
 			// TODO need save operation log
 			if (AssetTypeEnum.SOFTWARE.toString().equals(assetType)) {
 				softwareService.saveSoftware(assetVo.getSoftware());
@@ -463,7 +463,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						request);
 				logger.info("judge IAP userVo is null when it assign assets, userVo is null: "
 						+ (null == userVo));
-			} catch (DataException e) {
+			} catch (BusinessException e) {
 				logger.error("get userVo from IAP failed when IT assign asset",
 						e);
 				// TODO throw IAP exception
@@ -483,7 +483,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 			}
 		}
 
-		String[] ids = FormatUtil.splitString(assetIds, Constant.SPLIT_COMMA);
+		String[] ids = FormatUtil.splitString(assetIds, SystemConstants.SPLIT_COMMA);
 		Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 		Date date = UTCTimeUtil.localDateToUTC();
 
@@ -545,7 +545,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		} else {
 
 			String[] assetIdArr = FormatUtil.splitString(assetIds,
-					Constant.SPLIT_COMMA);
+					SystemConstants.SPLIT_COMMA);
 			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 			Date date = UTCTimeUtil.localDateToUTC();
 
@@ -595,7 +595,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		} else {
 
 			String[] assetIdArr = FormatUtil.splitString(assetIds,
-					Constant.SPLIT_COMMA);
+					SystemConstants.SPLIT_COMMA);
 			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 
 			for (String assetId : assetIdArr) {
@@ -629,7 +629,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		} else {
 
 			String[] assetIdArr = FormatUtil.splitString(assetIds,
-					Constant.SPLIT_COMMA);
+					SystemConstants.SPLIT_COMMA);
 			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
 
 			for (String assetId : assetIdArr) {
@@ -694,7 +694,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 		} else {
 
 			String[] assetIdArr = FormatUtil.splitString(assetIds,
-					Constant.SPLIT_COMMA);
+					SystemConstants.SPLIT_COMMA);
 
 			List<String> fileNameList = auditFileDao.getAuditFilesName();
 			logger.info("get auditFile name list when add assets to audit for search result, auditFile name list size: "
@@ -754,7 +754,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 			SQLException {
 
 		String[] assetIdArr = FormatUtil.splitString(assetIds,
-				Constant.SPLIT_COMMA);
+				SystemConstants.SPLIT_COMMA);
 		List<ExportVo> exportVos = assetDao
 				.findAssetsByIdsForExport(assetIdArr);
 
@@ -853,7 +853,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 
 			obj.put("warrantyTime", UTCTimeUtil.utcToLocalTime(
 					asset.getWarrantyTime(), clientTimeOffset,
-					Constant.DATE_DAY_PATTERN));
+					SystemConstants.DATE_DAY_PATTERN));
 			jsonArray.add(obj);
 		}
 		return jsonArray;
@@ -881,7 +881,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 
 			obj.put("licenseExpiredTime", UTCTimeUtil.utcToLocalTime(asset
 					.getSoftware().getSoftwareExpiredTime(), clientTimeOffset,
-					Constant.DATE_DAY_PATTERN));
+					SystemConstants.DATE_DAY_PATTERN));
 			jsonArray.add(obj);
 		}
 		return jsonArray;

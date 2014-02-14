@@ -4,7 +4,7 @@ $(document).ready(function(){
 	    $.ajax({
 	       type : 'GET',
 	       contentType : 'application/json',
-	       url : 'base/getCustomerInfo',
+	       url : 'customer/getCustomerInfo',
 	       dataType : 'json',
 	       success : function(data) {
 	    	   console.log(data);

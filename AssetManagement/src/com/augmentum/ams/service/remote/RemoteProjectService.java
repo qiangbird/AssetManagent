@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.web.vo.asset.ProjectVo;
 
 public interface RemoteProjectService {
@@ -17,10 +17,10 @@ public interface RemoteProjectService {
      * @param projectCode
      * @param httpServletRequest
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     public String getManagerIdByProjectCode(String projectCode,
-            HttpServletRequest httpServletRequest) throws DataException;
+            HttpServletRequest httpServletRequest) throws BusinessException;
 
     /**
      * 
@@ -30,10 +30,10 @@ public interface RemoteProjectService {
      * @param employeeId
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     public List<ProjectVo> getProjectByEmployeeId(String employeeId, HttpServletRequest request)
-            throws DataException;
+            throws BusinessException;
     /**
      * 
      * @description TODO
@@ -42,15 +42,15 @@ public interface RemoteProjectService {
      * @param projectCode
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
-    public ProjectVo getProjectByProjectCode(String projectCode, HttpServletRequest request) throws DataException;
+    public ProjectVo getProjectByProjectCode(String projectCode, HttpServletRequest request) throws BusinessException;
 
     /**
      * @author John.Li
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
-    Map<String, String> findAllProjectsFromIAP(HttpServletRequest request) throws DataException;
+    Map<String, String> findAllProjectsFromIAP(HttpServletRequest request) throws BusinessException;
 }

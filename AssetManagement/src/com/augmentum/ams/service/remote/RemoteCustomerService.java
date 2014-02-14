@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.ProjectVo;
@@ -18,10 +18,10 @@ public interface RemoteCustomerService {
      * @param employeeId
      * @param httpServletRequest
      * @return List<Customer>
-     * @throws DataException
+     * @throws BusinessException
      */
     List<Customer> getCustomerCodesByEmployeeId(String employeeId,
-            HttpServletRequest httpServletRequest) throws DataException;
+            HttpServletRequest httpServletRequest) throws BusinessException;
 
     /**
      * 
@@ -31,10 +31,10 @@ public interface RemoteCustomerService {
      * @param customerCodes
      * @param httpServletRequest
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     String[] getProjectManagerIdByCustomerCodes(String customerCodes,
-            HttpServletRequest httpServletRequest) throws DataException;
+            HttpServletRequest httpServletRequest) throws BusinessException;
 
     /**
      * 
@@ -44,10 +44,10 @@ public interface RemoteCustomerService {
      * @param customerName
      * @param httpServletRequest
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     String[] getProjectManagerIdByCustomerName(String customerName,
-            HttpServletRequest httpServletRequest) throws DataException;
+            HttpServletRequest httpServletRequest) throws BusinessException;
 
     /**
      * 
@@ -56,10 +56,10 @@ public interface RemoteCustomerService {
      * @time Dec 11, 2013 11:06:15 AM
      * @param httpServletRequest
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     List<CustomerVo> getAllCustomerFromIAP(HttpServletRequest httpServletRequest)
-            throws DataException;
+            throws BusinessException;
 
     /**
      * 
@@ -69,10 +69,10 @@ public interface RemoteCustomerService {
      * @param httpServletRequest
      * @param customerName
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     Customer getCustomerByNamefromIAP(HttpServletRequest httpServletRequest, String customerName)
-            throws DataException;
+            throws BusinessException;
 
     /**
      * 
@@ -82,10 +82,10 @@ public interface RemoteCustomerService {
      * @param httpServletRequest
      * @param customerName
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     Customer getCustomerByCodefromIAP(HttpServletRequest httpServletRequest, String customerCode)
-            throws DataException;
+            throws BusinessException;
 
     /**
      * 
@@ -95,10 +95,10 @@ public interface RemoteCustomerService {
      * @param httpServletRequest
      * @param customerName
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     String getCustomerIdByNamefromIAP(HttpServletRequest httpServletRequest, String customerName)
-            throws DataException;
+            throws BusinessException;
 
     /**
      * 
@@ -108,10 +108,10 @@ public interface RemoteCustomerService {
      * @param customerCode
      * @param httpServletRequest
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     List<ProjectVo> getProjectByCustomerCode(String customerCode,
-            HttpServletRequest httpServletRequest) throws DataException;
+            HttpServletRequest httpServletRequest) throws BusinessException;
 
     /**
      * 
@@ -121,14 +121,14 @@ public interface RemoteCustomerService {
      * @param userId
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
     List<CustomerVo> getCustomerByEmployeeId(String userId, HttpServletRequest request)
-            throws DataException;
+            throws BusinessException;
     
     List<CustomerVo> getCustomerForEmployeeByEmployeeId(String userId, HttpServletRequest request)
-            throws DataException;
+            throws BusinessException;
     
     List<CustomerVo> getCustomersFromIAP(HttpServletRequest httpServletRequest)
-            throws DataException;
+            throws BusinessException;
 }

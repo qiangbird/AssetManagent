@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.service.asset.LocationService;
 import com.augmentum.ams.service.remote.RemoteSiteService;
@@ -40,7 +40,7 @@ public class LocationController extends BaseController {
     RemoteSiteService remoteSiteService;
 
     @RequestMapping("/listLocation")
-    public ModelAndView listLocation(HttpServletRequest request) throws DataException {
+    public ModelAndView listLocation(HttpServletRequest request) throws BusinessException {
 
         logger.info("listLocation method start!");
 
@@ -151,7 +151,7 @@ public class LocationController extends BaseController {
         List<SiteVo> siteList = null;
         try {
             siteList = remoteSiteService.getSiteFromIAP(request);
-        } catch (DataException e) {
+        } catch (BusinessException e) {
             logger.error("Cannot get site information from IAP", e);
         }
         modelAndView.addObject("siteList", siteList);

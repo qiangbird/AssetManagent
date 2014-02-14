@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
@@ -68,7 +68,7 @@ public class PropertyTemplateServiceTest{
 	}
 	
 	@Test
-	public void savePropertyTemplateTest() throws DataException, ParseException{
+	public void savePropertyTemplateTest() throws BusinessException, ParseException{
 		
     	User user = userService.getUserByUserId("T04301");
     	Customer customer = customerService.getCustomerByCode("00100");

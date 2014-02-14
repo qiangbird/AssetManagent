@@ -15,8 +15,8 @@ import jxl.write.WritableWorkbook;
 
 import org.apache.log4j.Logger;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.ExcelException;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.UTCTimeUtil;
 
 public abstract class ExcelParser {
@@ -66,12 +66,12 @@ public abstract class ExcelParser {
     }
 
     public String getTemplatePath(String templateName) {
-        templatePath =  getBasePath() + Constant.CONFIG_TEMPLATES_PATH + templateName;
+        templatePath =  getBasePath() + SystemConstants.CONFIG_TEMPLATES_PATH + templateName;
         return templatePath;
     }
 
     public String getOutputPath(String... outputName) {
-        StringBuilder builder = new StringBuilder(getBasePath() + Constant.CONFIG_TEMPLATES_PATH);
+        StringBuilder builder = new StringBuilder(getBasePath() + SystemConstants.CONFIG_TEMPLATES_PATH);
 
         for (int i = 0, n = outputName.length; i < n; i++) {
             builder.append(outputName[i]);

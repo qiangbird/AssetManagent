@@ -13,7 +13,7 @@ $(document).ready(function() {
 	};
 	jQuery.ajax({
 		contentType : 'application/json',  
-        url: "base/getEmployeeDataSource",
+        url: "user/getEmployeeDataSource",
         data: null,
         success: function(data){
         	params.dataSource= data.employeeInfo;

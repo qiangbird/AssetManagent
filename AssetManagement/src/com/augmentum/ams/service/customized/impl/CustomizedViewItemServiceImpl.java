@@ -15,6 +15,7 @@ import org.apache.lucene.search.WildcardQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.customized.CustomizedViewItemDao;
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.customized.CustomizedView;
@@ -22,7 +23,6 @@ import com.augmentum.ams.model.customized.CustomizedViewItem;
 import com.augmentum.ams.model.enumeration.ColumnTypeEnum;
 import com.augmentum.ams.service.customized.CustomizedViewItemService;
 import com.augmentum.ams.service.customized.CustomizedViewService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.customized.CustomizedViewVo;
 
@@ -31,14 +31,14 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
 
     private Logger logger = Logger.getLogger(CustomizedViewItemServiceImpl.class);
 
-    private static String rangSearchGroup[] = { Constant.LESS_THAN, Constant.LESS_OR_EQUAL,
-            Constant.GREATER_THAN, Constant.GREATER_OR_EQUAL };
+    private static String rangSearchGroup[] = { SystemConstants.LESS_THAN, SystemConstants.LESS_OR_EQUAL,
+            SystemConstants.GREATER_THAN, SystemConstants.GREATER_OR_EQUAL };
 
-    private static String termSearchGroup[] = { Constant.IS, Constant.IS_NOT, Constant.TRUE,
-            Constant.FALSE };
+    private static String termSearchGroup[] = { SystemConstants.IS, SystemConstants.IS_NOT, SystemConstants.TRUE,
+            SystemConstants.FALSE };
 
-    private static String containsSearchGroup[] = { Constant.CONTAINS, Constant.NOT_CONTAINS,
-            Constant.START_WITH };
+    private static String containsSearchGroup[] = { SystemConstants.CONTAINS, SystemConstants.NOT_CONTAINS,
+            SystemConstants.START_WITH };
 
     @Autowired
     private CustomizedViewItemDao customizedViewItemDao;
@@ -206,12 +206,12 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
                 .getCustomizedViewById(customizedViewId);
 
         // operator is 'and'
-        if (Constant.OPERATOR_AND.equals(customizedView.getOperators())) {
+        if (SystemConstants.OPERATOR_AND.equals(customizedView.getOperators())) {
             booleanQuery = searchWithOperator(customizedViewItem, Occur.MUST);
             return booleanQuery;
         }
         // operator is 'or'
-        if (Constant.OPERATOR_OR.equals(customizedView.getOperators())) {
+        if (SystemConstants.OPERATOR_OR.equals(customizedView.getOperators())) {
             booleanQuery = searchWithOperator(customizedViewItem, Occur.SHOULD);
             return booleanQuery;
         }
@@ -275,7 +275,7 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     private void generateTermQuery(BooleanQuery booleanQuery, String column,
             String searchCondition, String value, Occur occur) {
 
-        if (Constant.IS_NOT.equals(searchCondition)) {
+        if (SystemConstants.IS_NOT.equals(searchCondition)) {
             BooleanQuery booleanQueryIn = new BooleanQuery();
             booleanQueryIn.add(new WildcardQuery(new Term(column, "*")), Occur.MUST);
             booleanQueryIn.add(new TermQuery(new Term(column, value)), Occur.MUST_NOT);
@@ -288,11 +288,11 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     private void generateWildcardQuery(BooleanQuery booleanQuery, String column,
             String searchCondition, String value, Occur occur) {
 
-        if (Constant.CONTAINS.equals(searchCondition)) {
+        if (SystemConstants.CONTAINS.equals(searchCondition)) {
             booleanQuery.add(new WildcardQuery(new Term(column, "*" + value + "*")), occur);
             return;
         }
-        if (Constant.NOT_CONTAINS.equals(searchCondition)) {
+        if (SystemConstants.NOT_CONTAINS.equals(searchCondition)) {
             BooleanQuery booleanQueryIn = new BooleanQuery();
             booleanQueryIn.add(new WildcardQuery(new Term(column, "*")), Occur.MUST);
             booleanQueryIn.add(new WildcardQuery(new Term(column, "*" + value + "*")),
@@ -300,7 +300,7 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             booleanQuery.add(booleanQueryIn, occur);
             return;
         }
-        if (Constant.START_WITH.equals(searchCondition)) {
+        if (SystemConstants.START_WITH.equals(searchCondition)) {
             booleanQuery.add(new WildcardQuery(new Term(column, value + "*")), occur);
             return;
         }
@@ -311,19 +311,19 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
 
         TermRangeQuery termRangeQuery = null;
 
-        if (Constant.LESS_THAN.equals(searchCondition)) {
+        if (SystemConstants.LESS_THAN.equals(searchCondition)) {
             termRangeQuery = new TermRangeQuery(column, null, realValue, false, false);
             return termRangeQuery;
         }
-        if (Constant.LESS_OR_EQUAL.equals(searchCondition)) {
+        if (SystemConstants.LESS_OR_EQUAL.equals(searchCondition)) {
             termRangeQuery = new TermRangeQuery(column, null, realValue, false, true);
             return termRangeQuery;
         }
-        if (Constant.GREATER_THAN.equals(searchCondition)) {
+        if (SystemConstants.GREATER_THAN.equals(searchCondition)) {
             termRangeQuery = new TermRangeQuery(column, realValue, null, false, false);
             return termRangeQuery;
         }
-        if (Constant.GREATER_OR_EQUAL.equals(searchCondition)) {
+        if (SystemConstants.GREATER_OR_EQUAL.equals(searchCondition)) {
             termRangeQuery = new TermRangeQuery(column, realValue, null, true, true);
             return termRangeQuery;
         }

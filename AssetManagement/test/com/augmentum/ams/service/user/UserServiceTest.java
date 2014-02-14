@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.user.UserDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.BaseCaseTest;
@@ -22,7 +22,7 @@ public class UserServiceTest extends BaseCaseTest{
     private BaseHibernateDao baseHibernateDao;
     
     @Test
-    public void testFindUserRole() throws DataException {
+    public void testFindUserRole() throws BusinessException {
         userService.findUserRole();
     }
     

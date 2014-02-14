@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 
 /**
  * @author Grylls.Xu
@@ -37,7 +37,7 @@ public class InitRoleAuthority {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testInitRoleAuthorities() throws DocumentException, DataException {
+    public void testInitRoleAuthorities() throws DocumentException, BusinessException {
         SAXReader saxReader = new SAXReader();
         Document document = null;
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(AUTHORITY);

@@ -10,7 +10,7 @@ package com.augmentum.ams.exception;
  * @author Rudy.Gao
  * @time Sep 27, 2013 2:54:50 PM
  */
-public class BaseException extends Exception {
+public class BaseException extends RuntimeException {
 
 	private static final long serialVersionUID = -4368304810297242836L;
 

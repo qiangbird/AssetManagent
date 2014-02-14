@@ -11,7 +11,7 @@
 #checkingInventoryNote .status {
     height: 24px;
     width: 410px;
-    margin: 9px 0 0 0;
+    margin: 15px 0 0 -42;
     list-style: none;
 }
 #checkingInventoryNote .status li {

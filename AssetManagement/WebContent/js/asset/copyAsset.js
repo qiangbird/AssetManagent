@@ -51,7 +51,7 @@
       $.ajax({
 	   type : 'GET',
 	   contentType : 'application/json',
-	   url : 'base/getCustomerInfo',
+	   url : 'customer/getCustomerInfo',
 	   dataType : 'json',
 	   success : function(data) {
 	      console.log(data.customerList);
@@ -187,7 +187,7 @@
 		      $.ajax({
 			   type : 'GET',
 			   contentType : 'application/json',
-			   url : 'base/getCustomerInfo',
+			   url : 'customer/getCustomerInfo',
 			   dataType : 'json',
 			   success : function(data) {
 			      console.log(data.customerList);

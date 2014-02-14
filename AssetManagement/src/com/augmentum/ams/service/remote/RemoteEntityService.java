@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 
 public interface RemoteEntityService {
     /**
@@ -14,7 +14,7 @@ public interface RemoteEntityService {
      * @time Dec 11, 2013 11:05:36 AM
      * @param request
      * @return
-     * @throws DataException
+     * @throws BusinessException
      */
-    List<String> getAllEntityFromIAP(HttpServletRequest request) throws DataException;
+    List<String> getAllEntityFromIAP(HttpServletRequest request) throws BusinessException;
 }

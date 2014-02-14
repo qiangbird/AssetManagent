@@ -3,7 +3,7 @@ package com.augmentum.ams.service.user;
 import java.util.List;
 import java.util.Map;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.web.vo.user.UserVo;
 
@@ -19,10 +19,10 @@ public interface UserService {
      * @author Rudy.Gao
      * @time Sep 16, 2013 1:41:43 PM
      * @param userVos
-     * @throws DataException
+     * @throws BusinessException
      */
 
-    void saveUserRole(List<UserVo> userVos) throws DataException;
+    void saveUserRole(List<UserVo> userVos) throws BusinessException;
 
     /**
      * @description find all users have IT role or System_Admin role, then
@@ -30,9 +30,9 @@ public interface UserService {
      * @author Rudy.Gao
      * @time Sep 16, 2013 6:28:02 PM
      * @return List<UserVo>
-     * @throws DataException
+     * @throws BusinessException
      */
-    List<UserVo> findUserRole() throws DataException;
+    List<UserVo> findUserRole() throws BusinessException;
 
     /**
      * @description get user info by UserId, notice that it will return null if

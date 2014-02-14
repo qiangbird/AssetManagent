@@ -26,13 +26,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.operationLog.OperationLogDao;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.service.asset.impl.TransferLogServiceImpl;
 import com.augmentum.ams.service.operationLog.OperationLogService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
@@ -168,7 +168,7 @@ public class OperationLogServiceImpl implements OperationLogService{
 	
 	private String[] getSearchFieldNames(String searchConditions) {
 		String[] fieldNames = FormatUtil.splitString(searchConditions,
-				Constant.SPLIT_COMMA);
+				SystemConstants.SPLIT_COMMA);
 
 		if (null == fieldNames || 0 == fieldNames.length) {
 			fieldNames = SearchFieldHelper.getOperationLogFields();
@@ -201,11 +201,11 @@ public class OperationLogServiceImpl implements OperationLogService{
         boolean isNullToTime = (null == toTime || "".equals(toTime));
 
         if (isNullFromTime && !isNullToTime) {
-            fromTime = Constant.SEARCH_MIN_DATE;
+            fromTime = SystemConstants.SEARCH_MIN_DATE;
             toTime = UTCTimeUtil.formatFilterTime(toTime);
             return new TermRangeQuery("updatedTime", fromTime, toTime, true, true);
         } else if (isNullToTime && !isNullFromTime) {
-            toTime = Constant.SEARCH_MAX_DATE;
+            toTime = SystemConstants.SEARCH_MAX_DATE;
             fromTime = UTCTimeUtil.formatFilterTime(fromTime);
             return new TermRangeQuery("updatedTime", fromTime, toTime, true, true);
         } else if (!isNullFromTime && !isNullToTime) {

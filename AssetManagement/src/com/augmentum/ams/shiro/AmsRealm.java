@@ -24,7 +24,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.user.Authority;
 import com.augmentum.ams.model.user.Role;
 import com.augmentum.ams.model.user.User;
@@ -116,7 +116,7 @@ public class AmsRealm extends AuthorizingRealm {
 		UserVo userVo = null;
 		try {
 			userVo = remoteEmployeeService.getLoginUser(request);
-		} catch (DataException e1) {
+		} catch (BusinessException e1) {
 			e1.printStackTrace();
 		}
 

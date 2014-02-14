@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.remote.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,16 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.http.HttpStatus;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.augmentum.ams.common.constants.IAPConstans;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.constants.IAPConstans;
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.RemoteUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.SqlRestrictionsUtil;
@@ -46,7 +45,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
      * (javax.servlet.http.HttpServletRequest)
      */
     @Override
-    public JSONArray findRemoteEmployees(HttpServletRequest request) throws DataException {
+    public JSONArray findRemoteEmployees(HttpServletRequest request)  {
 
         Request clientRequest = RemoteUtil.getRequest(request, DataModelAPI.listEmployee,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_JSON);
@@ -61,10 +60,12 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         Sorter sorter = new Sorter(IAPConstans.EMPLOYEE_NAME, SorterType.ASC);
         sorters.add(sorter);
         model.setSorters(sorters);
+        
+        logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search sorters: " + model.getSorters());
 
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
                 ContentType.APPLICATION_XML, clientRequest);
-        logger.info("get employeeName and employeeEmployeeId from IAP");
 
         List<Map<String, Object>> employeeeList = responseModel.getRequestModel().getDataList();
         JSONArray array = new JSONArray();
@@ -89,7 +90,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
     }
     
     @Override
-    public Map<String, String> findRemoteEmployeesForCache(HttpServletRequest request) throws DataException {
+    public Map<String, String> findRemoteEmployeesForCache(HttpServletRequest request)  {
 
         Request clientRequest = RemoteUtil.getRequest(request, DataModelAPI.listEmployee,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_JSON);
@@ -104,6 +105,9 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         Sorter sorter = new Sorter(IAPConstans.EMPLOYEE_NAME, SorterType.ASC);
         sorters.add(sorter);
         model.setSorters(sorters);
+        
+        logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search sorters: " + model.getSorters());
 
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
                 ContentType.APPLICATION_XML, clientRequest);
@@ -131,7 +135,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
      * .servlet.http.HttpServletRequest)
      */
     @Override
-    public UserVo getLoginUser(HttpServletRequest request) throws DataException {
+    public UserVo getLoginUser(HttpServletRequest request)  {
 
         String responseBody = null;
         String ticketURL = RequestHelper.getTicketURLByKey(request, DataModelAPI.getEmployeeInfo);
@@ -142,8 +146,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
                     IAPConstans.ADMIN_ROLE, null);
             responseBody = RequestHelper.sendRequest(clientRequest, null, null);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Error from getting data from IAP!"+ e.getMessage(), e);
         }
 
         List<Map<String, Object>> users = IAPDataModelResponseUtil.getResponseModel(responseBody)
@@ -169,26 +172,29 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
     }
 
     @Override
-    public UserVo getRemoteUserById(String userId, HttpServletRequest request) throws DataException {
+    public UserVo getRemoteUserById(String userId, HttpServletRequest request)  {
 
+        logger.info("userId: " + userId);
+        
         IAPDataSearchModel model = new IAPDataSearchModel();
         model.setColumns(new String[] { IAPConstans.ID,IAPConstans.EMPLOYEE_NAME, IAPConstans.POSITION_NAME_EN,
                 IAPConstans.POSITION_NAME_CN, IAPConstans.DEPARTMENT_NAME_EN,
                 IAPConstans.DEPARTMENT_NAME_CN, IAPConstans.MANAGER_NAME,
                 IAPConstans.EMPLOYEE_LEVEL });
         model.setFilter(SqlRestrictionsUtil.eq(IAPConstans.EMPLOYEE_EMPLOYEE_ID, userId));
+        
+        logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search filter: " + model.getFilter());
+        
         Request clientRequest = RemoteUtil.getRequest(request, DataModelAPI.listEmployee,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_XML);
 
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
                 ContentType.APPLICATION_XML, clientRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-            responseData = responseModel.getRequestModel().getDataList();
-        } else {
-            logger.info(responseModel.getStatus().getMessage());
-        }
+        responseData = responseModel.getRequestModel().getDataList();
         UserVo user = new UserVo();
+        
         for (Map<String, Object> mapData : responseData) {
         	user.setId((String) mapData.get(IAPConstans.ID));
             user.setEmployeeId(userId);
@@ -206,27 +212,29 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
 
     @Override
     public List<UserVo> getRemoteUserByName(List<String> userNames, HttpServletRequest request)
-            throws DataException {
+             {
 
+        logger.info("userNames: " + userNames.toString());
+        
         IAPDataSearchModel searchModel = new IAPDataSearchModel();
         searchModel.setColumns(new String[] { IAPConstans.EMPLOYEE_NAME,
                 IAPConstans.EMPLOYEE_EMPLOYEE_ID, IAPConstans.POSITION_NAME_EN,
                 IAPConstans.POSITION_NAME_CN, IAPConstans.DEPARTMENT_NAME_EN,
                 IAPConstans.DEPARTMENT_NAME_CN, IAPConstans.MANAGER_NAME });
         searchModel.setFilter(SqlRestrictionsUtil.in(IAPConstans.EMPLOYEE_NAME, userNames));
+        
+        logger.info("Search columns: " + Arrays.toString(searchModel.getColumns()));
+        logger.info("Search filter: " + searchModel.getFilter());
+        
         Request tmpRequest = RemoteUtil.getRequest(request, DataModelAPI.listEmployee,
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_XML);
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(searchModel,
                 ContentType.APPLICATION_XML, tmpRequest);
         List<Map<String, Object>> responseData = new ArrayList<Map<String, Object>>();
-        if (responseModel.getStatus().getStatusCode() == HttpStatus.SC_OK) {
-            responseData = responseModel.getRequestModel().getDataList();
-        } else {
-            logger.info(responseModel.getStatus().getMessage());
-        }
+        responseData = responseModel.getRequestModel().getDataList();
         List<UserVo> users = new ArrayList<UserVo>();
+        
         for (Map<String, Object> mapData : responseData) {
-            
             UserVo user = new UserVo();
             
             user.setEmployeeId((String) mapData.get(IAPConstans.EMPLOYEE_EMPLOYEE_ID));
@@ -244,7 +252,10 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
 
     @Override
     public JSONArray findRemoteEmployeeByCustomerCode(String customerCode,
-            HttpServletRequest request) throws DataException {
+            HttpServletRequest request)  {
+        
+        logger.info("customerCode: " + customerCode);
+        
         Request clientRequest = RemoteUtil.getRequest(request, "dataModel_listEmployeeProject",
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_JSON);
 
@@ -252,8 +263,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
 
         // model.setColumns(new String[] { "employeeName", "employeeEmployeeId"
         // });
-        model
-                .setColumns(new String[] { IAPConstans.EMPLOYEE_NAME,
+        model.setColumns(new String[] { IAPConstans.EMPLOYEE_NAME,
                         IAPConstans.EMPLOYEE_EMPLOYEE_ID });
         model.setFilter(SqlRestrictionsUtil.eq(IAPConstans.PROJECT_CUSTOMER_CODE, customerCode));
         List<Sorter> sorters = new ArrayList<Sorter>();
@@ -262,6 +272,10 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         Sorter sorter = new Sorter(IAPConstans.EMPLOYEE_NAME, SorterType.ASC);
         sorters.add(sorter);
         model.setSorters(sorters);
+        
+        logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search filter: " + model.getFilter());
+        logger.info("Search sorters: " + model.getSorters());
 
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
                 ContentType.APPLICATION_XML, clientRequest);
@@ -281,7 +295,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
             String employeeManager = (String) employeeeList.get(i).get(
                     IAPConstans.MANAGER_NAME);*/
             map.put("label", employeeName);
-            map.put("value", employeeName + Constant.SPLIT_SHARP + employeeEmployeeId );
+            map.put("value", employeeName + SystemConstants.SPLIT_SHARP + employeeEmployeeId );
             map.put("employeeCode", employeeEmployeeId);
             array.add(map);
         }
@@ -290,7 +304,10 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
 
     @Override
     public JSONArray findRemoteEmployeeByProjectCode(String projectCode, HttpServletRequest request)
-            throws DataException {
+             {
+        
+        logger.info("projectCode: " + projectCode);
+        
         Request clientRequest = RemoteUtil.getRequest(request, "dataModel_listEmployeeProject",
                 IAPConstans.ADMIN_ROLE, IAPResponseType.APPLICATION_JSON);
 
@@ -306,6 +323,10 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         Sorter sorter = new Sorter(IAPConstans.EMPLOYEE_NAME, SorterType.ASC);
         sorters.add(sorter);
         model.setSorters(sorters);
+        
+        logger.info("Search columns: " + Arrays.toString(model.getColumns()));
+        logger.info("Search filter: " + model.getFilter());
+        logger.info("Search sorters: " + model.getSorters());
 
         IAPDataResponseModel responseModel = RemoteUtil.getResponse(model,
                 ContentType.APPLICATION_XML, clientRequest);

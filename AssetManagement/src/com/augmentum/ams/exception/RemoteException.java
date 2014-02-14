@@ -14,23 +14,23 @@ package com.augmentum.ams.exception;
  * @version 1.0
  *
  */
-public class AuditHandleException extends BaseException {
+public class RemoteException extends BaseException {
 
     private static final long serialVersionUID = -4666238025902144329L;
 
-    public AuditHandleException(Exception e, String errorcode) {
+    public RemoteException(Exception e, String errorcode) {
         super(e, errorcode);
     }
     
-    public AuditHandleException(String errorcode) {
+    public RemoteException(String errorcode) {
         super(errorcode);
     }
     
-    public AuditHandleException(String errorCode, String errorMessage) {
+    public RemoteException(String errorCode, String errorMessage) {
         super(errorCode, errorMessage);
     }
     
-    public AuditHandleException(Exception e, String errorCode, String errorMessage) {
+    public RemoteException(Exception e, String errorCode, String errorMessage) {
         super(e,errorCode, errorMessage);
     }
 

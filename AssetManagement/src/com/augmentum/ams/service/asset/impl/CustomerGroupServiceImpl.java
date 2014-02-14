@@ -25,13 +25,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.CustomerGroupDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.service.asset.CustomerGroupService;
 import com.augmentum.ams.service.asset.CustomerService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.web.vo.system.Page;
@@ -204,7 +204,7 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
     }
 
     private String[] getSearchFieldNames(String searchConditions) {
-        String[] fieldNames = FormatUtil.splitString(searchConditions, Constant.SPLIT_COMMA);
+        String[] fieldNames = FormatUtil.splitString(searchConditions, SystemConstants.SPLIT_COMMA);
 
         if (null == fieldNames || 0 == fieldNames.length) {
             fieldNames = SearchFieldHelper.getCustomerGroupFields();

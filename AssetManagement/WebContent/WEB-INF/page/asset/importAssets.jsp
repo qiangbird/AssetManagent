@@ -80,5 +80,6 @@
     <jsp:include page="/WEB-INF/page/common/footer.jsp" />
     <script type="text/javascript" src="<%=basePath%>js/common/jquery.form.js"></script>
     <script type="text/javascript" src="<%=basePath%>js/asset/importAssets.js"></script>
+    <script type="text/javascript" src="<%=basePath%>js/audit/inventoryCommonOperation.js"></script>
 </body>
 </html>

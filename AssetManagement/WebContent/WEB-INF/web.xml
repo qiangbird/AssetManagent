@@ -4,11 +4,6 @@
 
 	<display-name>AssetManagement</display-name>
 
-   <!--  <welcome-file-list>
-       <welcome-file>/WEB-INF/page/home/head.jsp</welcome-file> 
-       <welcome-file>home/index</welcome-file>
-    </welcome-file-list> -->
-    
 	<!-- Begin configure CAS -->
 	<filter>
 		<filter-name>CAS Authentication Filter</filter-name>
@@ -19,7 +14,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.22.146:8080</param-value>
+			<param-value>http://192.168.22.143:8080</param-value>
 		</init-param>
 	</filter>
 
@@ -40,7 +35,7 @@
 		</init-param>
 		<init-param>
 			<param-name>serverName</param-name>
-			<param-value>http://192.168.22.146:8080</param-value>
+			<param-value>http://192.168.22.143:8080</param-value>
 		</init-param>
 		<init-param>
 			<param-name>acceptAnyProxy</param-name>
@@ -49,7 +44,7 @@
 		<init-param>
 			<param-name>proxyCallbackUrl</param-name>
 			<!-- sso.democlient.com is your CN in your keyStore if you are not server please use your IP, and use http, example : http://192.168.251.44:8080/DemoAPP/proxyCallback -->
-			<param-value>http://192.168.22.146:8080/AssetManagement/proxyCallback</param-value>
+			<param-value>http://192.168.22.143:8080/AssetManagement/proxyCallback</param-value>
 		</init-param>
 		<init-param>
 			<param-name>proxyReceptorUrl</param-name>
@@ -164,10 +159,10 @@
 	<!-- 必须加这个配置才能直接走index，因为所有的request都会被dispatcher处理 -->
 	<servlet-mapping>
         <servlet-name>rest</servlet-name>
-        <url-pattern>/home/index</url-pattern>
+        <url-pattern>/index</url-pattern>
     </servlet-mapping>
 	<welcome-file-list>  
-    <welcome-file>home/index</welcome-file><!-- 必须 -->  
+    <welcome-file>index</welcome-file><!-- 必须 -->  
     </welcome-file-list>  
 	
 	<filter>

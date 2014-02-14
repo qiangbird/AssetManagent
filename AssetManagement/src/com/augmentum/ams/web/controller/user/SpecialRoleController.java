@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
@@ -54,7 +54,7 @@ public class SpecialRoleController extends BaseController{
 	}
 	
 	@RequestMapping (value = "/findSpecialRoles", method=RequestMethod.GET)
-	public ModelAndView findSpecialRoles(HttpServletRequest httpServletRequest) throws DataException{
+	public ModelAndView findSpecialRoles(HttpServletRequest httpServletRequest) throws BusinessException{
 		
 	    logger.info(LogHelper.getLogInfo("Find specialRoles at controller start"));
 	    
@@ -88,7 +88,7 @@ public class SpecialRoleController extends BaseController{
         try {
             employees = remoteEmployeeService.findRemoteEmployeeByCustomerCode(specialRolevo.getCustomerCode(), 
                     httpServletRequest);
-        } catch (DataException e) {
+        } catch (BusinessException e) {
             logger.info(e);
         }
 	    

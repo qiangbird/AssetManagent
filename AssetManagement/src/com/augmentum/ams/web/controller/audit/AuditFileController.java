@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.model.audit.AuditFile;
 import com.augmentum.ams.service.audit.AuditFileService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
@@ -73,7 +73,7 @@ public class AuditFileController extends BaseController {
             jsonObject.put("fileName", entry.getKey().getFileName());
             jsonObject.put("operationTime", UTCTimeUtil.formatDateToString(UTCTimeUtil
                     .utcToLocalTime(entry.getKey().getOperationTime(), timeOffset),
-                    Constant.TIME_MINUTE_PATTERN));
+                    SystemConstants.TIME_MINUTE_PATTERN));
             jsonObject.put("operator", entry.getKey().getOperator().getUserName());
             jsonObject.put("percentage", entry.getValue());
             

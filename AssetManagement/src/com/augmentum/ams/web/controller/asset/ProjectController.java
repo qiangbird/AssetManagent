@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.ProjectVo;
@@ -32,7 +32,7 @@ public class ProjectController extends BaseController {
         List<ProjectVo> list = null;
         try {
             list = remoteCustomerService.getProjectByCustomerCode(customerCode, request);
-        } catch (DataException e) {
+        } catch (BusinessException e) {
             e.printStackTrace();
             logger.error("Get data as customerCode from IAP error", e);
         }

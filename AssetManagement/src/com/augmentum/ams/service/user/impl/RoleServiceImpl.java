@@ -12,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.augmentum.ams.dao.user.RoleDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.model.user.Authority;
 import com.augmentum.ams.model.user.Role;
 import com.augmentum.ams.service.user.AuthorityService;
 import com.augmentum.ams.service.user.RoleService;
 import com.augmentum.ams.util.ErrorCodeUtil;
-import com.augmentum.ams.util.ExceptionUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 
 @Service("roleService")
@@ -62,14 +61,14 @@ public class RoleServiceImpl implements RoleService {
      * @see com.augmentum.ams.service.user.RoleService#getRoleByName(com.augmentum.ams.model.user.RoleEnum)
      */
     @Override
-    public Role getRoleByName(RoleEnum roleName) throws DataException{
+    public Role getRoleByName(RoleEnum roleName) throws BusinessException{
         DetachedCriteria criteria = DetachedCriteria.forClass(Role.class);
 
         //roleName can not be cast to String for restrictions
         criteria.add(Restrictions.eq("roleName", roleName)).add(Restrictions.eq("isExpired", Boolean.FALSE));
         Role role =  roleDao.getUnique(criteria);
         if(role == null) {
-            ExceptionUtil.dataException(ErrorCodeUtil.DATA_ROLE_0203001, roleName.toString());
+            throw new BusinessException(ErrorCodeUtil.DATA_NOT_EXIST, "The role is null!");
         }
         return role;
     }
@@ -78,7 +77,7 @@ public class RoleServiceImpl implements RoleService {
      * @see com.augmentum.ams.service.user.RoleService#saveRoleAuthorities(java.lang.String, java.lang.String)
      */
     @Override
-    public void saveRoleAuthorities(String roleName, String authorityName) throws DataException {
+    public void saveRoleAuthorities(String roleName, String authorityName) throws BusinessException {
         Role role = this.getRoleByName(RoleEnum.getRoleEnum(roleName));
         List<Authority> authorities = role.getAuthorities();
         //        boolean roleAuthorityExist = false;

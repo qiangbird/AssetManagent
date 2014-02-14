@@ -27,8 +27,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
@@ -51,7 +52,6 @@ import com.augmentum.ams.service.search.SearchAssetService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.AssetUtil;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.ErrorCodeConvertToJSON;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FileOperateUtil;
@@ -119,12 +119,12 @@ public class AssetController extends BaseController {
 	 * @param request
 	 * @param assetVo
 	 * @return
-	 * @throws DataException
+	 * @throws BusinessException
 	 * @throws ParseException
 	 */
 	@RequestMapping("/createAsset")
 	public ModelAndView createAsset(HttpServletRequest request, AssetVo assetVo)
-			throws DataException, ParseException {
+			throws BusinessException, ParseException {
 
 		logger.info("createAsset method start!");
 
@@ -138,7 +138,7 @@ public class AssetController extends BaseController {
 	}
 
 	private ModelAndView getCommonInfoForAsset(HttpServletRequest request)
-			throws DataException, ParseException {
+			throws BusinessException, ParseException {
 
 		logger.info("getCommonInfoForAsset method start!");
 
@@ -176,12 +176,12 @@ public class AssetController extends BaseController {
 	 * @param batchCreate
 	 * @param batchCount
 	 * @return
-	 * @throws DataException
+	 * @throws BusinessException
 	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping(value = "/saveAsset", method = RequestMethod.POST)
 	public ModelAndView saveAsset(HttpServletRequest request, AssetVo assetVo,
-			String batchCreate, String batchCount) throws DataException,
+			String batchCreate, String batchCount) throws BusinessException,
 			UnsupportedEncodingException {
 
 		logger.info("saveAsset method start!");
@@ -230,7 +230,7 @@ public class AssetController extends BaseController {
 	 * @param assetVo
 	 * @param asset
 	 * @throws UnsupportedEncodingException
-	 * @throws DataException
+	 * @throws BusinessException
 	 */
 	private void voToAsset(HttpServletRequest request, AssetVo assetVo,
 			Asset asset) throws UnsupportedEncodingException {
@@ -246,7 +246,7 @@ public class AssetController extends BaseController {
 					userNames.add(assetVo.getUser().getUserName());
 					userVo = remoteEmployeeService.getRemoteUserByName(
 							userNames, request).get(0);
-				} catch (DataException e) {
+				} catch (BusinessException e) {
 					logger.error("Get user error from IAP", e);
 				}
 				userService.saveUserAsUserVo(userVo);
@@ -275,7 +275,7 @@ public class AssetController extends BaseController {
 		try {
 			cust = remoteCustomerService.getCustomerByCodefromIAP(request,
 					custCode);
-		} catch (DataException e1) {
+		} catch (BusinessException e1) {
 			e1.printStackTrace();
 		}
 		assetService.setAssetCustomer(asset, custCode, cust);
@@ -401,7 +401,7 @@ public class AssetController extends BaseController {
 
 	@RequestMapping(value = "/copy/{id}")
 	public ModelAndView copyAssetById(@PathVariable String id,
-			HttpServletRequest request) throws DataException, ParseException {
+			HttpServletRequest request) throws BusinessException, ParseException {
 
 		logger.info("copyAssetById method start!");
 
@@ -421,7 +421,7 @@ public class AssetController extends BaseController {
 
 	@RequestMapping("/delete/{id}")
 	public ModelAndView deleteAssetById(@PathVariable String id)
-			throws DataException, ParseException {
+			throws BusinessException, ParseException {
 
 		logger.info("deleteAssetById method satrt!");
 
@@ -613,38 +613,34 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/upload")
-	@ResponseBody
-	public JSONObject uploadAssetsExcelFile(MultipartFile file, String flag,
-			HttpServletRequest request, HttpServletResponse response) {
-
-		File targetFile = FileOperateUtil.upload(request, response, file);
-		ImportVo importVo = null;
-		JSONObject jsonObject = new JSONObject();
-
-		try {
-			importVo = assetImportParserService.importAsset(targetFile,
-					request, flag);
-		} catch (ExcelException e) {
-			jsonObject.put("error", e.getErrorCode());
-			return jsonObject;
-		} catch (DataException e) {
-			jsonObject.put("error", e.getErrorCode());
-			return jsonObject;
-		}
-		jsonObject.put("all", importVo.getAllImportRecords());
-		jsonObject.put("success", importVo.getSuccessRecords());
-		jsonObject.put("failure", importVo.getFailureRecords());
-		jsonObject.put("failureFileName", importVo.getFailureFileName());
-
-		return jsonObject;
-	}
+    @ResponseBody
+    public JSONObject  uploadAssetsExcelFile(MultipartFile file, String flag, HttpServletRequest request,
+            HttpServletResponse response) {
+        
+        File targetFile = FileOperateUtil.upload(request, response, file);
+        ImportVo importVo = null;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            importVo = assetImportParserService.importAsset(targetFile, request, flag);
+        } catch (ExcelException e) {
+            jsonObject.put("error", e.getErrorCode());
+            return jsonObject;
+        }
+        
+        jsonObject.put("all", importVo.getAllImportRecords());
+        jsonObject.put("success", importVo.getSuccessRecords());
+        jsonObject.put("failure", importVo.getFailureRecords());
+        jsonObject.put("failureFileName", importVo.getFailureFileName());
+        
+        return jsonObject;
+    }
 
 	@RequestMapping(value = "/download")
 	public void downloadFailureAssets(String fileName,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		String outPutPath = FileOperateUtil.getBasePath()
-				+ Constant.CONFIG_TEMPLATES_PATH + fileName;
+				+ SystemConstants.CONFIG_TEMPLATES_PATH + fileName;
 		try {
 			FileOperateUtil.download(request, response, outPutPath);
 		} catch (Exception e) {
@@ -677,7 +673,7 @@ public class AssetController extends BaseController {
 		try {
 			list = remoteCustomerService.getCustomerByEmployeeId(
 					userVo.getEmployeeId(), request);
-		} catch (DataException e) {
+		} catch (BusinessException e) {
 			logger.error("get customerVo failed from IAP", e);
 		}
 
@@ -712,7 +708,7 @@ public class AssetController extends BaseController {
 		try {
 			list = remoteCustomerService.getCustomerByEmployeeId(
 					userVo.getEmployeeId(), request);
-		} catch (DataException e) {
+		} catch (BusinessException e) {
 			logger.error("get customerVo failed from IAP", e);
 		}
 

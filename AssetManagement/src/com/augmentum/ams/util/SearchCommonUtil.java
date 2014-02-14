@@ -12,6 +12,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
@@ -228,7 +229,7 @@ public class SearchCommonUtil {
 								|| "receivedTime".equals(columnName)) {
 							value = UTCTimeUtil.formatUTCStringToLocalString(
 									(String) obj, timeOffset,
-									Constant.TIME_SECOND_PATTERN);
+									SystemConstants.TIME_SECOND_PATTERN);
 						} else {
 							value = (String) obj;
 						}

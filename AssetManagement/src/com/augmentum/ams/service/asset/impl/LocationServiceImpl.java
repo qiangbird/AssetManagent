@@ -24,11 +24,11 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.LocationDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.service.asset.LocationService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -166,7 +166,7 @@ public class LocationServiceImpl implements LocationService {
         List<Location> lcoations = locationDao.findAll(Location.class);
         
         for(Location location : lcoations){
-            localLocations.put(location.getSite() + Constant.SPLIT_UNDERLINE
+            localLocations.put(location.getSite() + SystemConstants.SPLIT_UNDERLINE
                      + location.getRoom(), location);
         }
         return localLocations;

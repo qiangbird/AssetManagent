@@ -1,4 +1,4 @@
-package com.augmentum.ams.common.constants;
+package com.augmentum.ams.constants;
 
 import java.util.Properties;
 

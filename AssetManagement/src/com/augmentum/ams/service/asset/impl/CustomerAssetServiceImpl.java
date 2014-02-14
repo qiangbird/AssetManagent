@@ -30,8 +30,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Project;
@@ -47,7 +48,6 @@ import com.augmentum.ams.service.remote.RemoteProjectService;
 import com.augmentum.ams.service.search.impl.SearchAssetServiceImpl;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
@@ -194,7 +194,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     }
 
     private String[] getSearchFieldNames(String searchConditions) {
-        String[] fieldNames = FormatUtil.splitString(searchConditions, Constant.SPLIT_COMMA);
+        String[] fieldNames = FormatUtil.splitString(searchConditions, SystemConstants.SPLIT_COMMA);
 
         if (null == fieldNames || 0 == fieldNames.length) {
             fieldNames = SearchFieldHelper.getAssetFields();
@@ -218,9 +218,9 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         if (null == status || "".equals(status)) {
             statusConditions = FormatUtil.splitString(SearchFieldHelper.getAssetStatus(),
-                    Constant.SPLIT_COMMA);
+                    SystemConstants.SPLIT_COMMA);
         } else {
-            statusConditions = FormatUtil.splitString(status, Constant.SPLIT_COMMA);
+            statusConditions = FormatUtil.splitString(status, SystemConstants.SPLIT_COMMA);
         }
 
         if (null != statusConditions && 0 < statusConditions.length) {
@@ -239,9 +239,9 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         if (null == type || "".equals(type)) {
             typeConditions = FormatUtil.splitString(SearchFieldHelper.getAssetType(),
-                    Constant.SPLIT_COMMA);
+                    SystemConstants.SPLIT_COMMA);
         } else {
-            typeConditions = FormatUtil.splitString(type, Constant.SPLIT_COMMA);
+            typeConditions = FormatUtil.splitString(type, SystemConstants.SPLIT_COMMA);
         }
 
         if (null != typeConditions && 0 < typeConditions.length) {
@@ -258,11 +258,11 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         boolean isNullToTime = (null == toTime || "".equals(toTime));
 
         if (isNullFromTime && !isNullToTime) {
-            fromTime = Constant.SEARCH_MIN_DATE;
+            fromTime = SystemConstants.SEARCH_MIN_DATE;
             toTime = UTCTimeUtil.formatFilterTime(toTime);
             return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
         } else if (isNullToTime && !isNullFromTime) {
-            toTime = Constant.SEARCH_MAX_DATE;
+            toTime = SystemConstants.SEARCH_MAX_DATE;
             fromTime = UTCTimeUtil.formatFilterTime(fromTime);
             return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
         } else if (!isNullFromTime && !isNullToTime) {
@@ -355,7 +355,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 UserVo userVo = null;
                 try {
                     userVo = remoteEmployeeService.getRemoteUserById(userCode, request);
-                } catch (DataException e) {
+                } catch (BusinessException e) {
                     logger.error("Get user error from IAP", e);
                 }
                 userService.saveUserAsUserVo(userVo);
@@ -368,7 +368,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
     @Override
     public void assginCustomerAsset(String customerCode, String ids, String projectCode,
-            String userName, String assetUserCode, HttpServletRequest request) throws DataException {
+            String userName, String assetUserCode, HttpServletRequest request) throws BusinessException {
         String uuId[] = ids.split(",");
         Customer customer = customerService.getCustomerByCode(customerCode);
         Project project = projectService.getProjectByProjectCode(projectCode);

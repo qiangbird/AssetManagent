@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.augmentum.ams.constants.SystemConstants;
+
 /**
  * @author Grylls.Xu
  * @time Sep 25, 2013 7:52:46 PM
@@ -38,11 +40,11 @@ public class FormatUtil {
         StringBuilder newFileName = new StringBuilder();
         if (null == fileNameList || 0 == fileNameList.size()) {
             String prefix = UTCTimeUtil.formatDateToString(new Date());
-            newFileName.append(prefix).append(Constant.SPLIT_UNDERLINE).append("01");
+            newFileName.append(prefix).append(SystemConstants.SPLIT_UNDERLINE).append("01");
         } else {
 
-            String prefix = Collections.max(fileNameList).split(Constant.SPLIT_UNDERLINE)[0];
-            String suffix = Collections.max(fileNameList).split(Constant.SPLIT_UNDERLINE)[1];
+            String prefix = Collections.max(fileNameList).split(SystemConstants.SPLIT_UNDERLINE)[0];
+            String suffix = Collections.max(fileNameList).split(SystemConstants.SPLIT_UNDERLINE)[1];
             Integer sequence = Integer.valueOf(suffix) + 1;
 
             if (sequence < 10) {
@@ -50,7 +52,7 @@ public class FormatUtil {
             } else {
                 suffix = sequence.toString();
             }
-            newFileName.append(prefix).append(Constant.SPLIT_UNDERLINE).append(suffix);
+            newFileName.append(prefix).append(SystemConstants.SPLIT_UNDERLINE).append(suffix);
         }
         return newFileName.toString();
     }

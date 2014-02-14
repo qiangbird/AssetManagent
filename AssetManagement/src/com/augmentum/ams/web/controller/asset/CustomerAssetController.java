@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.user.UserCustomColumn;
@@ -81,7 +81,7 @@ public class CustomerAssetController extends BaseController {
 	// goCustomerAsset
 	@RequestMapping(value = "listCustomerAsset", method = RequestMethod.GET)
 	public String listCustomerAsset(String customerCode,
-			HttpServletRequest request, String status, String type) throws DataException {
+			HttpServletRequest request, String status, String type) throws BusinessException {
 
 		logger.info("listCustomerAsset method start!");
 
@@ -102,7 +102,7 @@ public class CustomerAssetController extends BaseController {
 	@RequestMapping(value = "assginAssets", method = RequestMethod.PUT)
 	public ModelAndView assginAssets(String customerCode, String ids,
 			String projectCode, String userName, String assetUserCode,
-			HttpServletRequest request) throws DataException {
+			HttpServletRequest request) throws BusinessException {
 
 		logger.info("assginAssets method start!");
 		logger.info(customerCode + "\t" + projectCode + "\t" + userName + "\t"

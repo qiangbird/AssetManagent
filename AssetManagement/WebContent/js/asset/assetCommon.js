@@ -20,7 +20,7 @@
    $.ajax({
    type : 'GET',
    contentType : 'application/json',
-   url : 'home/changeLanguage?newlanguage=zh',
+   url : 'changeLanguage?newlanguage=zh',
    dataType : 'json',
    success : function(data) {
        console.log(data);
@@ -33,7 +33,7 @@
    $.ajax({
    type : 'GET',
    contentType : 'application/json',
-   url : 'home/changeLanguage?newlanguage=en',
+   url : 'changeLanguage?newlanguage=en',
    dataType : 'json',
    success : function(data) {
        console.log(data);

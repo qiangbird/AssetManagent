@@ -13,7 +13,7 @@ public final class ErrorCodeUtil {
     public static final String AUTHORITY_USER_0102001 = "0102001";
 
     /**
-     * DATA delegates it is used to throw DataException, ASSET
+     * DATA delegates it is used to throw BusinessException, ASSET
      * delegates it is used asset entity
      */
     public static final String DATA_SAVE_FAILED = "0201001";
@@ -39,25 +39,25 @@ public final class ErrorCodeUtil {
     
 
     /**
-     * DATA delegates it is used to throw DataException, ROLE
+     * DATA delegates it is used to throw BusinessException, ROLE
      * delegates it is used role entity
      */
     public static final String DATA_ROLE_0203001 = "0203001";
     
     /**
-     * DATA delegates it is used to throw DataException, IAP
+     * DATA delegates it is used to throw BusinessException, IAP
      * delegates it is used interactive with IAP
      */
     public static final String DATA_IAP_0204001 = "0204001";
     
     /**
-     * DATA delegates it is used to throw DataException, IAP
+     * DATA delegates it is used to throw BusinessException, IAP
      * delegates it is used interactive with IAP
      */
     public static final String DATA_IAP_0204002 = "0204002";
     
     /**
-     * DATA delegates it is used to throw DataException, IAP
+     * DATA delegates it is used to throw BusinessException, IAP
      * delegates it is used interactive with IAP
      */
     public static final String DATA_IAP_0204003 = "0204003";

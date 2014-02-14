@@ -2,7 +2,7 @@ package com.augmentum.ams.service.user;
 
 import java.util.List;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.model.user.Role;
 
@@ -23,9 +23,9 @@ public interface RoleService {
      * @time Sep 16, 2013 3:13:36 PM
      * @param roleEnum
      * @return Role
-     * @throws DataException
+     * @throws BusinessException
      */
-    Role getRoleByName(RoleEnum roleName) throws DataException;
+    Role getRoleByName(RoleEnum roleName) throws BusinessException;
 
     /**
      * @author Grylls.Xu
@@ -33,9 +33,9 @@ public interface RoleService {
      * @description Init Role and it's authorities from authority.xml.
      * @param roleName
      * @param authorityName
-     * @throws DataException
+     * @throws BusinessException
      */
-    void saveRoleAuthorities(String roleName, String authorityName) throws DataException;
+    void saveRoleAuthorities(String roleName, String authorityName) throws BusinessException;
 
     /**
      * @author Grylls.Xu

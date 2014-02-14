@@ -27,7 +27,7 @@ $(document).ready(function(){
     $.ajax({
     	dataType: 'json',
         type: "POST",
-        url: "home/getTimeOffset",
+        url: "getTimeOffset",
         data: "timeOffset=" + timeOffset
     });
     
@@ -35,13 +35,13 @@ $(document).ready(function(){
     $.ajax({
     	dataType: 'json',
         type: "POST",
-        url: "home/initUserCustomColumn"
+        url: "initUserCustomColumn"
     });
     
     $(".i18n-set-step").click(function(){
         var locale = $(this).attr("name");
          $.ajax({
-             url: $("#basePath").val() + "home/changeLocale?locale=" + locale,
+             url: $("#basePath").val() + "changeLocale?locale=" + locale,
              success: function(){
                  window.location.reload(true);
              }

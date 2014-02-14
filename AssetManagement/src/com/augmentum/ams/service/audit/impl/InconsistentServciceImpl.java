@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.audit.AuditFileDao;
 import com.augmentum.ams.dao.audit.InconsistentDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
@@ -40,7 +41,6 @@ import com.augmentum.ams.model.audit.AuditFile;
 import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.service.audit.InconsistentService;
 import com.augmentum.ams.service.customized.CustomizedViewItemService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
@@ -256,7 +256,7 @@ public class InconsistentServciceImpl implements InconsistentService {
 
 	private String[] getSearchFieldNames(String searchConditions) {
 		String[] fieldNames = FormatUtil.splitString(searchConditions,
-				Constant.SPLIT_COMMA);
+				SystemConstants.SPLIT_COMMA);
 
 		if (null == fieldNames || 0 == fieldNames.length) {
 			fieldNames = SearchFieldHelper.getAssetFields();
@@ -282,10 +282,10 @@ public class InconsistentServciceImpl implements InconsistentService {
 
 		if (null == status || "".equals(status)) {
 			statusConditions = FormatUtil.splitString(
-					SearchFieldHelper.getAssetStatus(), Constant.SPLIT_COMMA);
+					SearchFieldHelper.getAssetStatus(), SystemConstants.SPLIT_COMMA);
 		} else {
 			statusConditions = FormatUtil.splitString(status,
-					Constant.SPLIT_COMMA);
+					SystemConstants.SPLIT_COMMA);
 		}
 
 		if (null != statusConditions && 0 < statusConditions.length) {
@@ -304,9 +304,9 @@ public class InconsistentServciceImpl implements InconsistentService {
 
 		if (null == type || "".equals(type)) {
 			typeConditions = FormatUtil.splitString(
-					SearchFieldHelper.getAssetType(), Constant.SPLIT_COMMA);
+					SearchFieldHelper.getAssetType(), SystemConstants.SPLIT_COMMA);
 		} else {
-			typeConditions = FormatUtil.splitString(type, Constant.SPLIT_COMMA);
+			typeConditions = FormatUtil.splitString(type, SystemConstants.SPLIT_COMMA);
 		}
 
 		if (null != typeConditions && 0 < typeConditions.length) {
@@ -325,12 +325,12 @@ public class InconsistentServciceImpl implements InconsistentService {
 		boolean isNullToTime = (null == toTime || "".equals(toTime));
 
 		if (isNullFromTime && !isNullToTime) {
-			fromTime = Constant.SEARCH_MIN_DATE;
+			fromTime = SystemConstants.SEARCH_MIN_DATE;
 			toTime = UTCTimeUtil.formatFilterTime(toTime);
 			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
 					true);
 		} else if (isNullToTime && !isNullFromTime) {
-			toTime = Constant.SEARCH_MAX_DATE;
+			toTime = SystemConstants.SEARCH_MAX_DATE;
 			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
 			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
 					true);

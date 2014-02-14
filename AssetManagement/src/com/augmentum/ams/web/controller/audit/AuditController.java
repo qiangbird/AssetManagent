@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.audit.AuditFile;
@@ -23,7 +24,6 @@ import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.audit.AuditFileService;
 import com.augmentum.ams.service.audit.AuditService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
@@ -54,15 +54,15 @@ public class AuditController extends BaseController{
         AuditFile auditFile = auditFileService.getByFileName(auditVo.getAuditFileName());
         
         if(null == auditFile || null == auditFile.getOperator()){
-            modelAndView.addObject(Constant.OPERATOR, null);
-            modelAndView.addObject(Constant.OPERATION_TIME, null);
+            modelAndView.addObject(SystemConstants.OPERATOR, null);
+            modelAndView.addObject(SystemConstants.OPERATION_TIME, null);
         }else{
-            modelAndView.addObject(Constant.OPERATOR, 
+            modelAndView.addObject(SystemConstants.OPERATOR, 
                     auditFileService.getEmployeeNameByFileName(auditVo.getAuditFileName()));
-            modelAndView.addObject(Constant.OPERATION_TIME, auditFile.getOperationTime());
+            modelAndView.addObject(SystemConstants.OPERATION_TIME, auditFile.getOperationTime());
         }
-        modelAndView.addObject(Constant.FILE_NAME, auditVo.getAuditFileName());
-        modelAndView.addObject(Constant.PERCENT_NUMBER, percentNum);
+        modelAndView.addObject(SystemConstants.FILE_NAME, auditVo.getAuditFileName());
+        modelAndView.addObject(SystemConstants.PERCENT_NUMBER, percentNum);
         
         return modelAndView;
     }
@@ -89,17 +89,17 @@ public class AuditController extends BaseController{
         JSONObject jsonObject = new JSONObject();
 
         int countAudit=this.getAuditedAssetsCount(auditVo);
-        int  sEcho=Integer.parseInt(servletRequest.getParameter(Constant.S_ECHO));
-        int iDisplayStart=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_START));
-        int iDisplayLength=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_LENGTH));
+        int  sEcho=Integer.parseInt(servletRequest.getParameter(SystemConstants.S_ECHO));
+        int iDisplayStart=Integer.parseInt(servletRequest.getParameter(SystemConstants.I_DISPLAY_START));
+        int iDisplayLength=Integer.parseInt(servletRequest.getParameter(SystemConstants.I_DISPLAY_LENGTH));
         
-        jsonObject.put(Constant.S_ECHO, sEcho);
-        jsonObject.put(Constant.I_TOTAL_RECORDS, countAudit);
-        jsonObject.put(Constant.I_TOTAL_DISPLAY_RECORDS,countAudit);
+        jsonObject.put(SystemConstants.S_ECHO, sEcho);
+        jsonObject.put(SystemConstants.I_TOTAL_RECORDS, countAudit);
+        jsonObject.put(SystemConstants.I_TOTAL_DISPLAY_RECORDS,countAudit);
         
         JSONArray audits= auditService.findAudited(auditVo.getAuditFileName(),
                 iDisplayStart, iDisplayLength);
-        jsonObject.put(Constant.AA_DATA, audits);
+        jsonObject.put(SystemConstants.AA_DATA, audits);
         
         return jsonObject;
     }
@@ -111,17 +111,17 @@ public class AuditController extends BaseController{
         
         JSONObject jsonObject = new JSONObject();
         int countUnAudit=this.getUnAuditedAssetsCount(auditVo);
-        int  sEcho=Integer.parseInt(servletRequest.getParameter(Constant.S_ECHO));
-        int iDisplayStart=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_START));
-        int iDisplayLength=Integer.parseInt(servletRequest.getParameter(Constant.I_DISPLAY_LENGTH));
+        int  sEcho=Integer.parseInt(servletRequest.getParameter(SystemConstants.S_ECHO));
+        int iDisplayStart=Integer.parseInt(servletRequest.getParameter(SystemConstants.I_DISPLAY_START));
+        int iDisplayLength=Integer.parseInt(servletRequest.getParameter(SystemConstants.I_DISPLAY_LENGTH));
         
-        jsonObject.put(Constant.S_ECHO, sEcho);
-        jsonObject.put(Constant.I_TOTAL_RECORDS, countUnAudit);
-        jsonObject.put(Constant.I_TOTAL_DISPLAY_RECORDS,countUnAudit );
+        jsonObject.put(SystemConstants.S_ECHO, sEcho);
+        jsonObject.put(SystemConstants.I_TOTAL_RECORDS, countUnAudit);
+        jsonObject.put(SystemConstants.I_TOTAL_DISPLAY_RECORDS,countUnAudit );
         
         JSONArray unAudits= auditService.findUnAudited(auditVo.getAuditFileName(),
                 iDisplayStart, iDisplayLength);
-        jsonObject.put(Constant.AA_DATA, unAudits);
+        jsonObject.put(SystemConstants.AA_DATA, unAudits);
         
         return jsonObject;
      }

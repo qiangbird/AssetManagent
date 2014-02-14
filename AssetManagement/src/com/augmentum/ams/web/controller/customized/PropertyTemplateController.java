@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import net.sf.json.JSONArray;
 
-import com.augmentum.ams.exception.DataException;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ParameterException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.enumeration.AssetTypeEnum;
@@ -49,7 +49,7 @@ public class PropertyTemplateController extends BaseController{
 
     @RequestMapping("/getCustomerAndAssetType")
     public ModelAndView getCustomerAndAssetType(HttpServletRequest httpServletRequest)
-            throws DataException {
+            throws BusinessException {
         
         ModelAndView modelAndView = new ModelAndView();
         String employeeId = getUserIdByShiro();
@@ -64,7 +64,7 @@ public class PropertyTemplateController extends BaseController{
     
     @RequestMapping (value = "/saveSelfProperty", method=RequestMethod.POST )
     @ResponseBody
-    public String saveSelfProperty(String selfProperties, String customerCode, String assetType) throws ParameterException, DataException {
+    public String saveSelfProperty(String selfProperties, String customerCode, String assetType) throws ParameterException, BusinessException {
         
         PropertyTemplateVo propertyTemplateVo = new PropertyTemplateVo(selfProperties,
                 customerCode, assetType);

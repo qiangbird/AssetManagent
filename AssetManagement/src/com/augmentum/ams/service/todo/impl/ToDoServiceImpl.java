@@ -6,12 +6,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.base.BaseDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.service.todo.ToDoService;
-import com.augmentum.ams.util.Constant;
 import com.augmentum.ams.util.FormatUtil;
 
 @Service("toDoService")
@@ -34,7 +34,7 @@ public class ToDoServiceImpl implements ToDoService{
 		
 		logger.info("enter confirmReturnedAndReceivedAsset method successfully, parameters [ids], [status]: " 
 						+ ids + "," + status);
-		String[] idArr = FormatUtil.splitString(ids, Constant.SPLIT_COMMA);
+		String[] idArr = FormatUtil.splitString(ids, SystemConstants.SPLIT_COMMA);
 		
 		for (String id : idArr) {
 			
