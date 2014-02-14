@@ -321,6 +321,11 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                         customerVisibleList.add(customer);
                         }
                     }
+                }else{
+                    Customer iapCustomer = new Customer();
+                    iapCustomer.setCustomerName(cv.getCustomerName());
+                    iapCustomer.setCustomerCode(cv.getCustomerCode());
+                    customerVisibleList.add(iapCustomer);
                 }
             }
             if (flag) {
