@@ -208,7 +208,7 @@
   var selectedStatus = $("#selectedStatus").val();
   var selectedEntity = $("#selectedEntity").val();
   var machineType = $("#machineType").val();
-  var maxUseNum = $("#maxUseNum").val();
+//  var maxUseNum = $("#maxUseNum").val();
   var user = $("#assetUser").val();
   var checkedInTime = $("#checkedInTime").val();
   var checkedOutTime = $("#checkedOutTime").val();
@@ -219,12 +219,12 @@
   } else if (type == "machine"&& machineType == "") {
      $("#machineType").addClass("l-select-error");
      flag = 1;
-  } else if (type == "software") {
+  } /*else if (type == "software") {
      if (maxUseNum == ""|| !numberCheck(maxUseNum)||maxUseNum=="0") {
         $("#maxUseNum").addClass("l-select-error");
         flag = 1;
      }
-  }
+  }*/
   if (name == "") {
      $("#assetName").addClass("l-text-error");
      $("#assetName").unbind("click");

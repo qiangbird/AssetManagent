@@ -174,7 +174,7 @@ String basePath = request.getScheme() + "://"
 							</form:select>
 						</p>
 						<p>
-                            <span>*</span> <label><spring:message code="asset.location" /></label>
+                            <label><spring:message code="asset.location" /></label>
                                 <form:input path="location" id="selectedLocation" maxlength="36"
                                 cssClass="l-text" placeholder="Please input a user" />
                             <%-- <form:select path="location" id="selectedLocation" class="select">
@@ -318,11 +318,6 @@ String basePath = request.getScheme() + "://"
 								<form:input path="software.version" id="version" class="l-text" />
 							</p>
 							<p>
-								<label><spring:message code="asset.software.license.key" /></label>
-								<form:input path="software.licenseKey" id="licenseKey"
-									class="l-text" />
-							</p>
-							<p>
                                 <label><spring:message code="asset.software.additional.info" /></label>
 
                                 <form:input path="software.additionalInfo" id="additionalInfo"
@@ -330,7 +325,12 @@ String basePath = request.getScheme() + "://"
                             </p>
 						</div>
 						<div class="asset-input-right asset-input-panel">
-							<p>
+                            <p>
+                                <label><spring:message code="asset.software.license.key" /></label>
+                                <form:input path="software.licenseKey" id="licenseKey"
+                                    class="l-text" />
+                            </p>
+							<%-- <p>
 								<span>*</span>
 								<label><spring:message code="asset.software.max.user.num" /></label>
 								<form:input path="software.maxUseNum" id="maxUseNum"
@@ -341,7 +341,7 @@ String basePath = request.getScheme() + "://"
 
                                 <form:input path="softwareExpiredTime" id="softwareExpiredTime"
                                     class="l-date" />
-                            </p>
+                            </p> --%>
 
 						</div>
 					</div>

@@ -256,25 +256,16 @@ String basePath = request.getScheme() + "://"
                                 <label><spring:message code="asset.software.version" /></label>
                                 <form:input path="software.version" id="version" class="l-text"  readonly="true" />
                             </p>
-                            <p>
-                                <label><spring:message code="asset.software.license.key" /></label>
-                                <form:input path="software.licenseKey" id="licenseKey"
-                                    class="l-text"  readonly="true" />
-                            </p>
                              <p>
                                 <label><spring:message code="asset.software.additional.info" /></label>
                                 <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
                             </p> 
                         </div>
                         <div class="asset-input-right asset-input-panel">
-                            <p>
-                                <label><spring:message code="asset.software.max.user.num" /></label>
-                                <form:input path="software.maxUseNum" id="maxUseNum"
+                           <p>
+                                <label><spring:message code="asset.software.license.key" /></label>
+                                <form:input path="software.licenseKey" id="licenseKey"
                                     class="l-text"  readonly="true" />
-                            </p>
-                            <p>
-                                <label><spring:message code="asset.software.expired.time" /></label>
-                                <form:input path="softwareExpiredTime" id="softwareExpiredTime" class="l-text"  readonly="true" />
                             </p>
 
                         </div>

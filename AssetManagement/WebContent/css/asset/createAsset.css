@@ -170,13 +170,13 @@ html .ui-autocomplete {
 .asset-input-panel p span {
 color: #FF0000;
 position: absolute;
-top: 6px;
+top: 10px;
 left: -2;
 }
 .asset-input-panel p label {
 	width: 125px;
 	position: absolute;
-	top: 6px;
+	top: 12px;
 	left: 10px;
 }
 

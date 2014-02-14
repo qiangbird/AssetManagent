@@ -30,21 +30,17 @@ public class AssetUtil {
     public static void assetToAssetVo(Asset asset, AssetVo assetVo, String timeOffset) {
         try {
             BeanUtils.copyProperties(assetVo, asset);
-            assetVo.setSite(asset.getLocation().getSite().replace("Augmentum ",""));
+            assetVo.setSite(asset.getLocation().getSite().replace("Augmentum ", ""));
             assetVo.setLocation(asset.getLocation().getRoom());
-            
-            assetVo.setCheckInTime(UTCTimeUtil.formatDateToUTCString(asset.getCheckInTime(),
-                    timeOffset));
-            assetVo.setCheckOutTime(UTCTimeUtil.formatDateToUTCString(asset.getCheckOutTime(),
-                    timeOffset));
-            assetVo.setWarrantyTime(UTCTimeUtil.formatDateToUTCString(asset.getWarrantyTime(),
-                    timeOffset));
-            assetVo.setSoftwareExpiredTime(UTCTimeUtil.formatDateToUTCString(asset.getSoftware().getSoftwareExpiredTime(),
-                    timeOffset));
-            System.out.println(UTCTimeUtil.formatDateToUTCString(asset.getSoftware().getSoftwareExpiredTime(),
-                    timeOffset));
-            System.out.println(UTCTimeUtil.utcToLocalTime(asset.getSoftware().getSoftwareExpiredTime(),
-                    timeOffset,"yyyy-MM-dd"));
+
+            assetVo.setCheckInTime(UTCTimeUtil.utcToLocalTime(asset.getCheckInTime(), timeOffset,
+                    "yyyy-MM-dd"));
+            assetVo.setCheckOutTime(UTCTimeUtil.utcToLocalTime(asset.getCheckOutTime(), timeOffset,
+                    "yyyy-MM-dd"));
+            assetVo.setWarrantyTime(UTCTimeUtil.utcToLocalTime(asset.getWarrantyTime(), timeOffset,
+                    "yyyy-MM-dd"));
+            assetVo.setSoftwareExpiredTime(UTCTimeUtil.formatDateToUTCString(asset.getSoftware()
+                    .getSoftwareExpiredTime(), timeOffset));
         } catch (Exception e) {
             logger.error("Asset to assetVo error!", e);
         }
@@ -57,7 +53,7 @@ public class AssetUtil {
         for (int i = 0; i < keeper.length; i++) {
             keeperSet.add(keeper[i]);
         }
-        StringBuffer keeprs =new StringBuffer();
+        StringBuffer keeprs = new StringBuffer();
         for (String str : keeperSet) {
             keeprs.append(str).append(";");
         }
@@ -121,10 +117,10 @@ public class AssetUtil {
         for (Location location : list) {
             locationList.add(location.getSite() + location.getRoom());
         }
-        
+
         return locationList;
     }
-    
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static List getProcessTypes() {
         List processTypes = new ArrayList();
