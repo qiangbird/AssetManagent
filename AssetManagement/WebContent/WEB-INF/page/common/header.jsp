@@ -91,7 +91,7 @@
                 </shiro:hasRole>
                 <shiro:authenticated>
                 <li class="menuLi"><a><spring:message code="navigator.customser.assets" /></a>
-                    <ul class="sencndMenuUl">
+                    <ul class="sencndMenuUl customerAsset">
                     <c:if test="${sessionScope.customerList !=null }">
                        <c:forEach var="customer" items="${sessionScope.customerList }">
 				  <c:choose>

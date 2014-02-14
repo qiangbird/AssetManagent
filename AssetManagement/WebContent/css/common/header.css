@@ -2,6 +2,13 @@
 	outline: none;
 }
 
+.customerAsset {
+	overflow: scroll;
+	overflow-x: hidden;
+	height: auto; 
+	max-height: 400px;
+}
+
 #header_top {
 	position: relative;
 	margin: 0 auto;
