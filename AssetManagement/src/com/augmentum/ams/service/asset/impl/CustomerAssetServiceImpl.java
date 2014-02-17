@@ -322,6 +322,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                         }
                     }
                 }else{
+                    flag = true;
                     Customer iapCustomer = new Customer();
                     iapCustomer.setCustomerName(cv.getCustomerName());
                     iapCustomer.setCustomerCode(cv.getCustomerCode());

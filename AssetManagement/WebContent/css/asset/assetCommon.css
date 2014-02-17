@@ -15,3 +15,18 @@ font: normal 14px/16px arial;
 #ui-active-menuitem{
 	background: rgb(35, 165, 227);
 }
+
+#software_manager_visible{
+height: 20px;
+margin-top: 30px;
+margin-left: 10px;
+}
+#manager_visible{
+position: relative;
+top: -10px;
+left: 10px;
+}
+p lable{
+	font-family: Arial;
+	font-size: 14px;
+}

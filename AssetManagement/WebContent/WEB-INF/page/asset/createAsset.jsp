@@ -106,13 +106,6 @@ String basePath = request.getScheme() + "://"
 							<span>*</span> <label><spring:message code="asset.status" /></label>
 							<form:select path="status" cssClass="l-select"
 								id="selectedStatus" items="${assetStatus}">
-								<!-- <option value="AVAILABLE">Available</option>
-								<option value="IN_USE">In Use</option>
-								<option value="IDLE">Idle</option>
-								<option value="BORROWED">Borrowed</option>
-								<option value="RETURNED">Returned</option>
-								<option value="BROKEN">Broken</option>
-								<option value="WRITE_OFF">Write Off</option> -->
 							</form:select>
 						</p>
 						<p>
@@ -168,20 +161,12 @@ String basePath = request.getScheme() + "://"
 						<p>
 							<span>*</span> <label><spring:message code="asset.site" /></label>
 							<form:select path="site" id="selectedSite" class="select" items="${siteList}">
-								<%-- <c:forEach var="siteListItems" items="${siteList}">
-									<option value='${siteListItems.replace(" ","_") }'>${siteListItems}</option>
-								</c:forEach> --%>
 							</form:select>
 						</p>
 						<p>
                             <label><spring:message code="asset.location" /></label>
                                 <form:input path="location" id="selectedLocation" maxlength="36"
                                 cssClass="l-text" placeholder="Please input a user" />
-                            <%-- <form:select path="location" id="selectedLocation" class="select">
-                                <c:forEach var="locationListItems" items="${locationList }">
-                                    <option>${locationListItems.room}</option>
-                                </c:forEach>
-                            </form:select> --%>
                         </p>
 						<p>
 							<label><spring:message code="asset.user" /></label>
@@ -330,6 +315,10 @@ String basePath = request.getScheme() + "://"
                                 <form:input path="software.licenseKey" id="licenseKey"
                                     class="l-text" />
                             </p>
+                             <div id="software_manager_visible">
+                             <form:checkbox path="software.managerVisible"/>
+                                <label id="manager_visible">Visible for Manager</label>
+                            </div>
 							<%-- <p>
 								<span>*</span>
 								<label><spring:message code="asset.software.max.user.num" /></label>

@@ -295,34 +295,40 @@ String basePath = request.getScheme() + "://"
 						</div>
 					</div>
 
-					<div id="softwareDetails" class="type-details"
-						style="display: none">
-						<div class="commons">
-							<strong><spring:message code="asset.software.details" /></strong>
-						</div>
-						<div class="asset-input-left asset-input-panel">
-							<form:hidden path="software.id" />
-							<p>
-								<label><spring:message code="asset.software.version" /></label>
-								<form:input path="software.version" id="version" class="l-text" />
-							</p>
-							 <p>
-                                <label><spring:message code="asset.software.additional.info" /></label>
-
-                                <form:input path="software.additionalInfo" id="additionalInfo"
+<div id="softwareDetails" class="type-details"
+                        style="display: none">
+                        <div class="commons">
+                            <strong><spring:message code="asset.software.details" /></strong>
+                        </div>
+                        <div class="asset-input-left asset-input-panel">
+                            <form:hidden path="software.id" />
+                            
+                       <p>
+                           <label><spring:message code="asset.software.version" /></label>
+                           <form:input path="software.version" id="version" class="l-text" />
+                       </p>
+                       <p>
+                            <label><spring:message code="asset.software.additional.info" /></label>
+                            <form:input path="software.additionalInfo" id="additionalInfo"
                                     class="l-text" />
-                            </p>
-						</div>
-						<div class="asset-input-right asset-input-panel">
-							<p>
-                                <label><spring:message code="asset.software.license.key" /></label>
-                                <form:input path="software.licenseKey" id="licenseKey"
-                                    class="l-text" />
-                            </p>
-
-						</div>
-					</div>
-
+                       </p>
+                       </div>
+                       
+                        <div class="asset-input-right asset-input-panel">
+                       <p>
+                          <label><spring:message code="asset.software.license.key" /></label>
+                       <form:input path="software.licenseKey" id="licenseKey"
+                                    class="l-text"/>
+                       </p>             
+                                    
+                       <div id="software_manager_visible">
+                         <form:checkbox path="software.managerVisible"/>
+                         <label id="manager_visible">Visible for Manager</label>
+                       </div>
+                         </p>
+                        </div>
+                    </div>
+                    
 					<div id="otherAssetsDetails" class="type-details"
 						style="display: none">
 						<div class="commons">

@@ -4,6 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <%
 request.setCharacterEncoding("UTF-8");
 response.setCharacterEncoding("UTF-8");
@@ -308,34 +309,90 @@ String basePath = request.getScheme() + "://"
 							</p>
 						</div>
 					</div>
-
+					
 					<div id="softwareDetails" class="type-details"
-						style="display: none">
-						<div class="commons">
-							<strong><spring:message code="asset.software.details" /></strong>
-						</div>
-						<div class="asset-input-left asset-input-panel">
-							<form:hidden path="software.id" />
-							<p>
-								<label><spring:message code="asset.software.version" /></label>
-								<form:input path="software.version" id="version" class="l-text" />
-							</p>
-							<p>
-                                <label><spring:message code="asset.software.additional.info" /></label>
-
-                                <form:input path="software.additionalInfo" id="additionalInfo"
+                        style="display: none">
+                        <div class="commons">
+                            <strong><spring:message code="asset.software.details" /></strong>
+                        </div>
+                        <div class="asset-input-left asset-input-panel">
+                            <form:hidden path="software.id" />
+                            
+                       <c:choose>
+                       <c:when test='${sessionScope.userRoleList.contains("IT") }'>
+                       <p>
+                           <label><spring:message code="asset.software.version" /></label>
+                           <form:input path="software.version" id="version" class="l-text" />
+                       </p>
+                       <p>
+                            <label><spring:message code="asset.software.additional.info" /></label>
+                            <form:input path="software.additionalInfo" id="additionalInfo"
                                     class="l-text" />
-                            </p>
-						</div>
-						<div class="asset-input-right asset-input-panel">
-							<p>
-                                <label><spring:message code="asset.software.license.key" /></label>
-                                <form:input path="software.licenseKey" id="licenseKey"
-                                    class="l-text" />
-                            </p>
-						</div>
-					</div>
+                       </p>
+                       </c:when>
+                       <c:otherwise>
+                       <c:choose>
+                       <c:when test="${asset.software.managerVisible }">
+                        <p>
+                           <label><spring:message code="asset.software.version" /></label>
+                           <form:input path="software.version" id="version" class="l-text" readonly="true"/>
+                       </p>
+                       <p>
+                            <label><spring:message code="asset.software.additional.info" /></label>
+                            <form:input path="software.additionalInfo" id="additionalInfo"
+                                    class="l-text" readonly="true"/>
+                       </p>
+                       </c:when>
+                       
+                       <c:otherwise>
+                       <form:hidden path="software.version" id="version" class="l-text" readonly="true"/>
+                       <form:hidden path="software.additionalInfo" id="additionalInfo"
+                                    class="l-text" readonly="true"/>
+                       <p>
+                           <label><spring:message code="asset.software.version" /></label>
+                        <input type="text" value="**********" class="l-text"  readonly="true" >
+                       </p>
+                       </c:otherwise>
+                       </c:choose>
+                       </c:otherwise>
+                       </c:choose>
 
+                       </div>
+                        <div class="asset-input-right asset-input-panel">
+                       <c:choose>
+                       <c:when test='${sessionScope.userRoleList.contains("IT") }'>
+                       <p>
+                          <label><spring:message code="asset.software.license.key" /></label>
+                       <form:input path="software.licenseKey" id="licenseKey"
+                                    class="l-text"/>
+                       </p>             
+                                    
+                       <div id="software_manager_visible">
+                         <form:checkbox path="software.managerVisible"/>
+                         <label id="manager_visible">Visible for Manager</label>
+                       </div>
+                       </c:when>
+                       <c:otherwise>
+                       <p>
+                          <label><spring:message code="asset.software.license.key" /></label>
+                       <c:choose>
+                       <c:when test="${asset.software.managerVisible }">
+                       <form:input path="software.licenseKey" id="licenseKey"
+                                    class="l-text"  readonly="true" />
+                       </c:when>
+                       <c:otherwise>
+                        <form:hidden path="software.licenseKey" id="licenseKey"
+                                    class="l-text"  readonly="true" />
+                        <input type="text" value="**********" class="l-text"  readonly="true" >
+                       </c:otherwise>
+                       </c:choose>
+                       </c:otherwise>
+                       
+                     </c:choose> 
+                         </p>
+                        </div>
+                    </div>
+					
 					<div id="otherAssetsDetails" class="type-details"
 						style="display: none">
 						<div class="commons">

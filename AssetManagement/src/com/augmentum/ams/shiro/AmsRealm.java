@@ -129,6 +129,13 @@ public class AmsRealm extends AuthorizingRealm {
 			SecurityUtils.getSubject().getSession()
 					.setAttribute("currentUser", user);
 			
+			List<String> roleList = new ArrayList<String>();
+			for(Role role : user.getRoles()){
+			    roleList.add(role.getRoleName().toString());
+			}
+			SecurityUtils.getSubject().getSession()
+            .setAttribute("userRoleList", roleList);
+			
 			// initiate the locale language according to the browser language
             String localeLanguage = request.getLocale().getLanguage();
             Locale locale = null;

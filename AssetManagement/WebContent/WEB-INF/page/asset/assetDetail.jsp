@@ -4,6 +4,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>  
 <%
 request.setCharacterEncoding("UTF-8");
 response.setCharacterEncoding("UTF-8");
@@ -30,11 +31,13 @@ String basePath = request.getScheme() + "://"
             <span class="breadCrum"><spring:message code="view.asset" /></span>
         </div>
         <div id="operation">
+        <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT,MANAGER,SPECIAL_ROLE">
         <c:if test="${uuid==null }">
             <a id="editBtn"><spring:message code="edit" /></a>
             <a id="copyBtn"><spring:message code="copy" /></a>
             <a id="deleteBtn"><spring:message code="delete" /></a>
         </c:if>
+        </shiro:hasAnyRoles>
             <a id="cancelBtn"><spring:message code="cancel" /></a>
         </div>
 
@@ -252,21 +255,64 @@ String basePath = request.getScheme() + "://"
                         </div>
                         <div class="asset-input-left asset-input-panel">
                             <form:hidden path="software.id" />
+                         <c:choose>
+                            <c:when test="${asset.software.managerVisible }">
                             <p>
                                 <label><spring:message code="asset.software.version" /></label>
                                 <form:input path="software.version" id="version" class="l-text"  readonly="true" />
                             </p>
+                            </c:when>
+                            <c:otherwise>
+                            <p>
+                            <label><spring:message code="asset.software.version" /></label>
+                             <shiro:hasAnyRoles name="EMPLOYEE,MANAGER,SPECIAL_ROLE">
+                               <input type="text" value="**********" class="l-text"  readonly="true" >
+                             </shiro:hasAnyRoles>
+                             <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
+                               <form:input path="software.version" id="version" class="l-text"  readonly="true" />
+                             </shiro:hasAnyRoles>
+                             </p>
+                            </c:otherwise>
+                         </c:choose> 
+                            <c:choose>
+                            <c:when test="${asset.software.managerVisible }">
                              <p>
                                 <label><spring:message code="asset.software.additional.info" /></label>
                                 <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
                             </p> 
+                            </c:when>
+                            <c:otherwise>
+                             <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
+                             <p>
+                                <label><spring:message code="asset.software.additional.info" /></label>
+                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
+                            </p> 
+                             </shiro:hasAnyRoles>
+                            </c:otherwise>
+                            </c:choose>
                         </div>
                         <div class="asset-input-right asset-input-panel">
-                           <p>
+                          <c:choose>
+                            <c:when test="${asset.software.managerVisible }">
+                            <p>
                                 <label><spring:message code="asset.software.license.key" /></label>
-                                <form:input path="software.licenseKey" id="licenseKey"
+                                 <form:input path="software.licenseKey" id="licenseKey"
                                     class="l-text"  readonly="true" />
                             </p>
+                            </c:when>
+                            <c:otherwise>
+                            <p>
+                            <label><spring:message code="asset.software.license.key" /></label>
+                             <shiro:hasAnyRoles name="EMPLOYEE,MANAGER,SPECIAL_ROLE">
+                               <input type="text" value="**********" class="l-text"  readonly="true" >
+                             </shiro:hasAnyRoles>
+                             <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
+                             <form:input path="software.licenseKey" id="licenseKey"
+                                    class="l-text"  readonly="true" />
+                             </shiro:hasAnyRoles>
+                             </p>
+                            </c:otherwise>
+                         </c:choose> 
 
                         </div>
                     </div>

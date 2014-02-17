@@ -215,6 +215,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 				soft.setAdditionalInfo(newSoft.getAdditionalInfo());
 				soft.setLicenseKey(newSoft.getLicenseKey());
 				soft.setSoftwareExpiredTime(newSoft.getSoftwareExpiredTime());
+				soft.setManagerVisible(newSoft.isManagerVisible());
 				softwareService.updateSoftware(soft);
 				asset.setSoftware(soft);
 				updateAsset(asset);
@@ -381,10 +382,11 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 					.getWarrantyTime()));
 			asset.setVendor(assetVo.getVendor());
 			asset.setMemo(assetVo.getMemo());
-			if(null != assetVo.getSoftware()){
-			    assetVo.getSoftware().setSoftwareExpiredTime(UTCTimeUtil.localDateToUTC(assetVo
-                   .getSoftwareExpiredTime()));
-			}
+//			asset.setSoftware(assetVo.getSoftware());
+//			if(null != assetVo.getSoftware()){
+//			    assetVo.getSoftware().setSoftwareExpiredTime(UTCTimeUtil.localDateToUTC(assetVo
+//                   .getSoftwareExpiredTime()));
+//			}
 //			asset.getSoftware().setSoftwareExpiredTime((UTCTimeUtil.localDateToUTC(assetVo
 //                   .getSoftwareExpiredTime())));
 		} catch (Exception e) {

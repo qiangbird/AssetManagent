@@ -67,8 +67,18 @@ public class Software extends BaseModel {
 	@OneToMany(mappedBy = "software", cascade = CascadeType.ALL)
 	@ContainedIn
 	private List<Asset> assets = new ArrayList<Asset>();
+	
+	private boolean managerVisible;
 
-	public String getVersion() {
+    public boolean isManagerVisible() {
+        return managerVisible;
+    }
+
+    public void setManagerVisible(boolean managerVisible) {
+        this.managerVisible = managerVisible;
+    }
+
+    public String getVersion() {
 		return version;
 	}
 

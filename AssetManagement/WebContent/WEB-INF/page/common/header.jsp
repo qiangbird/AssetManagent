@@ -64,7 +64,7 @@
                 <shiro:authenticated>
                 	<li class="menuLi"><a href="home"><spring:message code="navigator.home" /></a></li>
                 </shiro:authenticated>
-                <shiro:hasAnyRoles name="MANAGER,IT,EMPLOYEE,SPECIAL_ROLE">
+                <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
                     <ul class="sencndMenuUl">
                         <li><a href="asset/allAssets"><spring:message code="navigator.all.assets" /></a></li>
