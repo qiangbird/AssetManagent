@@ -345,7 +345,7 @@ function setCriteria() {
     criteria.assetType = assetType;
 
     // set asset status
-    var assetStatus = "";
+    var assetStatus = $("#status").val();
     $("#assetStatus").find(":checked").each(function() {
         if (assetStatus == null || assetStatus == "") {
             assetStatus = this.value;

@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.augmentum.ams.constants.SystemConstants;
+import com.augmentum.ams.exception.SystemException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
@@ -165,33 +166,61 @@ public class SearchCommonUtil {
 
 	public static JSONArray formatTransferLogListTOJSONArray(
 			List<TransferLog> result,
-			List<UserCustomColumn> userCustomColumnList) {
+			List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
 
 		JSONArray arrays = new JSONArray();
 
 		for (TransferLog transferLog : result) {
 			JSONArray array = new JSONArray();
-			array.add(transferLog.getId());
-			array.add(transferLog.getAsset().getAssetId());
-			array.add(transferLog.getAsset().getAssetName());
-			array.add(transferLog.getEmployee().getUserName());
-			array.add(UTCTimeUtil.formatDateToString(transferLog.getTime(),
-					"yyyy-MM-dd HH:mm:ss"));
-			array.add(transferLog.getAction());
-			array.add(transferLog.getAsset().getManufacturer());
-			array.add(transferLog.getAsset().getBarCode());
-			array.add(UTCTimeUtil.formatDateToString(transferLog.getAsset()
-					.getCheckInTime(), "yyyy-MM-dd HH:mm:ss"));
-			array.add(transferLog.getAsset().getSeriesNo());
-			array.add(transferLog.getAsset().getPoNo());
 
+			array.add(transferLog.getId());
+
+			for (UserCustomColumn userCustomColumn : userCustomColumnList) {
+				String fieldName = userCustomColumn.getCustomizedColumn()
+						.getSortName();
+				String value = "";
+
+				if ("time".equals(fieldName)) {
+					value = UTCTimeUtil.utcToLocalTime(transferLog.getTime(),
+							clientTimeOffset,
+							SystemConstants.TIME_SECOND_PATTERN);
+				} else if ("asset.checkInTime".equals(fieldName)) {
+					if (null == transferLog.getAsset().getCheckInTime()) {
+						value = "";
+					} else {
+						value = UTCTimeUtil.utcToLocalTime(transferLog
+								.getAsset().getCheckInTime(), clientTimeOffset,
+								SystemConstants.DATE_DAY_PATTERN);
+					}
+				} else {
+
+					try {
+						value = BeanUtils.getProperty(transferLog, fieldName);
+					} catch (IllegalAccessException e) {
+						throw new SystemException(e,
+								ErrorCodeUtil.ILLEGAL_ACCESS_EXCEPTION,
+								"IllegalAccessException when get property from transferlog");
+					} catch (InvocationTargetException e) {
+						throw new SystemException(e,
+								ErrorCodeUtil.INVOCATION_TARGET_EXCEPTION,
+								"InvocationTargetException when get property from transferlog");
+					} catch (NoSuchMethodException e) {
+						throw new SystemException(e,
+								ErrorCodeUtil.NO_SUCH_METHOD_EXCEPTION,
+								"NoSuchMethodException when get property from transferlog");
+					}
+				}
+
+				array.add(value);
+			}
 			arrays.add(array);
 		}
 		return arrays;
 	}
 
-	public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(List<ToDo> todoList,
-			List<UserCustomColumn> userCustomColumnList, String timeOffset) {
+	public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(
+			List<ToDo> todoList, List<UserCustomColumn> userCustomColumnList,
+			String timeOffset) {
 		JSONArray arrays = new JSONArray();
 
 		for (ToDo todo : todoList) {
@@ -235,14 +264,17 @@ public class SearchCommonUtil {
 						}
 					}
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					logger.error("format todoList to JSONArray error", e);
+					throw new SystemException(e,
+							ErrorCodeUtil.ILLEGAL_ACCESS_EXCEPTION,
+							"IllegalAccessException when get property from todo asset");
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					logger.error("format todoList to JSONArray error", e);
+					throw new SystemException(e,
+							ErrorCodeUtil.INVOCATION_TARGET_EXCEPTION,
+							"InvocationTargetException when get property from todo asset");
 				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					logger.error("format todoList to JSONArray error", e);
+					throw new SystemException(e,
+							ErrorCodeUtil.NO_SUCH_METHOD_EXCEPTION,
+							"NoSuchMethodException when get property from todo asset");
 				}
 				array.add(value);
 			}
@@ -250,7 +282,7 @@ public class SearchCommonUtil {
 		}
 		return arrays;
 	}
-	
+
 	public static JSONArray formatOperationLogListTOJSONArray(
 			List<OperationLog> result,
 			List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
@@ -265,7 +297,8 @@ public class SearchCommonUtil {
 			array.add(operationLog.getOperation());
 			array.add(operationLog.getOperationObject());
 			array.add(operationLog.getOperationObjectID());
-			array.add(UTCTimeUtil.utcToLocalTime(operationLog.getUpdatedTime(),clientTimeOffset, "yyyy-MM-dd HH:mm:ss"));
+			array.add(UTCTimeUtil.utcToLocalTime(operationLog.getUpdatedTime(),
+					clientTimeOffset, "yyyy-MM-dd HH:mm:ss"));
 
 			arrays.add(array);
 		}

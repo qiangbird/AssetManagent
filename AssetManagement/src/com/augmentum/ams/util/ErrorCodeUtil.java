@@ -78,7 +78,22 @@ public final class ErrorCodeUtil {
      * PARAMETER delegates it is used unknown exception
      */
     public static final String UNKNOWN_EXCEPTION_0401001 = "0401001";
-
+    
+    /**
+     * IllegalAccessException
+     */
+    public static final String ILLEGAL_ACCESS_EXCEPTION = "1001001";
+    
+    /**
+     * InvocationTargetException
+     */
+    public static final String INVOCATION_TARGET_EXCEPTION = "1001002";
+    
+    /**
+     * NoSuchMethodException
+     */
+    public static final String NO_SUCH_METHOD_EXCEPTION = "1001003";
+    
     private ErrorCodeUtil() {
     	
     }

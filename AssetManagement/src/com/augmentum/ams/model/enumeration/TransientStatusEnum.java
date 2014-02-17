@@ -6,6 +6,4 @@ public enum TransientStatusEnum {
     
     RETURNING_TO_IT,
     
-    RETURNING_TO_CUSTOMER;
-    
 }

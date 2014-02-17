@@ -5,6 +5,17 @@ $(document).ready(function() {
     // categoryFlag = 9, it means category is 'transferLog'
     initCriteria(9);
     findDataListInfo("transfer log");
+    
+    $(".filterDiv input[type='checkBox']").each(function(){
+    	if ($(this).val() != "all") {
+    		$(this).attr("content", $(this).siblings("label").html());
+    	}
+    });
+    
+    $(".filterDiv input[type='text']").each(function(){
+    	$(this).attr("content", $(this).val());
+    });
+    
     $(".filterDiv").filterBox({});
     $("#searchButton").click(function() {
         
@@ -31,25 +42,8 @@ $(document).ready(function() {
         yearRange: "2000:2030"
     });
     
-    function AddI18n(message) {
-        $("#label_" + message).html(msg(message));
-        if (message == "CheckInTime") {
-            var $temp = $("#label_" + message).parent().siblings(".condition_optional").children("p").children("input");
-            $temp.attr("content", msg(message));
-        } 
-        $("#label_" + message).siblings("input").attr("content", msg(message));
-     }
-//     var localeCode = $("#localeCode").val();
-    var i18n = $("#language").val();
-     jQuery.i18n.properties({
-        name : 'message',
-        path : 'i18n/',
-        mode : 'map',
-        language : i18n,
-        callback : function() {
-        }
-     });
-     
+    removePlaceholderForKeyWord();
+    
 });
 
 //search list
@@ -63,8 +57,7 @@ var dataListInfo = {
     url : 'transferLog/search?id='+$("#assetUuId").val(),
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
-        callback : function(data) {
-        	console.log(data);
+        callback : function() {
             $.ajax({
                 type : "POST",
                 contentType : "application/json",
@@ -83,10 +76,6 @@ var dataListInfo = {
         callback : function() {
         }
     }
-//    ,
-//    contentHandler : function(str) {
-//        return resultContentHandle(str);
-//    }
 };
 function searchList() {
     dataList = $(".dataList").DataList(dataListInfo);

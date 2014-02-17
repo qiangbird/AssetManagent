@@ -3,6 +3,7 @@ package com.augmentum.ams.service.todo;
 import java.util.List;
 
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.model.user.User;
 
 public interface ToDoService {
 
@@ -21,6 +22,6 @@ public interface ToDoService {
 	 * @author Geoffrey.Zhao
 	 * @return
 	 */
-	List<ToDo> findReceivedAsset();
+	List<ToDo> findReceivedAsset(User user);
 	
 }

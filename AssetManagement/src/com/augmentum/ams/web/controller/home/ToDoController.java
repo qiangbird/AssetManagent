@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.todo.ToDoService;
@@ -91,7 +93,9 @@ public class ToDoController extends BaseController{
 		
 		ModelAndView modelAndView = new ModelAndView("todo/returnedAssetList");
 		
-		List<ToDo> todoList = todoService.findReceivedAsset();
+		User user = (User) SecurityUtils.getSubject().getSession()
+				.getAttribute("currentUser");
+		List<ToDo> todoList = todoService.findReceivedAsset(user);
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
 				.findUserCustomColumns("todo", getUserIdByShiro());
 		String timeOffset = (String) session.getAttribute("timeOffset");
@@ -107,7 +111,9 @@ public class ToDoController extends BaseController{
 	@RequestMapping(value = "/viewReceivedAssetPanel", method = RequestMethod.GET)
 	public JSONObject viewReceivedAssetPanel() {
 		
-		List<ToDo> todoList = todoService.findReceivedAsset();
+		User user = (User) SecurityUtils.getSubject().getSession()
+				.getAttribute("currentUser");
+		List<ToDo> todoList = todoService.findReceivedAsset(user);
 		
 		JSONArray jsonArray = new JSONArray();
 		for (int i = 0; i < todoList.size() && i < 3; i++) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.augmentum.ams.dao.base.BaseDao;
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.model.user.User;
 
 public interface ToDoDao extends BaseDao<ToDo>{
 
@@ -23,6 +24,6 @@ public interface ToDoDao extends BaseDao<ToDo>{
 	 * @author Geoffrey.Zhao
 	 * @return
 	 */
-	List<ToDo> findReceivedAsset();
+	List<ToDo> findReceivedAsset(User user);
 	
 }

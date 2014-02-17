@@ -321,6 +321,32 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 		map.put("allWriteOffMachineCount", result.get("MACHINE"));
 		map.put("allWriteOffMonitorCount", result.get("MONITOR"));
 		map.put("allWriteOffOtherAssetsCount", result.get("OTHERASSETS"));
+		
+		// IT: assigning assets
+		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = ?";
+		map.put("allAssigningAssetTotal", getCountByHql(hql, "ASSIGNING"));
+
+		hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false AND status = 'ASSIGNING' GROUP BY type ORDER BY type";
+		result = getAssetTypeCountList(getHibernateTemplate().find(hql));
+
+		map.put("allAssigningSoftwareCount", result.get("SOFTWARE"));
+		map.put("allAssigningDeviceCount", result.get("DEVICE"));
+		map.put("allAssigningMachineCount", result.get("MACHINE"));
+		map.put("allAssigningMonitorCount", result.get("MONITOR"));
+		map.put("allAssigningOtherAssetsCount", result.get("OTHERASSETS"));
+		
+		// IT: returning to IT assets
+		hql = "SELECT COUNT(*) FROM Asset WHERE isExpired = false AND status = ?";
+		map.put("allReturningToITAssetTotal", getCountByHql(hql, "RETURNING_TO_IT"));
+
+		hql = "SELECT type, COUNT(*) FROM Asset WHERE isExpired = false AND status = 'RETURNING_TO_IT' GROUP BY type ORDER BY type";
+		result = getAssetTypeCountList(getHibernateTemplate().find(hql));
+
+		map.put("allReturningToITSoftwareCount", result.get("SOFTWARE"));
+		map.put("allReturningToITDeviceCount", result.get("DEVICE"));
+		map.put("allReturningToITMachineCount", result.get("MACHINE"));
+		map.put("allReturningToITMonitorCount", result.get("MONITOR"));
+		map.put("allReturningToITOtherAssetsCount", result.get("OTHERASSETS"));
 
 		return map;
 	}
@@ -544,21 +570,6 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 						UTCTimeUtil.formatCurrentDateToUTC(),
 						UTCTimeUtil.getAssetExpiredTime()))
 				.addOrder(Order.asc("warrantyTime"));
-
-		return findByCriteria(criteria);
-	}
-
-	@Override
-	public List<Asset> findLicenseExpiredAssetForPanel() {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Asset.class);
-		criteria.setFetchMode("customer", FetchMode.JOIN);
-
-		criteria.createAlias("software", "software")
-				.add(Restrictions.eq("isExpired", Boolean.FALSE))
-				.add(Restrictions.between("software.softwareExpiredTime",
-						UTCTimeUtil.formatCurrentDateToUTC(),
-						UTCTimeUtil.getAssetExpiredTime()))
-				.addOrder(Order.asc("software.softwareExpiredTime"));
 
 		return findByCriteria(criteria);
 	}

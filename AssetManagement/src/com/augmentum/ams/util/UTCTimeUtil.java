@@ -207,8 +207,8 @@ public class UTCTimeUtil {
      * @param timeOffset
      * @return
      */
-    public static String formatDateToUTCString(Date date, String timeOffset) {
-        if(null!=date){
+    public static String formatUTCToLocalString(Date date, String timeOffset) {
+        if(null != date){
         return UTCTimeUtil.formatDateToString(UTCTimeUtil.utcToLocalTime(date, timeOffset),
                 SystemConstants.DATE_DAY_PATTERN);
         }else{

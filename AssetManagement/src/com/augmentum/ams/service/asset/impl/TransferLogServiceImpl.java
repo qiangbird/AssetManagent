@@ -8,13 +8,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.util.Version;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -35,7 +35,6 @@ import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.TransferLogDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Asset;
-import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
@@ -45,7 +44,6 @@ import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
-import com.augmentum.ams.web.vo.user.UserVo;
 
 @Service("transferLogService")
 public class TransferLogServiceImpl implements TransferLogService {
@@ -214,7 +212,7 @@ public class TransferLogServiceImpl implements TransferLogService {
 			Asset asset = assetService.getAsset(id);
 			TransferLog transferLog = new TransferLog();
 			transferLog.setAsset(asset);
-			transferLog.setEmployee(user);
+			transferLog.setUser(user);
 			transferLog.setAction(action);
 			transferLog.setTime(date);
 			transferLogDao.save(transferLog);

@@ -39,7 +39,7 @@ public class AssetUtil {
                     "yyyy-MM-dd"));
             assetVo.setWarrantyTime(UTCTimeUtil.utcToLocalTime(asset.getWarrantyTime(), timeOffset,
                     "yyyy-MM-dd"));
-            assetVo.setSoftwareExpiredTime(UTCTimeUtil.formatDateToUTCString(asset.getSoftware()
+            assetVo.setSoftwareExpiredTime(UTCTimeUtil.formatUTCToLocalString(asset.getSoftware()
                     .getSoftwareExpiredTime(), timeOffset));
         } catch (Exception e) {
             logger.error("Asset to assetVo error!", e);

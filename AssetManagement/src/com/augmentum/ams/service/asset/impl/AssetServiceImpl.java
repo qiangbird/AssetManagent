@@ -567,8 +567,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 						errorCodes.put(id, new ExceptionHelper(
 								ErrorCodeUtil.ASSET_STATUS_INVALID));
 					} else {
-						asset.setStatus(TransientStatusEnum.RETURNING_TO_CUSTOMER
-								.name());
+						asset.setStatus(StatusEnum.RETURNED.name());
 						assetDao.update(asset);
 
 						// generate todo list for return operation
@@ -848,43 +847,21 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 			obj.put("id", asset.getId());
 			obj.put("assetId", asset.getAssetId());
 			obj.put("assetName", asset.getAssetName());
+			
 			if (null == asset.getCustomer()) {
 				obj.put("customerName", "");
 			} else {
 				obj.put("customerName", asset.getCustomer().getCustomerName());
 			}
-
-			obj.put("warrantyTime", UTCTimeUtil.utcToLocalTime(
-					asset.getWarrantyTime(), clientTimeOffset,
-					SystemConstants.DATE_DAY_PATTERN));
-			jsonArray.add(obj);
-		}
-		return jsonArray;
-	}
-
-	@Override
-	public JSONArray findLicenseExpiredAssetForPanel(String clientTimeOffset) {
-
-		List<Asset> list = assetDao.findLicenseExpiredAssetForPanel();
-
-		JSONArray jsonArray = new JSONArray();
-		for (int i = 0; i < list.size() && i < 3; i++) {
-
-			JSONObject obj = new JSONObject();
-			Asset asset = list.get(i);
-
-			obj.put("id", asset.getId());
-			obj.put("assetId", asset.getAssetId());
-			obj.put("assetName", asset.getAssetName());
-			if (null == asset.getCustomer()) {
-				obj.put("customerName", "");
+			
+			if (null == asset.getWarrantyTime()) {
+				obj.put("warrantyTime", "");
 			} else {
-				obj.put("customerName", asset.getCustomer().getCustomerName());
+				obj.put("warrantyTime", UTCTimeUtil.utcToLocalTime(
+						asset.getWarrantyTime(), clientTimeOffset,
+						SystemConstants.DATE_DAY_PATTERN));
 			}
 
-			obj.put("licenseExpiredTime", UTCTimeUtil.utcToLocalTime(asset
-					.getSoftware().getSoftwareExpiredTime(), clientTimeOffset,
-					SystemConstants.DATE_DAY_PATTERN));
 			jsonArray.add(obj);
 		}
 		return jsonArray;

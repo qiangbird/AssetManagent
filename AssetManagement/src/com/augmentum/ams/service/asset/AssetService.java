@@ -226,10 +226,4 @@ public interface AssetService {
      */
     JSONArray findWarrantyExpiredAssetForPanel(String clientTimeOffset);
     
-    /**
-     * @author Geoffrey.Zhao
-     * @return
-     */
-    JSONArray findLicenseExpiredAssetForPanel(String clientTimeOffset);
-    
 }

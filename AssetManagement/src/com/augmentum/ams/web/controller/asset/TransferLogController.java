@@ -55,7 +55,8 @@ public class TransferLogController extends BaseController {
 			HttpSession session, String id) {
 
 		logger.info("searchTransferLog method start!");
-
+		String timeOffset = (String)session.getAttribute("timeOffset");
+		
 		if (null == searchCondition) {
 			searchCondition = new SearchCondition();
 		}
@@ -64,7 +65,7 @@ public class TransferLogController extends BaseController {
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
 				.findUserCustomColumns("transfer log", getUserIdByShiro());
 		JSONArray array = SearchCommonUtil.formatTransferLogListTOJSONArray(
-				page.getResult(), userCustomColumnList);
+				page.getResult(), userCustomColumnList, timeOffset);
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("fieldsData", array);

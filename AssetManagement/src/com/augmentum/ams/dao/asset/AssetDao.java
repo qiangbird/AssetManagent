@@ -85,9 +85,4 @@ public interface AssetDao extends BaseDao<Asset> {
 	 */
 	List<Asset> findWarrantyExpiredAssetForPanel();
 	
-	/**
-	 * @author Geoffrey.Zhao
-	 * @return
-	 */
-	List<Asset> findLicenseExpiredAssetForPanel();
 }

@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +37,6 @@ import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.AssetService;
-import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
 import com.augmentum.ams.service.asset.LocationService;
 import com.augmentum.ams.service.asset.TransferLogService;
@@ -59,7 +57,6 @@ import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
-import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.SiteVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -89,8 +86,6 @@ public class AssetController extends BaseController {
 	private UserCustomColumnsService userCustomColumnsService;
 	@Autowired
 	private SearchAssetService searchAssetService;
-	@Autowired
-	private CustomerAssetService customerAssetService;
 	@Autowired
 	private TransferLogService transferLogService;
 
@@ -436,13 +431,12 @@ public class AssetController extends BaseController {
 				.getAttribute("currentUser");
 
 		ModelAndView modelAndView = new ModelAndView();
-		// TODO test condition is null
-		// condition = null;
 		try {
 			assetService.itAssignAssets(assigner, condition, request);
 		} catch (ExceptionHelper e) {
 			modelAndView = this.addErrorCode(e);
 		}
+		transferLogService.saveTransferLog(condition.getAssetIds(), "Assign");
 		return modelAndView;
 	}
 
@@ -457,6 +451,7 @@ public class AssetController extends BaseController {
 		} catch (ExceptionHelper e) {
 			modelAndView = this.addErrorCode(e);
 		}
+		transferLogService.saveTransferLog(assetIds, "ReturnToCustomer");
 		return modelAndView;
 	}
 
@@ -619,116 +614,4 @@ public class AssetController extends BaseController {
             logger.error(e.getMessage());
         }
     }
-
-	@RequestMapping(value = "/getAssetCountForPanel", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getAssetCountForPanel(HttpServletRequest request) {
-		User user = (User) SecurityUtils.getSubject().getSession()
-				.getAttribute("currentUser");
-		Map<String, Integer> map = assetService.getAssetCountForPanel(user);
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("assetCount", JSONObject.fromObject(map));
-		return jsonObject;
-	}
-
-	@RequestMapping(value = "/getAssetCountForManager", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getAssetCountForManager(HttpServletRequest request) {
-
-		JSONObject jsonObject = new JSONObject();
-		
-		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
-				.getAttribute("userVo");
-		User user = (User) SecurityUtils.getSubject().getSession()
-				.getAttribute("currentUser");
-
-		List<CustomerVo> list = null;
-		try {
-			list = remoteCustomerService.getCustomerByEmployeeId(
-					userVo.getEmployeeId(), request);
-		} catch (BusinessException e) {
-			logger.error("get customerVo failed from IAP", e);
-		}
-
-		List<Customer> customers = customerAssetService
-				.findVisibleCustomerList(userVo, list);
-		
-		if (null == customers) {
-			return jsonObject;
-		} else {
-			
-			Map<String, Integer> map = assetService.getAssetCountForManager(user,
-					customers);
-		
-			JSONArray jsonArray = new JSONArray();
-		
-			for (Customer customer : customers) {
-				JSONObject obj = new JSONObject();
-				obj.put("customerName", customer.getCustomerName());
-				obj.put("customerCode", customer.getCustomerCode());
-		
-				jsonArray.add(obj);
-			}
-		
-			jsonObject.put("assetCount", JSONObject.fromObject(map));
-			jsonObject.put("customer", jsonArray);
-			return jsonObject;
-		}
-	}
-
-	@RequestMapping(value = "/viewIdleAssetPanel", method = RequestMethod.GET)
-	public JSONObject viewIdleAssetPanel(HttpServletRequest request) {
-
-		JSONObject jsonObject = new JSONObject();
-		
-		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
-				.getAttribute("userVo");
-
-		List<CustomerVo> list = null;
-		try {
-			list = remoteCustomerService.getCustomerByEmployeeId(
-					userVo.getEmployeeId(), request);
-		} catch (BusinessException e) {
-			logger.error("get customerVo failed from IAP", e);
-		}
-
-		List<Customer> customers = customerAssetService
-				.findVisibleCustomerList(userVo, list);
-		
-		if (null == customers) {
-			return jsonObject;
-		} else {
-			
-			JSONArray jsonArray = assetService.findIdleAssetForPanel(customers);
-			
-			jsonObject.put("idleAssetList", jsonArray);
-			return jsonObject;
-		}
-	}
-
-	@RequestMapping(value = "/viewWarrantyExpiredAssetPanel", method = RequestMethod.GET)
-	public JSONObject viewWarranyExpiredAssetPanel(HttpSession session) {
-
-		String clientTimeOffset = (String) session.getAttribute("timeOffset");
-		JSONArray jsonArray = assetService
-				.findWarrantyExpiredAssetForPanel(clientTimeOffset);
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("warrantyExpiredAssetList", jsonArray);
-		return jsonObject;
-	}
-
-	@RequestMapping(value = "/viewLicenseExpiredAssetPanel", method = RequestMethod.GET)
-	public JSONObject viewLicenseExpiredAssetPanel(HttpSession session) {
-
-		String clientTimeOffset = (String) session.getAttribute("timeOffset");
-		JSONArray jsonArray = assetService
-				.findLicenseExpiredAssetForPanel(clientTimeOffset);
-
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("licenseExpiredAssetList", jsonArray);
-		return jsonObject;
-	}
-
 }

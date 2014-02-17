@@ -43,7 +43,7 @@ public class TransferLog extends BaseModel {
     private Date time;
 
     @Column(nullable = false, length = 64)
-    @Field(name = "action", index = Index.TOKENIZED, store = Store.YES)
+    @Field(name = "action", index = Index.UN_TOKENIZED, store = Store.YES)
     private String action;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -72,11 +72,11 @@ public class TransferLog extends BaseModel {
         this.action = action;
     }
 
-    public User getEmployee() {
+    public User getUser() {
         return user;
     }
 
-    public void setEmployee(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 

@@ -30,16 +30,16 @@
 		<table border="1">
 			<tr class="td-header">
 				<th  class="tr-header"></th>
-				<th>Machine</th>
-				<th>Monitor</th>
-				<th>Software</th>
-				<th>Device</th>
-				<th>Other</th>
-				<th>Total</th>
+				<th><spring:message code="navigator.machine"/></th>
+				<th><spring:message code="navigator.monitor"/></th>
+				<th><spring:message code="navigator.software"/></th>
+				<th><spring:message code="navigator.device"/></th>
+				<th><spring:message code="other"/></th>
+				<th><spring:message code="total"/></th>
 			</tr>
 			<shiro:hasRole name="IT">
 			<tr class="tr-all-asset">
-				<td class="tr-header">All Assets</td>
+				<td class="tr-header"><spring:message code="navigator.all.assets"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -48,7 +48,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Available</td>
+				<td class="tr-header"><spring:message code="asset.available"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -57,7 +57,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">In Use</td>
+				<td class="tr-header"><spring:message code="asset.inUse"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -66,7 +66,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Idle</td>
+				<td class="tr-header"><spring:message code="asset.idle"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -75,7 +75,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Returned</td>
+				<td class="tr-header"><spring:message code="asset.returned"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -84,7 +84,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Borrowed</td>
+				<td class="tr-header"><spring:message code="asset.borrowed"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -93,7 +93,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Broken</td>
+				<td class="tr-header"><spring:message code="asset.broken"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -102,7 +102,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Write Off</td>
+				<td class="tr-header"><spring:message code="asset.writeOff"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -111,7 +111,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">ReturningToIT</td>
+				<td class="tr-header"><spring:message code="asset.returningToIT"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -120,7 +120,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header">Assigning</td>
+				<td class="tr-header"><spring:message code="asset.assigning"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -128,8 +128,9 @@
 				<td></td>
 				<td></td>
 			</tr>
+			<!--  
 			<tr class="tr-my-asset">
-				<td class="tr-header">Fixed</td>
+				<td class="tr-header"><spring:message code="navigator.fixed.assets"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -137,11 +138,13 @@
 				<td></td>
 				<td></td>
 			</tr>
+			-->
 			</shiro:hasRole>
 			<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
 			<tr class="tr-customer-asset">
 				<td class="tr-header-customer" style="cursor: pointer; font-weight: bold;" content="Customer Asset">
-					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>Customer Assets
+					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					<spring:message code="navigator.customser.assets"/>
 				</td>
 				<td></td>
 				<td></td>
@@ -152,7 +155,8 @@
 			</tr>
 			<tr>
 				<td class="tr-header-customer" style="cursor: pointer;" content="Available Customer Asset">
-					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>Available
+					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					<spring:message code="asset.available"/>
 				</td>
 				<td></td>
 				<td></td>
@@ -163,7 +167,8 @@
 			</tr>
 			<tr>
 				<td class="tr-header-customer" style="cursor: pointer;" content="In Use Customer Asset">
-					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>In Use
+					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					<spring:message code="asset.inUse"/>
 				</td>
 				<td></td>
 				<td></td>
@@ -174,7 +179,8 @@
 			</tr>
 			<tr>
 				<td class="tr-header-customer" style="cursor: pointer;" content="Idle Customer Asset">
-					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>Idle
+					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+					<spring:message code="asset.idle"/>
 				</td>
 				<td></td>
 				<td></td>
@@ -185,7 +191,7 @@
 			</tr>
 			</shiro:hasAnyRoles>
 			<tr class="tr-my-asset">
-				<td class="tr-header">My Assets</td>
+				<td class="tr-header"><spring:message code="navigator.my.assets"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -199,43 +205,24 @@
 	<shiro:hasRole name="IT">
 		<div class="warrantyExpiredPanel">
 			<div class="panel_title">
-				<span>Asset Warranty Time Will Be Expired</span>
+				<span><spring:message code="panel.warrantyExpiredAssets"/></span>
 				<span id="viewMore_warrantyExpired" class="viewMore">
 					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<span class="viewMoreContent">More</span>
+					<span class="viewMoreContent"><spring:message code="panel.more"/></span>
 				</span>
 			</div>
 			<div class="leftPanel_content">
 				<table>
 					<tr>
-						<th>AssetId</th>
-						<th>AssetName</th>
-						<th>CustomerName</th>
-						<th>WarrantyTime</th>
+						<th><spring:message code="asset.id"/></th>
+						<th><spring:message code="asset.name"/></th>
+						<th><spring:message code="Customer"/></th>
+						<th><spring:message code="asset.warranty"/></th>
 					</tr>
 				</table>
 			</div>
 		</div>
 		
-		<div class="licenseExpiredPanel">
-			<div class="panel_title">
-				<span>Asset License Time Will Be Expired</span>
-				<span id="viewMore_licenseExpired" class="viewMore">
-					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<span class="viewMoreContent">More</span>
-				</span>
-			</div>
-			<div class="leftPanel_content">
-				<table>
-					<tr>
-						<th>AssetId</th>
-						<th>AssetName</th>
-						<th>CustomerName</th>
-						<th>LicensesExpiredTime</th>
-					</tr>
-				</table>
-			</div>
-		</div>
 	</shiro:hasRole>
 	
 </div>
@@ -244,18 +231,18 @@
 	<shiro:hasRole name="IT">
 	<div class="newlyComingAssetPanel">
 		<div class="panel_title">
-			<span>Newly Coming Assets</span>
+			<span><spring:message code="panel.newlyComingAssets"/></span>
 			<span id="" class="viewMore">
 				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span class="viewMoreContent">More</span>
+				<span class="viewMoreContent"><spring:message code="panel.more"/></span>
 			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
-					<th style="width: 100px;">AssetName</th>
-					<th style="width: 130px;">CustomerName</th>
-					<th style="width: 115px;">CheckInTime</th>
+					<th style="width: 100px;"><spring:message code="asset.name"/></th>
+					<th style="width: 130px;"><spring:message code="Customer"/></th>
+					<th style="width: 115px;"><spring:message code="CheckInTime"/></th>
 				</tr>
 			</table>
 		</div>
@@ -263,22 +250,22 @@
 	
 	<div class="returnedAssetPanel">
 		<div class="panel_title">
-			<span>Returned Assets</span>
+			<span><spring:message code="panel.returnedAssets"/></span>
 			<span id="viewMore_returnedAsset" class="viewMore">
 				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span class="viewMoreContent">More</span>
+				<span class="viewMoreContent"><spring:message code="panel.more"/></span>
 			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
 					<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
-					<th style="width: 100px;">AssetName</th>
-					<th style="width: 130px;">CustomerName</th>
-					<th style="width: 115px;">ReturnedTime</th>
+					<th style="width: 100px;"><spring:message code="asset.name"/></th>
+					<th style="width: 130px;"><spring:message code="Customer"/></th>
+					<th style="width: 115px;"><spring:message code="todo.returnedTime"/></th>
 				</tr>
 			</table>
-			<input class="confirmButton" id="returnedAsset" type="button" value="Return"/>
+			<input class="confirmButton" id="returnedAsset" type="button" value="<spring:message code='todo.return'/>"/>
 		</div>
 	</div>
 	</shiro:hasRole>
@@ -286,22 +273,22 @@
 	<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
 	<div class="receivedAssetPanel">
 		<div class="panel_title">
-			<span>Received Assets</span>
+			<span><spring:message code="panel.receivedAssets"/></span>
 			<span id="viewMore_receivedAsset" class="viewMore">
 				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span class="viewMoreContent">More</span>
+				<span class="viewMoreContent"><spring:message code="panel.more"/></span>
 			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
 					<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
-					<th style="width: 100px;">AssetName</th>
-					<th style="width: 130px;">CustomerName</th>
-					<th style="width: 115px;">ReceivedTime</th>
+					<th style="width: 100px;"><spring:message code="asset.name"/></th>
+					<th style="width: 130px;"><spring:message code="Customer"/></th>
+					<th style="width: 115px;"><spring:message code="todo.receivedTime"/></th>
 				</tr>
 			</table>
-			<input class="confirmButton" id="receivedAsset" type="button" value="Received"/>
+			<input class="confirmButton" id="receivedAsset" type="button" value="<spring:message code='todo.receive'/>"/>
 		</div>
 	</div>
 	</shiro:hasAnyRoles>
@@ -309,22 +296,22 @@
 	<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
 		<div class="idleAssetPanel">
 			<div class="panel_title">
-				<span>Idle Assets</span>
+				<span><spring:message code="panel.idleAssets"/></span>
 				<span id="viewMore_idleAsset" class="viewMore">
 					<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-					<span class="viewMoreContent">More</span>
+					<span class="viewMoreContent"><spring:message code="panel.more"/></span>
 				</span>
 			</div>
 			<div class="todo_content">
 				<table>
 					<tr>
 						<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
-						<th style="width: 100px;">AssetName</th>
-						<th style="width: 130px;">CustomerName</th>
-						<th style="width: 115px;">User</th>
+						<th style="width: 100px;"><spring:message code="asset.name"/></th>
+						<th style="width: 130px;"><spring:message code="Customer"/></th>
+						<th style="width: 115px;"><spring:message code="User"/></th>
 					</tr>
 				</table>
-				<input class="confirmButton" id="idleAsset" type="button" value="ReturnToIT"/>
+				<input class="confirmButton" id="idleAsset" type="button" value="<spring:message code="returnToIT"/>"/>
 			</div>
 		</div>
 	</shiro:hasAnyRoles>

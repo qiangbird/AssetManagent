@@ -11,8 +11,7 @@ public class AssetStatusOperateUtil {
                 || StatusEnum.BORROWED.toString().equals(asset.getStatus())
                 || StatusEnum.IDLE.toString().equals(asset.getStatus())
                 || TransientStatusEnum.ASSIGNING.toString().equals(asset.getStatus())
-                || TransientStatusEnum.RETURNING_TO_IT.toString().equals(asset.getStatus())
-                || TransientStatusEnum.RETURNING_TO_CUSTOMER.toString().equals(asset.getStatus())) {
+                || TransientStatusEnum.RETURNING_TO_IT.toString().equals(asset.getStatus())) {
             return false;
         } else {
             return true;
@@ -31,8 +30,7 @@ public class AssetStatusOperateUtil {
     public static boolean canITReturnToCustomer(Asset asset) {
         if (StatusEnum.RETURNED.toString().equals(asset.getStatus())
                 || TransientStatusEnum.ASSIGNING.toString().equals(asset.getStatus())
-                || TransientStatusEnum.RETURNING_TO_IT.toString().equals(asset.getStatus())
-                || TransientStatusEnum.RETURNING_TO_CUSTOMER.toString().equals(asset.getStatus())) {
+                || TransientStatusEnum.RETURNING_TO_IT.toString().equals(asset.getStatus())) {
             return false;
         } else {
             return true;
@@ -47,8 +45,7 @@ public class AssetStatusOperateUtil {
         if (StatusEnum.RETURNED.toString().equals(asset.getStatus())
                 || StatusEnum.AVAILABLE.toString().equals(asset.getStatus())
                 || TransientStatusEnum.ASSIGNING.toString().equals(asset.getStatus())
-                || TransientStatusEnum.RETURNING_TO_IT.toString().equals(asset.getStatus())
-                || TransientStatusEnum.RETURNING_TO_CUSTOMER.toString().equals(asset.getStatus())) {
+                || TransientStatusEnum.RETURNING_TO_IT.toString().equals(asset.getStatus())) {
             return false;
         } else {
             return true;

@@ -11,6 +11,7 @@ import com.augmentum.ams.dao.base.BaseDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.todo.ToDoService;
 import com.augmentum.ams.util.FormatUtil;
 
@@ -56,8 +57,8 @@ public class ToDoServiceImpl implements ToDoService{
 	}
 
 	@Override
-	public List<ToDo> findReceivedAsset() {
-		return todoDao.findReceivedAsset();
+	public List<ToDo> findReceivedAsset(User user) {
+		return todoDao.findReceivedAsset(user);
 	}
 	
 }
