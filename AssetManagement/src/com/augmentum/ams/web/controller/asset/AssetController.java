@@ -1,6 +1,5 @@
 package com.augmentum.ams.web.controller.asset;
 
-import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -38,7 +37,6 @@ import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
-import com.augmentum.ams.service.asset.AssetImportParserService;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
@@ -62,7 +60,6 @@ import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
-import com.augmentum.ams.web.vo.asset.ImportVo;
 import com.augmentum.ams.web.vo.asset.SiteVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -94,8 +91,6 @@ public class AssetController extends BaseController {
 	private SearchAssetService searchAssetService;
 	@Autowired
 	private CustomerAssetService customerAssetService;
-	@Autowired
-	private AssetImportParserService assetImportParserService;
 	@Autowired
 	private TransferLogService transferLogService;
 
@@ -606,47 +601,24 @@ public class AssetController extends BaseController {
 			logger.error(e.getMessage());
 		}
 	}
-
+	
 	@RequestMapping(value = "/import")
-	public String importAssets() {
-		return "asset/importAssets";
-	}
-
-	@RequestMapping(value = "/upload")
-    @ResponseBody
-    public JSONObject  uploadAssetsExcelFile(MultipartFile file, String flag, HttpServletRequest request,
-            HttpServletResponse response) {
-        
-        File targetFile = FileOperateUtil.upload(request, response, file);
-        ImportVo importVo = null;
-        JSONObject jsonObject = new JSONObject();
-        try {
-            importVo = assetImportParserService.importAsset(targetFile, request, flag);
-        } catch (ExcelException e) {
-            jsonObject.put("error", e.getErrorCode());
-            return jsonObject;
-        }
-        
-        jsonObject.put("all", importVo.getAllImportRecords());
-        jsonObject.put("success", importVo.getSuccessRecords());
-        jsonObject.put("failure", importVo.getFailureRecords());
-        jsonObject.put("failureFileName", importVo.getFailureFileName());
-        
-        return jsonObject;
+    public String importAssets() {
+        return "asset/importAssets";
     }
-
+	
 	@RequestMapping(value = "/download")
-	public void downloadFailureAssets(String fileName,
-			HttpServletRequest request, HttpServletResponse response) {
-
-		String outPutPath = FileOperateUtil.getBasePath()
-				+ SystemConstants.CONFIG_TEMPLATES_PATH + fileName;
-		try {
-			FileOperateUtil.download(request, response, outPutPath);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-	}
+    public void downloadFailureAssets(String fileName,
+            HttpServletRequest request, HttpServletResponse response) {
+        
+        String outPutPath = FileOperateUtil.getBasePath()
+                + SystemConstants.CONFIG_TEMPLATES_PATH + fileName;
+        try {
+            FileOperateUtil.download(request, response, outPutPath);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
 
 	@RequestMapping(value = "/getAssetCountForPanel", method = RequestMethod.GET)
 	@ResponseBody

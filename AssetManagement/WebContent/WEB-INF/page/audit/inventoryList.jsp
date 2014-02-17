@@ -57,7 +57,7 @@
 	            							<div class="percentResult"></div>
 	            						</div>
 	            						<div class="process-operation-button">
-		            						<form action="auditFile/checkInventory" enctype="multipart/form-data" method="post">
+		            						<form action="upload/cvs" enctype="multipart/form-data" method="post">
 							                	<input id="fileUpload" type="file" name="file" id="file" onchange="initUpload(this);"></input>
 							                	<input type="hidden" name="auditFileName" id="auditFileName" value=""></input>
 						                		<input id="uploadBtn" type="button" value="<spring:message code='upload'/>" Onclick="file.click();"></input>

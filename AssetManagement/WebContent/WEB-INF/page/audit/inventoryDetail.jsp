@@ -49,7 +49,7 @@
                 
                 <div class="process-operation-button">
                 <c:if test="${operator == null}">
-                	<form action="auditFile/checkInventory" enctype="multipart/form-data" method="post">
+                	<form action="upload/cvs" enctype="multipart/form-data" method="post">
 	                	<input id="fileUpload" type="file" name="file" id="file" onchange="checkInventory(this, 'inventoryDetails');"></input>
 	                	<input type="hidden" name="auditFileName" value="${fileName}"></input>
                 		<input id="uploadBtn" type="button" value=<spring:message code="audit.upload" /> Onclick="file.click();"></input>

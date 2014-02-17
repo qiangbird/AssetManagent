@@ -46,7 +46,7 @@
                    </div>
                    <div class="process-panel pro-second">
                        <strong><spring:message code="import.file"></spring:message>: </strong>
-                       <form id="importForm" action="asset/upload" enctype="multipart/form-data" method="post">
+                       <form id="importForm" action="upload/excel" enctype="multipart/form-data" method="post">
                            <input type="hidden" id="flag" name="flag" value="create" />
 	                       <input type="file"  class="import-file" name="file" id="file" onchange="uploadFile(this);" />
 	                       <input type="button" id="uploadButon" class="import-button upload-button" value=<spring:message code="upload" /> Onclick="file.click();"/>

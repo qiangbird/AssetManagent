@@ -55,7 +55,7 @@
 	   $("#uploadForm").ajaxSubmit(
 	   {
 	       type : 'post',
-	       url : 'asset/uploadFile',
+	       url : 'upload/image',
 	       data : $("#uploadForm")
 	               .formSerialize(),
 	       success : function(data) {
