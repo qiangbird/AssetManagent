@@ -1,8 +1,12 @@
 package com.augmentum.ams.service.asset.impl;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.xwork.StringUtils;
 import org.apache.log4j.Logger;
@@ -12,9 +16,11 @@ import org.springframework.stereotype.Service;
 import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.PurchaseItemDao;
 import com.augmentum.ams.model.asset.PurchaseItem;
+import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.model.enumeration.EntityEnum;
 import com.augmentum.ams.service.asset.PurchaseItemService;
 import com.augmentum.ams.util.CommonUtil;
+import com.augmentum.ams.util.UTCTimeUtil;
 
 @Service("purchaseItemService")
 public class PurchaseItemServiceImpl implements PurchaseItemService {
@@ -44,19 +50,32 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
     }
 
     @Override
-    public List<PurchaseItem> getAllPurchaseItem()  {
+    public JSONArray findAllPurchaseItem()  {
+        
         List<PurchaseItem> purchaseItems = purchaseItemDao.findAll(PurchaseItem.class);
-
-        return purchaseItems;
+        JSONArray jsonArray = new JSONArray();
+        
+        for(PurchaseItem purchaseItem : purchaseItems){
+            JSONObject obj = new JSONObject();
+            
+            obj.put("id", purchaseItem.getId());
+            obj.put("itemName", purchaseItem.getItemName());
+            obj.put("deliveryDate", purchaseItem.getDeliveryDate().toString());
+            
+            jsonArray.add(obj);
+        }
+        
+        return jsonArray;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void createPurchaseItem(Map<String, Object> dataMap)  {
+        
         String processType = null;
         String dataSite = null;
         String entitySite = null;
-        Timestamp deliveryDate = null;
+        Date deliveryDate = null;
         int finalQuantity = 0;
 
         List<Map<String, Object>> orderList = (List<Map<String, Object>>) dataMap.get("orders");
@@ -75,7 +94,16 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
                     processType = CommonUtil.objectToString(dataMap.get("customerName"));
                 }
                 purchaseItem.setProcessType(processType);
-
+                
+                if("SOFTWARE".equals(CommonUtil.objectToString(dataMap.get("itemType")))){
+                    purchaseItem.setItemType(AssetTypeEnum.SOFTWARE.name());
+                }
+                if("HARDWARE".equals(CommonUtil.objectToString(dataMap.get("itemType")))){
+                    purchaseItem.setItemType(AssetTypeEnum.MACHINE.name());
+                }
+                if("OTHERS".equals(CommonUtil.objectToString(dataMap.get("itemType")))){
+                    purchaseItem.setItemType(AssetTypeEnum.OTHERASSETS.name());
+                }
                 purchaseItem.setCustomerName(CommonUtil.objectToString(dataMap.get("customerName")));
 
                 purchaseItem.setCustomerCode(CommonUtil.objectToString(dataMap.get("customerCode")));
@@ -123,7 +151,7 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
                 purchaseItem.setEntitySite(entitySite);
 
                 if (!StringUtils.isEmpty(CommonUtil.objectToString(orderMap.get("deliveryDate")))) {
-                    deliveryDate = Timestamp.valueOf(CommonUtil.objectToString(orderMap.get("deliveryDate")));
+                    deliveryDate = UTCTimeUtil.localDateToUTC(CommonUtil.objectToString(orderMap.get("deliveryDate")));
                 }
                 purchaseItem.setDeliveryDate(deliveryDate);
 
@@ -139,6 +167,11 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
                 purchaseItemDao.save(purchaseItem);
             }
         }
+    }
+
+    @Override
+    public void deletePurchaseItemAsId(String id) {
+        purchaseItemDao.delete(purchaseItemDao.get(PurchaseItem.class, id));
     }
 
 }

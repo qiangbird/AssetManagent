@@ -16,15 +16,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.asset.PurchaseItem;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
+import com.augmentum.ams.service.asset.PurchaseItemService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
+import com.augmentum.ams.util.AssetUtil;
+import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
+import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("dashboardController")
@@ -37,6 +44,8 @@ public class DashboardController extends BaseController {
 	private RemoteCustomerService remoteCustomerService;
 	@Autowired
 	private CustomerAssetService customerAssetService;
+	@Autowired
+    private PurchaseItemService purchaseItemService;
 	
 	Logger logger = Logger.getLogger(DashboardController.class);
 
@@ -138,4 +147,24 @@ public class DashboardController extends BaseController {
 		jsonObject.put("warrantyExpiredAssetList", jsonArray);
 		return jsonObject;
 	}
+	
+	@RequestMapping(value = "/viewNewlyPurchaseItemsPanel", method = RequestMethod.GET)
+    public JSONObject viewNewlyPurchaseItemsPanel() {
+
+        JSONArray jsonArray = purchaseItemService.findAllPurchaseItem();
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("newlyPurchaseItemsList", jsonArray);
+        
+        return jsonObject;
+    }
+	
+	@RequestMapping(value = "/deletePurchaseItem", method = RequestMethod.GET)
+	@ResponseBody
+    public String deletePurchaseItem(String id) {
+
+        purchaseItemService.deletePurchaseItemAsId(id);
+        
+        return null;
+    }
 }

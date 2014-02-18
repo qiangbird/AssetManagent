@@ -52,6 +52,7 @@ String basePath = request.getScheme() + "://"
 				<div class="common-requirement-property">
 					<div class="asset-input-left asset-input-panel">
 						<form:hidden path="assetId" />
+						<form:hidden path="purchaseItemId" />
 						<p>
 							<span>*</span> <label><spring:message code="asset.name" /></label>
 							<form:input path="assetName" maxlength="36" cssClass="l-text"

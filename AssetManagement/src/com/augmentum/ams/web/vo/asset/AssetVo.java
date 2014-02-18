@@ -77,6 +77,8 @@ public class AssetVo {
 
     private String softwareExpiredTime;
     
+    private String purchaseItemId;
+    
     public String getId() {
         return id;
     }
@@ -330,6 +332,14 @@ public class AssetVo {
 
     public void setSoftwareExpiredTime(String softwareExpiredTime) {
         this.softwareExpiredTime = softwareExpiredTime;
+    }
+
+    public String getPurchaseItemId() {
+        return purchaseItemId;
+    }
+
+    public void setPurchaseItemId(String purchaseItemId) {
+        this.purchaseItemId = purchaseItemId;
     }
 
 }

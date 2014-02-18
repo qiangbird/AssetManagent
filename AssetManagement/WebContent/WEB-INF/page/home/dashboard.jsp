@@ -229,9 +229,9 @@
 
 <div id="right">
 	<shiro:hasRole name="IT">
-	<div class="newlyComingAssetPanel">
+	<div class="newlyPurchaseItemsPanel">
 		<div class="panel_title">
-			<span><spring:message code="panel.newlyComingAssets"/></span>
+			<span><spring:message code="panel.newlyPurchaseItems"/></span>
 			<span id="" class="viewMore">
 				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 				<span class="viewMoreContent"><spring:message code="panel.more"/></span>
@@ -241,8 +241,8 @@
 			<table>
 				<tr>
 					<th style="width: 100px;"><spring:message code="asset.name"/></th>
-					<th style="width: 130px;"><spring:message code="Customer"/></th>
-					<th style="width: 115px;"><spring:message code="CheckInTime"/></th>
+					<th style="width: 130px;"><spring:message code="Date"/></th>
+					<th style="width: 115px;"><spring:message code="delete"/></th>
 				</tr>
 			</table>
 		</div>

@@ -136,6 +136,42 @@ $(document).ready(function(){
 		window.location.href = "asset/allAssets?isWarrantyExpired=true";
 	});
 	
+	// find newly purchase assets panel
+	$.ajax({
+		type : 'GET',
+		contentType : 'application/json',
+		dataType : 'json',
+		url: "dashboard/viewNewlyPurchaseItemsPanel",
+		success: function(data){
+			var purchaseItems = data.newlyPurchaseItemsList;
+			for (var i = 0; i < purchaseItems.length; i++) {
+				$(".newlyPurchaseItemsPanel table").append("<tr><td class='itemIdTd'><input class='itemId' value=" 
+						+ purchaseItems[i].id + " /></td><td><a class='itemName'>" + purchaseItems[i].itemName + "</a></td><td>" 
+						+ purchaseItems[i].deliveryDate + "</td><td><a class='deleteItem'></a></td><td>");
+			}
+		}
+	});
+	
+	$(".newlyPurchaseItemsPanel").delegate(".deleteItem","click", function(){
+		var itemId = $(this).parents(".newlyPurchaseItemsPanel").find(".itemId").val();
+		$.ajax({
+			type : 'GET',
+			dataType : 'json',
+			url: "dashboard/deletePurchaseItem",
+			data: {
+				id:itemId
+			},
+			success: function(data){
+				alert("Delete the purchase item successfully!");
+			}
+		});
+	});
+	
+	$(".newlyPurchaseItemsPanel").delegate(".itemName","click", function(){
+		var itemId = $(this).parents(".newlyPurchaseItemsPanel").find(".itemId").val();
+		window.location.href = "asset/createPurchaseItem?id=" + itemId;
+	});
+	
 	
 	// generate link and parameters for IT number   --------------------------------- start
 	function getTypeForLink(i) {

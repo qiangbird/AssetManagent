@@ -33,12 +33,14 @@ import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.DeviceSubtype;
 import com.augmentum.ams.model.asset.Location;
+import com.augmentum.ams.model.asset.PurchaseItem;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.DeviceSubtypeService;
 import com.augmentum.ams.service.asset.LocationService;
+import com.augmentum.ams.service.asset.PurchaseItemService;
 import com.augmentum.ams.service.asset.TransferLogService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
@@ -51,13 +53,13 @@ import com.augmentum.ams.util.AssetUtil;
 import com.augmentum.ams.util.ErrorCodeConvertToJSON;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FileOperateUtil;
-import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.asset.SiteVo;
+import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
@@ -88,6 +90,8 @@ public class AssetController extends BaseController {
 	private SearchAssetService searchAssetService;
 	@Autowired
 	private TransferLogService transferLogService;
+	@Autowired
+	private PurchaseItemService purchaseItemService;
 
 	private Page<Asset> pageForAudit;
 
@@ -614,4 +618,27 @@ public class AssetController extends BaseController {
             logger.error(e.getMessage());
         }
     }
+	
+	@RequestMapping(value = "/createPurchaseItem", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView createPurchaseItem(HttpServletRequest request, String id) throws BusinessException, ParseException {
+
+        PurchaseItem purchaseItem = purchaseItemService.getPurchaseItemById(id);
+        
+        ModelAndView modelAndView = getCommonInfoForAsset(request);
+        String timeOffset = (String) request.getSession().getAttribute(
+                "timeOffset");
+        AssetVo assetVo = new AssetVo();
+        
+        FormatEntityListToEntityVoList.purchaseItemToAssetVo(purchaseItem, assetVo, timeOffset);
+        modelAndView.addObject("assetVo", assetVo);
+        
+        request.setAttribute("type", assetVo.getType());
+        request.setAttribute("entity", assetVo.getEntity());
+        
+        modelAndView.setViewName("asset/copyAsset");
+        
+        return modelAndView;
+    }
+	
 }

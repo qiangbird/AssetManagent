@@ -24,11 +24,11 @@ import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.audit.AuditFileService;
 import com.augmentum.ams.service.audit.AuditService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
-import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.audit.AuditVo;
+import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 

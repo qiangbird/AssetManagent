@@ -3,6 +3,8 @@ package com.augmentum.ams.service.asset;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+
 import com.augmentum.ams.model.asset.PurchaseItem;
 
 public interface PurchaseItemService {
@@ -15,7 +17,9 @@ public interface PurchaseItemService {
      */
     void deletePurchaseItem(PurchaseItem purchaseItem);
 
-    List<PurchaseItem> getAllPurchaseItem();
+    JSONArray findAllPurchaseItem();
 
     void createPurchaseItem(Map<String, Object> dataMap);
+    
+    void deletePurchaseItemAsId(String id);
 }

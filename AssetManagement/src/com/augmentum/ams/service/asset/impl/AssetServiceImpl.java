@@ -57,6 +57,7 @@ import com.augmentum.ams.service.asset.MachineService;
 import com.augmentum.ams.service.asset.MonitorService;
 import com.augmentum.ams.service.asset.OtherAssetsService;
 import com.augmentum.ams.service.asset.ProjectService;
+import com.augmentum.ams.service.asset.PurchaseItemService;
 import com.augmentum.ams.service.asset.SoftwareService;
 import com.augmentum.ams.service.customized.CustomizedPropertyService;
 import com.augmentum.ams.service.customized.PropertyTemplateService;
@@ -119,7 +120,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	private AuditDao auditDao;
 	@Autowired
 	private ToDoDao todoDao;
-
+	@Autowired
+	private PurchaseItemService purchaseItemService;
+	
 	private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
 
 	@Override
@@ -163,7 +166,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 				softwareService.saveSoftware(assetVo.getSoftware());
 				asset.setSoftware(assetVo.getSoftware());
 				saveAsset(asset);
-
 			} else {
 
 				saveAsset(asset);
@@ -203,6 +205,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 							.saveOtherAssets(assetVo.getOtherAssets());
 				}
 			}
+			purchaseItemService.deletePurchaseItemAsId(assetVo.getPurchaseItemId());
 
 		} else {
 			// TODO need update operation log

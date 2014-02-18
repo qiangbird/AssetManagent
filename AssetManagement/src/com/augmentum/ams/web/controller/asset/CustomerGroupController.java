@@ -17,19 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.dao.asset.CustomerDao;
 import com.augmentum.ams.exception.BusinessException;
-import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
-import com.augmentum.ams.model.asset.Location;
-import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.CustomerGroupService;
 import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.util.AssetUtil;
-import com.augmentum.ams.util.CommonUtil;
-import com.augmentum.ams.util.FormatEntityListToEntityVoList;
 import com.augmentum.ams.util.SearchCommonUtil;
-import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 

@@ -31,6 +31,12 @@ public class PurchaseItem extends BaseModel {
 	 */
 	@Column(name = "process_type", length = 32, nullable = false)
 	private String processType;
+	
+	/**
+     * The item type of PMS
+     */
+    @Column(name = "item_type", length = 32, nullable = false)
+    private String itemType;
 
 	/**
 	 * The name of customer which bought the items
@@ -233,6 +239,14 @@ public class PurchaseItem extends BaseModel {
 
     public void setUsed(boolean isUsed) {
         this.isUsed = isUsed;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
 }
