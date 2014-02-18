@@ -21,4 +21,12 @@ public class CommonUtil {
         }
         return returnStr;
     }
+    
+    public static String objectToString(Object object){
+        if(object == null){
+            return "";
+        }else{
+            return String.valueOf(object);
+        }
+    }
 }

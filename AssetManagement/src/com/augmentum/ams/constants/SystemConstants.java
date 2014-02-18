@@ -88,4 +88,7 @@ public class SystemConstants {
     public static final String SERVER_ERROR_PAGE = "error/error_500";
     
     public static final String AUTHORITY_ERROR_PAGE = "error/authorityError";
+    
+    // Ownership
+    public static final String AUGMENTUM = "Augmentum";
 }

@@ -227,12 +227,12 @@ public class PurchaseItem extends BaseModel {
 		this.usedQuantity = usedQuantity;
 	}
 
-	public boolean isUsed() {
-		return isUsed;
-	}
+    public boolean isUsed() {
+        return isUsed;
+    }
 
-	public void setUsed(boolean isUsed) {
-		this.isUsed = isUsed;
-	}
+    public void setUsed(boolean isUsed) {
+        this.isUsed = isUsed;
+    }
 
 }

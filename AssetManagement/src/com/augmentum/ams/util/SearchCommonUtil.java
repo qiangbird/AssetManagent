@@ -198,15 +198,15 @@ public class SearchCommonUtil {
 						value = BeanUtils.getProperty(transferLog, fieldName);
 					} catch (IllegalAccessException e) {
 						throw new SystemException(e,
-								ErrorCodeUtil.ILLEGAL_ACCESS_EXCEPTION,
+								ErrorCodeUtil.SYSTEM_ERROR,
 								"IllegalAccessException when get property from transferlog");
 					} catch (InvocationTargetException e) {
 						throw new SystemException(e,
-								ErrorCodeUtil.INVOCATION_TARGET_EXCEPTION,
+								ErrorCodeUtil.SYSTEM_ERROR,
 								"InvocationTargetException when get property from transferlog");
 					} catch (NoSuchMethodException e) {
 						throw new SystemException(e,
-								ErrorCodeUtil.NO_SUCH_METHOD_EXCEPTION,
+								ErrorCodeUtil.SYSTEM_ERROR,
 								"NoSuchMethodException when get property from transferlog");
 					}
 				}
@@ -265,15 +265,15 @@ public class SearchCommonUtil {
 					}
 				} catch (IllegalAccessException e) {
 					throw new SystemException(e,
-							ErrorCodeUtil.ILLEGAL_ACCESS_EXCEPTION,
+							ErrorCodeUtil.SYSTEM_ERROR,
 							"IllegalAccessException when get property from todo asset");
 				} catch (InvocationTargetException e) {
 					throw new SystemException(e,
-							ErrorCodeUtil.INVOCATION_TARGET_EXCEPTION,
+							ErrorCodeUtil.SYSTEM_ERROR,
 							"InvocationTargetException when get property from todo asset");
 				} catch (NoSuchMethodException e) {
 					throw new SystemException(e,
-							ErrorCodeUtil.NO_SUCH_METHOD_EXCEPTION,
+							ErrorCodeUtil.SYSTEM_ERROR,
 							"NoSuchMethodException when get property from todo asset");
 				}
 				array.add(value);
