@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -54,7 +55,7 @@ public interface CustomerAssetService {
      * @param status
      * @param ids
      */
-    void returnCustomerAsset(String status,String ids);
+    void returnCustomerAsset(User returner, String status,String ids);
     
     /**
      * 

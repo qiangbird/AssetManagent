@@ -150,7 +150,7 @@ public interface AssetService {
      * @author Geoffrey.Zhao
      * @param assetIds
      */
-    void returnAssetsToCustomer(User returner, String assetIds) throws ExceptionHelper;
+    void returnAssetsToCustomer(String assetIds) throws ExceptionHelper;
 
     /**
      * @author Geoffrey.Zhao

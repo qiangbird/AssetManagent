@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.CustomerService;
@@ -129,8 +130,10 @@ public class CustomerAssetController extends BaseController {
 			String assetsId, String customerCode, String operation) {
 
 		logger.info("returnToOperation method start!");
-
-		customerAssetService.returnCustomerAsset(status, assetsId);
+		
+		User returner = (User) SecurityUtils.getSubject().getSession()
+                .getAttribute("currentUser");
+		customerAssetService.returnCustomerAsset(returner, status, assetsId);
 		transferLogService.saveTransferLog(assetsId, operation);
 
 		logger.info("returnToOperation method end!");

@@ -63,7 +63,7 @@ tr {
 
 .treeIndent {
 	width: 140px;
-	height: 25px;
+	height: 23px;
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow: ellipsis;
@@ -80,7 +80,7 @@ tr {
 
 .afterTR td div,.afterTR-available td div,.afterTR-inuse td div,.afterTR-idle td div{
 	margin-top: 6px;
-	text-indent: 31px;
+	text-indent: 30px;
 }
 
 .panel_title {
@@ -131,7 +131,7 @@ tr {
 }
 
 .confirmButton {
-	background: url("../../image/common/BTN_Create_Hover_80x30.png") no-repeat;
+	background: url("../../image/common/BTN_Create_80x30.png") no-repeat;
 	cursor: pointer;
 	height: 30px;
 	width: 80px;
@@ -139,6 +139,11 @@ tr {
 	font-size: 14px;
 	color: #FFFFFF;
 	margin: 3px 0px -6px 7px;
+	border: 0px;
+}
+
+.confirmButton:hover {
+	background: url("../../image/common/BTN_Create_Hover_80x30.png") no-repeat;
 }
 
 .newlyPurchaseItemsPanel,.returnedAssetPanel,.receivedAssetPanel,.idleAssetPanel {
@@ -183,6 +188,7 @@ tr {
 	text-align: left;
 	text-indent: 3px;
 	font-size: 14px;
+	height: 30px;
 }
 
 .tree_icons {
@@ -225,7 +231,17 @@ tr {
 	font-size: 12px;
 }
 
+.div_checkbox,.div_checkbox_all {
+	cursor: pointer;
+	background: url(../../image/common/ICN_Checkbox_14x15.png) no-repeat 50% 50%;
+	width: 30px;
+	height: 25px;
+	line-height: 25px;
+}
 
+.div_checkbox_actived,.div_checkbox_all_actived {
+	background: url(../../image/common/ICN_Checkbox_Active_14x15.png) no-repeat 50% 50%;
+}
 
 
 

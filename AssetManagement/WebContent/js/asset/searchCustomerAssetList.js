@@ -5,6 +5,17 @@ $(document).ready(function() {
     // categoryFlag = 1, it means category is 'asset'
     initCriteria(1);
     findDataListInfo("asset");
+    
+    $(".filterDiv input[type='checkBox']").each(function(){
+    	if ($(this).val() != "all") {
+    		$(this).attr("content", $(this).siblings("label").html());
+    	}
+    });
+    
+    $(".filterDiv input[type='text']").each(function(){
+    	$(this).attr("content", $(this).val());
+    });
+    
     $(".filterDiv").filterBox({});
     
     // update filterbox style for dashboard link and search as condition  ------ start

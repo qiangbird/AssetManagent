@@ -546,7 +546,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	}
 
 	@Override
-	public void returnAssetsToCustomer(User returner, String assetIds)
+	public void returnAssetsToCustomer(String assetIds)
 			throws ExceptionHelper {
 
 		logger.info("enter returnAssetsToCustomer service successfully");

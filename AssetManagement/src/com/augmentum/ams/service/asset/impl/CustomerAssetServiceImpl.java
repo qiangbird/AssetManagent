@@ -1,6 +1,7 @@
 package com.augmentum.ams.service.asset.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +33,14 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
+import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Project;
 import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
 import com.augmentum.ams.model.enumeration.StatusEnum;
+import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
@@ -79,6 +82,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     private ProjectService projectService;
     @Autowired
     private RemoteProjectService remoteProjectService;
+    @Autowired
+    private ToDoDao todoDao;
 
     /*
      * (non-Javadoc)
@@ -171,9 +176,10 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class);
-        criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
-                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN)
+        criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("project", FetchMode.JOIN)
+                .setFetchMode("location", FetchMode.JOIN)
                 .createAlias("customer", "customer");
+        
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         criteria.add(Restrictions.eq("customer.id", customerId));
 
@@ -188,6 +194,14 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
                 .setCriteriaQuery(criteria);
+        
+        if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
+            fullTextQuery.setFilter(filter);
+            List<Asset> allRecords = fullTextQuery.list();
+            page.setAllRecords(allRecords);
+            return page;
+        }
+        
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
         fullTextSession.close();
         return page;
@@ -340,13 +354,23 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     }
 
     @Override
-    public void returnCustomerAsset(String status, String ids) {
+    public void returnCustomerAsset(User returner, String status, String ids) {
         String assetId[] = ids.split(",");
+        Date date = UTCTimeUtil.localDateToUTC();
         for (String id : assetId) {
             Asset asset = assetService.getAsset(id);
             asset.setStatus(status);
             asset.setUser(null);
             assetService.updateAsset(asset);
+            
+         // generate todo list for return to IT operation
+            if ("RETURNING_TO_IT".equals(status)) {
+                ToDo todo = new ToDo();
+                todo.setAsset(asset);
+                todo.setReturnedTime(date);
+                todo.setReturner(returner);
+                todoDao.save(todo);
+            }
         }
     }
 
@@ -493,8 +517,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class);
         criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
-                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN)
-                .setFetchMode("customer", FetchMode.JOIN);
+                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
 
         Page<Asset> page = new Page<Asset>();
 
@@ -507,6 +530,14 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
                 .setCriteriaQuery(criteria);
+        
+        if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
+            fullTextQuery.setFilter(filter);
+            List<Asset> allRecords = fullTextQuery.list();
+            page.setAllRecords(allRecords);
+            return page;
+        }
+        
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
         fullTextSession.close();
         return page;

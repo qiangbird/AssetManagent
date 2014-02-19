@@ -259,7 +259,7 @@
 		<div class="todo_content">
 			<table>
 				<tr>
-					<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
+					<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
 					<th style="width: 100px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Customer"/></th>
 					<th style="width: 115px;"><spring:message code="todo.returnedTime"/></th>
@@ -282,7 +282,7 @@
 		<div class="todo_content">
 			<table>
 				<tr>
-					<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
+					<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
 					<th style="width: 100px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Customer"/></th>
 					<th style="width: 115px;"><spring:message code="todo.receivedTime"/></th>
@@ -305,7 +305,7 @@
 			<div class="todo_content">
 				<table>
 					<tr>
-						<th class="tr_checkbox"><input class="checkall" type="checkbox"/></th>
+						<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
 						<th style="width: 100px;"><spring:message code="asset.name"/></th>
 						<th style="width: 130px;"><spring:message code="Customer"/></th>
 						<th style="width: 115px;"><spring:message code="User"/></th>

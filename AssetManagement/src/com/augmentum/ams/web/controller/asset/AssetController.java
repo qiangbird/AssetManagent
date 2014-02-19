@@ -448,10 +448,9 @@ public class AssetController extends BaseController {
 	public ModelAndView returnAssetsToCustomer(String assetIds) {
 
 		ModelAndView modelAndView = new ModelAndView();
-		User returner = (User) SecurityUtils.getSubject().getSession()
-				.getAttribute("currentUser");
+		
 		try {
-			assetService.returnAssetsToCustomer(returner, assetIds);
+			assetService.returnAssetsToCustomer(assetIds);
 		} catch (ExceptionHelper e) {
 			modelAndView = this.addErrorCode(e);
 		}
