@@ -37,55 +37,6 @@
             <input type="hidden" id="keyword_content" value="">
             <div id="searchInputTipDiv" class="inputTipDiv"><span></span></div>
             <input id="keyword" class="input_txt" name="" type="text" value="">
-            <!-- <div class="filterDiv filterDiv_common">
-                <button class="filterBtn filter_no_dropDown">
-                </button>
-                <div class="filterBox">
-                    <div class="single_condition">
-                        <div class="condition_title"><label id="label_SearchBy"></label></div>
-                        <div class="condition_optional" id="searchFields">
-                            <p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllFields"></label></p>
-                            <p><input type="checkBox" name="field" value="assetId"/><label id="label_AssetId"></label></p>
-                            <p><input type="checkBox" name="field" value="assetName"/><label id="label_AssetName"></label></p>
-                            <p><input type="checkBox" name="field" value="user.userName"/><label id="label_User"></label></p>
-                            <p><input type="checkBox" name="field" value="project.projectName"/><label id="label_Project"></label></p>
-                            <p><input type="checkBox" name="field" value="customer.customerName"/><label id="label_Customer"></label></p>
-                            <p><input type="checkBox" name="field" value="poNo"/><label id="label_PoNo"></label></p>
-                            <p><input type="checkBox" name="field" value="barCode"/><label id="label_BarCode"></label></p>
-                        </div>
-                    </div>
-                    <div class="single_condition">
-                        <div class="condition_title"><label id="label_AssetType"></label></div>
-                        <div class="condition_optional" id="assetType">
-                            <p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllTypes"></label></p>
-                            <p><input type="checkBox" name="field" value="MACHINE" /><label id="label_Machine"></label></p>
-                            <p><input type="checkBox" name="field" value="MONITOR" /><label id="label_Monitor"></label></p>
-                            <p><input type="checkBox" name="field" value="DEVICE" /><label id="label_Device"></label></p>
-                            <p><input type="checkBox" name="field" value="SOFTWARE" /><label id="label_Software"></label></p>
-                            <p><input type="checkBox" name="field" value="OTHERASSETS" /><label id="label_OtherAssets"></label></p>
-                        </div>
-                    </div>
-                    <div class="single_condition">
-                        <div class="condition_title"><label id="label_AssetStatus"></label></div>
-                        <div class="condition_optional" id="assetStatus">
-                            <p><input type="checkBox" name="field" class="checked_all" value="all"/><label id="label_CheckedAllStatus"></label></p>
-                            <p><input type="checkBox" name="field" value="AVAILABLE" /><label id="label_Available"></label></p>
-                            <p><input type="checkBox" name="field" value="IN_USE" /><label id="label_InUse"></label></p>
-                            <p><input type="checkBox" name="field" value="IDLE" /><label id="label_Idle"></label></p>
-                            <p><input type="checkBox" name="field" value="RETURNED" /><label id="label_Returned"></label></p>
-                        </div>
-                    </div>
-                    <div class="single_condition">
-                        <div class="condition_title"><label id="label_CheckInTime"></label></div>
-                        <div class="condition_optional" id="checkInTime">
-                            <p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
-                            <span class="dateLine">-</span>
-                            <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>
-                        </div>
-                    </div>
-                    <a class="reset" href="javascript:void(0);">Reset</a>
-                </div>
-            </div> -->
             
             <div class="filterDiv filterDiv_common">
 				<button class="filterBtn filter_no_dropDown">
@@ -147,10 +98,6 @@
             <div class="operation_assets_list">
                 <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
-                    <%-- <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
-                    <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
-                    <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
-                    <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>  --%>
              <c:choose>
                 <c:when test="${sessionScope.userRole == 'Manager'}">
                     <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">

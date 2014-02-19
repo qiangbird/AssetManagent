@@ -71,8 +71,6 @@ public class BaseHibernateDaoImpl<T extends BaseModel> implements BaseHibernateD
             fullTextQuery.setSort(sort);
         }
 
-        page.setAllRecords(fullTextQuery.list());
-        
         page.setRecordCount(fullTextQuery.getResultSize());
         page.setTotalPage(page.getRecordCount() % page.getPageSize() == 0 ? page.getRecordCount()
                 / page.getPageSize() : page.getRecordCount() / page.getPageSize() + 1);

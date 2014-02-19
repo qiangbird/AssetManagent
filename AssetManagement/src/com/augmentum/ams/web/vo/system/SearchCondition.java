@@ -35,7 +35,7 @@ public class SearchCondition {
     
     private Boolean isWarrantyExpired;
     
-    private Boolean isLicenseExpired;
+    private Boolean isGetAllRecords;
     
     public String getCustomizedViewId() {
         return customizedViewId;
@@ -164,12 +164,11 @@ public class SearchCondition {
 		this.isWarrantyExpired = isWarrantyExpired;
 	}
 
-	public Boolean getIsLicenseExpired() {
-		return isLicenseExpired;
+	public Boolean getIsGetAllRecords() {
+		return isGetAllRecords;
 	}
 
-	public void setIsLicenseExpired(Boolean isLicenseExpired) {
-		this.isLicenseExpired = isLicenseExpired;
+	public void setIsGetAllRecords(Boolean isGetAllRecords) {
+		this.isGetAllRecords = isGetAllRecords;
 	}
-
 }

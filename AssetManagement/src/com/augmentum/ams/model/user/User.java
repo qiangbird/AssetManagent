@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
@@ -24,6 +26,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 import com.augmentum.ams.model.base.PageSize;
 
 /**
@@ -43,7 +46,11 @@ public class User extends BaseModel implements Serializable{
 	 * The name of a user, e.g: Grylls Xu
 	 */
 	@Column(name = "user_name", nullable = false, length = 32)
-	@Field(name = "userName", index = Index.TOKENIZED, store = Store.YES)
+	@Fields({
+		@Field(name = "userName", index = Index.TOKENIZED, store = Store.YES),
+		@Field(name = "userName_forSort", index = Index.UN_TOKENIZED, store = Store.YES)
+	})
+	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String userName;
 
 	/**
@@ -51,6 +58,7 @@ public class User extends BaseModel implements Serializable{
 	 */
 	@Column(nullable = false, unique = true, length = 32)
 	@Field(name = "userId", index = Index.UN_TOKENIZED, store = Store.YES)
+	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String userId;
 
 	@ManyToMany(fetch = FetchType.LAZY)

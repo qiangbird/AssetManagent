@@ -44,11 +44,6 @@ public class ToDoServiceImpl implements ToDoService{
 			
 			if (null != asset) {
 				asset.setStatus(status);
-				
-				if ("RETURNED".equals(status)) {
-					asset.setUser(null);
-				} 
-				
 				baseDao.update(todo);
 			}
 			baseDao.delete(todo);

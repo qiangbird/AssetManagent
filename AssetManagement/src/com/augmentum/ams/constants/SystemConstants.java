@@ -18,11 +18,10 @@ public class SystemConstants {
     public static final String DATE_YEAR_PATTERN = "yyyy";
 
     // max and min time for search range time
-    public static final String SEARCH_MIN_DATE = "10010101000000000";
-    public static final String SEARCH_MAX_DATE = "99991231000000000";
+    public static final String SEARCH_MIN_DATE = "10010101000000";
+    public static final String SEARCH_MAX_DATE = "99991231000000";
 
     public static final String FILTER_TIME_PATTERN = "yyyyMMddHHmmSS";
-    public static final String FILTER_MILLISECOND_SUFFIX = "000";
 
     // UTC Zone
     public static final String UTC_ZONE = "UTC";

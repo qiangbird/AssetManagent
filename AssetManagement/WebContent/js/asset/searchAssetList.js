@@ -27,7 +27,7 @@ $(document).ready(function() {
     $(".filterDiv").filterBox({});
     
     $("#searchButton").click(function() {
-        
+    	clearHideSearchCondition();
         setCriteria();
         criteria.pageNum = 1;
         dataList.criteria = criteria;
@@ -57,6 +57,7 @@ $(document).ready(function() {
     // add keypress event for search feature
     $("#keyword").keydown(function() {
         if(event.keyCode == 13) {
+        	clearHideSearchCondition();
             setCriteria();
             criteria.pageNum = 1;
             dataList.criteria = criteria;
@@ -232,7 +233,7 @@ $(document).ready(function() {
         	 tipMessage = i18nProp('message_confirm_asset_addToAudit', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
              ShowMsg(tipMessage, function(yes){
                  if (yes) {
-                     window.location.href = "asset/addAssetsToAuditForSearchResult";
+                     window.location.href = "asset/addAssetsToAuditForSearchResult?" + setParamsForAddToAudit();
                  }else{
                      return;
                  }
@@ -350,7 +351,10 @@ function setCriteria() {
         if (assetStatus == null || assetStatus == "") {
             assetStatus = this.value;
         } else {
-            assetStatus = assetStatus + "," + this.value;
+        	
+        	if (assetStatus != this.value) {
+        		assetStatus = assetStatus + "," + this.value;
+        	}
         }
     });
     criteria.assetStatus = assetStatus;
@@ -591,4 +595,25 @@ function closeDialog() {
     $("#userName").attr("placeholder", placeholder_user);
     
     $("#dialog_assign").dialog("close");
+}
+
+function setParamsForAddToAudit() {
+	criteria.isGetAllRecords = true;
+	criteria = setCriteria();
+	var params = "";
+	for (var key in criteria) {
+		if (criteria[key] != "") {
+			 params += key + "=" + criteria[key] + "&";
+		}
+	}
+	params = params.substring(0, params.length - 1);
+	return params;
+}
+
+
+function clearHideSearchCondition() {
+    $("#status").val("");
+    $("#type").val("");
+    $("#isFixedAsset").val("");
+    $("#isWarrantyExpired").val("");
 }

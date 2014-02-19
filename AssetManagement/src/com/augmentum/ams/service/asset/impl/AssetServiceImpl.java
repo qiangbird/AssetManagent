@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -62,6 +63,7 @@ import com.augmentum.ams.service.asset.SoftwareService;
 import com.augmentum.ams.service.customized.CustomizedPropertyService;
 import com.augmentum.ams.service.customized.PropertyTemplateService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.service.search.SearchAssetService;
 import com.augmentum.ams.service.search.impl.SearchAssetServiceImpl;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
@@ -78,6 +80,7 @@ import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
 import com.augmentum.ams.web.vo.asset.ExportVo;
 import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Service("assetService")
@@ -122,7 +125,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	private ToDoDao todoDao;
 	@Autowired
 	private PurchaseItemService purchaseItemService;
-	
+	@Autowired
+	private SearchAssetService searchAssetService;
+
 	private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
 
 	@Override
@@ -553,7 +558,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 			String[] assetIdArr = FormatUtil.splitString(assetIds,
 					SystemConstants.SPLIT_COMMA);
 			Map<String, ExceptionHelper> errorCodes = new LinkedHashMap<String, ExceptionHelper>();
-			Date date = UTCTimeUtil.localDateToUTC();
 
 			for (String id : assetIdArr) {
 				Asset asset = assetDao.getAssetById(id);
@@ -571,14 +575,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 								ErrorCodeUtil.ASSET_STATUS_INVALID));
 					} else {
 						asset.setStatus(StatusEnum.RETURNED.name());
+						asset.setUser(null);
 						assetDao.update(asset);
-
-						// generate todo list for return operation
-						ToDo todo = new ToDo();
-						todo.setAsset(asset);
-						todo.setReturnedTime(date);
-						todo.setReturner(returner);
-						todoDao.save(todo);
 					}
 				}
 			}
@@ -658,10 +656,11 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	}
 
 	@Override
-	public void addAssetsToAuditForSearchResult(Page<Asset> page)
+	public void addAssetsToAuditForSearchResult(SearchCondition condition)
 			throws ExceptionHelper {
 
 		logger.info("enter addAssetsToAuditForSearchResult service successfully");
+		Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition);
 		if (null == page || null == page.getAllRecords()) {
 			logger.error("there is no asset when add assets to audit for search result");
 			throw new ExceptionHelper(ErrorCodeUtil.ASSET_ADD_TO_AUDIT_FAILED);
@@ -769,11 +768,12 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 	}
 
 	@Override
-	public String exportAssetsForAll(Page<Asset> page) throws ExcelException,
+	public String exportAssetsForAll(SearchCondition condition) throws ExcelException,
 			SQLException {
 
-		if (null == page || null == page.getResult()
-				|| 0 == page.getResult().size()) {
+		Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition);
+		if (null == page || null == page.getAllRecords()
+				|| 0 == page.getAllRecords().size()) {
 			throw new ExcelException(ErrorCodeUtil.ASSET_EXPORT_FAILED,
 					"There is no asset when export assets for search result");
 		} else {

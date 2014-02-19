@@ -20,14 +20,18 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.DateBridge;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 import com.augmentum.ams.model.user.User;
 
 /**
@@ -44,6 +48,7 @@ public class Asset extends BaseModel {
 
     @Column(name = "asset_id", length = 128, nullable = false)
     @Field(name = "assetId", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String assetId;
 
     @Column(name = "asset_name", length = 128, nullable = false)
@@ -57,6 +62,7 @@ public class Asset extends BaseModel {
     /** The type of the asset. please refer to @TypeEnum */
     @Column(name = "type", length = 32, nullable = false)
     @Field(name = "type", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String type;
 
     @Column(length = 64, name = "bar_code")
@@ -94,6 +100,7 @@ public class Asset extends BaseModel {
     /** The status of asset, please refer to @StatusEnum */
     @Column(length = 32, nullable = false)
     @Field(name = "status", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String status;
 
     /** The description of asset. */
@@ -105,17 +112,20 @@ public class Asset extends BaseModel {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "check_in_time")
     @Field(name = "checkInTime", index = Index.UN_TOKENIZED, store = Store.YES)
+    @DateBridge(resolution = Resolution.SECOND)
     private Date checkInTime;
 
     /** The time when the assets checked out from company. */
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "check_out_time")
     @Field(name = "checkOutTime", index = Index.UN_TOKENIZED, store = Store.YES)
+    @DateBridge(resolution = Resolution.SECOND)
     private Date checkOutTime;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "warranty_time")
     @Field(name = "warrantyTime", index = Index.UN_TOKENIZED, store = Store.YES)
+    @DateBridge(resolution = Resolution.SECOND)
     private Date warrantyTime;
 
     @Column(name = "vendor")

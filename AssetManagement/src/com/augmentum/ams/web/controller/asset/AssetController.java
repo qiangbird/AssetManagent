@@ -93,7 +93,7 @@ public class AssetController extends BaseController {
 	@Autowired
 	private PurchaseItemService purchaseItemService;
 
-	private Page<Asset> pageForAudit;
+	private SearchCondition condition;
 
 	private Logger logger = Logger.getLogger(AssetController.class);
 
@@ -484,11 +484,11 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/addAssetsToAuditForSearchResult")
-	public ModelAndView addAssetsToAuditForSearchResult() {
+	public ModelAndView addAssetsToAuditForSearchResult(SearchCondition condition) {
 
 		ModelAndView modelAndView = new ModelAndView();
 		try {
-			assetService.addAssetsToAuditForSearchResult(pageForAudit);
+			assetService.addAssetsToAuditForSearchResult(condition);
 		} catch (ExceptionHelper e) {
 			modelAndView = this.addErrorCode(e);
 		}
@@ -555,10 +555,14 @@ public class AssetController extends BaseController {
 		if (null != uuid && !uuid.equals("")) {
 			searchCondition.setUserUuid(uuid);
 		}
+		
+		condition = searchCondition;
+		
 		Page<Asset> page = searchAssetService
 				.findAllAssetsBySearchCondition(searchCondition);
-		pageForAudit = page;
+		
 		String clientTimeOffset = (String) session.getAttribute("timeOffset");
+		
 		List<AssetListVo> list = FormatEntityListToEntityVoList
 				.formatAssetListToAssetVoList(page.getResult(),
 						clientTimeOffset);
@@ -586,7 +590,8 @@ public class AssetController extends BaseController {
 		try {
 
 			if (null == assetIds || "".equals(assetIds)) {
-				outPutPath = assetService.exportAssetsForAll(pageForAudit);
+				condition.setIsGetAllRecords(Boolean.TRUE);
+				outPutPath = assetService.exportAssetsForAll(condition);
 			} else {
 				outPutPath = assetService.exportAssetsByIds(assetIds);
 			}

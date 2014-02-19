@@ -18,11 +18,11 @@ public class FormatUtil {
     public static String formatKeyword(String keyword) {
 
         keyword = keyword.trim().toLowerCase();
-        String flags[] = { "\\", "+", "-", "&", "|", "!", "(", ")", "{", "}", "[", "]", "~", "^",
-                ":", "\"", "AND", "OR", "NOT", ".", ",", "_", "/" };
-        for (String flag : flags) {
-            keyword = keyword.replace(flag, "\\" + flag);
-        }
+//        String flags[] = { "\\", "+", "|", "!", "{", "}", "[", "]", "~", "^",
+//                ":", "\"", "AND", "OR", "NOT" };
+//        for (String flag : flags) {
+//            keyword = keyword.replace(flag, "\\" + flag);
+//        }
         return keyword;
     }
 

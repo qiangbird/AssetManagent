@@ -84,7 +84,7 @@ public class ToDoController extends BaseController{
 	@ResponseBody
 	public String confirmReturnedAsset(String ids) {
 		
-		todoService.confirmReturnedAndReceivedAsset(ids, "RETURNED");
+		todoService.confirmReturnedAndReceivedAsset(ids, "AVAILABLE");
 		return null;
 	}
 	

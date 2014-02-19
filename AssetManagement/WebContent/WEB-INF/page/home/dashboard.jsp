@@ -39,7 +39,7 @@
 			</tr>
 			<shiro:hasRole name="IT">
 			<tr class="tr-all-asset">
-				<td class="tr-header"><spring:message code="navigator.all.assets"/></td>
+				<td class="tr-header" content="allAssets"><spring:message code="navigator.all.assets"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -48,7 +48,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.available"/></td>
+				<td class="tr-header" content="allAvailable"><spring:message code="asset.available"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -57,7 +57,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.inUse"/></td>
+				<td class="tr-header" content="allInuse"><spring:message code="asset.inUse"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -66,7 +66,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.idle"/></td>
+				<td class="tr-header" content="allIdle"><spring:message code="asset.idle"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -75,7 +75,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.returned"/></td>
+				<td class="tr-header" content="returned"><spring:message code="asset.returned"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -84,7 +84,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.borrowed"/></td>
+				<td class="tr-header" content="borrowed"><spring:message code="asset.borrowed"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -93,7 +93,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.broken"/></td>
+				<td class="tr-header" content="broken"><spring:message code="asset.broken"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -102,7 +102,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.writeOff"/></td>
+				<td class="tr-header" content="writeOff"><spring:message code="asset.writeOff"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -111,7 +111,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.returningToIT"/></td>
+				<td class="tr-header" content="returningToIT"><spring:message code="asset.returningToIT"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -120,7 +120,7 @@
 				<td></td>
 			</tr>
 			<tr>
-				<td class="tr-header"><spring:message code="asset.assigning"/></td>
+				<td class="tr-header" content="assigning"><spring:message code="asset.assigning"/></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -191,7 +191,7 @@
 			</tr>
 			</shiro:hasAnyRoles>
 			<tr class="tr-my-asset">
-				<td class="tr-header"><spring:message code="navigator.my.assets"/></td>
+				<td class="tr-header" content="myAssets"><spring:message code="navigator.my.assets"/></td>
 				<td></td>
 				<td></td>
 				<td></td>

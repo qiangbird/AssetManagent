@@ -262,10 +262,10 @@ $(document).ready(function(){
         	$(".mainPanel table tr:gt(0)").each(function(i){
         		
         		// get first column name: All Asset, My Asset, Customer Asset, Available, etc...
-        		var type = $(this).children("td:eq(0)").html();
+        		var type = $(this).children("td:eq(0)").attr("content");
         		
         		// all asset line
-        		if (i == 0) {
+        		if (type == "allAssets") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allAssetMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allAssetMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allAssetSoftwareCount);
@@ -274,7 +274,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allAssetTotal);
         		} 
         		//my asset line
-        		else if (i == 14) {
+        		else if (type == "myAssets") {
         			addLinkForMyAssetNum($(this).children("td:eq(1)"), 1, data.assetCount.myAssetMachineCount);
         			addLinkForMyAssetNum($(this).children("td:eq(2)"), 2, data.assetCount.myAssetMonitorCount);
         			addLinkForMyAssetNum($(this).children("td:eq(3)"), 3, data.assetCount.myAssetSoftwareCount);
@@ -294,7 +294,7 @@ $(document).ready(function(){
         		}
         		*/
         		// available asset line
-        		else if (i == 1) {
+        		else if (type == "allAvailable") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allAvailableMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allAvailableMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allAvailableSoftwareCount);
@@ -303,7 +303,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allAvailableAssetTotal);
         		}
         		// in_use asset line
-        		else if (i == 2) {
+        		else if (type == "allInuse") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allInUseMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allInUseMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allInUseSoftwareCount);
@@ -312,7 +312,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allInUseAssetTotal);
         		}
         		// idle asset line
-        		else if (i == 3) {
+        		else if (type == "allIdle") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allIdleMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allIdleMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allIdleSoftwareCount);
@@ -321,7 +321,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allIdleAssetTotal);
         		}
         		// returned asset line
-        		else if (i == 4) {
+        		else if (type == "returned") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allReturnedMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allReturnedMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allReturnedSoftwareCount);
@@ -330,7 +330,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allReturnedAssetTotal);
         		}
         		// borrowed asset line
-        		else if (i == 5) {
+        		else if (type == "borrowed") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allBorrowedMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allBorrowedMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allBorrowedSoftwareCount);
@@ -339,7 +339,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allBorrowedAssetTotal);
         		}
         		// broken asset line
-        		else if (i == 6) {
+        		else if (type == "broken") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allBrokenMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allBrokenMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allBrokenSoftwareCount);
@@ -348,7 +348,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allBrokenAssetTotal);
         		}
         		// write_off asset line
-        		else if (i == 7) {
+        		else if (type == "writeOff") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allWriteOffMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allWriteOffMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allWriteOffSoftwareCount);
@@ -357,7 +357,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allWriteOffAssetTotal);
         		}
         		// returning to IT asset line
-        		else if (i == 8) {
+        		else if (type == "returningToIT") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allReturningToITMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allReturningToITMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allReturningToITSoftwareCount);
@@ -366,7 +366,7 @@ $(document).ready(function(){
         			addLinkForITNum($(this).children("td:eq(6)"), 6, i, data.assetCount.allReturningToITAssetTotal);
         		}
         		// assigning asset line
-        		else if (i == 9) {
+        		else if (type == "assigning") {
         			addLinkForITNum($(this).children("td:eq(1)"), 1, i, data.assetCount.allAssigningMachineCount);
         			addLinkForITNum($(this).children("td:eq(2)"), 2, i, data.assetCount.allAssigningMonitorCount);
         			addLinkForITNum($(this).children("td:eq(3)"), 3, i, data.assetCount.allAssigningSoftwareCount);
@@ -417,9 +417,9 @@ $(document).ready(function(){
         		$(".mainPanel table tr:gt(0)").each(function(i){
         			
         			// get first column name: All Asset, My Asset, Customer Asset, Available, etc...
-//        			var type = $(this).children("td:eq(0)").attr("content");
+        			var type = $(this).children("td:eq(0)").attr("content");
         			
-        			if (i == 10) {
+        			if (type == "Customer Asset") {
         				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "", data.assetCount.allCustomersMachineCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "", data.assetCount.allCustomersMonitorCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "", data.assetCount.allCustomersSoftwareCount);
@@ -465,7 +465,7 @@ $(document).ready(function(){
         				});
         			} 
         			// available customer asset count
-        			else if (i == 11) {
+        			else if (type == "Available Customer Asset") {
         				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "AVAILABLE", data.assetCount.allCustomersAvailableMachineCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "AVAILABLE", data.assetCount.allCustomersAvailableMonitorCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "AVAILABLE", data.assetCount.allCustomersAvailableSoftwareCount);
@@ -511,7 +511,7 @@ $(document).ready(function(){
         				});
         			}
         			// in use customer asset count
-        			else if (i == 12) {
+        			else if (type == "In Use Customer Asset") {
         				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "IN_USE", data.assetCount.allCustomersInUseMachineCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "IN_USE", data.assetCount.allCustomersInUseMonitorCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "IN_USE", data.assetCount.allCustomersInUseSoftwareCount);
@@ -557,7 +557,7 @@ $(document).ready(function(){
         			}
         			
         			// idle customer asset count
-        			else if (i == 13) {
+        			else if (type == "Idle Customer Asset") {
         				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "IDLE", data.assetCount.allCustomersIdleMachineCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "IDLE", data.assetCount.allCustomersIdleMonitorCount);
         				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "IDLE", data.assetCount.allCustomersIdleSoftwareCount);

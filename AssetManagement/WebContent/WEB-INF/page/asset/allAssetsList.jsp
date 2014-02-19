@@ -54,21 +54,21 @@
 						<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
 						<div class="condition_optional" id="assetType">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="MACHINE" /><label><spring:message code="asset.machine"/></label></p>
-							<p><input type="checkBox" name="field" value="MONITOR" /><label><spring:message code="asset.monitor"/></label></p>
-							<p><input type="checkBox" name="field" value="DEVICE" /><label><spring:message code="asset.device"/></label></p>
-							<p><input type="checkBox" name="field" value="SOFTWARE" /><label><spring:message code="asset.software"/></label></p>
-							<p><input type="checkBox" name="field" value="OTHERASSETS" /><label><spring:message code="asset.otherAssets"/></label></p>
+							<p><input type="checkBox" name="field" value="machine" /><label><spring:message code="asset.machine"/></label></p>
+							<p><input type="checkBox" name="field" value="monitor" /><label><spring:message code="asset.monitor"/></label></p>
+							<p><input type="checkBox" name="field" value="device" /><label><spring:message code="asset.device"/></label></p>
+							<p><input type="checkBox" name="field" value="software" /><label><spring:message code="asset.software"/></label></p>
+							<p><input type="checkBox" name="field" value="otherassets" /><label><spring:message code="asset.otherAssets"/></label></p>
 			            </div>
 			        </div>
 	        		<div class="single_condition">
 						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
 						<div class="condition_optional" id="assetStatus">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="AVAILABLE" /><label><spring:message code="asset.available"/></label></p>
-							<p><input type="checkBox" name="field" value="IN_USE" /><label><spring:message code="asset.inUse"/></label></p>
-							<p><input type="checkBox" name="field" value="IDLE" /><label><spring:message code="asset.idle"/></label></p>
-							<p><input type="checkBox" name="field" value="RETURNED" /><label><spring:message code="asset.returned"/></label></p>
+							<p><input type="checkBox" name="field" value="available" /><label><spring:message code="asset.available"/></label></p>
+							<p><input type="checkBox" name="field" value="in_use" /><label><spring:message code="asset.inUse"/></label></p>
+							<p><input type="checkBox" name="field" value="idle" /><label><spring:message code="asset.idle"/></label></p>
+							<p><input type="checkBox" name="field" value="returned" /><label><spring:message code="asset.returned"/></label></p>
 	            		</div>
 	        		</div>
 			        <div class="single_condition">
@@ -162,7 +162,6 @@
     <input type="hidden" id="type" value="${type }" />
     <input type="hidden" id="isFixedAsset" value="${isFixedAsset }" />
     <input type="hidden" id="isWarrantyExpired" value="${isWarrantyExpired }" />
-    <input type="hidden" id="isLicenseExpired" value="${isLicenseExpired }" />
 
     <input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>

@@ -20,7 +20,7 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
-import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 public interface AssetService {
 
@@ -174,7 +174,7 @@ public interface AssetService {
      * @author Geoffrey.Zhao
      * @param page
      */
-    void addAssetsToAuditForSearchResult(Page<Asset> page) throws ExceptionHelper;
+    void addAssetsToAuditForSearchResult(SearchCondition condition) throws ExceptionHelper;
     /**
      * @author Jay.He
      * @time Jan 3, 2014 9:54:09 AM
@@ -198,7 +198,7 @@ public interface AssetService {
      * @throws ExcelException 
      * @throws SQLException 
      */
-    String exportAssetsForAll(Page<Asset> page) throws ExcelException, SQLException;
+    String exportAssetsForAll(SearchCondition condition) throws ExcelException, SQLException;
 
     /**
      * @author Geoffrey.Zhao

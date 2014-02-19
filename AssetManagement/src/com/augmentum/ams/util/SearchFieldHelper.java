@@ -9,7 +9,7 @@ package com.augmentum.ams.util;
 public class SearchFieldHelper {
 
 	public static String[] getAssetFields() {
-		String[] fieldNames = new String[18];
+		String[] fieldNames = new String[19];
 		fieldNames[0] = "assetId";
 		fieldNames[1] = "assetName";
 		fieldNames[2] = "user.userName";
@@ -28,6 +28,7 @@ public class SearchFieldHelper {
 		fieldNames[15] = "vendor";
 		fieldNames[16] = "location.site";
 		fieldNames[17] = "location.room";
+		fieldNames[18] = "user.userName_forSort";
 
 		return fieldNames;
 	}
@@ -50,39 +51,37 @@ public class SearchFieldHelper {
 
 	public static String getAssetStatus() {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("AVAILABLE");
+		stringBuilder.append("available");
 		stringBuilder.append(",");
-		stringBuilder.append("IDLE");
+		stringBuilder.append("idle");
 		stringBuilder.append(",");
-		stringBuilder.append("IN_USE");
+		stringBuilder.append("in_use");
 		stringBuilder.append(",");
-		stringBuilder.append("BORROWED");
+		stringBuilder.append("borrowed");
 		stringBuilder.append(",");
-		stringBuilder.append("RETURNED");
+		stringBuilder.append("returned");
 		stringBuilder.append(",");
-		stringBuilder.append("BROKEN");
+		stringBuilder.append("broken");
 		stringBuilder.append(",");
-		stringBuilder.append("WRITE_OFF");
+		stringBuilder.append("write_off");
 		stringBuilder.append(",");
-		stringBuilder.append("ASSIGNING");
+		stringBuilder.append("assigning");
 		stringBuilder.append(",");
-		stringBuilder.append("RETURNING_TO_IT");
-		stringBuilder.append(",");
-		stringBuilder.append("RETURNING_TO_CUSTOMER");
+		stringBuilder.append("returning_to_it");
 		return stringBuilder.toString();
 	}
 
 	public static String getAssetType() {
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("DEVICE");
+		stringBuilder.append("device");
 		stringBuilder.append(",");
-		stringBuilder.append("MACHINE");
+		stringBuilder.append("machine");
 		stringBuilder.append(",");
-		stringBuilder.append("SOFTWARE");
+		stringBuilder.append("software");
 		stringBuilder.append(",");
-		stringBuilder.append("MONITOR");
+		stringBuilder.append("monitor");
 		stringBuilder.append(",");
-		stringBuilder.append("OTHERASSETS");
+		stringBuilder.append("otherassets");
 		return stringBuilder.toString();
 	}
 

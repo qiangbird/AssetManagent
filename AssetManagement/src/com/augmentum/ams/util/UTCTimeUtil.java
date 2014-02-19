@@ -194,7 +194,6 @@ public class UTCTimeUtil {
         String newFilterTime = UTCTimeUtil.formatDateToString(secondFormatDate,
                 SystemConstants.FILTER_TIME_PATTERN);
         stringBuilder.append(newFilterTime);
-        stringBuilder.append(SystemConstants.FILTER_MILLISECOND_SUFFIX);
         return stringBuilder.toString();
     }
 

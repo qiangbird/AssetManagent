@@ -3,6 +3,8 @@
  */
 package com.augmentum.ams.service.search.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
@@ -159,14 +161,6 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             	booleanQuery.add(new TermRangeQuery("warrantyTime", fromTime, toTime, true, true), Occur.MUST);
             }
             
-            // get license expired asset list
-            if (null != searchCondition.getIsLicenseExpired() && searchCondition.getIsLicenseExpired()) {
-            	String fromTime = UTCTimeUtil.formatCurrentTimeForFilterTime();
-            	String toTime = UTCTimeUtil.getAssetExpiredTimeForFilterTime();
-            	booleanQuery.add(new TermRangeQuery("software.softwareExpiredTime", fromTime, toTime, true, true), Occur.MUST);
-            }
-            
-
             booleanQuery.add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
                     Occur.MUST);
             booleanQuery.add(statusQuery, Occur.MUST);
@@ -197,6 +191,14 @@ public class SearchAssetServiceImpl implements SearchAssetService {
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
                 .setCriteriaQuery(criteria);
+        
+        if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
+        	fullTextQuery.setFilter(filter);
+        	List<Asset> allRecords = fullTextQuery.list();
+        	page.setAllRecords(allRecords);
+        	return page;
+        }
+        
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
         fullTextSession.close();
         return page;
@@ -286,7 +288,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
     private String transferSortName(String sortName) {
 
         if ("userName".equals(sortName)) {
-            sortName = "user.userName";
+            sortName = "user.userName_forSort";
         }
         return sortName;
     }
@@ -299,5 +301,5 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             logger.error(e);
         }
     }
-
+    
 }
