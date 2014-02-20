@@ -10,13 +10,11 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
-
-import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.model.user.User;
-
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.augmentum.ams.exception.BaseException;
+import com.augmentum.ams.model.user.User;
 
 /**
  * This class is to make aop for system
@@ -28,21 +26,21 @@ public class ExceptionAop {
 
     private static Logger logger = Logger.getLogger(ExceptionAop.class);
 
-    @Before(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)") 
-    public void testDoLog(JoinPoint point){ 
-    
+    @Before(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)")
+    public void testDoLog(JoinPoint point) {
+
         StringBuilder logInfo = getMethodAndParams(point);
         logInfo.append(" Start...");
-        
-        logger.info(logInfo); 
-    } 
-    
-    @AfterReturning(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)")   
-    public void  doSystemLog(JoinPoint point) { 
-        
-        logger.info(point.getSignature().getName() + "()  End..."); 
-    } 
-    
+
+        logger.info(logInfo);
+    }
+
+    @AfterReturning(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)")
+    public void doSystemLog(JoinPoint point) {
+
+        logger.info(point.getSignature().getName() + "()  End...");
+    }
+
     /**
      * This method to catch system throw exception, and encapsulates it to
      * BaseException then throw it, so that system just need to catch
@@ -52,22 +50,23 @@ public class ExceptionAop {
      *            which is aop joinPoint message
      * @param e
      *            which causes exception
-     * @throws BaseException 
+     * @throws BaseException
      */
     @AfterThrowing(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)", throwing = "e")
     public void catchException(JoinPoint joinPoint, Exception e) {
-    	
-    	setUserAndIP();
-    	
-        if((e instanceof BaseException)) {
-        	BaseException baseException = (BaseException) e;
-            logger.error("Error code: " + ((BaseException) e).getErrorCode() + ",\t Error message: " +baseException.getErrorMessage()+"\n"+baseException);
+
+        setUserAndIP();
+
+        if ((e instanceof BaseException)) {
+            BaseException baseException = (BaseException) e;
+            logger.error("Error code: " + ((BaseException) e).getErrorCode()
+                    + ",\t Error message: " + baseException.getErrorMessage() + "\n"
+                    + baseException);
+            logger.error(e.getMessage(), e);
+        } else {
             logger.error(e.getMessage(), e);
         }
-        else {
-            logger.error(e.getMessage(), e);
-        }
-        
+
     }
 
     private void setUserAndIP() {
@@ -95,24 +94,24 @@ public class ExceptionAop {
      * @return
      */
     private StringBuilder getMethodAndParams(JoinPoint joinPoint) {
-	    StringBuilder logInfo = new StringBuilder();
+        StringBuilder logInfo = new StringBuilder();
 
-	    //Get execute class and its method 
-	    logInfo.append("Execute method : " + joinPoint.getTarget().getClass()
-	            + "." + joinPoint.getSignature().getName() + "()");
-	    
-	    //Get execute method's args value 
-	    logInfo.append(" and the arg is: ");
-	    for(Object arg : joinPoint.getArgs()) {
-	        logInfo.append(String.valueOf(arg)+"\t");
-	    }
-	    return logInfo;
+        // Get execute class and its method
+        logInfo.append("Execute method : " + joinPoint.getTarget().getClass() + "."
+                + joinPoint.getSignature().getName() + "()");
+
+        // Get execute method's args value
+        logInfo.append(" and the arg is: ");
+        for (Object arg : joinPoint.getArgs()) {
+            logInfo.append(String.valueOf(arg) + "\t");
+        }
+        return logInfo;
     }
-    
+
     public String getIpAddress(HttpServletRequest request) {
-        
+
         String ip = request.getHeader("x-forwarded-for");
-        
+
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }

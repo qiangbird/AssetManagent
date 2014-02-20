@@ -25,9 +25,11 @@ import com.augmentum.ams.web.vo.validation.GroupValidation;
 public class AssetVo {
 
     private String id;
+
     private String assetId;
+
     @NotBlank(message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_FAILED)
-    @Size(max = 10, message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_LENGTH_FAILED, groups=GroupValidation.class)
+    @Size(max = 10, message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_LENGTH_FAILED, groups = GroupValidation.class)
     private String assetName;
 
     private String manufacturer;
@@ -71,12 +73,14 @@ public class AssetVo {
 
     @NotBlank(message = ErrorCodeUtil.ASSET_LOCATION_FAILED)
     private String location;
+
     @NotBlank(message = ErrorCodeUtil.ASSET_ENTITY_VALIDATOR_FAILED)
     private String entity;
 
     private Project project;
     @Valid
     private Customer customer;
+
     @NotBlank(message = ErrorCodeUtil.ASSET_SITE_VALIDATOR_FAILED)
     private String site;
 
@@ -85,9 +89,19 @@ public class AssetVo {
     private String keeper;
 
     private String softwareExpiredTime;
-    
+
     private String purchaseItemId;
-    
+
+    private String batchCount;
+
+    public String getBatchCount() {
+        return batchCount;
+    }
+
+    public void setBatchCount(String batchCount) {
+        this.batchCount = batchCount;
+    }
+
     public String getId() {
         return id;
     }
@@ -165,7 +179,7 @@ public class AssetVo {
     }
 
     public void setOwnerShip(String ownerShip) {
-            this.ownerShip = ownerShip;
+        this.ownerShip = ownerShip;
     }
 
     public boolean isFixed() {
@@ -303,7 +317,6 @@ public class AssetVo {
     public void setUser(User user) {
         this.user = user;
     }
-
 
     @Override
     public String toString() {

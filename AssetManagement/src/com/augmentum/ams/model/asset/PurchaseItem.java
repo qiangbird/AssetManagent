@@ -98,13 +98,13 @@ public class PurchaseItem extends BaseModel {
 	/**
 	 * The final quantity of item
 	 */
-	@Column(name = "fina_quantity", nullable = false)
+	@Column(name = "final_quantity", nullable = false)
 	private int finalQuantity;
 
 	/**
 	 * The quantity of this item are saved in asset table
 	 */
-	@Column(name = "used_auantity")
+	@Column(name = "used_quantity")
 	private int usedQuantity;
 
 	/**

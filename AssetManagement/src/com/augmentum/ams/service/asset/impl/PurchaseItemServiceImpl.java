@@ -95,13 +95,13 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
                 }
                 purchaseItem.setProcessType(processType);
                 
-                if("SOFTWARE".equals(CommonUtil.objectToString(dataMap.get("itemType")))){
+                if("SOFTWARE".equals(CommonUtil.objectToString(itemMap.get("itemType")))){
                     purchaseItem.setItemType(AssetTypeEnum.SOFTWARE.name());
                 }
-                if("HARDWARE".equals(CommonUtil.objectToString(dataMap.get("itemType")))){
+                if("HARDWARE".equals(CommonUtil.objectToString(itemMap.get("itemType")))){
                     purchaseItem.setItemType(AssetTypeEnum.MACHINE.name());
                 }
-                if("OTHERS".equals(CommonUtil.objectToString(dataMap.get("itemType")))){
+                if("OTHERS".equals(CommonUtil.objectToString(itemMap.get("itemType")))){
                     purchaseItem.setItemType(AssetTypeEnum.OTHERASSETS.name());
                 }
                 purchaseItem.setCustomerName(CommonUtil.objectToString(dataMap.get("customerName")));

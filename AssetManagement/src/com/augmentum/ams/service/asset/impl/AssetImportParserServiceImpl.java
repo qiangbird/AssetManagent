@@ -59,7 +59,7 @@ import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.asset.ImportVo;
 
 @Service("assetImportParserService")
-public class AssetImportParserServiceImpl implements AssetImportParserService{
+public class AssetImportParserServiceImpl implements AssetImportParserService {
 
     @Autowired
     private AssetDao assetDao;
@@ -127,42 +127,35 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         // Close the resource
         Workbook[] workbooks = { workbookImport, workbookTemplate };
         closeWorkbook(workbooks, writableWorkbook, importVo.getFailureRecords());
-        
+
         // Save the path of failure excel file which records the illegal assets
         File failureFile = new File(outPutPath);
         importVo.setFailureFileName(failureFile.getName());
 
         return importVo;
     }
-    
+
     private void initCacheData(HttpServletRequest request) {
 
         Map<String, User> localEmployees = userService.findAllUsersFromLocal();
         // temporary store the customer
-        Map<String, Customer> localCustomers = customerService
-                .findAllCustomersFromLocal();
+        Map<String, Customer> localCustomers = customerService.findAllCustomersFromLocal();
         // temporary store the project
-        Map<String, Project> localProjects = projectService
-                .findAllCustomersFromLocal();
+        Map<String, Project> localProjects = projectService.findAllCustomersFromLocal();
         // temporary store the location
-        Map<String, Location> localLocations = locationService
-                .findAllLocationsFromIAP();
+        Map<String, Location> localLocations = locationService.findAllLocationsFromIAP();
 
         Map<String, String> remoteEmployees = new HashMap<String, String>();
         Map<String, String> remoteProjects = new HashMap<String, String>();
         Map<String, String> remoteCustomers = new HashMap<String, String>();
 
         try {
-            remoteEmployees = remoteEmployeeService
-                    .findRemoteEmployeesForCache(request);
-            remoteProjects = remoteProjectService
-                    .findAllProjectsFromIAP(request);
+            remoteEmployees = remoteEmployeeService.findRemoteEmployeesForCache(request);
+            remoteProjects = remoteProjectService.findAllProjectsFromIAP(request);
 
-            List<CustomerVo> customers = remoteCustomerService
-                    .getAllCustomerFromIAP(request);
+            List<CustomerVo> customers = remoteCustomerService.getAllCustomerFromIAP(request);
             for (CustomerVo customerVo : customers) {
-                remoteCustomers.put(customerVo.getCustomerName(),
-                        customerVo.getCustomerCode());
+                remoteCustomers.put(customerVo.getCustomerName(), customerVo.getCustomerCode());
             }
         } catch (BusinessException e) {
             logger.error("Get date from IAP failure!", e);
@@ -257,28 +250,28 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     private void compareCellTitle(Cell[] template, Cell[] upload, String compareType)
             throws ExcelException {
 
-        //check length of title
+        // check length of title
         if (template.length != upload.length) {
-            
-            throw new ExcelException(ErrorCodeUtil.ASSET_IMPORT_FAILED, compareType + " type title length not match! " +
-            		"For asset template is: " + template.length + 
-                    ", and for upload file is: " + upload.length);
+
+            throw new ExcelException(ErrorCodeUtil.ASSET_IMPORT_FAILED, compareType
+                    + " type title length not match! " + "For asset template is: "
+                    + template.length + ", and for upload file is: " + upload.length);
         }
-        
-        //check content of title
+
+        // check content of title
         for (int i = 0; i < upload.length; i++) {
             if (!template[i].getContents().equals(upload[i].getContents())) {
 
-                throw new ExcelException(ErrorCodeUtil.ASSET_IMPORT_FAILED, compareType + " type title not match! " +
-                		"The column of template is: " + template[i].getContents() + 
-                        " and for import file is: " +  upload[i].getContents());
+                throw new ExcelException(ErrorCodeUtil.ASSET_IMPORT_FAILED, compareType
+                        + " type title not match! " + "The column of template is: "
+                        + template[i].getContents() + " and for import file is: "
+                        + upload[i].getContents());
             }
         }
     }
 
     private ImportVo importAsset(ImportVo importVo, ExcelUtil excelUtil,
-            WritableWorkbook writableWorkbook, String flag)
-            throws ExcelException {
+            WritableWorkbook writableWorkbook, String flag) throws ExcelException {
 
         int successRecords = 0;
         int failureRecords = 0;
@@ -328,12 +321,15 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         importVo.setFailureRecords(failureRecords);
         importVo.setSuccessRecords(successRecords);
 
+        logger.info("-----Total import records: " + importVo.getAllImportRecords());
+        logger.info("-----Total success records: " + successRecords);
+        logger.info("-----Total failure records: " + failureRecords);
+
         return importVo;
     }
 
     private int setExcelToMachine(Sheet machineSheet, int machineTotalRecords, ExcelUtil excelUtil,
-            WritableWorkbook writableWorkbook, String flag)
-            throws ExcelException {
+            WritableWorkbook writableWorkbook, String flag) throws ExcelException {
 
         int failureRecords = 0;
 
@@ -341,7 +337,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             Cell[] currentRowCells = excelUtil.getRows(machineSheet, i);
             Machine machine = new Machine();
 
-            ImportVo importVo = setExcelToAsset(currentRowCells, flag);
+            ImportVo importVo = setExcelToCommonAsset(currentRowCells, flag);
             boolean emptySubtype = Boolean.FALSE;
 
             if (null == currentRowCells[22].getContents()
@@ -383,15 +379,14 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     }
 
     private int setExcelToMonitor(Sheet monitorSheet, int monitorTotalRecords, ExcelUtil excelUtil,
-            WritableWorkbook writableWorkbook, String flag)
-            throws ExcelException {
+            WritableWorkbook writableWorkbook, String flag) throws ExcelException {
 
         int failureRecords = 0;
 
         for (int i = 1; i < monitorTotalRecords; i++) {
             Cell[] currentRowCells = excelUtil.getRows(monitorSheet, i);
 
-            ImportVo importVo = setExcelToAsset(currentRowCells, flag);
+            ImportVo importVo = setExcelToCommonAsset(currentRowCells, flag);
             Monitor monitor = new Monitor();
 
             if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
@@ -426,15 +421,14 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     }
 
     private int setExcelToDevice(Sheet deviceSheet, int deviceTotalRecords, ExcelUtil excelUtil,
-            WritableWorkbook writableWorkbook, String flag)
-            throws ExcelException {
+            WritableWorkbook writableWorkbook, String flag) throws ExcelException {
 
         int failureRecords = 0;
 
         for (int i = 1; i < deviceTotalRecords; i++) {
             Cell[] currentRowCells = excelUtil.getRows(deviceSheet, i);
 
-            ImportVo importVo = setExcelToAsset(currentRowCells, flag);
+            ImportVo importVo = setExcelToCommonAsset(currentRowCells, flag);
             Device device = new Device();
             DeviceSubtype deviceSubtype = new DeviceSubtype();
 
@@ -458,9 +452,10 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 failureRecords++;
             } else {
                 if (SystemConstants.CREATE.equals(flag)) {
-                    if(null == deviceSubtype.getSubtypeName() || "".equals(deviceSubtype.getSubtypeName())){
+                    if (null == deviceSubtype.getSubtypeName()
+                            || "".equals(deviceSubtype.getSubtypeName())) {
                         device.setDeviceSubtype(null);
-                    }else{
+                    } else {
                         deviceSubtypeService.saveDeviceSubtype(deviceSubtype);
                     }
                     Asset newAsset = assetDao.save(importVo.getAsset());
@@ -477,8 +472,8 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     }
 
     private int setExcelToSoftware(Sheet softwareSheet, int softwareTotalRecords,
-            ExcelUtil excelUtil, WritableWorkbook writableWorkbook,
-            String flag) throws ExcelException {
+            ExcelUtil excelUtil, WritableWorkbook writableWorkbook, String flag)
+            throws ExcelException {
 
         int failureRecords = 0;
 
@@ -486,7 +481,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
             Cell[] currentRowCells = excelUtil.getRows(softwareSheet, i);
 
             Software software = new Software();
-            ImportVo importVo = setExcelToAsset(currentRowCells, flag);
+            ImportVo importVo = setExcelToCommonAsset(currentRowCells, flag);
 
             if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
                     && AssetTypeEnum.SOFTWARE.name().equals(importVo.getAsset().getType())) {
@@ -506,6 +501,8 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 software.setMaxUseNum(Integer.valueOf(currentRowCells[25].getContents()));
             } else {
                 importVo.setErrorRecorde(Boolean.TRUE);
+                logger.info("Error record: 'MaxUseNum': " + currentRowCells[25].getContents()
+                        + "  of software is not a number!");
             }
             software.setAdditionalInfo(currentRowCells[26].getContents());
 
@@ -533,15 +530,15 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     }
 
     private int setExcelToOtherAsset(Sheet otherAssetsSheet, int otherAssetTotalRecords,
-            ExcelUtil excelUtil, WritableWorkbook writableWorkbook,
-            String flag) throws ExcelException {
+            ExcelUtil excelUtil, WritableWorkbook writableWorkbook, String flag)
+            throws ExcelException {
 
         int failureRecords = 0;
 
         for (int i = 1; i < otherAssetTotalRecords; i++) {
             Cell[] currentRowCells = excelUtil.getRows(otherAssetsSheet, i);
 
-            ImportVo importVo = setExcelToAsset(currentRowCells, flag);
+            ImportVo importVo = setExcelToCommonAsset(currentRowCells, flag);
             OtherAssets otherAsset = new OtherAssets();
 
             if (SystemConstants.UPDATE.equals(flag) && !importVo.isErrorRecorde()
@@ -586,7 +583,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
 
         AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
         int column = 0;
-        
+
         assetTemplateParser.fillOneCell(column++, row, asset.getAssetId(), sheet);
         assetTemplateParser.fillOneCell(column++, row, asset.getAssetName(), sheet);
         assetTemplateParser.fillOneCell(column++, row, asset.getManufacturer(), sheet);
@@ -596,12 +593,14 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         assetTemplateParser.fillOneCell(column++, row, asset.getCheckOutTime(), sheet);
         assetTemplateParser.fillOneCell(column++, row, asset.getSeriesNo(), sheet);
         assetTemplateParser.fillOneCell(column++, row, asset.getPoNo(), sheet);
-        assetTemplateParser.fillOneCell(column++, row, asset.getCustomer().getCustomerName(), sheet);
-        
-        if(null == asset.getProject()){
+        assetTemplateParser
+                .fillOneCell(column++, row, asset.getCustomer().getCustomerName(), sheet);
+
+        if (null == asset.getProject()) {
             assetTemplateParser.fillOneCell(column++, row, "", sheet);
-        }else{
-            assetTemplateParser.fillOneCell(column++, row, asset.getProject().getProjectName(), sheet);
+        } else {
+            assetTemplateParser.fillOneCell(column++, row, asset.getProject().getProjectName(),
+                    sheet);
         }
         assetTemplateParser.fillOneCell(column++, row, asset.getOwnerShip(), sheet);
         assetTemplateParser.fillOneCell(column++, row, asset.getEntity(), sheet);
@@ -679,7 +678,8 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         return sheet;
     }
 
-    private ImportVo setExcelToAsset(Cell[] currentRowCells, String flag) throws ExcelException {
+    private ImportVo setExcelToCommonAsset(Cell[] currentRowCells, String flag)
+            throws ExcelException {
 
         ImportVo importVo = new ImportVo();
 
@@ -701,7 +701,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         importVo = setCommonAssetOwnerShip(importVo, currentRowCells[column++].getContents());
         importVo = setCommonAssetEntity(importVo, currentRowCells[column++].getContents());
         importVo = setCommonAssetFixed(importVo, currentRowCells[column++].getContents());
-        importVo = setCommonAssetLocation(importVo, currentRowCells[column++].getContents(), 
+        importVo = setCommonAssetLocation(importVo, currentRowCells[column++].getContents(),
                 currentRowCells[column++].getContents());
         importVo = setCommonAssetUser(importVo, currentRowCells[column++].getContents());
         importVo = setCommonAssetStatus(importVo, currentRowCells[column++].getContents());
@@ -717,21 +717,26 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
 
     private ImportVo setCommonAssetId(ImportVo importVo, String assetId, String flag) {
 
-        if (SystemConstants.CREATE.equals(flag)) {
+        if (SystemConstants.CREATE.equals(flag)) { // create
             if (null != assetId && !"".equals(assetId)) {
+                logger.info("Error record: The 'Asset ID': " + assetId
+                        + " must be null when the operation is create!");
                 importVo.setErrorRecorde(Boolean.TRUE);
                 importVo.getAsset().setAssetId(assetId);
             } else {
                 importVo.getAsset()
                         .setAssetId(generateAssetId(assetDao.getTotalCount(Asset.class)));
             }
-        } else {
+        } else { // update
             if (null == assetId || "".equals(assetId)) {
+                logger.info("Error record: The 'Asset ID' can't be null when the operation is update!");
                 importVo.setErrorRecorde(Boolean.TRUE);
             } else {
                 importVo.setAsset(assetDao.getByAssetId(assetId));
 
                 if (null == importVo.getAsset()) {
+                    logger.info("Error record: The 'Asset ID': " + assetId
+                            + " is not exist in the database when the operation is update!");
                     importVo.setErrorRecorde(Boolean.TRUE);
                     importVo.getAsset().setAssetId(assetId);
                 }
@@ -744,6 +749,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     private ImportVo setCommonAssetName(ImportVo importVo, String assetName) {
 
         if ("".equals(assetName) || null == assetName) {
+            logger.info("Error record: The 'Asset Name' is null!");
             importVo.setErrorRecorde(Boolean.TRUE);
         }
         importVo.getAsset().setAssetName(assetName);
@@ -756,6 +762,8 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         boolean isRightStatu = StatusEnum.isRightStatus(assetStatus);
 
         if ("".equals(assetStatus) || null == assetStatus || !isRightStatu) {
+            logger.info("Error record: The 'Status': " + assetStatus
+                    + " is null or not the right status!");
             importVo.setErrorRecorde(Boolean.TRUE);
         }
         importVo.getAsset().setStatus(assetStatus);
@@ -772,6 +780,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         Map<String, User> localEmployees = (Map<String, User>) MemcachedUtil.get("localEmployees");
 
         if ("".equals(assetUser) || null == assetUser) {
+            logger.info("Error record: The 'User' is null!");
             importVo.setErrorRecorde(Boolean.TRUE);
         } else {
             if (localEmployees.containsKey(assetUser)) {
@@ -780,13 +789,14 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 user.setUserId(remoteEmployees.get(assetUser));
                 user.setUserName(assetUser);
                 userService.saveUser(user);
-                
+
                 localEmployees.put(user.getUserName(), user);
                 MemcachedUtil.replace("localEmployees", localEmployees);
             } else {
+                logger.info("Error record: The 'User': " + assetUser
+                        + " is not exist in the system or IAP!");
                 importVo.setErrorRecorde(Boolean.TRUE);
                 user.setUserName(assetUser);
-                logger.info("The " + assetUser + " user is not exsit in the IAP");
             }
         }
         importVo.getAsset().setUser(user);
@@ -811,6 +821,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 .get("remoteCustomers");
 
         if ("".equals(assetCustomer) || null == assetCustomer) {
+            logger.info("Error record: The 'Customer' is null!");
             importVo.setErrorRecorde(Boolean.TRUE);
         } else {
             if (localCustomers.containsKey(assetCustomer)) {
@@ -819,13 +830,14 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
                 customer.setCustomerCode(remoteCustomers.get(assetCustomer));
                 customer.setCustomerName(assetCustomer);
                 customerService.saveCustomer(customer);
-                
+
                 localCustomers.put(customer.getCustomerName(), customer);
                 MemcachedUtil.replace("localCustomers", localCustomers);
             } else {
+                logger.info("Error record: The 'Customer': " + assetCustomer
+                        + " is not exist in the system or IAP!");
                 importVo.setErrorRecorde(Boolean.TRUE);
                 customer.setCustomerName(assetCustomer);
-                logger.info("The " + assetCustomer + " customer is not exsit in the IAP");
             }
         }
         importVo.getAsset().setCustomer(customer);
@@ -837,28 +849,31 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     private ImportVo setCommonAssetProject(ImportVo importVo, String assetProject) {
 
         Project project = new Project();
-        Map<String, Project> localProjects = (Map<String, Project>) MemcachedUtil.get("localProjects");
-        Map<String, String> remoteProjects = (Map<String, String>) MemcachedUtil.get("remoteProjects");
+        Map<String, Project> localProjects = (Map<String, Project>) MemcachedUtil
+                .get("localProjects");
+        Map<String, String> remoteProjects = (Map<String, String>) MemcachedUtil
+                .get("remoteProjects");
 
-        if(null == assetProject || "".equals(assetProject)){
+        if (null == assetProject || "".equals(assetProject)) {
             project = null;
-        }else{
+        } else {
             if (localProjects.containsKey(assetProject)) {
                 project = localProjects.get(assetProject);
-            } else if (remoteProjects.containsKey(assetProject) && 
-                    null != importVo.getAsset().getCustomer().getId()) {
+            } else if (remoteProjects.containsKey(assetProject)
+                    && null != importVo.getAsset().getCustomer().getId()) {
                 project.setProjectCode(remoteProjects.get(assetProject));
                 project.setProjectName(assetProject);
                 // TODO check whether the project belong to the customer?
                 project.setCustomer(importVo.getAsset().getCustomer());
                 projectService.saveProject(project);
-                
+
                 localProjects.put(project.getProjectName(), project);
                 MemcachedUtil.replace("localProjects", localProjects);
             } else {
                 importVo.setErrorRecorde(Boolean.TRUE);
                 project.setProjectName(assetProject);
-                logger.info("The " + assetProject + " project is not exsit in the IAP");
+                logger.info("Error record: The 'Project':" + assetProject
+                        + " is not exsit in the IAP");
             }
         }
         importVo.getAsset().setProject(project);
@@ -871,6 +886,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         boolean isRightType = AssetTypeEnum.isRightType(assetType);
 
         if ("".equals(assetType) || null == assetType || !isRightType) {
+            logger.info("Error record: 'Type' of asset is null!");
             importVo.setErrorRecorde(Boolean.TRUE);
         }
         importVo.getAsset().setType(assetType);
@@ -896,12 +912,17 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
         if ("".equals(assetLocationSite) || null == assetLocationSite
                 || "".equals(assetLocationRoom) || null == assetLocationRoom) {
             importVo.setErrorRecorde(Boolean.TRUE);
+            logger.info("Error record: Either 'Augmentum Site' or 'Location' is null!");
         } else {
-            if (localLocations.containsKey(assetLocationSite + 
-                    SystemConstants.SPLIT_UNDERLINE + assetLocationRoom)) {
-                
-                location = localLocations.get(assetLocationSite);
+            if (localLocations.containsKey(assetLocationSite + SystemConstants.SPLIT_UNDERLINE
+                    + assetLocationRoom)) {
+
+                location = localLocations.get(assetLocationSite + SystemConstants.SPLIT_UNDERLINE
+                        + assetLocationRoom);
             } else {
+                logger.info("Error record: The group 'Augmentum site': " + assetLocationSite
+                        + " and 'Location': " + assetLocationRoom
+                        + " is not exist in the database!");
                 importVo.setErrorRecorde(Boolean.TRUE);
                 location.setSite(assetLocationSite);
                 location.setRoom(assetLocationRoom);
@@ -922,6 +943,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     private ImportVo setCommonAssetOwnerShip(ImportVo importVo, String ownerShip) {
 
         if (null == ownerShip || "".equals(ownerShip)) {
+            logger.info("Error record: 'OwnerShip' is null!");
             importVo.setErrorRecorde(Boolean.TRUE);
         }
         importVo.getAsset().setOwnerShip(ownerShip);
@@ -932,6 +954,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService{
     private ImportVo setCommonAssetEntity(ImportVo importVo, String assetEntity) {
 
         if (null == assetEntity || "".equals(assetEntity)) {
+            logger.info("Error record: 'Augementum Entity' is null!");
             importVo.setErrorRecorde(Boolean.TRUE);
         }
         importVo.getAsset().setEntity(assetEntity);

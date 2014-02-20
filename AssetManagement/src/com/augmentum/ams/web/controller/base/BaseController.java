@@ -1,6 +1,7 @@
 package com.augmentum.ams.web.controller.base;
 
-import net.sf.json.JSONArray;
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONObject;
 
 import org.apache.shiro.SecurityUtils;
@@ -25,62 +26,64 @@ import com.augmentum.ams.web.vo.user.UserVo;
 @RequestMapping(value = "/base")
 public abstract class BaseController {
 
-	public String getUserIdByShiro() {
+    public HttpServletRequest request;
 
-		String userId = getUserVoByShiro().getEmployeeId();
+    public String getUserIdByShiro() {
 
-		return userId;
-	}
+        String userId = getUserVoByShiro().getEmployeeId();
 
-	public String getUserNameByShiro() {
+        return userId;
+    }
 
-		return getUserVoByShiro().getEmployeeName();
-	}
+    public String getUserNameByShiro() {
 
-	public UserVo getUserVoByShiro() {
+        return getUserVoByShiro().getEmployeeName();
+    }
 
-		Subject subject = SecurityUtils.getSubject();
-		Session session = subject.getSession();
+    public UserVo getUserVoByShiro() {
 
-		return (UserVo) session.getAttribute("userVo");
-	}
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
+
+        return (UserVo) session.getAttribute("userVo");
+    }
 
     @ExceptionHandler({ ExcelException.class })
-	@ResponseBody
+    @ResponseBody
     protected JSONObject handleExcelException(ExcelException e) {
 
         JSONObject jSONObject = new JSONObject();
         jSONObject.put("error", e.getErrorCode());
-        
+
         return jSONObject;
     }
-    
+
     @ExceptionHandler({ AuthorityException.class })
     @ResponseBody
     protected ModelAndView handleAuthorityException(AuthorityException e) {
 
         ModelAndView mv = new ModelAndView(SystemConstants.AUTHORITY_ERROR_PAGE);
-        
+
         return mv;
-    }    
-    
-    @ExceptionHandler({ RemoteException.class, DataAccessException.class, BusinessException.class, Exception.class })
+    }
+
+    @ExceptionHandler({ RemoteException.class, DataAccessException.class, BusinessException.class,
+            Exception.class })
     protected ModelAndView handleServerErrorException() {
 
         ModelAndView mv = new ModelAndView(SystemConstants.SERVER_ERROR_PAGE);
-        
+
         return mv;
     }
-    
+
     @ExceptionHandler({ ValidatorException.class })
     @ResponseBody
     protected JSONObject handleValidatorException(ValidatorException ve) {
 
         JSONObject jSONObject = new JSONObject();
-        jSONObject.put("error", ve.getErrorCode().replaceAll(","," ").trim());
-        
+        jSONObject.put("error", ve.getErrorCode().replaceAll(",", " ").trim());
+
         return jSONObject;
     }
-    
-    
+
 }

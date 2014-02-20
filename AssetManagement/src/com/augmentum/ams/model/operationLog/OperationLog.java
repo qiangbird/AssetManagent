@@ -23,76 +23,90 @@ import com.augmentum.ams.model.base.BaseModel;
 @Analyzer(impl = IKAnalyzer.class)
 public class OperationLog extends BaseModel {
 
-	private static final long serialVersionUID = 7314725364102909644L;
+    private static final long serialVersionUID = 7314725364102909644L;
 
-	@Column(name = "operator_name", length = 32)
-	@Field(name = "operatorName", index = Index.TOKENIZED, store = Store.YES)
-	private String operatorName;
+    @Column(name = "operator_name", length = 32)
+    @Field(name = "operatorName", index = Index.TOKENIZED, store = Store.YES)
+    private String operatorName;
 
-	/** The operator ID(userId), for example YT00000 */
-	@Column(name = "operator_id", length = 32, nullable = false)
-	@Field(name = "operatorID", index = Index.TOKENIZED, store = Store.YES)
-	private String operatorID;
+    /** The operator ID(userId), for example YT00000 */
+    @Column(name = "operator_id", length = 32, nullable = false)
+    @Field(name = "operatorID", index = Index.TOKENIZED, store = Store.YES)
+    private String operatorID;
 
-	/**
-	 * The detail operation modified by operator
-	 */
-	@Column(length = 512)
-	@Field(name = "operation", index = Index.TOKENIZED, store = Store.YES)
-	private String operation;
+    /**
+     * The detail operation modified by operator
+     */
+    @Column(length = 512)
+    @Field(name = "operation", index = Index.TOKENIZED, store = Store.YES)
+    private String operation;
 
-	/**
-	 * The operation object name, for example asset object
-	 */
-	@Column(name = "operation_object", length = 32)
-	@Field(name = "operationObject", index = Index.TOKENIZED, store = Store.YES)
-	private String operationObject;
+    /**
+     * The operation object name, for example asset object
+     */
+    @Column(name = "operation_object", length = 32)
+    @Field(name = "operationObject", index = Index.TOKENIZED, store = Store.YES)
+    private String operationObject;
 
-	/**
-	 * It refers to a record uuid
-	 */
-	@Column(name = "operation_object_id", length = 32)
-	@Field(name = "operationObjectID", index = Index.TOKENIZED, store = Store.YES)
-	private String operationObjectID;
+    /**
+     * It refers to a record uuid
+     */
+    @Column(name = "operation_object_id", length = 32)
+    @Field(name = "operationObjectID", index = Index.TOKENIZED, store = Store.YES)
+    private String operationObjectID;
 
-	public String getOperatorName() {
-		return operatorName;
-	}
+    public OperationLog() {
 
-	public void setOperatorName(String operatorName) {
-		this.operatorName = operatorName;
-	}
+    }
 
-	public String getOperatorID() {
-		return operatorID;
-	}
+    public OperationLog(String operatorName, String operatorID, String operation,
+            String operationObject, String operationObjectID) {
 
-	public void setOperatorID(String operatorID) {
-		this.operatorID = operatorID;
-	}
+        this.operatorName = operatorName;
+        this.operatorID = operatorID;
+        this.operation = operation;
+        this.operationObject = operationObject;
+        this.operationObjectID = operationObjectID;
+    }
 
-	public String getOperation() {
-		return operation;
-	}
+    public String getOperatorName() {
+        return operatorName;
+    }
 
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
 
-	public String getOperationObject() {
-		return operationObject;
-	}
+    public String getOperatorID() {
+        return operatorID;
+    }
 
-	public void setOperationObject(String operationObject) {
-		this.operationObject = operationObject;
-	}
+    public void setOperatorID(String operatorID) {
+        this.operatorID = operatorID;
+    }
 
-	public String getOperationObjectID() {
-		return operationObjectID;
-	}
+    public String getOperation() {
+        return operation;
+    }
 
-	public void setOperationObjectID(String operationObjectID) {
-		this.operationObjectID = operationObjectID;
-	}
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
+    public String getOperationObject() {
+        return operationObject;
+    }
+
+    public void setOperationObject(String operationObject) {
+        this.operationObject = operationObject;
+    }
+
+    public String getOperationObjectID() {
+        return operationObjectID;
+    }
+
+    public void setOperationObjectID(String operationObjectID) {
+        this.operationObjectID = operationObjectID;
+    }
 
 }

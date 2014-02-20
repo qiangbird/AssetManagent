@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.augmentum.ams.aop.OperationLogAnnotation;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.PurchaseItem;
@@ -161,6 +162,7 @@ public class DashboardController extends BaseController {
 	
 	@RequestMapping(value = "/deletePurchaseItem", method = RequestMethod.GET)
 	@ResponseBody
+//	@OperationLogAnnotation(operateDescribe="Delete PurchaseItem", operateObject="PurchaseItem", operateObjectId="%")
     public String deletePurchaseItem(String id) {
 
         purchaseItemService.deletePurchaseItemAsId(id);
