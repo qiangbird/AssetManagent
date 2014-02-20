@@ -1,6 +1,6 @@
 ﻿$(document).ready(function(){
 	//below is about front page validation
-	$("#assetName,#ownership,#customerName,#assetUser,#maxUseNum").delegate(this,"blur",function(){
+	$("#assetName,#ownership,#customerName,#assetUser,#maxUseNum,#selectedLocation").delegate(this,"blur",function(){
 		//delete the tips when input data exists
 		if( "" != $(this).val()){
 		$(this).clearValidationMessage();
@@ -131,7 +131,12 @@
    		    dataType : 'json',
    		    success : function(data) {
    		        console.log(data);
+   		        rooms = [];
    		        length = data.locationRoomList.length;
+   		        for ( var i = 0; i < length; i++) {
+   		        	rooms[i] = data.locationRoomList[i];
+    	        }
+   		     
    		        $("#selectedLocation").autocomplete({
    		            source : data.locationRoomList
    		        })
@@ -189,21 +194,25 @@
 	           });
 	       }
 	 
-
-// $("#selectedLocationList").delegate(this,
-//	"click", function() {
-//		alert("ddd");
-//	});
-	 
-//	 $("#selectedLocation").click(function(){
-//		 alert("ddf");
-//	 });
-	 
+ $("#selectedLocation").blur(
+    function() {
+    if ($(this).val().trim() == "") {
+        TextMouseOutError(this);
+    } else {
+        if (!checkInArr(rooms,$(this).val())) {
+        	console.log(rooms);
+            TextMouseOutError(this);
+        } else {
+            TextMouseOutNormal(this);
+        }
+    }
+    });
 	 
   var name = $("#assetName").val();
   var type = $("#assetType").val();
   var ownership = $("#ownership").val();
   var customerName = $("#customerName").val();
+  var room = $("#selectedLocation").val();
   var selectedSite = $("#selectedSite").val();
   var selectedStatus = $("#selectedStatus").val();
   var selectedEntity = $("#selectedEntity").val();
@@ -303,9 +312,46 @@
 	  $("#selectedStatus").val("IN_USE");
   }
   
+  if (room == ""){
+	  $("#selectedLocation").addClass("l-text-error");
+	     flag = 20;
+  }else{
+	  try{
+		  if(!checkInArr(rooms, room)){
+			  $("#selectedLocation").addClass("l-text-error");
+	    	     flag = 20;
+		  }
+	  }catch (e) {
+		  if(flag==0){
+		  flag = 0;
+		  }
+	}
+  }
   
+// flag = 0;
   if (flag == 0) {
-	     $("#assetFrom").submit();
+	  $("#assetFrom").ajaxSubmit(
+			   {
+			       type : 'post',
+			       url : $("#action").val(),
+			       data : $("#assetFrom")
+			               .formSerialize(),
+			       success : function(data) {
+			    	   console.log(data==null);
+			    	   console.log(data=="");
+			    	   console.log(data.error==undefined);
+			    	   if(data.error != undefined){
+			    	   var errorCode = data.error.toString();
+			    	    console.log(errorCode);
+			    	   console.log(typeof(errorCode));
+			           showMessageBarForMessage(errorCode);
+			           return false;
+			    	   }else{
+			    		   window.location.href="asset/allAssets";
+			    	   }
+			       }
+			       });
+	  
 	      }
   
    });

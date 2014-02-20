@@ -1,5 +1,10 @@
 package com.augmentum.ams.web.vo.asset;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Device;
 import com.augmentum.ams.model.asset.Machine;
@@ -8,6 +13,8 @@ import com.augmentum.ams.model.asset.OtherAssets;
 import com.augmentum.ams.model.asset.Project;
 import com.augmentum.ams.model.asset.Software;
 import com.augmentum.ams.model.user.User;
+import com.augmentum.ams.util.ErrorCodeUtil;
+import com.augmentum.ams.web.vo.validation.GroupValidation;
 
 /**
  * Asset Vo for get data from front page
@@ -18,13 +25,13 @@ import com.augmentum.ams.model.user.User;
 public class AssetVo {
 
     private String id;
-
     private String assetId;
-
+    @NotBlank(message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_FAILED)
+    @Size(max = 10, message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_LENGTH_FAILED, groups=GroupValidation.class)
     private String assetName;
 
     private String manufacturer;
-
+    @NotBlank(message = ErrorCodeUtil.ASSET_TYPE_VALIDATOR_FAILED)
     private String type;
 
     private String barCode;
@@ -35,10 +42,11 @@ public class AssetVo {
 
     private String photoPath;
 
+    @NotBlank(message = ErrorCodeUtil.ASSET_OWNERSHIP_INVALID)
     private String ownerShip;
 
     private boolean fixed;
-
+    @NotBlank(message = ErrorCodeUtil.ASSET_STATUS_INVALID)
     private String status;
 
     private String memo;
@@ -61,16 +69,17 @@ public class AssetVo {
 
     private OtherAssets otherAssets;
 
+    @NotBlank(message = ErrorCodeUtil.ASSET_LOCATION_FAILED)
     private String location;
-
+    @NotBlank(message = ErrorCodeUtil.ASSET_ENTITY_VALIDATOR_FAILED)
     private String entity;
 
     private Project project;
-
+    @Valid
     private Customer customer;
-    
+    @NotBlank(message = ErrorCodeUtil.ASSET_SITE_VALIDATOR_FAILED)
     private String site;
-    
+
     private User user;
 
     private String keeper;

@@ -33,6 +33,7 @@
     text-overflow: ellipsis;
     height: 28px;
     line-height: 28px;
+    text-align: left;
 }
 
 .message_id {
@@ -67,4 +68,10 @@
     display: inline-block;
     height: 13px;
     width: 13px;
+}
+
+.errorItmes{
+	text-align: left;
+	margin-left: 220;
+	float: left;
 }

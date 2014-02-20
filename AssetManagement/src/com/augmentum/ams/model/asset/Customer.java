@@ -20,9 +20,11 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.validator.constraints.NotBlank;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.util.ErrorCodeUtil;
 
 /**
  * @author Rudy.Gao
@@ -39,6 +41,7 @@ public class Customer extends BaseModel implements Serializable {
 
 	@Column(name = "customer_name", length = 128, nullable = false)
 	@Field(name = "customerName", index = Index.TOKENIZED, store = Store.YES)
+	@NotBlank(message=ErrorCodeUtil.ASSET_CUSTOMER_VALIDATOR_FAILED)
 	private String customerName;
 
 	@Column(name = "customer_code", length = 32)

@@ -24,6 +24,7 @@ String basePath = request.getScheme() + "://"
 	type="text/css">
 <link rel="stylesheet" href="css/asset/assetCommon.css" type="text/css">
 <link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="messageBar/css/messagebar.css">
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
@@ -47,7 +48,7 @@ String basePath = request.getScheme() + "://"
 			</div>
 
 
-			<form:form action="asset/update" method="post" id="assetFrom"
+			<form:form action="asset/update" method="post" id="assetEditFrom"
 				modelAttribute="asset">
 				<div class="common-requirement-property">
 					<div class="asset-input-left asset-input-panel">
@@ -180,9 +181,9 @@ String basePath = request.getScheme() + "://"
                             </form:select>
                         </p>
 						<p>
-							<label><spring:message code="asset.location" /></label>
+							<span>*</span><label><spring:message code="asset.location" /></label>
 							<form:input path="location" id="selectedLocation" maxlength="36"
-                                cssClass="l-text" placeholder="Please input a user" />
+                                cssClass="l-text" placeholder="Please input a room" />
 						</p>
 						<p>
 							<label><spring:message code="asset.user" /></label>
@@ -574,9 +575,12 @@ String basePath = request.getScheme() + "://"
 		<script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 		<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 		<script type="text/javascript" src="js/asset/assetCommon.js"></script>
+		<script type="text/javascript" src="js/common/messageBarCommon.js"></script>
+		
 		<!-- add front page validation -->
         <script type="text/javascript" src="js/common/validation.js"></script>
         <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
         <script type="text/javascript" src="js/asset/assetValidation.js"></script>
+        <script type="text/javascript" src="messageBar/js/messagebar.js"></script>
 </body>
 </html>

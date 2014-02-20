@@ -5,16 +5,16 @@ package com.augmentum.ams.util;
  * @time Sep 27, 2013 3:11:50 PM
  */
 public final class ErrorCodeUtil {
-	
-	/**
+
+    /**
      * Authority delegates it is used to throw AuthorityException, USER
      * delegates it is used user entity
      */
     public static final String AUTHORITY_USER_0102001 = "0102001";
 
     /**
-     * DATA delegates it is used to throw BusinessException, ASSET
-     * delegates it is used asset entity
+     * DATA delegates it is used to throw BusinessException, ASSET delegates it
+     * is used asset entity
      */
     public static final String DATA_SAVE_FAILED = "0201001";
     public static final String DATA_UPDATE_FAILED = "0201002";
@@ -27,7 +27,7 @@ public final class ErrorCodeUtil {
      */
     public static final String ASSET_STATUS_INVALID = "0201006";
     public static final String ASSET_OWNERSHIP_INVALID = "0201007";
-    
+
     public static final String ASSET_ASSIGN_FAILED = "0201008";
     public static final String ASSET_RETURN_FAILED = "0201009";
     public static final String ASSET_TAKEOVER_FAILED = "0201010";
@@ -36,32 +36,40 @@ public final class ErrorCodeUtil {
     public static final String ASSET_ADD_TO_AUDIT_FAILED = "0201013";
     public static final String ASSET_IMPORT_FAILED = "0201014";
     public static final String ASSET_EXPORT_FAILED = "0201015";
-    
+
+    // below is about validate asset
+    public static final String ASSET_NANE_VALIDATOR_FAILED = "0201016";
+    public static final String ASSET_TYPE_VALIDATOR_FAILED = "0201017";
+    public static final String ASSET_ENTITY_VALIDATOR_FAILED = "0201018";
+    public static final String ASSET_CUSTOMER_VALIDATOR_FAILED = "0201019";
+    public static final String ASSET_SITE_VALIDATOR_FAILED = "0201020";
+    public static final String ASSET_NANE_VALIDATOR_LENGTH_FAILED = "0201021";
+    public static final String ASSET_LOCATION_FAILED = "0201022";
 
     /**
-     * DATA delegates it is used to throw BusinessException, ROLE
-     * delegates it is used role entity
+     * DATA delegates it is used to throw BusinessException, ROLE delegates it
+     * is used role entity
      */
     public static final String DATA_ROLE_0203001 = "0203001";
-    
+
     /**
-     * DATA delegates it is used to throw BusinessException, IAP
-     * delegates it is used interactive with IAP
+     * DATA delegates it is used to throw BusinessException, IAP delegates it is
+     * used interactive with IAP
      */
     public static final String DATA_IAP_0204001 = "0204001";
-    
+
     /**
-     * DATA delegates it is used to throw BusinessException, IAP
-     * delegates it is used interactive with IAP
+     * DATA delegates it is used to throw BusinessException, IAP delegates it is
+     * used interactive with IAP
      */
     public static final String DATA_IAP_0204002 = "0204002";
-    
+
     /**
-     * DATA delegates it is used to throw BusinessException, IAP
-     * delegates it is used interactive with IAP
+     * DATA delegates it is used to throw BusinessException, IAP delegates it is
+     * used interactive with IAP
      */
     public static final String DATA_IAP_0204003 = "0204003";
-    
+
     /**
      * PARAMETER delegates it is used to throw ParameterException, ASSET
      * delegates it is used asset entity
@@ -73,16 +81,16 @@ public final class ErrorCodeUtil {
      * delegates it is used user entity
      */
     public static final String PARAMETER_USER_0202001 = "0302001";
-    
+
     /**
      * PARAMETER delegates it is used unknown exception
      */
     public static final String UNKNOWN_EXCEPTION_0401001 = "0401001";
-    
+
     public static final String SYSTEM_ERROR = "0501001";
 
     private ErrorCodeUtil() {
-    	
+
     }
 
 }

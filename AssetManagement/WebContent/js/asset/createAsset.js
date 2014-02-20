@@ -212,6 +212,19 @@ $("#assetUser").click(function() {
 //});
 //});
 
+//$("#selectedLocation").blur(
+//        function() {
+//        if ($(this).val().trim() == "") {
+//            TextMouseOutError(this);
+//        } else {
+//            if (!checkInArr(rooms,$(this).val())) {
+//            	console.log(rooms);
+//                TextMouseOutError(this);
+//            } else {
+//                TextMouseOutNormal(this);
+//            }
+//        }
+//        });
 
 $("#deviceSubtypeSelect").click(function() {
     $.ajax({

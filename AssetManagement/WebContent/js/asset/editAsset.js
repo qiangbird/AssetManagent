@@ -131,6 +131,20 @@
        }
   });
 });
+   
+$("#selectedLocation").blur(
+    function() {
+    if ($(this).val().trim() == "") {
+        TextMouseOutError(this);
+    } else {
+        if (!checkInArr(rooms,$(this).val())) {
+        	console.log(rooms);
+            TextMouseOutError(this);
+        } else {
+            TextMouseOutNormal(this);
+        }
+    }
+    });
 
    $("#deviceSubtypeSelect").click(
    function() {
@@ -160,7 +174,7 @@
       var type = $("#assetType").val();
       var ownership = $("#ownership").val();
       var customerName = $("#customerName").val();
-      var selectedLocation = $("#selectedLocation").val();
+      var room = $("#selectedLocation").val();
       var selectedStatus = $("#selectedStatus").val();
       var selectedEntity = $("#selectedEntity").val();
       var machineType = $("#machineType").val();
@@ -200,14 +214,19 @@
          $("#customerName").addClass("l-select-error");
          flag = 7;
       }
-      if (selectedLocation == "") {
-         $("#selectedLocation").addClass("l-select-error");
-         flag = 8;
-      }
+//      if (selectedLocation == "") {
+//         $("#selectedLocation").addClass("l-select-error");
+//         flag = 8;
+//      }
       if (selectedStatus == "") {
          $("#selectedStatus").addClass("l-select-error");
          flag = 9;
-      }
+      } else {
+	    if (selectedStatus == "IN_USE"&& $("#assetUser").val() == "") {
+	        $("#assetUser").addClass("l-text-error");
+	        flag = 9;
+	    }
+	}
       if (selectedEntity == "") {
          $("#selectedEntity").addClass("l-select-error");
          flag = 13;
@@ -244,6 +263,23 @@
       if(user!=""&&selectedStatus!="IN_USE"){
     	  $("#selectedStatus").val("IN_USE");
       }
+      
+      if (room == ""){
+    	  $("#selectedLocation").addClass("l-text-error");
+    	     flag = 20;
+      }else{
+    	  try{
+    		  if(!checkInArr(rooms, room)){
+    			  $("#selectedLocation").addClass("l-text-error");
+    	    	     flag = 20;
+    		  }
+    	  }catch (e) {
+    		  if(flag==0){
+    		  flag = 0;
+    		  }
+		}
+      }
+
       console.log(flag);
       if (flag != 0) {
          return false;
@@ -288,7 +324,28 @@
   	         }
   	      });
   		
-         $("#assetFrom").submit();
+//         $("#assetFrom").submit();
+  		 $("#assetEditFrom").ajaxSubmit(
+  			   {
+  			       type : 'post',
+  			       url : 'asset/update',
+  			       data : $("#assetEditFrom")
+  			               .formSerialize(),
+  			       success : function(data) {
+  			    	   console.log(data==null);
+  			    	   console.log(data=="");
+  			    	   console.log(data.error==undefined);
+  			    	   if(data.error != undefined){
+  			    	   var errorCode = data.error.toString();
+  			    	    console.log(errorCode);
+  			    	   console.log(typeof(errorCode));
+  			           showMessageBarForMessage(errorCode);
+  			           return false;
+  			    	   }else{
+  			    		   window.location.href="asset/allAssets";
+  			    	   }
+  			       }
+  			       });
          return true;
       }
    });

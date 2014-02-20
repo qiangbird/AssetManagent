@@ -11,11 +11,14 @@ function validateAssetForm(){
     var checkedOutTime = $("#checkedOutTime").val();
     var assetStatus = $("#selectedStatusList").find("span:first").text();
     var assetUser = $("#assetUser").val();
+    var room = $("#selectedLocation").val();
     if(entityType = "Asset"){
     	validations.push($("#assetName").validateNull(assetName,"AssetName should not be null !"));
     	validations.push($("#ownership").validateNull(ownership,"Ownership should not be null and must be a customer !"));
     	validations.push($("#customerName").validateNull(customerName,"CustomerName should not be null and must be a customer!"));
     	validations.push($("#maxUseNum").validateNum(maxUseNum,"Max User Num must be a number and cannot be null !"));
+    	validations.push($("#selectedLocation").validateNum(room,"Room is illegal !"));
+    	
     	
     	if("" != checkedInTime && "" != checkedOutTime){
     	validations.push($("#checkedOutTime").validateDate(checkedOutTime,checkedInTime,"Check out time should larger than check in time !"));
@@ -29,6 +32,11 @@ function validateAssetForm(){
         		$("#assetUser").push($("#assetUser").validateNull(assetUser,"Asset must be a employee name !"));
         	}
     	}
+    	
+    	if("" == room || $("#selectedLocation").hasClass("l-text-error")){
+    		$("#selectedLocation").push($("#selectedLocation").validateNull(room,"Room is illegal !"));
+    	}
+    	
     	validations.push("failed");
     } 
     

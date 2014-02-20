@@ -1,5 +1,6 @@
 package com.augmentum.ams.web.controller.base;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.shiro.SecurityUtils;
@@ -17,6 +18,7 @@ import com.augmentum.ams.exception.AuthorityException;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.exception.RemoteException;
+import com.augmentum.ams.exception.ValidatorException;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("baseController")
@@ -69,4 +71,16 @@ public abstract class BaseController {
         
         return mv;
     }
+    
+    @ExceptionHandler({ ValidatorException.class })
+    @ResponseBody
+    protected JSONObject handleValidatorException(ValidatorException ve) {
+
+        JSONObject jSONObject = new JSONObject();
+        jSONObject.put("error", ve.getErrorCode().replaceAll(","," ").trim());
+        
+        return jSONObject;
+    }
+    
+    
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -17,6 +18,8 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +32,7 @@ import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ExcelException;
+import com.augmentum.ams.exception.ValidatorException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.DeviceSubtype;
@@ -174,13 +178,20 @@ public class AssetController extends BaseController {
 	 * @throws UnsupportedEncodingException
 	 */
 	@RequestMapping(value = "/saveAsset", method = RequestMethod.POST)
-	public ModelAndView saveAsset(HttpServletRequest request, AssetVo assetVo,
-			String batchCreate, String batchCount) throws BusinessException,
+	public ModelAndView saveAsset(HttpServletRequest request,@Validated/*(GroupValidation.class)*/ AssetVo assetVo,
+	        BindingResult bindingResult, String batchCreate, String batchCount) throws BusinessException,
 			UnsupportedEncodingException {
 
 		logger.info("saveAsset method start!");
 
 		logger.info(assetVo.toString());
+		
+		if(bindingResult.hasFieldErrors()){
+            String error_message = AssetUtil.getErrorMessage(bindingResult);
+            String error_field = AssetUtil.getErrorField(bindingResult);
+            throw new ValidatorException(error_message,error_field+" is invalid!"); 
+        }
+		
 		ModelAndView modelAndView = new ModelAndView();
 		Asset asset = new Asset();
 
@@ -368,11 +379,17 @@ public class AssetController extends BaseController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public ModelAndView updateAsset(AssetVo assetVo, HttpServletRequest request)
+	public ModelAndView updateAsset(@Valid AssetVo assetVo, BindingResult bindingResult , HttpServletRequest request)
 			throws UnsupportedEncodingException {
 
 	    logger.info("updateAsset method start!");
 
+	    if(bindingResult.hasFieldErrors()){
+            String error_message = AssetUtil.getErrorMessage(bindingResult);
+            String error_field = AssetUtil.getErrorField(bindingResult);
+            throw new ValidatorException(error_message,error_field+" is invalid!"); 
+        }
+	    
         ModelAndView modelAndView = new ModelAndView();
         Asset asset = assetService.getAsset(assetVo.getId().trim());
         Asset oldAsset = new Asset();

@@ -210,7 +210,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements
 							.saveOtherAssets(assetVo.getOtherAssets());
 				}
 			}
+			if(!StringUtils.isBlank(assetVo.getPurchaseItemId())){
 			purchaseItemService.deletePurchaseItemAsId(assetVo.getPurchaseItemId());
+			}
 
 		} else {
 			// TODO need update operation log

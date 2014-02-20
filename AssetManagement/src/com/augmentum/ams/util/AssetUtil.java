@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Location;
@@ -128,6 +130,30 @@ public class AssetUtil {
             processTypes.add(ProcessTypeEnum.values()[i]);
         }
         return processTypes;
+    }
+    
+    public static String getErrorMessage(BindingResult bindingResult){
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        StringBuffer sb = new StringBuffer();
+        
+        for (FieldError error : errors) {
+            String errorCode = error.getDefaultMessage();
+            sb.append(errorCode).append(",");
+            logger.info(sb.toString());
+        }
+        return sb.toString();
+    }
+
+    public static String getErrorField(BindingResult bindingResult){
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        StringBuffer sb = new StringBuffer();
+        
+        for (FieldError error : errors) {
+            String errorCode = error.getField();
+            sb.append(errorCode).append(",");
+            logger.info(sb.toString());
+        }
+        return sb.toString();
     }
 
 }

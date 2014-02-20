@@ -38,6 +38,13 @@
             		messageStr = "<div class='message_board'><div class='message_content'><span class='message_id'></span>"
                   + "<span class='message_notice'>" + options.responseMessage[0] + "</span></div>"
                   + "<div class='close_btn'><span id='close_img'></span></div></div>";
+            		$(".message_content").height(options.height);
+            		
+            		errorCodeCount = options.responseMessage[0].split("<br>").length;
+            		options.height = 26 * (errorCodeCount>1?(errorCodeCount-1):1)+10;
+            		
+            		$(".message_content").height(options.height);
+//            		options.height = 26 * (errorCodeCount>3?3:2);
             	} else {
             		
             		for (var i = 0; i < options.itemId.length; i++) {

@@ -55,7 +55,23 @@ function messageBarForMessage(messages) {
 }
 
 function showMessageBarForMessage (errorCode) {
+	errorCodes = errorCode.split(" ");
+	errorMessage = "";
+	for(i=0;i<errorCodes.length;i++){
+		errorMessage += "<span class='errorItmes'>";
+		errorMessage += i18nProp(errorCodes[i]);
+		errorMessage += "</span><br>";
+	}
 	var messages = [];
-	messages[0] = i18nProp(errorCode);
+	messages[0] = errorMessage;
 	messageBarForMessage(messages);
+	$(".message_content").height(26*errorCodes.length);
+	$(".message_board").css("top",100);
+	window.scrollTo(0,0);
+	
 }
+//function showMessageBarForMessage (errorCode) {
+//	var messages = [];
+//	messages[0] = i18nProp(errorCode);
+//	messageBarForMessage(messages);
+//}
