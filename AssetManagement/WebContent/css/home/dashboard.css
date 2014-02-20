@@ -43,7 +43,7 @@ tr {
 }
 
 #right {
-    width: 410px;;
+    width: 400px;;
     height: auto;
     float: right;
 }
@@ -54,7 +54,7 @@ tr {
 }
 
 .tr-header {
-	width: 140px;
+	width: 148px;
 	height: 30px;
 	text-align: left;
 	text-indent: 13px;
@@ -151,7 +151,7 @@ tr {
 }
 
 .warrantyExpiredPanel,.licenseExpiredPanel {
-	width: 568px;
+	width: 576px;
 	margin-top: 30px;
 }
 
