@@ -1,6 +1,8 @@
 $(document).ready(function(){
 	$(".menuLi,.headerNavigationEnd").mouseover(function() {
 		$(this).find("ul").show();
+		$(this).parents(".firstMenuUl").find(".menuLi").css("background-color","");
+		$(this).css("background-color","#3F8FB5");
 	}).mouseout(function() {
 		$(this).find("ul").hide();
 	});
