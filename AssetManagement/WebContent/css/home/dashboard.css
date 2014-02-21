@@ -51,6 +51,7 @@ tr {
 .td-header {
 	background-image: url(../../searchList/images/IMG_ListTitle_Middle_1x30.png);
 	color: #FFFFFF;
+	font-size: 14px;
 }
 
 .tr-header {

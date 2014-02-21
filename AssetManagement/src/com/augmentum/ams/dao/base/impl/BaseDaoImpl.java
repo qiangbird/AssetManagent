@@ -104,8 +104,12 @@ public class BaseDaoImpl<T extends BaseModel> implements BaseDao<T> {
     @SuppressWarnings("unchecked")
     @Override
     public Page<T> findByCriteria(DetachedCriteria criteria, Page<T> page) {
+    	
+        int pageSize = page.getPageSize();
+        int currentPage = page.getCurrentPage();
+        page.setStartRecord((currentPage - 1) * pageSize);
         int firstResult = page.getStartRecord();
-        int maxResults = page.getPageSize();
+        
         List<T> list = null;
 
         if (page.getRecordCount() == 0) {
@@ -117,11 +121,15 @@ public class BaseDaoImpl<T extends BaseModel> implements BaseDao<T> {
             criteria.setProjection(null);
             page.setRecordCount(recordCount);
         }
-
+        
+        int recordCount = page.getRecordCount();
+        int totalPage = recordCount % pageSize == 0 ? recordCount / pageSize : recordCount / pageSize + 1;
+        page.setTotalPage(totalPage);
+        
         criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
 
         // Gain result of query
-        list = hibernateTemplate.findByCriteria(criteria, firstResult, maxResults);
+        list = hibernateTemplate.findByCriteria(criteria, firstResult, pageSize);
 
         page.setResult(list);
 

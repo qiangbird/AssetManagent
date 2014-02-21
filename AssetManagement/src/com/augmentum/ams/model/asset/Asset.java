@@ -16,8 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.DateBridge;
@@ -132,7 +130,6 @@ public class Asset extends BaseModel {
     @Field(name = "vendor", index = Index.TOKENIZED, store = Store.YES)
     private String vendor;
 
-    @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "asset", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<TransferLog> transferLogs = new HashSet<TransferLog>();
 

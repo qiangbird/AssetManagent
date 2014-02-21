@@ -34,7 +34,7 @@ import com.augmentum.ams.util.ErrorCodeUtil;
 @Table(name = "customer")
 @Indexed(index = "customer")
 @Analyzer(impl = IKAnalyzer.class)
-@JsonIgnoreProperties(value={"assets"})    
+//@JsonIgnoreProperties(value={"assets"})    
 public class Customer extends BaseModel implements Serializable {
 
 	private static final long serialVersionUID = -1485320091445990928L;

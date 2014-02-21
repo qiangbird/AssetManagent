@@ -24,11 +24,6 @@ var dataListInfo = {
 	            });
 	        }
 	    },
-	    updateShowSize : {
-	        url : 'searchCommon/pageSize/updatePageSize',
-	        callback : function() {
-	        }
-	    },
 	    contentHandler : function(str) {
 	        return resultContentHandle(str);
 	    }
@@ -68,9 +63,10 @@ $(document).ready(function(){
 	});
 	
 	
-	criteria.pageNum = 1;
-    criteria.sortName = 'updatedTime';
-    criteria.sortSign = 'desc';
+	criteria.currentPage = 1;
+	criteria.pageSize = 20;
+//    criteria.sortName = 'updatedTime';
+//    criteria.sortSign = 'desc';
     
     dataListInfo.criteria = criteria;
     dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
@@ -114,7 +110,7 @@ $(document).ready(function(){
                         	ids: getActivedAssetIds()
                         },
                         success : function(data) {
-                            criteria.pageNum = 1;
+                            criteria.currentPage = 1;
                             dataList.search();
                         }
                     });

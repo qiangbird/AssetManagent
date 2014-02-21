@@ -13,6 +13,7 @@ import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.BaseCaseTest;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.SearchCommonUtil;
+import com.augmentum.ams.web.vo.system.Page;
 
 public class ToDoServiceTest extends BaseCaseTest {
 
@@ -26,30 +27,22 @@ public class ToDoServiceTest extends BaseCaseTest {
 	
 	@Test
 	public void testFindReturnedAsset() {
-		List<ToDo> list = todoService.findReturnedAsset();
-		for (ToDo todo : list) {
-			logger.info(list.size() + "--" + todo.getAsset().getAssetId());
+		Page<ToDo> page = new Page<ToDo>();
+		page.setPageSize(20);
+		
+		List<ToDo> todos = todoService.findReturnedAsset();
+		for (ToDo todo : todos) {
+			logger.info(todos.size() + "--" + todo.getAsset().getAssetId());
 		}
 		
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService.findUserCustomColumns("todo", "T00245");
-		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(list, userCustomColumnList, "8,0");
+		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(todos, userCustomColumnList, "8,0");
 		logger.info(array.size() + "--" + array);
 	} 
 	
 	@Test
 	public void testConfirmReturnedAsset() {
-		todoService.confirmReturnedAndReceivedAsset("4028961242fa20eb0142fb206b5c123d", "RETURNED");
+		todoService.confirmReturnedAndReceivedAsset("4028961242fa20eb0142fb206b5c123d", "AVAILABLE");
 	}
 	
-	@Test
-	public void testFindReceivedAsset() {
-		List<ToDo> list = todoService.findReceivedAsset();
-		for (ToDo todo : list) {
-			logger.info(list.size() + "--" + todo.getAsset().getAssetId());
-		}
-		
-		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService.findUserCustomColumns("todo", "T00690");
-		JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(list, userCustomColumnList, "8,0");
-		logger.info(array.size() + "--" + array);
-	} 
 }

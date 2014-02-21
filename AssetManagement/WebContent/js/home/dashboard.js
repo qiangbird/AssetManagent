@@ -145,7 +145,7 @@ $(document).ready(function(){
 	});
 	
 	$("#viewMore_idleAsset").click(function(){
-		window.location.href = "customerAsset/listAllCustomerAssets?status=IDLE";
+		window.location.href = "customerAsset/listAllCustomerAssets?status=idle";
 	});
 	
 	// get warranty expired asset panel
@@ -208,15 +208,15 @@ $(document).ready(function(){
 	// generate link and parameters for IT number   --------------------------------- start
 	function getTypeForLink(i) {
 		if (i == 1) {
-			return "MACHINE";
+			return "machine";
 		} else if (i == 2) {
-			return "MONITOR";
+			return "monitor";
 		} else if (i == 3) {
-			return "SOFTWARE";
+			return "software";
 		} else if (i == 4) {
-			return "DEVICE";
+			return "device";
 		} else if (i == 5) {
-			return "OTHERASSETS";
+			return "otherassets";
 		} else {
 			return "";
 		}
@@ -224,23 +224,23 @@ $(document).ready(function(){
 	
 	function getStatusForLink(i) {
 		if (i == 1 || i == 12) {
-			return "AVAILABLE";
+			return "available";
 		} else if (i == 2 || i == 13) {
-			return "IN_USE";
+			return "in_use";
 		} else if (i == 3 || i == 14) {
-			return "IDLE";
+			return "idle";
 		} else if (i == 4) {
-			return "RETURNED";
+			return "returned";
 		} else if (i == 5) {
-			return "BORROWED";
+			return "borrowed";
 		} else if (i == 6) {
-			return "BROKEN";
+			return "broken";
 		} else if (i == 7) {
-			return "WRITE_OFF";
+			return "write_off";
 		} else if (i == 8) {
-			return "RETURNING_TO_IT";
+			return "returning_to_it";
 		} else if (i == 9) {
-			return "ASSIGNING";
+			return "assigning";
 		} else {
 			return "";
 		}

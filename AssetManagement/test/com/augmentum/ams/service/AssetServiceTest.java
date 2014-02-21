@@ -558,13 +558,6 @@ public class AssetServiceTest {
 	}
 	
 	@Test
-	public void testFindLicenseExpiredAssetForPanel() {
-		JSONArray jsonArray = assetService.findLicenseExpiredAssetForPanel("8,0");
-		logger.info(jsonArray.size());
-		logger.info(jsonArray);
-	}
-	
-	@Test
 	public void testFindIdleAssetBySearchCondition() {
 		
 		SearchCondition searchCondition = new SearchCondition();
