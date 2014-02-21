@@ -302,6 +302,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             throws ParseException {
 
         @SuppressWarnings("unchecked")
+        // TODO: fix bugs when using self property
         List<PropertyTemplate> defaultPropertyTemplatesList = JSONArray.toList(
                 propertyTemplateService.findPropertyTemplateByCustomerAndAssetType(asset
                         .getCustomer().getCustomerName(), asset.getType()), PropertyTemplate.class);

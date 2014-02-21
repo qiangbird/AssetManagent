@@ -52,6 +52,7 @@ import com.augmentum.ams.service.search.impl.SearchAssetServiceImpl;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.FormatUtil;
+import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
@@ -96,7 +97,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     @Override
     public Page<Asset> findCustomerAssetsBySearchCondition(SearchCondition searchCondition,
             String customerId) {
-    	
+
         // init base search columns and associate way
         String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
         Occur[] clauses = new Occur[fieldNames.length];
@@ -178,9 +179,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class);
         criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("project", FetchMode.JOIN)
-                .setFetchMode("location", FetchMode.JOIN)
-                .createAlias("customer", "customer");
-        
+                .setFetchMode("location", FetchMode.JOIN).createAlias("customer", "customer");
+
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         criteria.add(Restrictions.eq("customer.id", customerId));
 
@@ -195,14 +195,14 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
                 .setCriteriaQuery(criteria);
-        
+
         if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
             fullTextQuery.setFilter(filter);
             List<Asset> allRecords = fullTextQuery.list();
             page.setAllRecords(allRecords);
             return page;
         }
-        
+
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
         fullTextSession.close();
         return page;
@@ -307,51 +307,58 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     @Override
     public List<Customer> findVisibleCustomerList(UserVo userVo, List<CustomerVo> list) {
         List<Customer> customerVisibleList = new ArrayList<Customer>();
-        boolean flag = false;
-        if (null != list) {
-            for (CustomerVo cv : list) {
-                Customer customer = null;
-                customer = customerService.getCustomerByCode(cv.getCustomerCode());
-                if (null != customer) {
-                    if (null != customer.getCustomerGroup()) {
-                        flag = true;
-                        if (customer.getCustomerGroup().getProcessType() == ProcessTypeEnum.SHARED) {
 
-                            List<Customer> groupCustomerList = customerService
-                                    .getCustomerByGroup(customer.getCustomerGroup().getId());
-                            customerVisibleList.addAll(groupCustomerList);
-                        }
-                        if (customer.getCustomerGroup().getProcessType() == ProcessTypeEnum.NONSHARE) {
-                            if (userVo.getEmployeeLevel().equals("Manager")
-                                    || userVo.getEmployeeLevel().equals("Director")
-                                    || specialRoleService.findSpecialRoleByUserId(userVo
-                                            .getEmployeeId())) {
-                                customerVisibleList.add(customer);
-                            }
+        List<Customer> nonGroupCustomerList = new ArrayList<Customer>();
 
-                        }
-                    } else {
-                        if(!userVo.getEmployeeLevel().equals("Employee")){
-                            flag = true;
-                        customerVisibleList.add(customer);
-                        }
-                    }
-                }else{
-                    flag = true;
-                    Customer iapCustomer = new Customer();
-                    iapCustomer.setCustomerName(cv.getCustomerName());
-                    iapCustomer.setCustomerCode(cv.getCustomerCode());
-                    customerVisibleList.add(iapCustomer);
+        // TODO: need code review
+
+        boolean isSharedCustomer = false;
+
+        for (CustomerVo cv : list) {
+
+            // get customer from local database
+            Customer customer = customerService.getCustomerByCode(cv.getCustomerCode());
+
+            if (null != customer) {
+
+                // check customer is shared
+                if (null != customer.getCustomerGroup()
+                        && customer.getCustomerGroup().getProcessType() == ProcessTypeEnum.SHARED) {
+
+                    isSharedCustomer = true;
+
+                    // TODO: customer group using string not using enum
+                    List<Customer> groupCustomerList = customerService.getCustomerByGroup(customer
+                            .getCustomerGroup().getId());
+
+                    customerVisibleList.addAll(groupCustomerList);
+
                 }
-            }
-            if (flag) {
-                return customerVisibleList;
+
             } else {
-                return null;
+                customer = new Customer();
+
+                customer.setCustomerName(cv.getCustomerName());
+                customer.setCustomerCode(cv.getCustomerCode());
             }
-        } else {
-            return null;
+
+            if (!isSharedCustomer) {
+
+                // TODO check employee is not employee or leader and not special
+                // role user
+                if (RoleLevelUtil.checkEmployeeCanViewCustomerAssets(userVo)
+                        || specialRoleService.findSpecialRoleByUserId(userVo.getEmployeeId())) {
+
+                    nonGroupCustomerList.add(customer);
+                }
+
+            }
         }
+
+        customerVisibleList.addAll(nonGroupCustomerList);
+
+        return customerVisibleList;
+
     }
 
     @Override
@@ -363,8 +370,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
             asset.setStatus(status);
             asset.setUser(null);
             assetService.updateAsset(asset);
-            
-         // generate todo list for return to IT operation
+
+            // generate todo list for return to IT operation
             if ("RETURNING_TO_IT".equals(status)) {
                 ToDo todo = new ToDo();
                 todo.setAsset(asset);
@@ -399,7 +406,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
     @Override
     public void assginCustomerAsset(String customerCode, String ids, String projectCode,
-            String userName, String assetUserCode, HttpServletRequest request) throws BusinessException {
+            String userName, String assetUserCode, HttpServletRequest request)
+            throws BusinessException {
         String uuId[] = ids.split(",");
         Customer customer = customerService.getCustomerByCode(customerCode);
         Project project = projectService.getProjectByProjectCode(projectCode);
@@ -430,16 +438,17 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
     }
 
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Override
-	public Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition, List<Customer> customers) {
+    public Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition,
+            List<Customer> customers) {
 
-		String[] customerIds = new String[customers.size()];
+        String[] customerIds = new String[customers.size()];
 
-		for (int i = 0; i < customers.size(); i++) {
-			customerIds[i] = customers.get(i).getId();
-		}
-		
+        for (int i = 0; i < customers.size(); i++) {
+            customerIds[i] = customers.get(i).getId();
+        }
+
         // init base search columns and associate way
         String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
         Occur[] clauses = new Occur[fieldNames.length];
@@ -502,7 +511,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // create filter based on advanced search condition, it used for further
         // filtering query result
         BooleanQuery booleanQuery = new BooleanQuery();
-        
+
         BooleanQuery statusQuery = getStatusQuery(searchCondition.getAssetStatus());
         BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
         Query trq = getTimeRangeQuery(searchCondition.getFromTime(), searchCondition.getToTime());
@@ -532,29 +541,29 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
                 .setCriteriaQuery(criteria);
-        
+
         if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
             fullTextQuery.setFilter(filter);
             List<Asset> allRecords = fullTextQuery.list();
             page.setAllRecords(allRecords);
             return page;
         }
-        
+
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
         fullTextSession.close();
         return page;
-    
-	}
-    
+
+    }
+
     private BooleanQuery getCustomerQuery(String[] customerIds) {
-    	
-    	BooleanQuery customerQuery = new BooleanQuery();
-    	
-    	for (int i = 0; i < customerIds.length; i++) {
-    		TermQuery termQery = new TermQuery(new Term("customer.id", customerIds[i]));
-    		customerQuery.add(termQery, Occur.SHOULD);
-    	}
-    	return customerQuery;
+
+        BooleanQuery customerQuery = new BooleanQuery();
+
+        for (int i = 0; i < customerIds.length; i++) {
+            TermQuery termQery = new TermQuery(new Term("customer.id", customerIds[i]));
+            customerQuery.add(termQery, Occur.SHOULD);
+        }
+        return customerQuery;
     }
 
 }

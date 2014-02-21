@@ -503,12 +503,12 @@ $(document).ready(function(){
         			} 
         			// available customer asset count
         			else if (type == "Available Customer Asset") {
-        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "AVAILABLE", data.assetCount.allCustomersAvailableMachineCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "AVAILABLE", data.assetCount.allCustomersAvailableMonitorCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "AVAILABLE", data.assetCount.allCustomersAvailableSoftwareCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "AVAILABLE", data.assetCount.allCustomersAvailableDeviceCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "AVAILABLE", data.assetCount.allCustomersAvailableOtherAssetsCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "AVAILABLE", data.assetCount.allCustomersAvailableAssetTotal);
+        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "available", data.assetCount.allCustomersAvailableMachineCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "available", data.assetCount.allCustomersAvailableMonitorCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "available", data.assetCount.allCustomersAvailableSoftwareCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "available", data.assetCount.allCustomersAvailableDeviceCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "available", data.assetCount.allCustomersAvailableOtherAssetsCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "available", data.assetCount.allCustomersAvailableAssetTotal);
         				
         				//append each customer asset
         				for (var i = 0; i < data.customer.length; i++) {
@@ -533,12 +533,12 @@ $(document).ready(function(){
         				$(".afterTR-available").each(function(){
         					var customerCode = $(this).attr("content");
         					
-        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "AVAILABLE", $(this).children("td:eq(1)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "AVAILABLE", $(this).children("td:eq(2)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "AVAILABLE", $(this).children("td:eq(3)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "AVAILABLE", $(this).children("td:eq(4)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "AVAILABLE", $(this).children("td:eq(5)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "AVAILABLE", $(this).children("td:eq(6)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "available", $(this).children("td:eq(1)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "available", $(this).children("td:eq(2)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "available", $(this).children("td:eq(3)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "available", $(this).children("td:eq(4)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "available", $(this).children("td:eq(5)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "available", $(this).children("td:eq(6)").html());
         				});
         				
         				
@@ -549,12 +549,12 @@ $(document).ready(function(){
         			}
         			// in use customer asset count
         			else if (type == "In Use Customer Asset") {
-        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "IN_USE", data.assetCount.allCustomersInUseMachineCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "IN_USE", data.assetCount.allCustomersInUseMonitorCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "IN_USE", data.assetCount.allCustomersInUseSoftwareCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "IN_USE", data.assetCount.allCustomersInUseDeviceCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "IN_USE", data.assetCount.allCustomersInUseOtherAssetsCount);
-        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "IN_USE", data.assetCount.allCustomersInUseAssetTotal);
+        				addLinkForAllCustomerNum($(this).children("td:eq(1)"), 1, "in_use", data.assetCount.allCustomersInUseMachineCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(2)"), 2, "in_use", data.assetCount.allCustomersInUseMonitorCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(3)"), 3, "in_use", data.assetCount.allCustomersInUseSoftwareCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(4)"), 4, "in_use", data.assetCount.allCustomersInUseDeviceCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(5)"), 5, "in_use", data.assetCount.allCustomersInUseOtherAssetsCount);
+        				addLinkForAllCustomerNum($(this).children("td:eq(6)"), 6, "in_use", data.assetCount.allCustomersInUseAssetTotal);
         				
         				//append each customer asset
         				for (var i = 0; i < data.customer.length; i++) {
@@ -579,12 +579,12 @@ $(document).ready(function(){
         				$(".afterTR-inuse").each(function(){
         					var customerCode = $(this).attr("content");
         					
-        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "IN_USE", $(this).children("td:eq(1)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "IN_USE", $(this).children("td:eq(2)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "IN_USE", $(this).children("td:eq(3)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "IN_USE", $(this).children("td:eq(4)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "IN_USE", $(this).children("td:eq(5)").html());
-        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "IN_USE", $(this).children("td:eq(6)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(1)"), 1, customerCode, "in_use", $(this).children("td:eq(1)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(2)"), 2, customerCode, "in_use", $(this).children("td:eq(2)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(3)"), 3, customerCode, "in_use", $(this).children("td:eq(3)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(4)"), 4, customerCode, "in_use", $(this).children("td:eq(4)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(5)"), 5, customerCode, "in_use", $(this).children("td:eq(5)").html());
+        					addLinkForCustomerNum($(this).children("td:eq(6)"), 6, customerCode, "in_use", $(this).children("td:eq(6)").html());
         				});
         				
         				$(this).children("td:eq(0)").bind("click", function(){

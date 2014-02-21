@@ -65,12 +65,13 @@ public class BaseHibernateDaoImpl<T extends BaseModel> implements BaseHibernateD
         }
 
         String sortColumn = page.getSortColumn();
-        
+
         if (null != sortColumn && !("".equals(sortColumn))) {
             sort = new Sort(new SortField(sortColumn, Locale.ENGLISH, reverse));
             fullTextQuery.setSort(sort);
         }
 
+        // TODO: get NullPointerException for line 75 - create index failed
         page.setRecordCount(fullTextQuery.getResultSize());
         page.setTotalPage(page.getRecordCount() % page.getPageSize() == 0 ? page.getRecordCount()
                 / page.getPageSize() : page.getRecordCount() / page.getPageSize() + 1);
