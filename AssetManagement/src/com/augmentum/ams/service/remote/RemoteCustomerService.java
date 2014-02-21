@@ -12,18 +12,6 @@ import com.augmentum.ams.web.vo.asset.ProjectVo;
 public interface RemoteCustomerService {
 
     /**
-     * Get customer codes by employeeId, the employeeId uses in
-     * managerEmployeeId or directorEmployeeId
-     * 
-     * @param employeeId
-     * @param httpServletRequest
-     * @return List<Customer>
-     * @throws BusinessException
-     */
-    List<Customer> getCustomerCodesByEmployeeId(String employeeId,
-            HttpServletRequest httpServletRequest) throws BusinessException;
-
-    /**
      * 
      * @description TODO
      * @author Jay.He
@@ -125,10 +113,10 @@ public interface RemoteCustomerService {
      */
     List<CustomerVo> getCustomerByEmployeeId(String userId, HttpServletRequest request)
             throws BusinessException;
-    
+
     List<CustomerVo> getCustomerForEmployeeByEmployeeId(String userId, HttpServletRequest request)
             throws BusinessException;
-    
+
     List<CustomerVo> getCustomersFromIAP(HttpServletRequest httpServletRequest)
             throws BusinessException;
 }
