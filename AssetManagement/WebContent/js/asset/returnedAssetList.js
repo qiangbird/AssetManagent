@@ -64,9 +64,8 @@ $(document).ready(function(){
 	
 	
 	criteria.currentPage = 1;
-	criteria.pageSize = 20;
-//    criteria.sortName = 'updatedTime';
-//    criteria.sortSign = 'desc';
+    criteria.sortName = 'updatedTime';
+    criteria.sortSign = 'desc';
     
     dataListInfo.criteria = criteria;
     dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();

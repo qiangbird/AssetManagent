@@ -26,12 +26,14 @@ $(document).ready(function(){
     var timeOffset = getTimeOffset();
     
     // When load page(head.jsp), timeOffset will be transfered to background and saved in session
-    $.ajax({
-    	dataType: 'json',
-        type: "POST",
-        url: "getTimeOffset",
-        data: "timeOffset=" + timeOffset
-    });
+    if ($("#timeOffset").val() == "") {
+    	$.ajax({
+    		dataType: 'json',
+    		type: "POST",
+    		url: "getTimeOffset",
+    		data: "timeOffset=" + timeOffset
+    	});
+    }
     
     // when user login, judge if userCustomColumns is null. If yes, initialize column.
     $.ajax({

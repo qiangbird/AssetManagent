@@ -35,6 +35,8 @@
 <body>
 	<input type="hidden" id="basePath" value="<%=basePath %>">
 	<input type="hidden" id="locale" value=${sessionScope.localeLanguage }>
+	<input type="hidden" id="timeOffset" value="${sessionScope.timeOffset }">
+	
 	<div id="header_top">
             <div id="header_logo"></div>
             <div id="header_text">

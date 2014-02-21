@@ -38,6 +38,8 @@ $(document).ready(function() {
     });
     // ------------------------------------------------------------------------- end 
     
+    removePlaceholderForKeyWord();
+    
     $("#searchButton").click(function() {
         
         setCriteria();

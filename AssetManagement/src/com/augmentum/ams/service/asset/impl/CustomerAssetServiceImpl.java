@@ -92,6 +92,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
      * com.augmentum.ams.service.hibernate.HibernateSearchService#searchCommon
      * (com.augmentum.ams.web.vo.system.Page)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Page<Asset> findCustomerAssetsBySearchCondition(SearchCondition searchCondition,
             String customerId) {
@@ -291,7 +292,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     private String transferSortName(String sortName) {
 
         if ("userName".equals(sortName)) {
-            sortName = "user.userName";
+            sortName = "user.userName_forSort";
         }
         return sortName;
     }
@@ -429,7 +430,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
     }
 
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition, List<Customer> customers) {
 
 		String[] customerIds = new String[customers.size()];

@@ -35,7 +35,7 @@
         <div class="dataList">
             <div id="searchCondition">
             <input type="hidden" id="keyword_content" value="">
-            <div id="searchInputTipDiv" class="inputTipDiv"><span></span></div>
+            <div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
             <input id="keyword" class="input_txt" name="" type="text" value="">
             
             <div class="filterDiv filterDiv_common">

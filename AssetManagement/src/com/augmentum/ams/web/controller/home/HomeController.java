@@ -126,7 +126,7 @@ public class HomeController extends BaseController {
 
 		logger.info("timeOffset: " + timeOffset);
 
-		if (session.getAttribute("timeOffset") == null) {
+		if (null == session.getAttribute("timeOffset")) {
 			session.setAttribute("timeOffset", timeOffset);
 		}
 
