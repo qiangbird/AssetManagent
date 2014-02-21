@@ -100,10 +100,10 @@
                 <ul>
              <c:choose>
                 <c:when test="${sessionScope.userRole == 'Manager'}">
-                    <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
+                    <%-- <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }"> --%>
                     <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
                     <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
-                    </c:if>
+                    <%-- </c:if> --%>
                     <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
                     <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
                 </c:when>

@@ -1,9 +1,11 @@
 package com.augmentum.ams.web.controller.home;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,6 +85,11 @@ public class HomeController extends BaseController {
 			// Get the list of customer shown in subMenu
 			List<Customer> customerVisibleList = customerAssetService
 					.findVisibleCustomerList(userVo, list);
+			
+			Set<Customer> set = new HashSet<Customer>(customerVisibleList); 
+			customerVisibleList.clear();
+			customerVisibleList.addAll(set);
+			
 			String userRole = userService.getUserRole(userVo);
 			session.setAttribute("userRole", userRole);
 			session.setAttribute("customerList", customerVisibleList);
