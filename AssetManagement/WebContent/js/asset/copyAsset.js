@@ -330,6 +330,14 @@
 	       }
 	     });
   });
+   
+   batchNumber = $("#batchNumber").val();
+   if(batchNumber>1){
+	   $("#batchCreate").attr("checked",'true');
+	   $("#showBatch").val(batchNumber).show();
+   }
+   
+   
 });
 
 $(document).ready(function() {

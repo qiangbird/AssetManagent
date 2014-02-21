@@ -95,6 +95,7 @@ public class FormatEntityListToEntityVoList {
             assetVo.setSite(purchaseItem.getDataSite().replace("Augmentum ", ""));
             assetVo.setEntity(purchaseItem.getEntitySite());
             assetVo.setPoNo(purchaseItem.getPoNo());
+            assetVo.setAssetName(purchaseItem.getItemName());
 
             Project project = new Project();
 
@@ -103,7 +104,7 @@ public class FormatEntityListToEntityVoList {
 
             assetVo.setProject(project);
             assetVo.setVendor(purchaseItem.getVendorName());
-            assetVo.setBatchCount(String.valueOf(purchaseItem.getFinalQuantity()));
+            assetVo.setBatchNumber(String.valueOf(purchaseItem.getFinalQuantity()));
             assetVo.setCheckInTime(UTCTimeUtil.utcToLocalTime(purchaseItem.getDeliveryDate(),
                     timeOffset, "yyyy-MM-dd"));
 

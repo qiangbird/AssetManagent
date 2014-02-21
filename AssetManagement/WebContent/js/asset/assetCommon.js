@@ -89,17 +89,21 @@
   //Batch create
    $("#batchCreate").click(
 		   function() {
+		  $("#showBatch").removeClass().addClass("showBatchHovered");
 		   if ($("#batchCreate").is(":checked")) {
 		   $("#showBatch").removeClass().addClass("showBatchNormal");
+		   
+		   batchNumber = $("#batchNumber").val()
+		   if( batchNumber != ""){
+			   $("#showBatch").val(batchNumber);
+		   }
+		   
 		   $("#showBatch").show();
 		   } else {
 		       $("#showBatch").removeClass().addClass("showBatchNormal");
 		   $("#showBatch").val("1").hide();
 		   }
 		   });
-   $("#showBatch").click(function() {
-	    $("#showBatch").removeClass().addClass("showBatchHovered");
-	        });
 	$("#showBatch").blur(function() {
 	    if ($(this).val() == ""|| !numberCheck($(this).val().trim())) {
 	$("#showBatch").removeClass("showBatchNormal showBatchHovered").addClass("showBatchError");

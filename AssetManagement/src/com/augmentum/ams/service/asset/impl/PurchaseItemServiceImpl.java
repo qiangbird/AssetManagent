@@ -174,4 +174,9 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
         purchaseItemDao.delete(purchaseItemDao.get(PurchaseItem.class, id));
     }
 
+    @Override
+    public void savePurchaseItem(PurchaseItem item) {
+        purchaseItemDao.save(item);
+    }
+
 }

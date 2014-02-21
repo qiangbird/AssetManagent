@@ -34,8 +34,10 @@ String basePath = request.getScheme() + "://"
         <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT,MANAGER,SPECIAL_ROLE">
         <c:if test="${uuid==null }">
             <a id="editBtn"><spring:message code="edit" /></a>
+            <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
             <a id="copyBtn"><spring:message code="copy" /></a>
             <a id="deleteBtn"><spring:message code="delete" /></a>
+            </shiro:hasAnyRoles>
         </c:if>
         </shiro:hasAnyRoles>
             <a id="cancelBtn"><spring:message code="cancel" /></a>

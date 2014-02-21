@@ -217,7 +217,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 } else {
                     purchaseItem.setUsed(Boolean.TRUE);
                     try {
-                        purchaseItem.setUsedQuantity(Integer.valueOf(assetVo.getBatchCount()));
+                        purchaseItem.setUsedQuantity(Integer.valueOf(assetVo.getBatchNumber()));
                     } catch (NumberFormatException e) {
                         throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "The batchCount is not a number!");

@@ -22,4 +22,6 @@ public interface PurchaseItemService {
     void createPurchaseItem(Map<String, Object> dataMap);
     
     void deletePurchaseItemAsId(String id);
+    
+    void savePurchaseItem(PurchaseItem item);
 }

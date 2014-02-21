@@ -92,14 +92,14 @@ public class AssetVo {
 
     private String purchaseItemId;
 
-    private String batchCount;
-
-    public String getBatchCount() {
-        return batchCount;
+    private String batchNumber;
+    
+    public String getBatchNumber() {
+        return batchNumber;
     }
 
-    public void setBatchCount(String batchCount) {
-        this.batchCount = batchCount;
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber;
     }
 
     public String getId() {
