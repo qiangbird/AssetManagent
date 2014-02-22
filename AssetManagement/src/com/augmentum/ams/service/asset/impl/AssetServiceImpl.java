@@ -729,18 +729,20 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     @Override
-    public String exportAssetsByIds(String assetIds) throws ExcelException, SQLException {
+    public String exportAssetsByIds(String assetIds, HttpServletRequest request)
+            throws ExcelException, SQLException {
 
         String[] assetIdArr = FormatUtil.splitString(assetIds, SystemConstants.SPLIT_COMMA);
         List<ExportVo> exportVos = assetDao.findAssetsByIdsForExport(assetIdArr);
 
         AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
 
-        return assetTemplateParser.parse(exportVos);
+        return assetTemplateParser.parse(exportVos, request);
     }
 
     @Override
-    public String exportAssetsForAll(SearchCondition condition) throws ExcelException, SQLException {
+    public String exportAssetsForAll(SearchCondition condition, HttpServletRequest request)
+            throws ExcelException, SQLException {
 
         Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition);
         if (null == page || null == page.getAllRecords() || 0 == page.getAllRecords().size()) {
@@ -760,7 +762,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             List<ExportVo> exportVos = assetDao.findAssetsByIdsForExport(assetIdArr);
             AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
 
-            return assetTemplateParser.parse(exportVos);
+            return assetTemplateParser.parse(exportVos, request);
         }
     }
 

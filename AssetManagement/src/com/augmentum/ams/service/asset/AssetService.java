@@ -175,6 +175,7 @@ public interface AssetService {
      * @param page
      */
     void addAssetsToAuditForSearchResult(SearchCondition condition) throws ExceptionHelper;
+
     /**
      * @author Jay.He
      * @time Jan 3, 2014 9:54:09 AM
@@ -182,23 +183,28 @@ public interface AssetService {
      * @param request
      * @param response
      */
-    void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request, HttpServletResponse response);
+    void uploadAndDisplayImage(MultipartFile file, HttpServletRequest request,
+            HttpServletResponse response);
 
     /**
      * @author John.li
      * @param assetIds
-     * @throws ExcelException 
-     * @throws SQLException 
+     * @param request
+     * @throws ExcelException
+     * @throws SQLException
      */
-    String exportAssetsByIds(String assetIds) throws ExcelException, SQLException;
+    String exportAssetsByIds(String assetIds, HttpServletRequest request) throws ExcelException,
+            SQLException;
 
     /**
      * @author John.li
+     * @param request
      * @param page
-     * @throws ExcelException 
-     * @throws SQLException 
+     * @throws ExcelException
+     * @throws SQLException
      */
-    String exportAssetsForAll(SearchCondition condition) throws ExcelException, SQLException;
+    String exportAssetsForAll(SearchCondition condition, HttpServletRequest request)
+            throws ExcelException, SQLException;
 
     /**
      * @author Geoffrey.Zhao
@@ -206,24 +212,24 @@ public interface AssetService {
      * @return
      */
     Map<String, Integer> getAssetCountForPanel(User user);
-    
+
     /**
      * @author Geoffrey.Zhao
      * @param user
      * @return
      */
     Map<String, Integer> getAssetCountForManager(User user, List<Customer> customers);
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
     JSONArray findIdleAssetForPanel(List<Customer> customers);
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
     JSONArray findWarrantyExpiredAssetForPanel(String clientTimeOffset);
-    
+
 }

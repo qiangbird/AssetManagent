@@ -593,9 +593,9 @@ public class AssetController extends BaseController {
 
             if (null == assetIds || "".equals(assetIds)) {
                 condition.setIsGetAllRecords(Boolean.TRUE);
-                outPutPath = assetService.exportAssetsForAll(condition);
+                outPutPath = assetService.exportAssetsForAll(condition, request);
             } else {
-                outPutPath = assetService.exportAssetsByIds(assetIds);
+                outPutPath = assetService.exportAssetsByIds(assetIds, request);
             }
             FileOperateUtil.download(request, response, outPutPath);
 

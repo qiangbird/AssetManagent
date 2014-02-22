@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import jxl.Workbook;
 import jxl.format.CellFormat;
 import jxl.write.Label;
@@ -20,7 +22,7 @@ import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.util.UTCTimeUtil;
 
 public abstract class ExcelParser {
-    
+
     private Logger logger = Logger.getLogger(ExcelParser.class);
     public static final String EXCEL_FILE_TYPE = ".xls";
 
@@ -29,7 +31,8 @@ public abstract class ExcelParser {
     protected String templatePath;
     protected String outputFile;
 
-    public abstract String parse(Collection<?> collection) throws ExcelException;
+    public abstract String parse(Collection<?> collection, HttpServletRequest request)
+            throws ExcelException;
 
     /**
      * Override this method if needed.
@@ -55,8 +58,9 @@ public abstract class ExcelParser {
 
     public void check(Collection<?> collection) throws ExcelException {
         if ((collection == null) || collection.isEmpty()) {
-            //TODO throw ExcelException
-//            throw new ExcelException(ExcelException.ERROR_TYPE_NO_DATA, "No data found when fill excel.");
+            // TODO throw ExcelException
+            // throw new ExcelException(ExcelException.ERROR_TYPE_NO_DATA,
+            // "No data found when fill excel.");
         }
     }
 
@@ -66,16 +70,18 @@ public abstract class ExcelParser {
     }
 
     public String getTemplatePath(String templateName) {
-        templatePath =  getBasePath() + SystemConstants.CONFIG_TEMPLATES_PATH + templateName;
+        templatePath = getBasePath() + SystemConstants.CONFIG_TEMPLATES_PATH + templateName;
         return templatePath;
     }
 
     public String getOutputPath(String... outputName) {
-        StringBuilder builder = new StringBuilder(getBasePath() + SystemConstants.CONFIG_TEMPLATES_PATH);
+        StringBuilder builder = new StringBuilder(getBasePath()
+                + SystemConstants.CONFIG_TEMPLATES_PATH);
 
         for (int i = 0, n = outputName.length; i < n; i++) {
             builder.append(outputName[i]);
-            if ((i + 1) != n) builder.append("_");
+            if ((i + 1) != n)
+                builder.append("_");
         }
 
         outputFile = builder.append(EXCEL_FILE_TYPE).toString();
@@ -89,18 +95,22 @@ public abstract class ExcelParser {
     }
 
     public void fillOneCell(int c, int r, Object value, WritableSheet ws) throws ExcelException {
-        if (value == null) value = "";
+        if (value == null)
+            value = "";
         CellFormat format = ws.getCell(c, r).getCellFormat();
 
         try {
             fillOneCell(c, r, value, ws, format);
         } catch (Exception e) {
-            throw new ExcelException(e, "Cannot write: " + value + " to comlum: " + c + " row: " + r);
+            throw new ExcelException(e, "Cannot write: " + value + " to comlum: " + c + " row: "
+                    + r);
         }
     }
 
-    public static void fillOneCell(int c, int r, Object value, WritableSheet ws, CellFormat format) throws ExcelException {
-        if (value == null) value = "";
+    public static void fillOneCell(int c, int r, Object value, WritableSheet ws, CellFormat format)
+            throws ExcelException {
+        if (value == null)
+            value = "";
 
         try {
             if (format == null) {
@@ -133,12 +143,13 @@ public abstract class ExcelParser {
                 }
             }
         } catch (Exception e) {
-            throw new ExcelException(e, "Cannot write: " + value + " to comlum: " + c + " row: " + r);
+            throw new ExcelException(e, "Cannot write: " + value + " to comlum: " + c + " row: "
+                    + r);
         }
     }
-    
+
     private String getBasePath() {
-        
+
         String url = Thread.currentThread().getContextClassLoader().getResource("/").getPath();
         String basePath = url.replaceFirst("/", "");
         String decodedPath = null;
@@ -147,7 +158,7 @@ public abstract class ExcelParser {
         } catch (UnsupportedEncodingException e) {
             logger.error("Decode path error, path = " + basePath, e);
         }
-        
+
         return decodedPath;
     }
 }

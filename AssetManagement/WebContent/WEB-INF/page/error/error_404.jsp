@@ -43,7 +43,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			<div id="title">
 				<div id="home_link">
-					Click<a href="#"> Here</a> to <a href="#">Home</a> Page
+					Click<a href="#"> Here</a> to <a href="index">Home</a> Page
 				</div>
 			</div>
 			<div id="image"></div>

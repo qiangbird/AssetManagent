@@ -85,8 +85,6 @@
                     <ul class="sencndMenuUl">
                         <li><a href="user/roleList"><spring:message code="navigator.roleList" /></a></li>
                         <li><a href="specialRole/findSpecialRoles"><spring:message code="navigator.assign.special.role" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.shared.customers" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.scheduler.task" /></a></li>
                         <li><a href="location/listLocation"><spring:message code="navigator.location.list" /></a></li>
                         <li><a href="group/list"><spring:message code="navigator.group.list" /></a></li>
                     </ul>
@@ -115,18 +113,17 @@
                        </c:forEach>
                        </c:if>
                     </ul></li>
-              </shiro:authenticated>
-                <li class="menuLi"><a href="customizedView/goToNewCustomizedView"><spring:message code="navigator.my.assets" /></a>
-					<ul class="sencndMenuUl">
-                        <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
-                        <li><a href="asset/listMyAssets"><spring:message code="navigator.my.assets" /></a></li>
-                    </ul></li>
+               </shiro:authenticated>
+                    <li class="menuLi"><a href="asset/listMyAssets"><spring:message code="navigator.my.assets" /></a>
                <shiro:hasAnyRoles name="MANAGER,IT">
-                <li class="menuLi"><a href="transferLog/list"><spring:message code="navigator.transfer.log" /></a></li>
+                    <li class="menuLi"><a href="transferLog/list"><spring:message code="navigator.transfer.log" /></a></li>
                </shiro:hasAnyRoles>
                <shiro:hasRole name="SYSTEM_ADMIN">
-                <li class="menuLi"><a href="operationLog/list"><spring:message code="navigator.operation.log" /></a></li>
-                </shiro:hasRole>
+                    <li class="menuLi"><a href="operationLog/list"><spring:message code="navigator.operation.log" /></a></li>
+               </shiro:hasRole>
+               <shiro:hasRole name="MANAGER">
+                    <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
+               </shiro:hasRole>
             </ul>
         </div>
         

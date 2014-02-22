@@ -4,6 +4,6 @@ $(document).ready(function(){
     
     $(".error_click_home").click(function(){
         
-        window.location.href = path + "todo/redirectDashboard";
+        window.location.href = path + "index";
     });
 });

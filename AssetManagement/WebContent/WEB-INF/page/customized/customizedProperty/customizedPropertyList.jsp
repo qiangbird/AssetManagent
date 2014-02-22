@@ -122,7 +122,7 @@
     			</div>
             </div>
             <div class="rowDiv">
-                <button  id="submitProperty" value="submit" class="operateButton"><spring:message code="submit" /></button>
+                <button  id="submitProperty" value="add" class="operateButton"><spring:message code="add" /></button>
                 <button  id="cancleProperty" value="cancel" class="operateButton"><spring:message code="cancel" /></button>
             </div>
         </div>
