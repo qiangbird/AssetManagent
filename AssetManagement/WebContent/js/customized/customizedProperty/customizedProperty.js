@@ -542,7 +542,7 @@ function saveProperties(properties){
 	    dataType : 'json',  
 	    success : function() { 
 	    	checkCustomerNameAndAssetType();
-	    	alert("Sava successfully!");
+	    	showMessageBarForMessage("message_customizedView_save_success");
 	    }
 	});
 }
