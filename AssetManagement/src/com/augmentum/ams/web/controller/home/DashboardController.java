@@ -1,7 +1,9 @@
 package com.augmentum.ams.web.controller.home;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,23 +18,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.augmentum.ams.aop.OperationLogAnnotation;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
-import com.augmentum.ams.model.asset.PurchaseItem;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.asset.PurchaseItemService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
-import com.augmentum.ams.util.AssetUtil;
-import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
-import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
-import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("dashboardController")
@@ -84,7 +79,11 @@ public class DashboardController extends BaseController {
 		List<Customer> customers = customerAssetService
 				.findVisibleCustomerList(userVo, list);
 		
-		if (null == customers) {
+		Set<Customer> set = new HashSet<Customer>(customers); 
+		customers.clear();
+		customers.addAll(set);
+		
+		if (0 == customers.size()) {
 			return jsonObject;
 		} else {
 			
