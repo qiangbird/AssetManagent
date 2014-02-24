@@ -485,7 +485,7 @@ html .ui-autocomplete {
 }
 
 .common-requirement-property {
-	height: 420px;
+	height: 475px;
 }
 
 #uploadPhoto input {
@@ -952,7 +952,7 @@ li {
 }
 
 .showAsSelect {
-	margin-top: 80px;
+	margin-top: 10px;
 }
 
 #picDiv {
@@ -963,7 +963,7 @@ li {
 
 .showAsSelfDefine {
 	position: relative;
-	margin-top: 100px;
+	margin-top: 30px;
 	margin-bottom: 50px;
 	display: block;
 }
@@ -976,6 +976,15 @@ li {
 }
 
 #editBtn,#copyBtn,#deleteBtn {
+	width: 80px;
+	height: 30px;
+	border: 0px;
+	font-family: arial;
+	font-weight: bold;
+	font-size: 14px;
+	color: #ffffff;
+	margin-right: 20px;
+	cursor: pointer;
 	background:
 		url("../../image/customize/customizedView/BTN_Create_80x30.png")
 		no-repeat;
@@ -988,6 +997,10 @@ li {
 }
 
 #cancelBtn {
+	cursor: pointer;
+	width: 80px;
+    height: 30px;
+    border: 0px;
 	background: url("../../image/common/Cancel.png") no-repeat;
 }
 
@@ -1013,3 +1026,28 @@ margin-left: 130px;
 color: #23A5E3;
 text-decoration: underline;
 }
+
+#memo {
+	margin-left: 150px;
+	margin-top: 10px;
+	resize: none;
+	background: none;
+	overflow-y: scroll;
+	height: 50px;
+}
+
+.clear {
+	clear: both;
+}
+
+
+BODY { 
+	SCROLLBAR-FACE-COLOR: #f892cc; 
+	SCROLLBAR-HIGHLIGHT-COLOR: #f256c6; 
+	SCROLLBAR-SHADOW-COLOR: #fd76c2; 
+	SCROLLBAR-3DLIGHT-COLOR: #fd76c2; 
+	SCROLLBAR-ARROW-COLOR: #fd76c2; 
+	SCROLLBAR-TRACK-COLOR: #fd76c2; 
+	SCROLLBAR-DARKSHADOW-COLOR: #f629b9; 
+	SCROLLBAR-BASE-COLOR: #e9cfe0 
+} 

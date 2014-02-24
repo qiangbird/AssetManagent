@@ -27,7 +27,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	<div id ="messageBar"></div>
+	<div id="bodyMinHight">
     <div class="content">
     <!-- 核心入口 -->
     	<div class="dataList">
@@ -73,7 +73,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
           <%--  <c:if test='${location.id==null }'>sssss</c:if>
            <c:if test='${location.id=="" }'><c:out value="${location.id }"></c:out> </c:if> --%>
            <c:out value="${location.id }"></c:out>
-            <input id="submitLocation" class="input-80-30 submit-button" type="button" value='<spring:message code="submit" />' />
+            <input id="submitLocation" class="input-80-30 submit-button" type="button" value='<spring:message code="save" />' />
             <input id="resetLocation" class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> />
             </tr>
         </div>
@@ -91,7 +91,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
  	<div id="dialog-warning" title="Warning">
   		<p id="warning-message-body"></p>
  	</div>
- 	
+ 	</div>
     <input type="hidden" id="categoryFlag" value="1"/>
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">
     

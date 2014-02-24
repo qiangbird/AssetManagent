@@ -11,11 +11,13 @@
 <head>
 <base href="<%=basePath%>">
 <link rel="stylesheet" type="text/css" href="css/customize/customizedView/createCustomizedView.css" />
+<link rel="stylesheet" type="text/css" href="css/customize/customizedView/customizedViewList.css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 </head>
 <body>
 <jsp:include page="../../common/header.jsp" />
+<div id="bodyMinHight">
 <div class="customizedView">
     <div class="create-new-button">
         <input id="newView" type="button" value=<spring:message code="create" /> class="create-new" />
@@ -28,6 +30,7 @@
     <div class="filterHead">
       <div class="columnElement viewNameTitleHead" ><spring:message code="customized.view.name"></spring:message></div>
       <div class="columnElement criteriaTitle" ><spring:message code="customized.created.by"></spring:message></div>
+      <div class="columnElement operation" ><spring:message code="operation"></spring:message></div>
     </div>
     <c:forEach items="${customizedViews}" var="customizedView">
       <div class="filterInfo">
@@ -39,6 +42,7 @@
         <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"><img src="<%=basePath%>/image/customize/customizedView/icon_edit_normal.png"></a></p></div>
       </div>
     </c:forEach>
+  </div>
   </div>
   </div>
 

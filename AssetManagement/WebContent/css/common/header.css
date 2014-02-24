@@ -2,6 +2,10 @@
 	outline: none;
 }
 
+#bodyMinHight {
+	min-height: 450px;
+}
+
 .customerAsset {
 	overflow: auto;
 	overflow-x: hidden;
@@ -135,7 +139,7 @@ a {
 
 .menuLi {
 	padding-left: 10px;
-	padding-right: 10px;
+	padding-right: 0px;
 	float: left;
 }
 
@@ -316,4 +320,10 @@ a {
 .validation_fail {
 	border: 1px solid rgb(223, 24, 50);
 	border-color: red !important;
+}
+
+.ui-dialog .ui-dialog-content {
+	font-family: arial;
+	font-size: 14px;
+	line-height: 18px;
 }

@@ -13,7 +13,6 @@
 <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="css/common/tip-green/tip-green.css" type="text/css">
-<link rel="stylesheet" href="css/asset/groupManagement.css"type="text/css">
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
 <link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
@@ -22,13 +21,15 @@
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
 <link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
+<link rel="stylesheet" href="css/asset/groupManagement.css"type="text/css">
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-<div class="content">
+	<div id="bodyMinHight">
+    <div class="content">
     	<div class="dataList">
     		<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
@@ -42,6 +43,7 @@
 	        <a id="addButton"><spring:message code="add" /></a>
 	    </div>
     	</div>
+</div>
 </div>
 
 	 <div class="addGroup"> 
@@ -97,11 +99,11 @@
                     </tr>
                 </div>
             </div>
-			<div class="submit-div">
-				<input id="submitGroup" class="input-80-30 submit-button" type="button" value="<spring:message code='submit' />" /> 
-				<input id="resetGroup" class="input-80-30 reset-button" type="button" value="<spring:message code='reset' />" />
-		    </div>
 		</table>
+		<div class="submit-div">
+                <input id="submitGroup" class="input-80-30 submit-button" type="button" value="<spring:message code='save' />" /> 
+                <input id="resetGroup" class="input-80-30 reset-button" type="button" value="<spring:message code='reset' />" />
+        </div>
 		</form>
 		</td>
 		</tr> 

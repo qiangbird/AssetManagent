@@ -28,6 +28,7 @@ String basePath = request.getScheme() + "://"
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="bodyMinHight">
 	<div id="main">
 		<div class="home">
 			<span class="root-back"><a href="#">
@@ -471,8 +472,8 @@ String basePath = request.getScheme() + "://"
 													value="${selfProperty.enName}" /> </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}">
 											<textarea class="l-textArea selfPropertyVlaue"
-												name="${selfProperty.enName}" id="${selfProperty.id}">
-												<c:out value="${selfProperty.value }" /> </textarea>
+												name="${selfProperty.enName}" id="${selfProperty.id}">${selfProperty.value }
+												 </textarea>
 										</p>
 									</c:if>
 								</c:if>
@@ -534,8 +535,7 @@ String basePath = request.getScheme() + "://"
 													value="${selfProperty.enName}" /> </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}">
 											<textarea class="l-textArea selfPropertyVlaue"
-												name="${selfProperty.enName}" id="${selfProperty.id}">
-												<c:out value="${selfProperty.value }" /> </textarea>
+												name="${selfProperty.enName}" id="${selfProperty.id}"  >${selfProperty.value }</textarea>
 										</p>
 									</c:if>
 								</c:if>
@@ -561,6 +561,8 @@ String basePath = request.getScheme() + "://"
 			</form:form>
 			<input type="hidden" id="localeCode" name="localeCode"
 				value="${sessionScope.i18n }">
+		</div>
+		</div>
 		</div>
 		<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 		<script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>

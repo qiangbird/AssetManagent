@@ -23,7 +23,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	<div id ="messageBar"></div>
+	<div id="bodyMinHight">
     <div class="content">
     	<div class="dataList">
     		<div id="searchCondition">
@@ -62,6 +62,7 @@
 	        </a>
 	    </div>
     	</div>
+    </div>
     </div>
  	
     <input type="hidden" id="language" value="${sessionScope.localeLanguage }">

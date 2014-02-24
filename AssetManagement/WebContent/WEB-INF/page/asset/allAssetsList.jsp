@@ -25,7 +25,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	<!-- <div id ="messageBar"></div> -->
+	<div id="bodyMinHight">
     <div class="content">
     	<div class="dataList">
     		<div id="searchCondition">
@@ -88,7 +88,7 @@
 	        	<span class="right"></span>
 	        </a>
 	        <c:if test="${requestScope.userUuid==null }">
-	        <div id="customizedViewButton">
+	        <%-- <div id="customizedViewButton">
 		        <a id="customizedView" ><spring:message code="customizedView"/></a>
 		        <ul id="viewUlTemplate">
 	                <li><a id="" class="existCustomizedView" ></a></li>
@@ -97,7 +97,7 @@
 	                <li><a href="customizedView/goToNewCustomizedView"><spring:message code="createView"/></a></li>
 	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
 	            </ul>
-            </div>
+            </div> --%>
             
             <shiro:hasRole name="IT">
 	        <div class="operation_assets_list">
@@ -119,6 +119,7 @@
 	        <a id="exportIcon" ></a>
 	    </div>
     	</div>
+    </div>
     </div>
     <div id="dialog_assign" title="<spring:message code='itAssign.dialog.title'/>">
 	      <div>

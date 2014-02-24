@@ -439,14 +439,14 @@
 #save {
 	vertical-align: top;
 	float: right;
-	margin: 9px 10px 10px 10px;
+	margin: 9px 18px 10px 10px;
 }
 
 #cancleProperty {
-	margin-left: 20px;
+	margin-left: 24px;
 }
 
-#save,#submitProperty {
+#save, #submitProperty, #editProperty {
 	background-image: url("../../../image/common/BTN_Create_80x30.png");
 }
 
@@ -455,7 +455,7 @@
 	background-image: url("../../../image/common/BTN_Cancel_80x30.png");
 }
 
-#save:hover,#submitProperty:hover {
+#save:hover,#submitProperty:hover, #editProperty:hover {
 	background-image: url("../../../image/common/BTN_Create_Hover_80x30.png");
 }
 
@@ -665,6 +665,10 @@
 .inputDate {
 	background: #fff url("../../../image/customize/customizedView/ICN_Calendar_26x26.png") right center no-repeat;
 	cursor: pointer;
+}
+
+#editProperty {
+	display: none;
 }
 
 

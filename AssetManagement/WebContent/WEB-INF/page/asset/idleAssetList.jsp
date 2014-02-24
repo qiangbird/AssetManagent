@@ -23,11 +23,12 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	
+	<div id="bodyMinHight">
 	<div class="content">
 		<div class="dataList">
 			<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReturnToITButton"/>
 		</div>
+	</div>
 	</div>
 	
 	<input type="hidden" id="locale" value="${sessionScope.localeLanguage }">

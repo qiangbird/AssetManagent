@@ -1,9 +1,10 @@
 .message_board {
-    background-color: #FEFFE5;
-    border: 1px solid #F9F2A7;
+    background-color: #DFF0D8;
+    border: 1px solid #AACA9D;
     text-align: center;
     position: absolute;
     z-index: 10;
+    height: 30px;
 }
 
 .message_content {
@@ -11,7 +12,7 @@
     text-align: center;
     font-family: Arial;
     font-size: 14px;
-    color: #D4A639;
+    color: #468847;
     max-width: 93%;
     overflow: hidden;
     white-space: nowrap;
@@ -24,7 +25,7 @@
 .message_notice {
     font-family: Arial;
     font-size: 14px;
-    color: #D4A639;
+    color: #468847;
     line-height: 100%;
     max-width: 93%;
     overflow: hidden;

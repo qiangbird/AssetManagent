@@ -122,7 +122,7 @@
                     <li class="menuLi"><a href="operationLog/list"><spring:message code="navigator.operation.log" /></a></li>
                </shiro:hasRole>
                <shiro:hasRole name="MANAGER">
-                    <li><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
+                    <li class="menuLi"><a href="self/selfProperty"><spring:message code="navigator.self.property" /></a></li>
                </shiro:hasRole>
             </ul>
         </div>

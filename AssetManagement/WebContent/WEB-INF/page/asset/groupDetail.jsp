@@ -19,7 +19,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
-	
+	<div id="bodyMinHight">
 	<div class="groupListContent">
 		<div class="roleAddContent">
 		 <span id="autoText">
@@ -102,6 +102,7 @@
 			<input type="button" value="Cancel" id="cancelButton"></input>
 		</div>
 
+	</div>
 	</div>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/asset/groupCustomerManagement.js"></script>

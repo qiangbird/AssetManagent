@@ -1,0 +1,22 @@
+.viewNameTitleHead {
+	width: 33.3%;
+}
+
+.criteriaTitle {
+	width: 33.3%;
+}
+
+.viewNameTitle{
+	width: 33.3%;
+}
+.deleteButton{
+	width: 24px;
+	padding-left: 8px;
+	padding-right: 0px;
+	margin-right: 120px;
+	float: right;
+}
+
+.operation {
+	width: 33.403%;
+}

@@ -20,6 +20,7 @@
 </head>
 <body>
 <jsp:include page="../common/header.jsp" />
+<div id="bodyMinHight">
  <div class="roleListContent">
      <div class="roleAddContent">
      	<div class="customerName">
@@ -75,6 +76,7 @@
         </div>
 	  
 	  <jsp:include page="userInfoTips.jsp" />
+</div>
 </div>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/user/specialRoleList.js"></script>

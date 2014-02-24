@@ -120,7 +120,7 @@
 
 
 .addOperateButton input {
-	margin-left: 15px;
+	margin-left: 20px;
 	cursor: pointer;
 	margin-top: 4px;
 	font-size: 14px;
@@ -134,7 +134,7 @@
 }
 
 .saveOperateButton input {
-	margin-left: 15px;
+	margin-left: 20px;
 	cursor: pointer;
 	margin-top: 4px;
 	font-size: 14px;
@@ -221,7 +221,7 @@
 	border-top: 0px;
 	background-color: #F5F5F5;
 	width: 960px;
-	overflow: auto;
+	overflow: hidden;
 	border-radius: 3px;
 }
 

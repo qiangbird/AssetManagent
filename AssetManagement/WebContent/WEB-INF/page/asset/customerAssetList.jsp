@@ -31,6 +31,7 @@
     <input type="hidden" id="customerCode" value="${customer.customerCode }">
     <input type="hidden" id="userRole" value="${sessionScope.userRole }">
     <input type="hidden" id="userCode" value="${sessionScope.userVo.employeeId }">
+    <div id="bodyMinHight">
     <div class="content">
         <div class="dataList">
             <div id="searchCondition">
@@ -172,6 +173,7 @@
 	<!-- <label id="label_Operation_Warning"></label> -->
 	<div id="dialog-warning" title="<label id='label_Operation_Warning'></label>">
 		<p id="warning-message-body"></p>
+	</div>
 	</div>
 	<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>

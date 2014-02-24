@@ -240,7 +240,7 @@
 		<div class="todo_content">
 			<table>
 				<tr>
-					<th style="width: 100px;"><spring:message code="asset.name"/></th>
+					<th style="width: 185px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Date"/></th>
 					<th style="width: 115px;"><spring:message code="delete"/></th>
 				</tr>

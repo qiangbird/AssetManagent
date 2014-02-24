@@ -23,7 +23,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	
+	<div id="bodyMinHight">
 	<c:choose>
 		<c:when test="${todoFlag == 'returned' }">
 			<div class="content">
@@ -40,7 +40,7 @@
 			</div>
 		</c:when>
 	</c:choose>
-	
+	</div>
 	<input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
 	<input type="hidden" id="todoFlag" value="${todoFlag }">
 	

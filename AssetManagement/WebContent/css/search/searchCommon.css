@@ -141,13 +141,14 @@ a.viewDetail {
 
 #customizedViewButton{
 	display: inline;
+	margin-left: 10px;
 }
 
 #viewUl {
 	position: absolute;
 	display: none;
 	width: 110px;
-	margin-left: 473px;
+	margin-left: 483px;
 	height: 26px;
 	line-height: 180%;
 	z-index: 9999;
@@ -212,7 +213,7 @@ div.operation_assets_list {
 	width: 150px;
 	position: relative;
 	top: 20px;
-	left: 713px;
+	left: 726px;
 	position: absolute;
 	z-index: 1;
 	background: url("../../image/asset/assetList/BTN_Action_150x30.png") no-repeat;

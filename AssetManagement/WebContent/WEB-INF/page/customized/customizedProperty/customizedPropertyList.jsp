@@ -17,6 +17,7 @@
 </head>
 <body>
 <jsp:include page="../../common/header.jsp" />
+<div id="bodyMinHight">
 <div id="propertyContent">
 	<form id="propertiesForm" action="" method="post">
 	<input name="selfProperties" id="selfProperties" type="hidden" value="" />
@@ -123,6 +124,7 @@
             </div>
             <div class="rowDiv">
                 <button  id="submitProperty" value="add" class="operateButton"><spring:message code="add" /></button>
+                <button  id="editProperty" value="edit" class="operateButton"><spring:message code="edit" /></button>
                 <button  id="cancleProperty" value="cancel" class="operateButton"><spring:message code="cancel" /></button>
             </div>
         </div>
@@ -171,7 +173,8 @@
             <div class="clear"></div>
         </div>
     </div>
-</div>                              
+</div>                     
+</div>         
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/common/json2.js"></script>
 <script type="text/javascript" src="js/customized/customizedProperty/customizedProperty.js"></script>

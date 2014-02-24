@@ -73,12 +73,12 @@ body,button,input,select,option{
 }
 .dataList-div-nineSqurt{
 	margin:0 10px;
-	width: 150px;
+	width: 26px;
 	height: 50px;
 	float: right;
 }
 .dataList-img-nineSqurt{
-	margin:24px 0px 1px 124px;
+	margin:24px 0px 1px 0px;
     cursor: pointer;
 	background-image: url(../images/ICN_Setting_26x26.png);
 }

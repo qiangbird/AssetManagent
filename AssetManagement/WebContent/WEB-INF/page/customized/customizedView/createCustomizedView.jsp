@@ -29,6 +29,7 @@
 	<input type="hidden" name="searchColumns" id="searchColumns">
 	<input type="hidden" name="realTables" id="formRealTables">
 </form>
+<div id="bodyMinHight">
  <div class="customizedView">
  	<div class="viewName">
           <span class="viewNameText"><spring:message code="customized.view.name"/>:</span>
@@ -112,6 +113,7 @@
 	</c:choose>  
   	<input id="cancel" type="button" value=<spring:message code="cancel"/>  class="submit-cancel" />
   </div>
+ </div>
  </div>
  <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
  <script type="text/javascript" src="js/customized/customizedView/createCustomizedView.js"></script>

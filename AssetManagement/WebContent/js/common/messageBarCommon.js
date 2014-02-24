@@ -13,7 +13,7 @@ function messageBarForItemId(itemIds, messages) {
         // isAutoHide used to define whether auto hide in system default time.
         isAutoHide : true,
         // autoHideTime redefine the system default time for hide.
-        autoHideTime : "99999999",
+        autoHideTime : "5000",
         // preposition id.
         isPrepositionId : true
     });
@@ -48,7 +48,7 @@ function messageBarForMessage(messages) {
         // isAutoHide used to define whether auto hide in system default time.
         isAutoHide : true,
         // autoHideTime redefine the system default time for hide.
-        autoHideTime : "99999999",
+        autoHideTime : "5000",
         // preposition id.
         isPrepositionId : true
     });
@@ -70,8 +70,3 @@ function showMessageBarForMessage (errorCode) {
 	window.scrollTo(0,0);
 	
 }
-//function showMessageBarForMessage (errorCode) {
-//	var messages = [];
-//	messages[0] = i18nProp(errorCode);
-//	messageBarForMessage(messages);
-//}

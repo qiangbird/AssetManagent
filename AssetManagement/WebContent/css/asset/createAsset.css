@@ -407,7 +407,7 @@ left: -2;
 }
 
 .operation_location {
-	width: 230px;
+	width: 188px;
 	height: 30px;
 	margin: 0 auto;
 }
@@ -430,6 +430,10 @@ left: -2;
 	cursor: pointer;
 	font-weight: bold;
 	color: #FFFFFF;
+	font-size: 14px;
+    font-family: arial;
+    height: 30px;
+    border: 0px;
 }
 
 .operation .submit-button:hover {
@@ -450,6 +454,10 @@ left: -2;
 	left: -30px;
 	cursor: pointer;
 	font-weight: bold;
+	font-size: 14px;
+    font-family: arial;
+    height: 30px;
+    border: 0px;
 }
 
 .operation .cancel-button:hover {

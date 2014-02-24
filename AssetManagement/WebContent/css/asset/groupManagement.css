@@ -114,11 +114,6 @@
 	margin-top: 5px;
 }
 
-#dialog .submit-div {
-	position: absolute;
-	margin: 150px 150px;
-}
-
 #location_table td {
 	width: 80px;
 	text-align: center;
@@ -155,6 +150,8 @@
 	font-size: 14px;
 	font-weight: bold;
 	font-family: Arial;
+	margin-right: 20px;
+	cursor: pointer;
 }
 
 .reset-button {
@@ -164,6 +161,7 @@
 	font-size: 14px;
 	font-weight: bold;
 	font-family: Arial;
+	cursor: pointer;
 	background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
 }
 
@@ -186,13 +184,13 @@
 
 #addButton {
 	width: 80px;
-	margin-left: 100px;
 	text-align: center;
 	line-height: 30px;
 	color: #FFFFFF;
 	font-size: 14px;
 	font-weight: bold;
 	font-family: Arial;
+	float: right;
 }
 
 #dialog-confirm {
@@ -264,6 +262,8 @@ div.operation_assets_list ul {
 #group_table {
 	margin: 20px auto;
 	width: 400px;
+	font-family: arial;
+    font-size: 14px;
 }
 
 #group_table tr {
@@ -277,7 +277,12 @@ div.operation_assets_list ul {
 
 #dialog .submit-div {
 	position: absolute;
-	margin: 260px 210px;
+	margin: 0px 210px;
+	font-family: arial;
+	font-size: 14px;
+	font-weight: bold;
+	width: 200px;
+	margin-top: 5px;
 }
 
 #group_table td input {
@@ -330,4 +335,20 @@ border: solid 1px red !important;
 }
 .dataList-div-checkbox,.dataList-div-checkbox-all{
 	display:none;
+}
+
+#searchCondition {
+	width: 940px;
+}
+
+#searchButton, #customizedView {
+	left: 20px;
+}
+
+.ui-dialog .ui-dialog-content {
+    overflow: hidden;
+}
+
+.token-input-list-facebook{
+	margin-top: 10px;
 }

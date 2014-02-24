@@ -24,9 +24,16 @@ $(document).ready(function() {
 		}
 		$(".sortable").css("display","block");
 	});
-	$("#submitProperty").click(function(){
+	$(".rowDiv").delegate("#submitProperty, #editProperty","click", function(){
+		if("edit" == $(this).val()){
+			$("#submitProperty").show();
+			$("#editProperty").hide();
+		}
 		createOrUpdateProperty();
 	});
+/*	$("#submitProperty").click(function(){
+		createOrUpdateProperty();
+	});*/
 	$("#cancleProperty").click(function(){
 		$(".showProperty").css("display","none");
 	});
@@ -69,6 +76,8 @@ $(document).ready(function() {
 		});
     });
     $(".properties").delegate(".editProperty", "click", function (index){
+    	$("#submitProperty").hide();
+    	$("#editProperty").show();
     	doEditOpertion(this);
     });
     $(".properties").delegate(".deleteProperty", "click", function (index){
@@ -193,7 +202,6 @@ function createOrUpdateProperty() {
 		propertyArray.push(property);
 		showPropertyValueOnSide(propertyArray);
 	}
-	$(".showProperty").css("display", "none");
 	initCreateProperty();
 }
 

@@ -24,9 +24,11 @@ String basePath = request.getScheme() + "://"
 <link rel="stylesheet" href="css/asset/assetCommon.css" type="text/css">
 <link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="messageBar/css/messagebar.css">
+<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="bodyMinHight">
 	<div id="main">
 		<div class="home">
 			<span class="root-back">
@@ -368,16 +370,18 @@ String basePath = request.getScheme() + "://"
 				<div id="bodyShadow"></div>
 				<div class="operation">
 					<div class="operation_location">
-						<input type="button" value='<spring:message code="submit" />'
-						 class="submit-button" id="submitForm" />
-						<input type="button" value='<spring:message code="cancel" />'
-						 class="cancel-button" onclick="window.history.back();" />
+						<button value='<spring:message code="submit" />'
+						 class="submit-button" id="submitForm" ><spring:message code="submit" /></button>
+						<button value='<spring:message code="cancel" />'
+						 class="cancel-button" onclick="window.history.back();" ><spring:message code="cancel" /></button>
 					</div>
 					<div id="showError"></div>
 				</div>
 			</form:form>
 			<input type="hidden" id="localeCode" name="localeCode"
 				value="${sessionScope.i18n }">
+		</div>
+		</div>
 		</div>
 		<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 		<script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
@@ -390,7 +394,6 @@ String basePath = request.getScheme() + "://"
 		<script type="text/javascript" src="js/asset/copyAsset.js"></script>
 		<script type="text/javascript" src="autocomplete/js/autocomplete.js"></script>
 		<script type="text/javascript" src="dropDownList/dropDownList.js"></script>
-		<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 		<script type="text/javascript" src="js/asset/assetCommon.js"></script>
 		<script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 		<!-- add front page validation -->

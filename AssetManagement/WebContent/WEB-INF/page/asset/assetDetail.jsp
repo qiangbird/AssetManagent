@@ -24,6 +24,7 @@ String basePath = request.getScheme() + "://"
 </head>
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
+    <div id="bodyMinHight">
     <div id="main">
         <div class="home">
             <span class="root-back"><a href="#"><spring:message code="navigator.home" /></a></span>
@@ -33,14 +34,18 @@ String basePath = request.getScheme() + "://"
         <div id="operation">
         <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT,MANAGER,SPECIAL_ROLE">
         <c:if test="${uuid==null }">
-            <a id="editBtn"><spring:message code="edit" /></a>
+            <%-- <a id="editBtn"><spring:message code="edit" /></a> --%>
+            <button id="editBtn" value=<spring:message code="edit" />><spring:message code="edit" /></button>
             <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
-            <a id="copyBtn"><spring:message code="copy" /></a>
-            <a id="deleteBtn"><spring:message code="delete" /></a>
+<%--             <a id="copyBtn"><spring:message code="copy" /></a>
+            <a id="deleteBtn"><spring:message code="delete" /></a> --%>
+            <button id="copyBtn" value=<spring:message code="copy" />><spring:message code="copy" /></button>
+            <button id="deleteBtn" value=<spring:message code="delete" />><spring:message code="delete" /></button>
             </shiro:hasAnyRoles>
         </c:if>
         </shiro:hasAnyRoles>
-            <a id="cancelBtn"><spring:message code="cancel" /></a>
+            <%-- <a id="cancelBtn"><spring:message code="cancel" /></a> --%>
+            <button id="cancelBtn" value=<spring:message code="cancel" />><spring:message code="cancel" /></button>
         </div>
 
         <div id="createAssetContent">
@@ -159,15 +164,18 @@ String basePath = request.getScheme() + "://"
                             <form:input path="vendor" readonly="true" />
                         </p>
 
-                        <p class="textarea">
-                            <label><spring:message code="asset.memo" /></label>
-                            <form:input path="memo" readonly="true" />
-                        </p>
                         <p>
                             <label><spring:message code="audit.trail" /></label>
                            <span id="viewAuditTrail"> <a href="transferLog/list?id=${id }"> <spring:message code="view" /> </a></span>
                         </p>
+                        
+                        <p>
+                            <label><spring:message code="asset.memo" /></label>
+                            <%-- <form:input path="memo" readonly="true" /> --%>
+                            <form:textarea path="memo" rows="1" cols="15" readonly="true" />
+                        </p>
                     </div>
+                    <div class="clear"></div>
                 </div>
 
 
@@ -204,7 +212,7 @@ String basePath = request.getScheme() + "://"
                                 </p>
                             </div>
                         </div>
-
+                        <div class="clear"></div>
                     </div>
 
 
@@ -225,6 +233,7 @@ String basePath = request.getScheme() + "://"
                                 <form:input path="monitor.detail" class="l-text"  readonly="true" />
                             </p>
                         </div>
+                        <div class="clear"></div>
                     </div>
 
                     <div id="deviceDetails" class="type-details" style="display: none">
@@ -248,6 +257,7 @@ String basePath = request.getScheme() + "://"
                                     class="l-text"  readonly="true" />
                             </p>
                         </div>
+                        <div class="clear"></div>
                     </div>
 
                     <div id="softwareDetails" class="type-details"
@@ -317,6 +327,7 @@ String basePath = request.getScheme() + "://"
                          </c:choose> 
 
                         </div>
+                        <div class="clear"></div>
                     </div>
 
                     <div id="otherAssetsDetails" class="type-details"
@@ -335,6 +346,7 @@ String basePath = request.getScheme() + "://"
                         </div>
 
                         <div class="asset-input-right asset-input-panel"></div>
+                        <div class="clear"></div>
                     </div>
 
                 </div>
@@ -429,6 +441,7 @@ String basePath = request.getScheme() + "://"
                 <div class="clear"></div>
                 <input type="hidden" id="localeLanguage" value=${sessionScope.localeLanguage }>
         </div>
+    </div>
     </div>
     </form:form>
 	<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
