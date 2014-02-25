@@ -5,7 +5,7 @@ var placeholder_project;
 var placeholder_user;
 
 $(document).ready(function() {
-    
+	
 	placeholder_customer = $("#customerName").attr("placeholder");
 	placeholder_project = $("#projectName").attr("placeholder");
 	placeholder_user = $("#userName").attr("placeholder");
@@ -317,6 +317,7 @@ function searchList() {
     dataList.search();
 }
 
+
 //set Criteria(search conditions) for search feature
 function setCriteria() {
 
@@ -486,6 +487,17 @@ $("#userName").blur(function() {
         $(this).attr("placeholder", placeholder_user);
     }
 });
+
+
+// Show Operation tips after create, edit,update, delete
+
+if(null!=$("#tips").val()&&$("#tips").val()!=""){
+//	showMessageBar($("#tips").val());
+//	showMessageBarForMessage($("#tips").val());
+	showMessageBarForOperationResultMessage(aaa);
+
+}
+
 
 // get all checkbox active asset ids
 function getActivedAssetIds() {

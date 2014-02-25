@@ -26,6 +26,8 @@
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
 	<div id="bodyMinHight">
+	<!-- <div id ="messageBar"></div> -->
+	<input type="hidden" id="tips" value="${requestScope.tips }">
     <div class="content">
     	<div class="dataList">
     		<div id="searchCondition">

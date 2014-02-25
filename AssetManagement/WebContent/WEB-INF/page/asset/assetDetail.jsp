@@ -267,7 +267,11 @@ String basePath = request.getScheme() + "://"
                         </div>
                         <div class="asset-input-left asset-input-panel">
                             <form:hidden path="software.id" />
-                         <c:choose>
+                            <p>
+                                <label><spring:message code="asset.software.version" /></label>
+                                <form:input path="software.version" id="version" class="l-text"  readonly="true" />
+                            </p>
+                    <%--      <c:choose>
                             <c:when test="${asset.software.managerVisible }">
                             <p>
                                 <label><spring:message code="asset.software.version" /></label>
@@ -285,7 +289,7 @@ String basePath = request.getScheme() + "://"
                              </shiro:hasAnyRoles>
                              </p>
                             </c:otherwise>
-                         </c:choose> 
+                         </c:choose>  --%>
                             <c:choose>
                             <c:when test="${asset.software.managerVisible }">
                              <p>

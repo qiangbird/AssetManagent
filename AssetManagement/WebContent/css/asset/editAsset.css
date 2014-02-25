@@ -685,6 +685,7 @@ div.type-details {
 
 #assetType,#customerName,#project,#ownership {
 	background: rgb(245, 247, 240);
+	border: solid 1px #C7C2C5;
 }
 
 /* .l-select{

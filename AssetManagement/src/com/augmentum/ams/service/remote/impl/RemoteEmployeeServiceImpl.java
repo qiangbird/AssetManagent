@@ -98,8 +98,7 @@ public class RemoteEmployeeServiceImpl implements RemoteEmployeeService {
         IAPDataSearchModel model = new IAPDataSearchModel();
 
         model.setColumns(new String[] { IAPConstans.EMPLOYEE_NAME,
-                IAPConstans.EMPLOYEE_EMPLOYEE_ID, IAPConstans.POSITION_LEVEL,
-                IAPConstans.EMPLOYEE_POSITION_CODE });
+                IAPConstans.EMPLOYEE_EMPLOYEE_ID });
         List<Sorter> sorters = new ArrayList<Sorter>();
         // Sort employee by employeeName
         Sorter sorter = new Sorter(IAPConstans.EMPLOYEE_NAME, SorterType.ASC);

@@ -319,13 +319,16 @@ String basePath = request.getScheme() + "://"
                         </div>
                         <div class="asset-input-left asset-input-panel">
                             <form:hidden path="software.id" />
-                            
+                        <p>
+                       <label><spring:message code="asset.software.version" /></label>
+                       <form:input path="software.version" id="version" class="l-text" />
+                       </p>
                        <c:choose>
                        <c:when test='${sessionScope.userRoleList.contains("IT") }'>
-                       <p>
+                       <%-- <p>
                            <label><spring:message code="asset.software.version" /></label>
                            <form:input path="software.version" id="version" class="l-text" />
-                       </p>
+                       </p> --%>
                        <p>
                             <label><spring:message code="asset.software.additional.info" /></label>
                             <form:input path="software.additionalInfo" id="additionalInfo"

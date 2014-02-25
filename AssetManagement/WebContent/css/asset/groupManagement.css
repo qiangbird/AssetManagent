@@ -221,16 +221,23 @@ div.operation_assets_list ul {
 	background: url("../../image/common/Cancel_Hover.png") no-repeat;
 }
 
-.dataList-div-body .row .Operation {
+/* .dataList-div-body .row .Operation {
 	margin-left: -20px;
-}
+} */
 
 .editGroupIcon {
 	cursor: pointer;
 	width: 30px;
 	height: 30px;
 	margin: 0 35;
-	background: url("../../image/common/Edit.png") no-repeat;
+	background: url("../../image/customize/customizedView/icon_edit_normal.png") no-repeat;
+}
+.editGroupIcon:hover {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin: 0 35;
+    background: url("../../image/customize/customizedView/icon_edit_hover.png") no-repeat;
 }
 
 .deleteGroupIcon {
@@ -241,7 +248,18 @@ div.operation_assets_list ul {
 	width: 30px;
 	height: 30px;
 	margin: 0 auto;
-	background: url("../../image/common/Delete.png") no-repeat;
+	background: url("../../image/customize/customizedView/icon_delete_normal.png") no-repeat;
+}
+
+.deleteGroupIcon:hover {
+    cursor: pointer;
+    position: relative;
+    top: -60px;
+    left: 45px;
+    width: 30px;
+    height: 30px;
+    margin: 0 auto;
+    background: url("../../image/customize/customizedView/icon_delete_hover.png") no-repeat;
 }
 
 .editIcon,.removeIcon {

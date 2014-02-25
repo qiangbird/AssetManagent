@@ -16,7 +16,7 @@
             // isAutoHide used to define whether auto hide in system default time.
             isAutoHide : true,
             // autoHideTime redefine the system default time for hide.
-            autoHideTime : "2000",
+            autoHideTime : "200000",
             // preposition id.
             isPrepositionId : false
 

@@ -407,7 +407,7 @@ left: -2;
 }
 
 .operation_location {
-	width: 188px;
+	width: 180px;
 	height: 30px;
 	margin: 0 auto;
 }
@@ -882,5 +882,6 @@ p .dropDownList .dropDownList_icon {
 }
 
 .dropDownList_div ul li {
-	border: 1px solid white
+	border: 1px solid white;
+	line-height: 30px;
 }

@@ -34,7 +34,17 @@ String basePath = request.getScheme() + "://"
 			<span class="root-back">
 			 <a href="#"><spring:message code="navigator.home" /></a>
 			</span> <span class="catelog-in-line">></span> 
-			<span class="breadCrum"><spring:message code="copy.asset" /></span>
+			<span class="breadCrum">
+		    <c:choose>
+			<c:when test="${flag==''||flag==null}">
+			<spring:message code="copy.asset" />
+			</c:when>
+			<c:when test="${flag!=''}">
+			<spring:message code="create.asset" />
+			</c:when>
+			</c:choose>
+			
+			</span>
 		</div>
 		<div id="createAssetContent">
 			<div class="commons ng-binding">

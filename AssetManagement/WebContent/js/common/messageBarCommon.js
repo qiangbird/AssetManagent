@@ -70,3 +70,10 @@ function showMessageBarForMessage (errorCode) {
 	window.scrollTo(0,0);
 	
 }
+
+function showMessageBarForOperationResultMessage (message) {
+	var messages = [];
+	messages[0] = i18nProp(message);
+	messageBarForMessage(messages);
+}
+

@@ -351,7 +351,11 @@
 			           showMessageBarForMessage(errorCode);
 			           return false;
 			    	   }else{
-			    		   window.location.href="asset/allAssets";
+//			    		   if($("#showBatch").val()!=1){
+//			    		   window.location.href="asset/allAssets?tips=Batch create "+$("#showBatch").val()+" items asset success!";
+//			    		   }else{
+//			    			   window.location.href="asset/allAssets?tips=Create asset "+$("#assetId").val()+" success!";
+//			    		   }
 			    	   }
 			       }
 			       });

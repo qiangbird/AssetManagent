@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,13 +178,7 @@ public class AssetController extends BaseController {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping(value = "/saveAsset", method = RequestMethod.POST)
-    public ModelAndView saveAsset(HttpServletRequest request, @Validated/*
-                                                                         * (
-                                                                         * GroupValidation
-                                                                         * .
-                                                                         * class
-                                                                         * )
-                                                                         */AssetVo assetVo,
+    public ModelAndView saveAsset(HttpServletRequest request, @Validated/*(GroupValidation.class)*/AssetVo assetVo,
             BindingResult bindingResult, String batchCreate, String batchCount)
             throws BusinessException, UnsupportedEncodingException {
 
@@ -203,10 +198,14 @@ public class AssetController extends BaseController {
         voToAsset(request, assetVo, asset);
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
 
+        String tips=null;
         if (null == batchCreate) {
             asset.setAssetId(assetVo.getAssetId());
             try {
                 assetService.saveAssetAsType(assetVo, asset, "save");
+//                modelAndView.addObject("tips","Create asset"+asset.getAssetId()+" success!");
+//                request.setAttribute("tips","Create asset"+asset.getAssetId()+" success!");
+//                tips="Create asset"+asset.getAssetId()+" success!";
             } catch (Exception e) {
                 logger.error("Save asset error", e);
             }
@@ -220,13 +219,17 @@ public class AssetController extends BaseController {
                     asset.setAssetId(batchIdList.get(i));
                     assetService.saveAssetAsType(assetVo, asset, "save");
                 }
+//               modelAndView.addObject("tips","Batch create "+batchNum+" items asset success!");
+//                request.setAttribute("tips","Batch create "+batchNum+" items asset success!");
+//                tips= "Batch create "+batchNum+" items asset success!";
             } catch (NumberFormatException e) {
                 // TODO
                 logger.error("Number format error!", e);
             }
         }
+//        modelAndView.setViewName("redirect:/asset/allAssets?tips="+tips);
         modelAndView.setViewName("redirect:/asset/allAssets");
-        
+       
         logger.info("saveAsset method end!");
         return modelAndView;
     }
@@ -288,7 +291,7 @@ public class AssetController extends BaseController {
 
     @RequestMapping(value = "/allAssets")
     public ModelAndView redirectPage(String type, String status, Boolean isFixedAsset,
-            Boolean isWarrantyExpired, Boolean isLicenseExpired) {
+            Boolean isWarrantyExpired, Boolean isLicenseExpired,String tips,HttpServletRequest request) {
 
         ModelAndView modelAndView = new ModelAndView("asset/allAssetsList");
         modelAndView.addObject("type", type);
@@ -296,6 +299,9 @@ public class AssetController extends BaseController {
         modelAndView.addObject("isFixedAsset", isFixedAsset);
         modelAndView.addObject("isWarrantyExpired", isWarrantyExpired);
         modelAndView.addObject("isLicenseExpired", isLicenseExpired);
+        request.setAttribute("tips",tips);
+        
+        String tip = request.getParameter("tips");
 
         return modelAndView;
     }
@@ -645,6 +651,7 @@ public class AssetController extends BaseController {
         modelAndView.addObject("assetVo", assetVo);
         request.setAttribute("type", assetVo.getType());
         request.setAttribute("entity", assetVo.getEntity());
+        request.setAttribute("flag","FromPurchase");
 
         modelAndView.setViewName("asset/copyAsset");
 
