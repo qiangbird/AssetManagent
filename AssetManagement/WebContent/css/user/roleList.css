@@ -315,3 +315,7 @@
 .itInRow, .adminInRow {
 	position: relative;
 }
+/* 
+.ui-dialog .ui-dialog-content {
+    overflow: hidden;
+} */

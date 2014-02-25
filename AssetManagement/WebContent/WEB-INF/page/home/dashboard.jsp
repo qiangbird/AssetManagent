@@ -22,7 +22,9 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
-	
+<div id="blank">
+   <span><spring:message code="navigator.home"></spring:message></span>
+</div>	
 <div id="main">
 
 <div id="left">

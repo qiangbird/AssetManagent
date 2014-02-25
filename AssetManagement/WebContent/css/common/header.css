@@ -325,7 +325,9 @@ a {
 .ui-dialog .ui-dialog-content {
 	font-family: arial;
 	font-size: 14px;
+	height: 34.40000009536743px;
 	line-height: 18px;
+	overflow: hidden;
 }
 
 #div-loader {
@@ -338,4 +340,30 @@ a {
 	opacity: 0.4;
 	background: #DDD url(../../image/common/loader.gif) no-repeat 50% 50%;
 	z-index: 9999999;
+}
+
+#blank {
+    color: #418FB5;
+    font-family: Arial;
+    font-size: 14px;
+    width: 1000px;
+    height: 25px;
+    line-height: 25px;
+    margin: 0 auto;
+    visibility: visible;
+    position: relative;
+}
+
+#blank b {
+    margin: 0 3px;
+}
+
+#blank a {
+    color: #23A5E3;
+    text-decoration:none;
+}
+#blank span{
+    font-weight: bold;
+    color: #555555;
+    cursor: default;
 }

@@ -66,8 +66,8 @@ $(document).ready(function() {
 	    	ShowMsg(i18nProp('message_confirm_rolelist_delete_role'),function(yes){
 			      if (yes) {
 						var flag = false;
-						var currentEmployeeId = $(object).parents(".employeeRoleInfo").find(".employeeIdInRow").text();
-						flag = isAtLeastOneITAndAdmin(currentEmployeeId);
+//						var currentEmployeeId = $(object).parents(".employeeRoleInfo").find(".employeeIdInRow").text();
+						flag = isAtLeastOneITAndAdmin();
 						if(true == flag){
 							var isNew = parent.find("#isNew").text();
 							if("true" == isNew){
@@ -78,7 +78,7 @@ $(document).ready(function() {
 								usersRoleInfo[index - 1].isDelete = "true";
 							}
 						}else{
-							alert("There must at least two user has IT and System Admin role");
+							ShowMsg(i18nProp('none_IT_and_Admin'));
 						}
 			      }else{
 			          return;
@@ -96,10 +96,14 @@ $(document).ready(function() {
 	});
 	
 	$("#saveButton").click(function(){
-		//there is no current employee id
-		isAtLeastOneITAndAdmin(null);
+		var hasITAndAdmin = isAtLeastOneITAndAdmin();
 		
-		saveOperation(usersRoleInfo);
+		if(hasITAndAdmin){
+			$("#div-loader").show();
+			saveOperation(usersRoleInfo);
+		}else{
+			ShowMsg(i18nProp('none_IT_and_Admin'));
+		}
 	});
 	
 	$("#cancelButton").click(function(){
@@ -108,30 +112,16 @@ $(document).ready(function() {
 });
 
 function isAtLeastOneITAndAdmin(currentEmployeeId){
-	var employeeIdForIT = "";
-	var employeeIDFroAdmin = "";
-	//check employeeIdForIT
-	for(var i = 0; i < usersRoleInfo.length; i++){
-		if(true == usersRoleInfo[i].itRole){
-			employeeIdForIT = usersRoleInfo[i].employeeId;
-			break;
-		}
-	}
-	//check employeeIDFroAdmin
-	for(var i = 0; i < usersRoleInfo.length; i++){
-		if("true"== usersRoleInfo[i].systemAdminRole){
-			employeeIDFroAdmin = usersRoleInfo[i].employeeId;
-			break;
-		}
-	}
+	var employeeRoleInfo = $(".roleDispaly").find(".employeeRoleInfo");
+	var ITNumber = employeeRoleInfo.find(".itInRow").find(".roleCheckBoxInRowOn").size();
+	var AdminNumber = employeeRoleInfo.find(".adminInRow").find(".roleCheckBoxInRowOn").size();
 	
-	//compare employeeIdForIT with employeeIDFroAdmin and currentEmployeeId
-	if(employeeIdForIT != employeeIDFroAdmin && employeeIdForIT != currentEmployeeId
-			&& employeeIDFroAdmin != currentEmployeeId){
+	if(0 < ITNumber && 0 < AdminNumber){
 		return true;
 	}else{
 		return false;
 	}
+	
 }
 
 function showUnderLineByCheckIsNew(object){
@@ -199,30 +189,24 @@ function checkEmployees(listEmployees){
 	errorEmployeeNames.length = 0;
 	
 	if("false" == itRole && "false" == systemAdminRole) {
-		//showTipMessage($document.find("#showError"),msg.prop("User.eror.emplyeeAtLeastOneRole"),350,30,3000);
-		alert("Role can't be null");
+		ShowMsg(i18nProp('message_warn_role_is_null', null));
 	}
 	else {
 		for(var i=0;i<listEmployees.length;i++) {
 			var employeeName = listEmployees[i].split("#")[0];
 			var employeeId = listEmployees[i].split("#")[1];
 			if(employeeName == "") {
-//				showTipMessage($document.find("#showError"),msg.prop("User.error.nullEmployeeNme"),350,30,3000);
-				alert("User is null!");
+				ShowMsg(i18nProp('message_warn_user_is_null', null));
 				return;
 			}else if(employeeId == "" || employeeId == undefined) {  // employee not exist
 				$("#autoText li").each(function() {
 					var errorEmployeeName = $(this).find("p").text();
 					if(employeeName == errorEmployeeName) {
+						errorEmployeeNames.push(errorEmployeeName);
 						$(this).css("background-color","#FFF58F");
 						$(this).css("border", "1px solid red");
 					}
 				});
-	/*			var message = msg.prop("User.error.notExistEmployee",employeeName);
-				showTipMessage($document.find("#showError"),message,350,30,3000);*/
-				alert(employeeName + " is not exist!");
-				employees.length = 0;
-				return;
 			}
 			
 			// employee already exist
@@ -239,7 +223,6 @@ function checkEmployees(listEmployees){
 				}
 			}
 			var employee = new Object();
-//			employee.isDelete = "false";
 			employee.employeeId = employeeId;
 			employee.employeeName = employeeName;
 			employee.itRole = itRole;
@@ -249,8 +232,8 @@ function checkEmployees(listEmployees){
 			}
 		if(0 < errorEmployeeNames.length){
 			var names = errorEmployeeNames.join(",");
-			alert(names + " already exist!");
 			employees.length = 0;
+			ShowMsg(i18nProp('message_warn_role_illegal', names));
 			return;
 		}else{
 			for(var m = 0; m < employees.length; m++){
@@ -272,7 +255,9 @@ function saveOperation(usersRoleInfo){
 			"usersRoleInfo":JSON.stringify(usersRoleInfo)
 		},
 		success: function(){
-			alert("Save successfully!");
+			$("#div-loader").hide();
+			getUserRoloInfo();
+			showMessageBarForMessage("role_save_success");
 		},
 		dataType: 'json',
 		type: 'POST'

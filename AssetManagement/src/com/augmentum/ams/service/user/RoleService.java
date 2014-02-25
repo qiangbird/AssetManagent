@@ -3,7 +3,6 @@ package com.augmentum.ams.service.user;
 import java.util.List;
 
 import com.augmentum.ams.exception.BusinessException;
-import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.model.user.Role;
 
 public interface RoleService {
@@ -25,7 +24,7 @@ public interface RoleService {
      * @return Role
      * @throws BusinessException
      */
-    Role getRoleByName(RoleEnum roleName) throws BusinessException;
+    Role getRoleByName(String roleName) throws BusinessException;
 
     /**
      * @author Grylls.Xu
@@ -44,6 +43,6 @@ public interface RoleService {
      * @param roleName
      * @return
      */
-    List<String> getAuthoritiesByRoleName(RoleEnum roleName);
+    List<String> getAuthoritiesByRoleName(String roleName);
 
 }

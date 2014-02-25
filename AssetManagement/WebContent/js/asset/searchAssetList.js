@@ -257,7 +257,12 @@ $(document).ready(function() {
                  if (yes) {
                 	 $("#div-loader").show();
                 	 $("#assetIds").val(assetIds);
-                	 $('#exportForm').submit();
+                	 $('#exportForm').ajaxSubmit(
+                		 function(){
+                			 showMessageBarForMessage("exoprt_assets_success");
+                			 $("#div-loader").hide();
+                		 }
+                	 );
                  }else{
                      return;
                  }
@@ -268,7 +273,12 @@ $(document).ready(function() {
                  if (yes) {
                 	 $("#div-loader").show();
                 	 $("#assetIds").val(null);
-                	 $('#exportForm').submit();
+                	 $('#exportForm').ajaxSubmit(
+                    		 function(){
+                    			 showMessageBarForMessage("exoprt_assets_success");
+                    			 $("#div-loader").hide();
+                    		 }
+                    	 );
                  }else{
                      return;
                  }

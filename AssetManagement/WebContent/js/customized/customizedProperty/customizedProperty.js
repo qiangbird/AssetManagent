@@ -538,6 +538,7 @@ function initSaveOperation(){
 function saveProperties(properties){
 	var customerCode = $("#customerCode").val();
 	var assetType = $("#assetType").val();
+	$("#div-loader").show();
 	$.ajax( {  
 	    type : 'POST',  
 	    contentType: 'application/x-www-form-urlencoded',
@@ -549,6 +550,7 @@ function saveProperties(properties){
 	    	},
 	    dataType : 'json',  
 	    success : function() { 
+	    	$("#div-loader").hide();
 	    	checkCustomerNameAndAssetType();
 	    	showMessageBarForMessage("message_customizedView_save_success");
 	    }

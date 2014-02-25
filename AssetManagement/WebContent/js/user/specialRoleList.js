@@ -42,6 +42,7 @@ $(document).ready(function() {
 	});
 	
 	$("#saveButton").click(function(){
+		$("#div-loader").show();
 		saveOperation(specialRoles);
 	});
 	
@@ -58,13 +59,15 @@ function clearInputBox(){
 
 function saveOperation(specialRoles){
 	$.ajax({
-		contentType : 'application/x-www-form-urlencoded',  
+		contentType : 'application/x-www-form-urlencoded',
 		url: 'specialRole/saveOrUpdateSpecialRole',
 		data: { 
 			"specialRoles":JSON.stringify(specialRoles)
 		},
 		success: function(){
-			alert("Save successfully!");
+			$("#div-loader").hide();
+			findCustomersAndSpecialRoles();
+			showMessageBarForMessage("role_save_success");
 		},
 		dataType: 'json',
 		type: 'POST'
@@ -76,7 +79,7 @@ function initAddProccess(){
 	if(true == existCustomer){
 		checkEmployees();
 	}else{
-		alert("Customer is null!");
+		ShowMsg(i18nProp('message_warn_customer_is_null', null));
 	}
 }
 
@@ -103,22 +106,17 @@ function checkEmployees(){
 /*			var department = listEmployees[i].split("#")[2];
 			var manager = listEmployees[i].split("#")[3];*/
 			if(employeeName == "") {
-//				showTipMessage($document.find("#showError"),msg.prop("User.error.nullEmployeeNme"),350,30,3000);
-				alert("User is null!");
+				ShowMsg(i18nProp('message_warn_user_is_null', null));
 				return;
 			}else if(employeeId == "" || employeeId == undefined) {  // employee not exist
 				$("#autoText li").each(function() {
 					var errorEmployeeName = $(this).find("p").text();
 					if(employeeName == errorEmployeeName) {
+						errorEmployeeNames.push(errorEmployeeName);
 						$(this).css("background-color","#FFF58F");
 						$(this).css("border", "1px solid red");
 					}
 				});
-	/*			var message = msg.prop("User.error.notExistEmployee",employeeName);
-				showTipMessage($document.find("#showError"),message,350,30,3000);*/
-				alert(employeeName + " is not exist!");
-				employees.length = 0;
-				return;
 			}
 			
 			// employee already exist
@@ -139,15 +137,13 @@ function checkEmployees(){
 			employee.employeeName = employeeName;
 			employee.customerName = customerName;
 			employee.customerCode = customerCode;
-/*			employee.customerCode = department;
-			employee.customerCode = manager;*/
 			employee.isNew = "true";
 			employees.push(employee);
 			}
 		if(0 < errorEmployeeNames.length){
 			var names = errorEmployeeNames.join(",");
-			alert(names + " already exist!");
 			employees.length = 0;
+			ShowMsg(i18nProp('message_warn_role_illegal', names));
 			return;
 		}else{
 			for(var m = 0; m < employees.length; m++){
@@ -175,7 +171,6 @@ function displaySpecialRoleList(specialRoles){
 			lastDivToAppend.find(".customerNameInRow").text(specialRoles[i].customerName);
 			lastDivToAppend.find(".managerInRow").text(specialRoles[i].manager);
 		}
-//		tooltips(".employeeNameInRow");
 	}
 }
 

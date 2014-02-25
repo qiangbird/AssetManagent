@@ -41,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
     public void saveInitRole() {
         List<Role> roles = new ArrayList<Role>();
         Date date = UTCTimeUtil.localDateToUTC();
-        
+
         for (RoleEnum roleEnum : RoleEnum.values()) {
 
             // Because RoleEnum.SPECIAL_ROLE info in special_role table, so here
@@ -52,46 +52,55 @@ public class RoleServiceImpl implements RoleService {
                 role.setCreatedTime(date);
                 role.setUpdatedTime(date);
                 roles.add(role);
-                logger.info("Save role:" + roleEnum.toString()+ " in database");
+                logger.info("Save role:" + roleEnum.toString() + " in database");
             }
         }
         roleDao.saveOrUpdateAll(roles);
     }
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.service.user.RoleService#getRoleByName(com.augmentum.ams.model.user.RoleEnum)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.service.user.RoleService#getRoleByName(com.augmentum
+     * .ams.model.user.RoleEnum)
      */
     @Override
-    public Role getRoleByName(RoleEnum roleName) throws BusinessException{
+    public Role getRoleByName(String roleName) throws BusinessException {
         DetachedCriteria criteria = DetachedCriteria.forClass(Role.class);
 
-        //roleName can not be cast to String for restrictions
-        criteria.add(Restrictions.eq("roleName", roleName)).add(Restrictions.eq("isExpired", Boolean.FALSE));
-        Role role =  roleDao.getUnique(criteria);
-        if(role == null) {
+        // roleName can not be cast to String for restrictions
+        criteria.add(Restrictions.eq("roleName", roleName)).add(
+                Restrictions.eq("isExpired", Boolean.FALSE));
+        Role role = roleDao.getUnique(criteria);
+        if (role == null) {
             throw new BusinessException(ErrorCodeUtil.DATA_NOT_EXIST, "The role is null!");
         }
         return role;
     }
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.service.user.RoleService#saveRoleAuthorities(java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.service.user.RoleService#saveRoleAuthorities(java.lang
+     * .String, java.lang.String)
      */
     @Override
     public void saveRoleAuthorities(String roleName, String authorityName) throws BusinessException {
-        Role role = this.getRoleByName(RoleEnum.getRoleEnum(roleName));
+        Role role = this.getRoleByName(RoleEnum.getRoleEnum(roleName).name());
         List<Authority> authorities = role.getAuthorities();
-        //        boolean roleAuthorityExist = false;
-        //        if(authorities != null) {
-        //            for (Authority authority : authorities) {
-        //                if (authorityName.equals(authority.getName())) {
-        //                    roleAuthorityExist = true;
-        //                    break;
-        //                }
-        //            }
-        //        }
+        // boolean roleAuthorityExist = false;
+        // if(authorities != null) {
+        // for (Authority authority : authorities) {
+        // if (authorityName.equals(authority.getName())) {
+        // roleAuthorityExist = true;
+        // break;
+        // }
+        // }
+        // }
         //
-        //        if (!roleAuthorityExist) {
+        // if (!roleAuthorityExist) {
         Authority authority = authorityService.getAuthorityByName(authorityName);
         List<Role> roles = authority.getRoles();
         roles.add(role);
@@ -101,17 +110,24 @@ public class RoleServiceImpl implements RoleService {
 
         role.setUpdatedTime(new Date());
         roleDao.update(role);
-        logger.info("Update role authority. Role name:"+roleName+", authority name:"+authorityName);
-        //        }
+        logger.info("Update role authority. Role name:" + roleName + ", authority name:"
+                + authorityName);
+        // }
     }
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.service.user.RoleService#getAuthoritiesByRoleName(com.augmentum.ams.model.user.RoleEnum)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.service.user.RoleService#getAuthoritiesByRoleName(com
+     * .augmentum.ams.model.user.RoleEnum)
      */
     @Override
-    public List<String> getAuthoritiesByRoleName(RoleEnum roleName) {
-        DetachedCriteria criteria = DetachedCriteria.forClass(Role.class).setFetchMode("authorities", FetchMode.JOIN);
-        criteria.add(Restrictions.eq("roleName", roleName)).add(Restrictions.eq("isExpired", Boolean.FALSE));
+    public List<String> getAuthoritiesByRoleName(String roleName) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(Role.class).setFetchMode(
+                "authorities", FetchMode.JOIN);
+        criteria.add(Restrictions.eq("roleName", roleName)).add(
+                Restrictions.eq("isExpired", Boolean.FALSE));
 
         List<Role> roles = roleDao.findByCriteria(criteria);
         List<String> authorities = new ArrayList<String>();
@@ -126,6 +142,5 @@ public class RoleServiceImpl implements RoleService {
         }
         return authorities;
     }
-
 
 }

@@ -23,6 +23,11 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <span><spring:message code="navigator.transfer.log"></spring:message></span>
+    </div>
 	<div id="bodyMinHight">
     <div class="content">
     	<div class="dataList">

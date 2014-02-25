@@ -29,10 +29,6 @@ tr {
 	margin-right: 10px;
 }
 
-.mainPanel {
-	margin-top: 30px;
-}
-
 .mainPanel table {
 	border-color: #418FB5;
 }
@@ -43,9 +39,10 @@ tr {
 }
 
 #right {
-    width: 400px;;
+    width: 400px;
     height: auto;
     float: right;
+    margin-top: -30px;
 }
 
 .td-header {

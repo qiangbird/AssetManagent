@@ -19,11 +19,11 @@
         <jsp:include page="/WEB-INF/page/common/header.jsp" />
 <div class="shady"></div>
     <div id="page">
-        <!-- <div id="blank">
-            <a href="dashBoard">home</a>
+        <div id="blank">
+            <a href="home"><spring:message code="navigator.home"></spring:message></a>
             <b>&gt;</b>
-            <span>importAssets</span>
-        </div> -->
+            <span><spring:message code="navigator.import.asset"></spring:message></span>
+        </div>
         <div id="body">
            <div id="main">
                <div class="panel-shadow"></div>

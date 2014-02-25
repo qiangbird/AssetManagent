@@ -33,13 +33,13 @@ public class UserServiceImpl implements UserService {
     private static Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     protected HttpServletRequest servletRequest;
-    
+
     @Autowired
     private UserDao userDao;
 
     @Autowired
     private RoleService roleService;
-    
+
     @Autowired
     private SpecialRoleService specialRoleService;
 
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
         // Before save user and role info in database, clear user_role table
         // records.
-    	// this.deleteUserRole();
+        // this.deleteUserRole();
         List<User> users = new ArrayList<User>();
         Date date = UTCTimeUtil.localDateToUTC();
 
@@ -62,15 +62,18 @@ public class UserServiceImpl implements UserService {
             User user = null;
             User existUser = userDao.getUserByUserId(userVo.getEmployeeId());
 
-            // If user is saved in database already in database, then assign it to user
-            // If user is not save in database, then initialize user base info from userVo
+            // If user is saved in database already in database, then assign it
+            // to user
+            // If user is not save in database, then initialize user base info
+            // from userVo
             if (existUser != null) {
                 user = existUser;
-                if(Boolean.TRUE == userVo.isDelete()){
-                	userDao.deleteUserRoleById(user.getId());
-                	user.setExpired(Boolean.TRUE);
-                	users.add(user);
-                	break;
+                if (Boolean.TRUE == userVo.isDelete()) {
+                    userDao.deleteUserRoleById(user.getId());
+                    /*
+                     * user.setExpired(Boolean.TRUE); users.add(user);
+                     */
+                    break;
                 }
             } else {
                 user = new User();
@@ -85,7 +88,7 @@ public class UserServiceImpl implements UserService {
             // If user is selected ITRole, then save user ITRole in user_role
             // table
             if (userVo.isITRole()) {
-                Role itRole = roleService.getRoleByName(RoleEnum.IT);
+                Role itRole = roleService.getRoleByName(RoleEnum.IT.name());
                 roles.add(itRole);
                 logger.info("Assign ITRole for user, user name is:" + user.getUserName());
             }
@@ -93,7 +96,7 @@ public class UserServiceImpl implements UserService {
             // If user is selected SystemAdminRole, then save user
             // SystemAdminRole in user_role table
             if (userVo.isSystemAdminRole()) {
-                Role systemAdminRole = roleService.getRoleByName(RoleEnum.SYSTEM_ADMIN);
+                Role systemAdminRole = roleService.getRoleByName(RoleEnum.SYSTEM_ADMIN.name());
                 roles.add(systemAdminRole);
                 logger.info("Assign SystemAdminRole for user, user name is:" + user.getUserName());
             }
@@ -127,9 +130,9 @@ public class UserServiceImpl implements UserService {
             // If user has ITRole then setting ITRole flag is true, if user has
             // SystemAdminRole then setting SystemAdminRole flag is true
             for (Role role : roles) {
-                if (role.getRoleName().equals(RoleEnum.IT)) {
+                if (role.getRoleName().equals(RoleEnum.IT.name())) {
                     userVo.setITRole(true);
-                } else if (role.getRoleName().equals(RoleEnum.SYSTEM_ADMIN)) {
+                } else if (role.getRoleName().equals(RoleEnum.SYSTEM_ADMIN.name())) {
                     userVo.setSystemAdminRole(true);
                 }
             }
@@ -143,14 +146,13 @@ public class UserServiceImpl implements UserService {
         return userVos;
     }
 
-    /**   
+    /**
      * (non-Javadoc)
      * 
-     * @see
-     * com.augmentum.ams.service.user.UserService#getUserByUserId(java.lang.
-     * String)
+     * @see com.augmentum.ams.service.user.UserService#getUserByUserId(java.lang.
+     *      String)
      **/
-     
+
     @Override
     public User getUserByUserId(String userId) {
         String hql = "FROM User user WHERE user.userId=? AND isExpired = ?";
@@ -161,7 +163,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getUserById(String userId) {
-        DetachedCriteria criteria = DetachedCriteria.forClass(User.class).setFetchMode("roles", FetchMode.JOIN);
+        DetachedCriteria criteria = DetachedCriteria.forClass(User.class).setFetchMode("roles",
+                FetchMode.JOIN);
         criteria.add(Restrictions.eq("userId", userId));
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
 
@@ -173,64 +176,69 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.service.user.UserService#validateEmployee(com.augmentum.ams.web.vo.user.UserVo)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.service.user.UserService#validateEmployee(com.augmentum
+     * .ams.web.vo.user.UserVo)
      */
     @Override
     public User validateEmployee(UserVo userVo) {
         if (null == userVo) {
             logger.error("userVo is null when validate employee");
             return null;
-        }else{
- 
-        User user = this.getUserById(userVo.getEmployeeId());
-        if (null == user) {
-            user = new User();
-            user.setUserId(userVo.getEmployeeId());
-            user.setUserName(userVo.getEmployeeName());
-            Date date = UTCTimeUtil.localDateToUTC();
-            user.setCreatedTime(date);
-            user.setUpdatedTime(date);
-            userDao.save(user);
-        }
-        List<Role> roles = new ArrayList<Role>();
-        String companyRole = RoleLevelUtil.getRoleByUserVo(userVo);
-        roles.addAll(user.getRoles());
-        Role role = new Role();
-        role.setRoleName(companyRole);
-        roles.add(role);
-        user.setRoles(roles);
-        return user;
+        } else {
+
+            User user = this.getUserById(userVo.getEmployeeId());
+            if (null == user) {
+                user = new User();
+                user.setUserId(userVo.getEmployeeId());
+                user.setUserName(userVo.getEmployeeName());
+                Date date = UTCTimeUtil.localDateToUTC();
+                user.setCreatedTime(date);
+                user.setUpdatedTime(date);
+                userDao.save(user);
+            }
+            List<Role> roles = new ArrayList<Role>();
+            String companyRole = RoleLevelUtil.getRoleByUserVo(userVo);
+            roles.addAll(user.getRoles());
+            Role role = new Role();
+            role.setRoleName(companyRole);
+            roles.add(role);
+            user.setRoles(roles);
+            return user;
         }
     }
 
-	@Override
-	public User getUserByName(String username) {
-		return userDao.getUserByName(username);
-	}
+    @Override
+    public User getUserByName(String username) {
+        return userDao.getUserByName(username);
+    }
 
-	@Override
-	public void saveUser(User user) {
-		userDao.save(user);
-	}
+    @Override
+    public void saveUser(User user) {
+        userDao.save(user);
+    }
 
-	@Override
-	public void saveUserAsUserVo(UserVo userVo) {
-		User user;
-		user = new User();
-		user.setUserName(userVo.getEmployeeName());
-		user.setUserId(userVo.getEmployeeId());
-		saveUser(user);
-	}
+    @Override
+    public void saveUserAsUserVo(UserVo userVo) {
+        User user;
+        user = new User();
+        user.setUserName(userVo.getEmployeeName());
+        user.setUserId(userVo.getEmployeeId());
+        saveUser(user);
+    }
 
     @Override
     public User getUserByUserIdForUserRoles(String userId) {
-        
-        DetachedCriteria criteria = DetachedCriteria.forClass(User.class).setFetchMode("roles", FetchMode.JOIN);
+
+        DetachedCriteria criteria = DetachedCriteria.forClass(User.class).setFetchMode("roles",
+                FetchMode.JOIN);
         criteria.add(Restrictions.eq("userId", userId));
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         List<User> list = userDao.findByCriteria(criteria);
-        
+
         if (null == list || 0 == list.size()) {
             return null;
         }
@@ -239,20 +247,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserRole(UserVo userVo) {
-        if(userVo.getEmployeeLevel().equals("Manager")||userVo.getEmployeeLevel().equals("Director")||specialRoleService.findSpecialRoleByUserId(userVo.getEmployeeId())){
-        return "Manager";
-        }else{
+        if (userVo.getEmployeeLevel().equals("Manager")
+                || userVo.getEmployeeLevel().equals("Director")
+                || specialRoleService.findSpecialRoleByUserId(userVo.getEmployeeId())) {
+            return "Manager";
+        } else {
             return "Employee";
         }
     }
 
     @Override
     public Map<String, User> findAllUsersFromLocal() {
-        
+
         List<User> users = userDao.findAll(User.class);
         Map<String, User> employees = new HashMap<String, User>();
-        
-        for(User user : users){
+
+        for (User user : users) {
             employees.put(user.getUserName(), user);
         }
         return employees;

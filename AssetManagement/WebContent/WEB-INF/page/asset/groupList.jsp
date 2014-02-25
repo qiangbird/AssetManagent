@@ -28,6 +28,13 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
+	<div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <a href="user/roleList"><spring:message code="navigator.system"></spring:message></a>
+       <b>&gt;</b>
+       <span><spring:message code="navigator.group.list"></spring:message></span>
+    </div>
 	<div id="bodyMinHight">
     <div class="content">
     	<div class="dataList">

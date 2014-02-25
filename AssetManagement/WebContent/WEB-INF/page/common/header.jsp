@@ -12,6 +12,10 @@
 <head>
 <base href="<%=basePath%>">
 
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.8.18.custom.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
@@ -22,13 +26,6 @@
 <script type="text/javascript" src="js/common/uuid.js"></script>
 <script type="text/javascript" src="js/common/header.js"></script>
 <script type="text/javascript" src="messageBar/js/messagebar.js"></script>
-
-
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/header.css" >
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.8.18.custom.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
-<link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
 
 <title>Asset Page</title>
 </head>
