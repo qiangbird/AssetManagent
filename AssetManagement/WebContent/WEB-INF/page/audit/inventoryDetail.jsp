@@ -29,11 +29,13 @@
 <input type="hidden" name="operator" id="operator" value="${operator}"/>
 <input type="hidden" name="operationTime" id="operationTime" value="${operationTime}"/>
 <input type="hidden" id="viewMoreDialog_title" value="<spring:message code='viewMoreDialog_title'/>" />
-<!--         <div id="blank">
-            <a href="dashBoard">home</a>
-            <b id="father">&gt;</b>
-            <a href="checkInventory">checkInventory</a><b>&gt;</b><span>fileName</span>
-        </div> -->
+    <div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <a href="auditFile/inventoryList"><spring:message code="navigator.check.inventory"></spring:message></a>
+       <b>&gt;</b>
+       <span><spring:message code="navigator.check.inventory.detail"></spring:message></span>
+    </div>
         <div id="hen" style="height: 20px;width:100px;display: none; border-color:red"><spring:message code="audit.loading..."/>Loading...</div>
         <div id="dataTables_scrollBody">
 	     

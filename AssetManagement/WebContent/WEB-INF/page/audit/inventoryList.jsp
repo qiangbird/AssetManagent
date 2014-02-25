@@ -20,7 +20,11 @@
 </head>
 <body>
 <jsp:include page="../common/header.jsp"></jsp:include>
-<div id="messageBar"></div>
+<div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <span><spring:message code="navigator.check.inventory"></spring:message></span>
+</div>
 <div id="body" >
 	<div id="main">
 		<div class="up-shadow"></div>

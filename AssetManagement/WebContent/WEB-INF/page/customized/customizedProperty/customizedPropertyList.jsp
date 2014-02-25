@@ -11,8 +11,9 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<link rel="stylesheet" href="css/customize/customizedProperty/selfProperty.css" type="text/css">
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
+<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
+<link rel="stylesheet" href="css/customize/customizedProperty/selfProperty.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -182,7 +183,10 @@
 </div>         
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/common/json2.js"></script>
-<script type="text/javascript" src="js/customized/customizedProperty/customizedProperty.js"></script>
 <script type="text/javascript" src="js/common/commonFunction.js"></script>
+<script type="text/javascript" src="js/common/validation.js"></script>
+<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
+<script type="text/javascript" src="js/asset/assetValidation.js"></script>
+<script type="text/javascript" src="js/customized/customizedProperty/customizedProperty.js"></script>
 </body>
 </html>

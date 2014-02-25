@@ -31,9 +31,6 @@ $(document).ready(function() {
 		}
 		createOrUpdateProperty();
 	});
-/*	$("#submitProperty").click(function(){
-		createOrUpdateProperty();
-	});*/
 	$("#cancleProperty").click(function(){
 		$(".showProperty").css("display","none");
 	});
@@ -53,10 +50,10 @@ $(document).ready(function() {
     });
     $("#addItem").click(function(){
     	var propertyPropertyItem = $("#propertyPropertyItem").val();
-    	if(undefined == propertyPropertyItem || "" == propertyPropertyItem){
-    		showTipMessage($document.find("#showError"),msg.prop("Property.error.itemNull"),350,180,3000);
+    	if ("failed" == $("#propertyPropertyItem").push($("#propertyPropertyItem")
+    			.validateNull(propertyPropertyItem,i18nProp('property_error_chineseNameNull')))) {
     		return;
-    	}
+    	} 
     	$(".addSelectItem").append($("#itemTemplate").html());
     	$("#propertyPropertyItem").val("");
     	$(".itemContent:last").find("#itemValue").val(propertyPropertyItem);
@@ -129,6 +126,10 @@ $(document).ready(function() {
 	    changeYear : true,
 	    dateFormat : "yy-mm-dd"
 	});
+	$("#propertyZhName,#propertyEnName, #assetType, #customerName").delegate(this,"focus",function(){
+		//delete the tips when input data exists
+		$(this).clearValidationMessage();
+	});
 
 });
 
@@ -155,13 +156,10 @@ function createOrUpdateProperty() {
 	var zhName = $("#propertyZhName").val();
 	var isCreateProperty = true;
 	
-	if (zhName == undefined || zhName == "") {
-		showTipMessage($document.find("#showError"),msg.prop("Property.error.chineseNameNull"),350,180,3000);
-		return;
-	} else if (enName == undefined || enName == "") {
-		showTipMessage($document.find("#showError"),msg.prop("Property.error.englishNameNull"),350,180,3000);
+	if("failed" == nullZnAndEnName(zhName, enName)){
 		return;
 	}
+
 	if("" != $("#editId").val()){
 		isCreateProperty = false;
 		for ( var i = 0; i < properties.length; i++) { //edit
@@ -203,6 +201,20 @@ function createOrUpdateProperty() {
 		showPropertyValueOnSide(propertyArray);
 	}
 	initCreateProperty();
+}
+
+function nullZnAndEnName(zhName, enName){
+	var validations = new Array();
+    var validation = "success";
+    
+    validations.push($("#propertyZhName")
+			.validateNull(zhName,i18nProp('property_error_chineseNameNull')));
+    validations.push($("#propertyEnName")
+    		.validateNull(enName,i18nProp('property_error_englishNameNull')));
+    
+    validation = recordFailInfo(validations);
+    
+    return validation;
 }
 
 function setObjectValue(object, type){
@@ -287,6 +299,14 @@ function setEditedPropertyValueInEditPage(property){
 }
 
 function setPropertyValueInSortTable(parent, object){
+	
+	var required = parent.find(".propertyRequired");
+	
+	if("false" == object.required){
+		required.hide();
+	}else{
+		required.show();
+	}
 	parent.find(".inputText").val("").css("display", "none");
 	parent.find(".inputSelectType").val("").css("display", "none")
 	.find(".select-panel").remove();
@@ -482,7 +502,7 @@ function getCustomerAndAssetType(){
 		            $("#customerCode").val(customerCode);
 		            customerNameInput.val(value);
 		            checkCustomerNameAndAssetType();
-		            $("#customerName").addClass("select-type");
+//		            $("#customerName").addClass("select-type");
 		        });
 		    });
 		    
@@ -492,7 +512,7 @@ function getCustomerAndAssetType(){
 		            var value = $(this).text();
 		            assetTypesInput.val(value);
 		            checkCustomerNameAndAssetType();
-		            $("#assetType").addClass("select-type");
+//		            $("#assetType").addClass("select-type");
 		        });
 		    });
 	    }
@@ -510,14 +530,22 @@ function checkCustomerNameAndAssetType(){
 function initSaveOperation(){
 	var createProperties = new Array();
 	deepCopyArray(createProperties,properties);
+	var validations = new Array();
+    var validation = "success";
+	var assetType = $("#assetType").val();
+    var customerName = $("#customerName").val();
 	
-	if (customerCode == "") {
-		showTipMessage($document.find("#showError"),msg.prop("Property.error.customerNull"),350,0,3000);
-		return;
-	} else if (assetType == "") {
-		showTipMessage($document.find("#showError"),msg.prop("Property.error.assetTypeNull"),350,0,3000);
+	validations.push($("#assetType")
+			.validateNull(assetType,i18nProp('property_error_customerNameNull')));
+	validations.push($("#customerName")
+			.validateNull(customerName,i18nProp('property_error_assetTypeNull')));
+	
+	validation = recordFailInfo(validations);
+	
+	if("failed" == validation){
 		return;
 	}
+
 	$(".properties").find(".sortable").children("li").each(function(index) {
 		var id = $(this).find("input:hidden[id='id']").val();
 		var position = $(this).parent("ul").attr("id");
@@ -551,7 +579,7 @@ function saveProperties(properties){
 	    dataType : 'json',  
 	    success : function() { 
 	    	$("#div-loader").hide();
-	    	checkCustomerNameAndAssetType();
+	    	getCustomerAndAssetType();
 	    	showMessageBarForMessage("message_customizedView_save_success");
 	    }
 	});
