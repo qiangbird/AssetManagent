@@ -26,9 +26,28 @@
 </head>
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
-    
+    <div id="blank">
+   		<a href="home"><spring:message code="navigator.home"></spring:message></a>
+   		<b>&gt;</b>
+   		<c:choose>
+   			<c:when test="${customer.customerCode == null}">
+		   		<span><spring:message code="navigator.customser.assets"></spring:message></span>
+   			</c:when>
+   			<c:otherwise>
+   				<a href="customerAsset/listAllCustomerAssets"><spring:message code="navigator.customser.assets"></spring:message></a>
+   			</c:otherwise>
+   		</c:choose>
+   		<c:if test="${customer.customerCode != null}">
+	   		<b>&gt;</b>
+   			<span>${customer.customerName }</span>
+   		</c:if>
+	</div>
     
     <input type="hidden" id="customerCode" value="${customer.customerCode }">
+    <input type="hidden" id="customerCode" value="${customer.customerCode == ''}">
+    <input type="hidden" id="customerCode" value="${customer.customerCode != ''}">
+    <input type="hidden" id="customerCode" value="${customer.customerCode == null}">
+    <input type="hidden" id="customerCode" value="${customer.customerCode != null}">
     <input type="hidden" id="userRole" value="${sessionScope.userRole }">
     <input type="hidden" id="userCode" value="${sessionScope.userVo.employeeId }">
     <div id="bodyMinHight">

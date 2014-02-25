@@ -25,6 +25,22 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="blank">
+   		<a href="home"><spring:message code="navigator.home"></spring:message></a>
+   		<b>&gt;</b>
+   		<c:choose>
+   			<c:when test="${isFixedAsset}">
+		   		<span><spring:message code="navigator.fixed.assets"></spring:message></span>
+   			</c:when>
+   			<c:when test="${requestScope.userUuid != '' }">
+   				<span><spring:message code="navigator.my.assets"></spring:message></span>
+   			</c:when>
+   			<c:otherwise>
+	   			<span><spring:message code="navigator.all.assets"></spring:message></span>
+   			</c:otherwise>
+   		</c:choose>
+	</div>
+
 	<div id="bodyMinHight">
 	<!-- <div id ="messageBar"></div> -->
 	<input type="hidden" id="tips" value="${requestScope.tips }">

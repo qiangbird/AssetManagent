@@ -359,8 +359,9 @@ a {
 }
 
 #blank a {
-    color: #23A5E3;
+    color: #418FB5;
     text-decoration:none;
+    font-weight: bold;
 }
 #blank span{
     font-weight: bold;

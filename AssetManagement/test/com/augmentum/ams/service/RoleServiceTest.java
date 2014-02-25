@@ -23,6 +23,6 @@ public class RoleServiceTest extends BaseCaseTest{
 
 	@Test
 	public void testGetRoleByName() throws BusinessException {
-		roleService.getRoleByName(RoleEnum.IT);
+		roleService.getRoleByName(RoleEnum.IT.name());
 	}
 }
