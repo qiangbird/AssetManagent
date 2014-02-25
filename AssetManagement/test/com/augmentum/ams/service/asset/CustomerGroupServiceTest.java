@@ -33,7 +33,7 @@ public class CustomerGroupServiceTest {
         CustomerGroup customerGroup =  new CustomerGroup();
         customerGroup.setDescription("bbbbb");
         customerGroup.setGroupName("bbbb");
-        customerGroup.setProcessType(ProcessTypeEnum.NONSHARE);
+        customerGroup.setProcessType(ProcessTypeEnum.NONSHARE.name());
         customerGroupService.saveCustomerGroup(customerGroup);
     }
     
