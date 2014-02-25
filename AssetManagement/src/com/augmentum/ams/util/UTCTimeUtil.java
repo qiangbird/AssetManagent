@@ -126,6 +126,9 @@ public class UTCTimeUtil {
      */
     public static String utcToLocalTime(Date date, String clientTimeOffset, String pattern) {
 
+        if (null == date) {
+            return "";
+        }
         String[] timeOffset = clientTimeOffset.split(SystemConstants.SPLIT_COMMA);
 
         Calendar calendar = Calendar.getInstance();
@@ -207,64 +210,69 @@ public class UTCTimeUtil {
      * @return
      */
     public static String formatUTCToLocalString(Date date, String timeOffset) {
-        if(null != date){
-        return UTCTimeUtil.formatDateToString(UTCTimeUtil.utcToLocalTime(date, timeOffset),
-                SystemConstants.DATE_DAY_PATTERN);
-        }else{
+        if (null != date) {
+            return UTCTimeUtil.formatDateToString(UTCTimeUtil.utcToLocalTime(date, timeOffset),
+                    SystemConstants.DATE_DAY_PATTERN);
+        } else {
             return null;
         }
     }
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
-    public static String formatUTCStringToLocalString(String utcString, String timeOffset, String pattern) {
-    	Date utcTime = formatStringToDate(utcString, SystemConstants.TIME_SECOND_PATTERN);
-    	Date localTime = utcToLocalTime(utcTime, timeOffset);
-    	return formatDateToString(localTime, pattern);
+    public static String formatUTCStringToLocalString(String utcString, String timeOffset,
+            String pattern) {
+        Date utcTime = formatStringToDate(utcString, SystemConstants.TIME_SECOND_PATTERN);
+        Date localTime = utcToLocalTime(utcTime, timeOffset);
+        return formatDateToString(localTime, pattern);
     }
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
     public static String getAssetExpiredTimeForFilterTime() {
-    	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.DAY_OF_MONTH, SystemConstants.EXPIRED_TIME_SETTING);
-    	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
-    	return formatFilterTime(s);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, SystemConstants.EXPIRED_TIME_SETTING);
+        String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-"
+                + cal.get(Calendar.DAY_OF_MONTH);
+        return formatFilterTime(s);
     }
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
     public static String formatCurrentTimeForFilterTime() {
-    	Calendar cal = Calendar.getInstance();
-    	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DAY_OF_MONTH);
-    	return formatFilterTime(s);
+        Calendar cal = Calendar.getInstance();
+        String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-"
+                + cal.get(Calendar.DAY_OF_MONTH);
+        return formatFilterTime(s);
     }
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
     public static Date getAssetExpiredTime() {
-    	Calendar cal = Calendar.getInstance();
-    	cal.add(Calendar.DAY_OF_MONTH, SystemConstants.EXPIRED_TIME_SETTING);
-    	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DAY_OF_MONTH));
-    	return localDateToUTC(s);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, SystemConstants.EXPIRED_TIME_SETTING);
+        String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-"
+                + (cal.get(Calendar.DAY_OF_MONTH));
+        return localDateToUTC(s);
     }
-    
+
     /**
      * @author Geoffrey.Zhao
      * @return
      */
     public static Date formatCurrentDateToUTC() {
-    	Calendar cal = Calendar.getInstance();
-    	String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + (cal.get(Calendar.DAY_OF_MONTH));
-    	return localDateToUTC(s);
+        Calendar cal = Calendar.getInstance();
+        String s = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-"
+                + (cal.get(Calendar.DAY_OF_MONTH));
+        return localDateToUTC(s);
     }
-    
+
 }

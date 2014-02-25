@@ -255,6 +255,7 @@ $(document).ready(function() {
              tipMessage = i18nProp('message_confirm_asset_export', $('.row .dataList-checkbox-active').size().toString());
              ShowMsg(tipMessage, function(yes){
                  if (yes) {
+                	 $("#div-loader").show();
                 	 $("#assetIds").val(assetIds);
                 	 $('#exportForm').submit();
                  }else{
@@ -265,6 +266,7 @@ $(document).ready(function() {
         	 tipMessage = i18nProp('message_confirm_asset_export', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
              ShowMsg(tipMessage, function(yes){
                  if (yes) {
+                	 $("#div-loader").show();
                 	 $("#assetIds").val(null);
                 	 $('#exportForm').submit();
                  }else{
