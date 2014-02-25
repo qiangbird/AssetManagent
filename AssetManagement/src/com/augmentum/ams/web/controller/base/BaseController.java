@@ -1,7 +1,5 @@
 package com.augmentum.ams.web.controller.base;
 
-import javax.servlet.http.HttpServletRequest;
-
 import net.sf.json.JSONObject;
 
 import org.apache.shiro.SecurityUtils;
@@ -25,8 +23,6 @@ import com.augmentum.ams.web.vo.user.UserVo;
 @Controller("baseController")
 @RequestMapping(value = "/base")
 public abstract class BaseController {
-
-    public HttpServletRequest request;
 
     public String getUserIdByShiro() {
 

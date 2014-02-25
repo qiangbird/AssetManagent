@@ -246,3 +246,23 @@ tr {
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+.deleteItem {
+	cursor: pointer;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	margin-left: 35px;
+	background: url("../../image/common/icon_delete_normal.png") no-repeat;
+}
+
+.deleteItem:hover {
+	background: url("../../image/common/icon_delete_hover.png") no-repeat;
+}
+
+.itemName {
+	cursor: pointer;
+	color: #418FB5;
+	font-weight: bold;
+	text-decoration: underline;
+}

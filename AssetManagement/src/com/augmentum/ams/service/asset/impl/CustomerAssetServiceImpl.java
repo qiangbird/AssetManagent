@@ -1,11 +1,13 @@
 package com.augmentum.ams.service.asset.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -32,9 +34,12 @@ import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.constants.SystemConstants;
+import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
+import com.augmentum.ams.excel.AssetTemplateParser;
 import com.augmentum.ams.exception.BusinessException;
+import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.Project;
@@ -51,11 +56,13 @@ import com.augmentum.ams.service.remote.RemoteProjectService;
 import com.augmentum.ams.service.search.impl.SearchAssetServiceImpl;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
+import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.FormatUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.asset.ExportVo;
 import com.augmentum.ams.web.vo.asset.ProjectVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -63,7 +70,8 @@ import com.augmentum.ams.web.vo.user.UserVo;
 
 @Service("customerAssetService")
 public class CustomerAssetServiceImpl implements CustomerAssetService {
-    private static Logger logger = Logger.getLogger(SearchAssetServiceImpl.class);
+    private static Logger logger = Logger
+            .getLogger(SearchAssetServiceImpl.class);
 
     @Autowired
     private BaseHibernateDao<Asset> baseHibernateDao;
@@ -85,6 +93,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     private RemoteProjectService remoteProjectService;
     @Autowired
     private ToDoDao todoDao;
+    @Autowired
+    private AssetDao assetDao;
 
     /*
      * (non-Javadoc)
@@ -95,11 +105,12 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public Page<Asset> findCustomerAssetsBySearchCondition(SearchCondition searchCondition,
-            String customerId) {
+    public Page<Asset> findCustomerAssetsBySearchCondition(
+            SearchCondition searchCondition, String customerId) {
 
         // init base search columns and associate way
-        String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
+        String[] fieldNames = getSearchFieldNames(searchCondition
+                .getSearchFields());
         Occur[] clauses = new Occur[fieldNames.length];
 
         for (int i = 0; i < fieldNames.length; i++) {
@@ -108,8 +119,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
-        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder()
-                .forEntity(Asset.class).get();
+        QueryBuilder qb = fullTextSession.getSearchFactory()
+                .buildQueryBuilder().forEntity(Asset.class).get();
 
         // create ordinary query, it contains search by keyword and field names
         BooleanQuery query = new BooleanQuery();
@@ -119,7 +130,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // if keyword is null or "", search condition is "*", it will search all
         // the value based on some one field
         if (null == keyWord || "".equals(keyWord) || "*".equals(keyWord)) {
-            Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
+            Query defaultQuery = new TermQuery(new Term("isExpired",
+                    Boolean.FALSE.toString()));
             query.add(defaultQuery, Occur.MUST);
         } else {
 
@@ -140,8 +152,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 Query parseQuery = null;
 
                 try {
-                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord,
-                            fieldNames, clauses, new IKAnalyzer());
+                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30,
+                            keyWord, fieldNames, clauses, new IKAnalyzer());
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block
                     logger.error("parse keyword error", e);
@@ -149,7 +161,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 bq.add(parseQuery, Occur.SHOULD);
 
                 for (int i = 0; i < fieldNames.length; i++) {
-                    Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
+                    Query keyWordPrefixQuery = new PrefixQuery(new Term(
+                            fieldNames[i], keyWord));
                     bq.add(keyWordPrefixQuery, Occur.SHOULD);
                 }
 
@@ -161,14 +174,17 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // filtering query result
         BooleanQuery booleanQuery = new BooleanQuery();
 
-        BooleanQuery statusQuery = getStatusQuery(searchCondition.getAssetStatus());
+        BooleanQuery statusQuery = getStatusQuery(searchCondition
+                .getAssetStatus());
         BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
-        Query trq = getTimeRangeQuery(searchCondition.getFromTime(), searchCondition.getToTime());
+        Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
+                searchCondition.getToTime());
 
         TermQuery termQery = new TermQuery(new Term("customer.id", customerId));
 
-        booleanQuery
-                .add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())), Occur.MUST);
+        booleanQuery.add(
+                new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
+                Occur.MUST);
         booleanQuery.add(statusQuery, Occur.MUST);
         booleanQuery.add(typeQuery, Occur.MUST);
         booleanQuery.add(trq, Occur.MUST);
@@ -178,8 +194,10 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class);
-        criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("project", FetchMode.JOIN)
-                .setFetchMode("location", FetchMode.JOIN).createAlias("customer", "customer");
+        criteria.setFetchMode("user", FetchMode.JOIN)
+                .setFetchMode("project", FetchMode.JOIN)
+                .setFetchMode("location", FetchMode.JOIN)
+                .createAlias("customer", "customer");
 
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
         criteria.add(Restrictions.eq("customer.id", customerId));
@@ -193,23 +211,26 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         page.setSortOrder(searchCondition.getSortSign());
         page.setSortColumn(transferSortName(searchCondition.getSortName()));
 
-        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
-                .setCriteriaQuery(criteria);
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
+                query, Asset.class).setCriteriaQuery(criteria);
 
-        if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
+        if (null != searchCondition.getIsGetAllRecords()
+                && searchCondition.getIsGetAllRecords()) {
             fullTextQuery.setFilter(filter);
             List<Asset> allRecords = fullTextQuery.list();
             page.setAllRecords(allRecords);
             return page;
         }
 
-        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
+        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page,
+                Asset.class);
         fullTextSession.close();
         return page;
     }
 
     private String[] getSearchFieldNames(String searchConditions) {
-        String[] fieldNames = FormatUtil.splitString(searchConditions, SystemConstants.SPLIT_COMMA);
+        String[] fieldNames = FormatUtil.splitString(searchConditions,
+                SystemConstants.SPLIT_COMMA);
 
         if (null == fieldNames || 0 == fieldNames.length) {
             fieldNames = SearchFieldHelper.getAssetFields();
@@ -217,11 +238,13 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         return fieldNames;
     }
 
-    private BooleanQuery getSentenceQuery(QueryBuilder qb, String[] sentenceFields, String keyWord) {
+    private BooleanQuery getSentenceQuery(QueryBuilder qb,
+            String[] sentenceFields, String keyWord) {
         BooleanQuery sentenceQuery = new BooleanQuery();
 
         for (int i = 0; i < sentenceFields.length; i++) {
-            Query query = qb.phrase().onField(sentenceFields[i]).sentence(keyWord).createQuery();
+            Query query = qb.phrase().onField(sentenceFields[i])
+                    .sentence(keyWord).createQuery();
             sentenceQuery.add(query, Occur.SHOULD);
         }
         return sentenceQuery;
@@ -232,17 +255,19 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         BooleanQuery statusQuery = new BooleanQuery();
 
         if (null == status || "".equals(status)) {
-            statusConditions = FormatUtil.splitString(SearchFieldHelper.getAssetStatus(),
+            statusConditions = FormatUtil.splitString(
+                    SearchFieldHelper.getAssetStatus(),
                     SystemConstants.SPLIT_COMMA);
         } else {
-            statusConditions = FormatUtil.splitString(status, SystemConstants.SPLIT_COMMA);
+            statusConditions = FormatUtil.splitString(status,
+                    SystemConstants.SPLIT_COMMA);
         }
 
         if (null != statusConditions && 0 < statusConditions.length) {
 
             for (int i = 0; i < statusConditions.length; i++) {
-                statusQuery.add(new TermQuery(new Term("status", statusConditions[i])),
-                        Occur.SHOULD);
+                statusQuery.add(new TermQuery(new Term("status",
+                        statusConditions[i])), Occur.SHOULD);
             }
         }
         return statusQuery;
@@ -253,16 +278,20 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         BooleanQuery typeQuery = new BooleanQuery();
 
         if (null == type || "".equals(type)) {
-            typeConditions = FormatUtil.splitString(SearchFieldHelper.getAssetType(),
+            typeConditions = FormatUtil.splitString(
+                    SearchFieldHelper.getAssetType(),
                     SystemConstants.SPLIT_COMMA);
         } else {
-            typeConditions = FormatUtil.splitString(type, SystemConstants.SPLIT_COMMA);
+            typeConditions = FormatUtil.splitString(type,
+                    SystemConstants.SPLIT_COMMA);
         }
 
         if (null != typeConditions && 0 < typeConditions.length) {
 
             for (int i = 0; i < typeConditions.length; i++) {
-                typeQuery.add(new TermQuery(new Term("type", typeConditions[i])), Occur.SHOULD);
+                typeQuery.add(
+                        new TermQuery(new Term("type", typeConditions[i])),
+                        Occur.SHOULD);
             }
         }
         return typeQuery;
@@ -275,17 +304,21 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         if (isNullFromTime && !isNullToTime) {
             fromTime = SystemConstants.SEARCH_MIN_DATE;
             toTime = UTCTimeUtil.formatFilterTime(toTime);
-            return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
+            return new TermRangeQuery("checkInTime", fromTime, toTime, true,
+                    true);
         } else if (isNullToTime && !isNullFromTime) {
             toTime = SystemConstants.SEARCH_MAX_DATE;
             fromTime = UTCTimeUtil.formatFilterTime(fromTime);
-            return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
+            return new TermRangeQuery("checkInTime", fromTime, toTime, true,
+                    true);
         } else if (!isNullFromTime && !isNullToTime) {
             fromTime = UTCTimeUtil.formatFilterTime(fromTime);
             toTime = UTCTimeUtil.formatFilterTime(toTime);
-            return new TermRangeQuery("checkInTime", fromTime, toTime, true, true);
+            return new TermRangeQuery("checkInTime", fromTime, toTime, true,
+                    true);
         } else {
-            return new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
+            return new TermQuery(
+                    new Term("isExpired", Boolean.FALSE.toString()));
         }
     }
 
@@ -300,12 +333,14 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     @Override
     public List<Asset> findAssetsByCustomerCode(String customerCode) {
         Customer customer = customerService.getCustomerByCode(customerCode);
-        List<Asset> customerAssetsList = assetService.findAssetsByCustomerId(customer.getId());
+        List<Asset> customerAssetsList = assetService
+                .findAssetsByCustomerId(customer.getId());
         return customerAssetsList;
     }
 
     @Override
-    public List<Customer> findVisibleCustomerList(UserVo userVo, List<CustomerVo> list) {
+    public List<Customer> findVisibleCustomerList(UserVo userVo,
+            List<CustomerVo> list) {
         List<Customer> customerVisibleList = new ArrayList<Customer>();
 
         List<Customer> nonGroupCustomerList = new ArrayList<Customer>();
@@ -317,19 +352,22 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         for (CustomerVo cv : list) {
 
             // get customer from local database
-            Customer customer = customerService.getCustomerByCode(cv.getCustomerCode());
+            Customer customer = customerService.getCustomerByCode(cv
+                    .getCustomerCode());
 
             if (null != customer) {
 
                 // check customer is shared
                 if (null != customer.getCustomerGroup()
-                        && customer.getCustomerGroup().getProcessType().equals(ProcessTypeEnum.SHARED.name())) {
+                        && customer.getCustomerGroup().getProcessType()
+                                .equals(ProcessTypeEnum.SHARED.name())) {
 
                     isSharedCustomer = true;
 
                     // TODO: customer group using string not using enum
-                    List<Customer> groupCustomerList = customerService.getCustomerByGroup(customer
-                            .getCustomerGroup().getId());
+                    List<Customer> groupCustomerList = customerService
+                            .getCustomerByGroup(customer.getCustomerGroup()
+                                    .getId());
 
                     customerVisibleList.addAll(groupCustomerList);
 
@@ -347,7 +385,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 // TODO check employee is not employee or leader and not special
                 // role user
                 if (RoleLevelUtil.checkEmployeeCanViewCustomerAssets(userVo)
-                        || specialRoleService.findSpecialRoleByUserId(userVo.getEmployeeId())) {
+                        || specialRoleService.findSpecialRoleByUserId(userVo
+                                .getEmployeeId())) {
 
                     nonGroupCustomerList.add(customer);
                 }
@@ -356,7 +395,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
 
         customerVisibleList.addAll(nonGroupCustomerList);
-
+        
         return customerVisibleList;
 
     }
@@ -383,7 +422,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     }
 
     @Override
-    public void takeOverCustomerAsset(String assetsId, String userCode, HttpServletRequest request) {
+    public void takeOverCustomerAsset(String assetsId, String userCode,
+            HttpServletRequest request) {
         String ids[] = assetsId.split(",");
         for (String id : ids) {
             Asset asset = assetService.getAsset(id);
@@ -392,7 +432,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
             if (null == user) {
                 UserVo userVo = null;
                 try {
-                    userVo = remoteEmployeeService.getRemoteUserById(userCode, request);
+                    userVo = remoteEmployeeService.getRemoteUserById(userCode,
+                            request);
                 } catch (BusinessException e) {
                     logger.error("Get user error from IAP", e);
                 }
@@ -405,16 +446,16 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     }
 
     @Override
-    public void assginCustomerAsset(String customerCode, String ids, String projectCode,
-            String userName, String assetUserCode, HttpServletRequest request)
-            throws BusinessException {
+    public void assginCustomerAsset(String customerCode, String ids,
+            String projectCode, String userName, String assetUserCode,
+            HttpServletRequest request) throws BusinessException {
         String uuId[] = ids.split(",");
         Customer customer = customerService.getCustomerByCode(customerCode);
         Project project = projectService.getProjectByProjectCode(projectCode);
         User user = userService.getUserByName(userName);
         if (null == project) {
-            ProjectVo projectVo = remoteProjectService
-                    .getProjectByProjectCode(projectCode, request);
+            ProjectVo projectVo = remoteProjectService.getProjectByProjectCode(
+                    projectCode, request);
             Project project2 = new Project();
             project2.setProjectName(projectVo.getProjectName());
             project2.setProjectCode(projectVo.getProjectCode());
@@ -440,8 +481,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition,
-            List<Customer> customers) {
+    public Page<Asset> findAllCustomerAssetBySearchCondition(
+            SearchCondition searchCondition, List<Customer> customers) {
 
         String[] customerIds = new String[customers.size()];
 
@@ -450,7 +491,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
 
         // init base search columns and associate way
-        String[] fieldNames = getSearchFieldNames(searchCondition.getSearchFields());
+        String[] fieldNames = getSearchFieldNames(searchCondition
+                .getSearchFields());
         Occur[] clauses = new Occur[fieldNames.length];
 
         for (int i = 0; i < fieldNames.length; i++) {
@@ -459,8 +501,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
-        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder()
-                .forEntity(Asset.class).get();
+        QueryBuilder qb = fullTextSession.getSearchFactory()
+                .buildQueryBuilder().forEntity(Asset.class).get();
 
         // create ordinary query, it contains search by keyword and field names
         BooleanQuery query = new BooleanQuery();
@@ -470,7 +512,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // if keyword is null or "", search condition is "*", it will search all
         // the value based on some one field
         if (null == keyWord || "".equals(keyWord) || "*".equals(keyWord)) {
-            Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
+            Query defaultQuery = new TermQuery(new Term("isExpired",
+                    Boolean.FALSE.toString()));
             query.add(defaultQuery, Occur.MUST);
         } else {
 
@@ -491,8 +534,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 Query parseQuery = null;
 
                 try {
-                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30, keyWord,
-                            fieldNames, clauses, new IKAnalyzer());
+                    parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30,
+                            keyWord, fieldNames, clauses, new IKAnalyzer());
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block
                     logger.error("parse keyword error", e);
@@ -500,7 +543,8 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 bq.add(parseQuery, Occur.SHOULD);
 
                 for (int i = 0; i < fieldNames.length; i++) {
-                    Query keyWordPrefixQuery = new PrefixQuery(new Term(fieldNames[i], keyWord));
+                    Query keyWordPrefixQuery = new PrefixQuery(new Term(
+                            fieldNames[i], keyWord));
                     bq.add(keyWordPrefixQuery, Occur.SHOULD);
                 }
 
@@ -512,12 +556,15 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         // filtering query result
         BooleanQuery booleanQuery = new BooleanQuery();
 
-        BooleanQuery statusQuery = getStatusQuery(searchCondition.getAssetStatus());
+        BooleanQuery statusQuery = getStatusQuery(searchCondition
+                .getAssetStatus());
         BooleanQuery typeQuery = getTypeQuery(searchCondition.getAssetType());
-        Query trq = getTimeRangeQuery(searchCondition.getFromTime(), searchCondition.getToTime());
+        Query trq = getTimeRangeQuery(searchCondition.getFromTime(),
+                searchCondition.getToTime());
 
-        booleanQuery
-                .add(new TermQuery(new Term("isExpired", Boolean.FALSE.toString())), Occur.MUST);
+        booleanQuery.add(
+                new TermQuery(new Term("isExpired", Boolean.FALSE.toString())),
+                Occur.MUST);
         booleanQuery.add(getCustomerQuery(customerIds), Occur.MUST);
         booleanQuery.add(statusQuery, Occur.MUST);
         booleanQuery.add(typeQuery, Occur.MUST);
@@ -527,8 +574,10 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class);
-        criteria.setFetchMode("user", FetchMode.JOIN).setFetchMode("customer", FetchMode.JOIN)
-                .setFetchMode("project", FetchMode.JOIN).setFetchMode("location", FetchMode.JOIN);
+        criteria.setFetchMode("user", FetchMode.JOIN)
+                .setFetchMode("customer", FetchMode.JOIN)
+                .setFetchMode("project", FetchMode.JOIN)
+                .setFetchMode("location", FetchMode.JOIN);
 
         Page<Asset> page = new Page<Asset>();
 
@@ -539,17 +588,19 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         page.setSortOrder(searchCondition.getSortSign());
         page.setSortColumn(transferSortName(searchCondition.getSortName()));
 
-        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Asset.class)
-                .setCriteriaQuery(criteria);
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
+                query, Asset.class).setCriteriaQuery(criteria);
 
-        if (null != searchCondition.getIsGetAllRecords() && searchCondition.getIsGetAllRecords()) {
+        if (null != searchCondition.getIsGetAllRecords()
+                && searchCondition.getIsGetAllRecords()) {
             fullTextQuery.setFilter(filter);
             List<Asset> allRecords = fullTextQuery.list();
             page.setAllRecords(allRecords);
             return page;
         }
 
-        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Asset.class);
+        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page,
+                Asset.class);
         fullTextSession.close();
         return page;
 
@@ -560,10 +611,48 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         BooleanQuery customerQuery = new BooleanQuery();
 
         for (int i = 0; i < customerIds.length; i++) {
-            TermQuery termQery = new TermQuery(new Term("customer.id", customerIds[i]));
+            TermQuery termQery = new TermQuery(new Term("customer.id",
+                    customerIds[i]));
             customerQuery.add(termQery, Occur.SHOULD);
         }
         return customerQuery;
+    }
+
+    @Override
+    public String exportAssetsForAll(SearchCondition condition,
+            List<Customer> customers, String customerId,
+            HttpServletRequest request) throws ExcelException, SQLException {
+
+        Page<Asset> page = new Page<Asset>();
+        
+        if (StringUtils.isNotBlank(customerId)) {
+            page = findCustomerAssetsBySearchCondition(condition, customerId);
+        } else {
+            page = findAllCustomerAssetBySearchCondition(condition,
+                    customers);
+        }
+        
+        if (null == page || null == page.getAllRecords()
+                || 0 == page.getAllRecords().size()) {
+            throw new ExcelException(ErrorCodeUtil.ASSET_EXPORT_FAILED,
+                    "There is no asset when export customer assets for search result");
+        } else {
+            String[] assetIdArr = new String[page.getAllRecords().size()];
+
+            for (int i = 0; i < page.getAllRecords().size(); i++) {
+                if (null != page.getAllRecords().get(i)) {
+                    assetIdArr[i] = page.getAllRecords().get(i).getId();
+                } else {
+                    throw new ExcelException(ErrorCodeUtil.ASSET_EXPORT_FAILED,
+                            "The i'th asset is not exist when export customer assets for search result");
+                }
+            }
+            List<ExportVo> exportVos = assetDao
+                    .findAssetsByIdsForExport(assetIdArr);
+            AssetTemplateParser assetTemplateParser = new AssetTemplateParser();
+
+            return assetTemplateParser.parse(exportVos, request);
+        }
     }
 
 }

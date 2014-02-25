@@ -98,8 +98,6 @@ public class AssetController extends BaseController {
     @Autowired
     private PurchaseItemService purchaseItemService;
 
-    private SearchCondition condition;
-
     private Logger logger = Logger.getLogger(AssetController.class);
 
     @RequestMapping("/software")
@@ -555,7 +553,7 @@ public class AssetController extends BaseController {
     // TODO get asset data list
     @RequestMapping(value = "/allAssetsList", method = RequestMethod.GET)
     public ModelAndView findMyAssetsBySearchCondition(SearchCondition searchCondition, String uuid,
-            HttpSession session) throws BaseException {
+            HttpSession session, HttpServletRequest request) throws BaseException {
 
         logger.info("findMyAssetsBySearchCondition method end!");
 
@@ -565,8 +563,6 @@ public class AssetController extends BaseController {
         if (null != uuid && !uuid.equals("")) {
             searchCondition.setUserUuid(uuid);
         }
-
-        condition = searchCondition;
 
         Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(searchCondition);
 
@@ -592,9 +588,13 @@ public class AssetController extends BaseController {
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @ResponseBody
     public void exportAssets(HttpServletRequest request, HttpServletResponse response,
-            String assetIds) {
+            String assetIds, SearchCondition condition) {
 
         String outPutPath = null;
+        
+        if (null == condition) {
+            condition = new SearchCondition();
+        }
         try {
 
             if (null == assetIds || "".equals(assetIds)) {

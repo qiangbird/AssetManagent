@@ -69,14 +69,20 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
 
     @Override
     public CustomerGroup getCustomerGroupById(String customerGroupId) {
-        String hql = "from CustomerGroup where id = ?";
+        String hql = "from CustomerGroup where id = ? and isExpired = false";
         return customerGroupDao.getUnique(hql, customerGroupId);
     }
 
     @Override
     public void deleteCustomerGroupById(String customerGroupId) {
+        
         CustomerGroup customerGroup = getCustomerGroupById(customerGroupId);
+        List<Customer> customers = customerService.getCustomerByGroup(customerGroupId);
         customerGroupDao.delete(customerGroup);
+        
+        for (Customer customer : customers) {
+            customer.setCustomerGroup(null);
+        }
     }
 
     @Override

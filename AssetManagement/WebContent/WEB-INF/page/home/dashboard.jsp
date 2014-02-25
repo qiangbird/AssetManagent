@@ -142,7 +142,7 @@
 			</tr>
 			-->
 			</shiro:hasRole>
-			<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
+			<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE,EMPLOYEE">
 			<tr class="tr-customer-asset">
 				<td class="tr-header-customer" style="cursor: pointer; font-weight: bold;" content="Customer Asset">
 					<div class="tree_icons tree_icon_close">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -234,17 +234,13 @@
 	<div class="newlyPurchaseItemsPanel">
 		<div class="panel_title">
 			<span><spring:message code="panel.newlyPurchaseItems"/></span>
-			<span id="" class="viewMore">
-				<span class="viewMoreIcon">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-				<span class="viewMoreContent"><spring:message code="panel.more"/></span>
-			</span>
 		</div>
 		<div class="todo_content">
 			<table>
 				<tr>
-					<th style="width: 100px;padding-left: 35px;"><spring:message code="asset.name"/></th>
-					<th style="width: 130px;"><spring:message code="Date"/></th>
-					<th style="width: 115px;"><spring:message code="delete"/></th>
+					<th style="width: 120px;padding-left: 30px;"><spring:message code="asset.name"/></th>
+					<th style="width: 140px;"><spring:message code="Date"/></th>
+					<th style="width: 99px;"><spring:message code="delete"/></th>
 				</tr>
 			</table>
 		</div>
@@ -267,7 +263,7 @@
 					<th style="width: 115px;"><spring:message code="todo.returnedTime"/></th>
 				</tr>
 			</table>
-			<input class="confirmButton" id="returnedAsset" type="button" value="<spring:message code='todo.return'/>"/>
+			<input class="confirmButton" id="returnedAsset" type="button" value="<spring:message code='confirm'/>"/>
 		</div>
 	</div>
 	</shiro:hasRole>

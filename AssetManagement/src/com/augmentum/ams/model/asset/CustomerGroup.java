@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
@@ -58,7 +59,8 @@ public class CustomerGroup extends BaseModel {
     /**
      *  The customers in the group
      */
-    @OneToMany(fetch = FetchType.EAGER,mappedBy="customerGroup",cascade =CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customerGroup", cascade = CascadeType.ALL)
+    @ContainedIn
     private List<Customer> customers;
     
     public String getDescription() {

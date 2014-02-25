@@ -228,10 +228,12 @@ $(document).ready(function(){
 			success: function(data){
 				var purchaseItems = data.newlyPurchaseItemsList;
 				for (var i = 0; i < purchaseItems.length; i++) {
-					$(".newlyPurchaseItemsPanel table").append("<tr><td class='itemIdTd'><input class='itemId' value=" 
-							+ purchaseItems[i].id + " /></td><td><a class='itemName'>" + purchaseItems[i].itemName + "</a></td><td>" 
-							+ purchaseItems[i].deliveryDate + "</td><td><a class='deleteItem'></a></td><td>");
+					$(".newlyPurchaseItemsPanel table").append("<tr><td><input type='hidden' class='itemId' value=" 
+							+ purchaseItems[i].id + "><div style='width:120px;margin-left:30px;' class='overFlow itemName'>" 
+							+ purchaseItems[i].itemName + "</div></td><td>" 
+							+ purchaseItems[i].deliveryDate + "</td><td><div class='deleteItem'></div></td><td>");
 				}
+				addOverFlowStyle();
 			}
 		});
 	}
@@ -505,6 +507,7 @@ $(document).ready(function(){
         success : function(data){
         	
         	if (data.customer == null || data.assetCount == null) {
+        		$(".tr-header-customer").parent("tr").remove();
         		return;
         	} else {
         		var available = "available";

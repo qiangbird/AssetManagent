@@ -116,7 +116,19 @@
                 </ul>
             </div>
             <%-- </shiro:hasAnyRoles> --%>
-            
+            <form name="exportForm" id="exportForm" action="customerAsset/export">
+	        	<input type="hidden" name="assetIds" id="assetIds" value=""/>
+	        	
+	        	<input type="hidden" name="assetStatus" id="condition_assetStatus" value="" />
+	        	<input type="hidden" name="assetType" id="condition_assetType" value="" />
+	        	<input type="hidden" name="keyWord" id="condition_keyWord" value="" />
+	        	<input type="hidden" name="searchFields" id="condition_searchFields" value="" />
+	        	<input type="hidden" name="fromTime" id="condition_fromTime" value="" />
+	        	<input type="hidden" name="toTime" id="condition_toTime" value="" />
+	        	
+	        	<input type="hidden" name="customerCode" value="${customer.customerCode }" />
+	        </form>
+	        <a id="exportIcon" ></a>
         </div>
         </div>
     </div>

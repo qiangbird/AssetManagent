@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,8 +82,12 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getCustomerByGroup(String groupId) {
-        String hql = "from Customer customer where customer.customerGroup.id=?";
-        return customerDao.find(hql,groupId);
+        DetachedCriteria criteria = DetachedCriteria.forClass(Customer.class);
+        criteria.createAlias("customerGroup", "customerGroup")
+                    .add(Restrictions.eq("customerGroup.isExpired", Boolean.FALSE))
+                    .add(Restrictions.eq("customerGroup.id", groupId))
+                    .add(Restrictions.eq("isExpired", Boolean.FALSE));
+        return customerDao.findByCriteria(criteria);
     }
 
 	@Override

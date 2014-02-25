@@ -19,6 +19,7 @@ import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 import org.hibernate.validator.constraints.NotBlank;
 import org.wltea.analyzer.lucene.IKAnalyzer;
@@ -53,12 +54,13 @@ public class Customer extends BaseModel implements Serializable {
      *  If the groupCode is null, the default process is 
      *  not_share
      */
-	@ManyToOne(fetch = FetchType.EAGER, optional = true)
+	@ManyToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "groupId")
+	@IndexedEmbedded(depth = 1)
     private CustomerGroup customerGroup;
 
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer",cascade =CascadeType.PERSIST)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
 	@ContainedIn
 	private List<Asset> assets = new ArrayList<Asset>();
 

@@ -28,7 +28,7 @@
 		<c:when test="${todoFlag == 'returned' }">
 			<div class="content">
 				<div class="dataList">
-					<input type="button" value="<spring:message code='todo.return'/>" class="confirm-button" id="confirmReturnedButton"/>
+					<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReturnedButton"/>
 				</div>
 			</div>
 		</c:when>

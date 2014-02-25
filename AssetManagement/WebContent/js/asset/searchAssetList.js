@@ -273,6 +273,14 @@ $(document).ready(function() {
                  if (yes) {
                 	 $("#div-loader").show();
                 	 $("#assetIds").val(null);
+                	 
+                	 $("#condition_keyWord").val(criteria.keyWord);
+                	 $("#condition_fromTime").val(criteria.fromTime);
+                	 $("#condition_toTime").val(criteria.toTime);
+                	 $("#condition_assetStatus").val(criteria.assetStatus);
+                	 $("#condition_assetType").val(criteria.assetType);
+                	 $("#condition_searchFields").val(criteria.searchFields);
+                	 
                 	 $('#exportForm').ajaxSubmit(
                     		 function(){
                     			 showMessageBarForMessage("exoprt_assets_success");
@@ -339,7 +347,6 @@ function setCriteria() {
     criteria.userUuid = $("#userUuid").val();
     criteria.isFixedAsset = $("#isFixedAsset").val();
     criteria.isWarrantyExpired = $("#isWarrantyExpired").val();
-    criteria.isLicenseExpired = $("#isLicenseExpired").val();
     
     // set search fields
     var searchFields = "";

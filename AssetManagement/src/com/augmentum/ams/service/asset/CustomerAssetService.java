@@ -1,10 +1,12 @@
 package com.augmentum.ams.service.asset;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.augmentum.ams.exception.BusinessException;
+import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.user.User;
@@ -23,6 +25,7 @@ public interface CustomerAssetService {
      * @return
      */
     List<Asset> findAssetsByCustomerCode(String customerCode);
+
     /**
      * 
      * @description TODO
@@ -36,7 +39,9 @@ public interface CustomerAssetService {
      * @param customerId
      * @return
      */
-    Page<Asset> findCustomerAssetsBySearchCondition(SearchCondition searchCondition,String customerId);
+    Page<Asset> findCustomerAssetsBySearchCondition(
+            SearchCondition searchCondition, String customerId);
+
     /**
      * 
      * @description TODO
@@ -47,6 +52,7 @@ public interface CustomerAssetService {
      * @return
      */
     List<Customer> findVisibleCustomerList(UserVo userVo, List<CustomerVo> list);
+
     /**
      * 
      * @description return assets to project or IT
@@ -55,8 +61,8 @@ public interface CustomerAssetService {
      * @param status
      * @param ids
      */
-    void returnCustomerAsset(User returner, String status,String ids);
-    
+    void returnCustomerAsset(User returner, String status, String ids);
+
     /**
      * 
      * @description TODO
@@ -66,7 +72,9 @@ public interface CustomerAssetService {
      * @param userCode
      * @param request
      */
-    void takeOverCustomerAsset(String assetsId, String userCode, HttpServletRequest request);
+    void takeOverCustomerAsset(String assetsId, String userCode,
+            HttpServletRequest request);
+
     /**
      * @description TODO
      * @author Jay.He
@@ -77,15 +85,28 @@ public interface CustomerAssetService {
      * @param userName
      * @param assetUserCode
      * @param request
-     * @throws BusinessException 
+     * @throws BusinessException
      */
-    void assginCustomerAsset(String customerCode, String ids, String projectCode, String userName,
-            String assetUserCode, HttpServletRequest request) throws BusinessException;
-    
+    void assginCustomerAsset(String customerCode, String ids,
+            String projectCode, String userName, String assetUserCode,
+            HttpServletRequest request) throws BusinessException;
+
     /**
      * @author Geoffrey.Zhao
      * @param customers
      * @return
      */
-    Page<Asset> findAllCustomerAssetBySearchCondition(SearchCondition searchCondition, List<Customer> customers);
+    Page<Asset> findAllCustomerAssetBySearchCondition(
+            SearchCondition searchCondition, List<Customer> customers);
+
+    /**
+     * @author John.li
+     * @param request
+     * @param page
+     * @throws ExcelException
+     * @throws SQLException
+     */
+    String exportAssetsForAll(SearchCondition condition,
+            List<Customer> customers, String customerId,
+            HttpServletRequest request) throws ExcelException, SQLException;
 }

@@ -418,6 +418,42 @@ $(document).ready(function(){
 			return;
 		}
 	});
+	
+	$("#exportIcon").click(function(){
+   	 var tipMessage = "";
+   	 var assetIds = getActivedAssetIds();
+        
+        if (assetIds != "") {
+       	 
+            tipMessage = i18nProp('message_confirm_asset_export', $('.row .dataList-checkbox-active').size().toString());
+            ShowMsg(tipMessage, function(yes){
+                if (yes) {
+               	 $("#assetIds").val(assetIds);
+               	 $('#exportForm').submit();
+                }else{
+                    return;
+                }
+            });
+        } else {
+       	 tipMessage = i18nProp('message_confirm_asset_export', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
+            ShowMsg(tipMessage, function(yes){
+                if (yes) {
+               	 $("#assetIds").val(null);
+               	 
+               	 $("#condition_keyWord").val(criteria.keyWord);
+	           	 $("#condition_fromTime").val(criteria.fromTime);
+	           	 $("#condition_toTime").val(criteria.toTime);
+	           	 $("#condition_assetStatus").val(criteria.assetStatus);
+	           	 $("#condition_assetType").val(criteria.assetType);
+	           	 $("#condition_searchFields").val(criteria.searchFields);
+           	 
+               	 $('#exportForm').submit();
+                }else{
+                    return;
+                }
+            });
+        }
+    });
 });
 
 function checkInArr(Arr, ele) {
@@ -438,3 +474,11 @@ function getIndexInArr(Arr, ele) {
     }
     return -1;
  }
+
+function getActivedAssetIds() {
+    var assetIds = [];
+    $('.row .dataList-checkbox-active').each(function(){
+        assetIds.push(($(this).attr('pk')));
+    });
+    return assetIds.toString();
+}

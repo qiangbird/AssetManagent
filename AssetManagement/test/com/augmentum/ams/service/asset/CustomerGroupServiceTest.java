@@ -3,6 +3,10 @@
  */
 package com.augmentum.ams.service.asset;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
 
@@ -27,6 +32,8 @@ public class CustomerGroupServiceTest {
     Logger logger = Logger.getLogger(CustomerGroupServiceTest.class);
     @Autowired
     private CustomerGroupService customerGroupService;
+    @Autowired
+    private CustomerService customerService;
     
     @Test
     public void saveCustomerGroupTest(){
@@ -35,6 +42,23 @@ public class CustomerGroupServiceTest {
         customerGroup.setGroupName("bbbb");
         customerGroup.setProcessType(ProcessTypeEnum.NONSHARE.name());
         customerGroupService.saveCustomerGroup(customerGroup);
+    }
+    
+    @Test
+    public void getCustomerByGroup() {
+        List<Customer> list = customerService.getCustomerByGroup("402896124466e075014466e2488b0000");
+        
+        Set<Customer> set = new HashSet<Customer>(list);
+        logger.info(set.size());
+        
+        for (Customer customer : set) {
+            logger.info(customer.getCustomerName());
+        }
+    }
+    
+    @Test
+    public void deleteCustomerGroup() {
+        customerGroupService.deleteCustomerGroupById("402896124466e075014466e2488b0000");
     }
     
 }
