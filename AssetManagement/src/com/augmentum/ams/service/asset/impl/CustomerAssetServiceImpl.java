@@ -323,7 +323,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
                 // check customer is shared
                 if (null != customer.getCustomerGroup()
-                        && customer.getCustomerGroup().getProcessType() == ProcessTypeEnum.SHARED) {
+                        && customer.getCustomerGroup().getProcessType().equals(ProcessTypeEnum.SHARED.name())) {
 
                     isSharedCustomer = true;
 

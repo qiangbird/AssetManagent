@@ -28,14 +28,14 @@
 		<c:when test="${todoFlag == 'returned' }">
 			<div class="content">
 				<div class="dataList">
-					<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReturnedButton"/>
+					<input type="button" value="<spring:message code='todo.return'/>" class="confirm-button" id="confirmReturnedButton"/>
 				</div>
 			</div>
 		</c:when>
 		<c:when test="${todoFlag == 'received' }">
 			<div class="content">
 				<div class="dataList">
-					<input type="button" value="<spring:message code='confirm'/>" class="confirm-button" id="confirmReceivedButton"/>
+					<input type="button" value="<spring:message code='todo.receive'/>" class="confirm-button" id="confirmReceivedButton"/>
 				</div>
 			</div>
 		</c:when>

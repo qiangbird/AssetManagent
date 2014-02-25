@@ -327,3 +327,15 @@ a {
 	font-size: 14px;
 	line-height: 18px;
 }
+
+#div-loader {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	opacity: 0.4;
+	background: #DDD url(../../image/common/loader.gif) no-repeat 50% 50%;
+	z-index: 9999999;
+}

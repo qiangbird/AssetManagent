@@ -71,12 +71,12 @@
                 <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
                     <ul class="sencndMenuUl">
                         <li><a href="asset/allAssets"><spring:message code="navigator.all.assets" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.fixed.assets" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.machine" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.monitor" /></a></li>
-                        <li><a href="#/asset/software"><spring:message code="navigator.software" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.device" /></a></li>
-                        <li><a href="#"><spring:message code="navigator.other.assets" /></a></li>
+                        <li><a href="asset/allAssets?isFixedAsset=true"><spring:message code="navigator.fixed.assets" /></a></li>
+                        <li><a href="asset/allAssets?type=machine"><spring:message code="navigator.machine" /></a></li>
+                        <li><a href="asset/allAssets?type=monitor"><spring:message code="navigator.monitor" /></a></li>
+                        <li><a href="asset/allAssets?type=software"><spring:message code="navigator.software" /></a></li>
+                        <li><a href="asset/allAssets?type=device"><spring:message code="navigator.device" /></a></li>
+                        <li><a href="asset/allAssets?type=otherassets"><spring:message code="navigator.other.assets" /></a></li>
                     </ul>
                 </li>
                 </shiro:hasAnyRoles>
@@ -145,6 +145,7 @@
   		<p id="warning-message-body"></p>
  	</div>
  	<div id ="messageBar"></div>
+ 	<div id="div-loader"></div>
     <script type="text/javascript" src="<%=basePath%>js/common/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui-1.8.18.custom.min.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/autocomplete.js"></script>

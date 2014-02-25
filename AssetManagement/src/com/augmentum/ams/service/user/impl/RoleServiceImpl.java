@@ -40,14 +40,15 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void saveInitRole() {
         List<Role> roles = new ArrayList<Role>();
+        Date date = UTCTimeUtil.localDateToUTC();
+        
         for (RoleEnum roleEnum : RoleEnum.values()) {
 
             // Because RoleEnum.SPECIAL_ROLE info in special_role table, so here
             // needn't save its info in database
-            if (!roleEnum.equals(RoleEnum.SPECIAL_ROLE)) {
+            if (!roleEnum.equals(RoleEnum.SPECIAL_ROLE.name())) {
                 Role role = new Role();
-                role.setRoleName(roleEnum);
-                Date date = UTCTimeUtil.localDateToUTC();
+                role.setRoleName(roleEnum.name());
                 role.setCreatedTime(date);
                 role.setUpdatedTime(date);
                 roles.add(role);

@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -20,7 +18,6 @@ import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
-import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
 
 /**
  * @description divide the customers into group.
@@ -55,9 +52,8 @@ public class CustomerGroup extends BaseModel {
      *  The process type of the group
      */
     @Column(name = "process_type", length = 128, nullable = false)
-    @Enumerated(value = EnumType.STRING)
     @Field(name = "processType", index = Index.UN_TOKENIZED, store = Store.YES)
-    private ProcessTypeEnum processType;
+    private String processType;
 
     /**
      *  The customers in the group
@@ -81,14 +77,6 @@ public class CustomerGroup extends BaseModel {
         this.groupName = groupName;
     }
 
-    public ProcessTypeEnum getProcessType() {
-        return processType;
-    }
-
-    public void setProcessType(ProcessTypeEnum processType) {
-        this.processType = processType;
-    }
-
 	public List<Customer> getCustomers() {
 		return customers;
 	}
@@ -96,5 +84,13 @@ public class CustomerGroup extends BaseModel {
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
 	}
-    
+
+    public String getProcessType() {
+        return processType;
+    }
+
+    public void setProcessType(String processType) {
+        this.processType = processType;
+    }
+	
 }

@@ -1,18 +1,17 @@
 package com.augmentum.ams.util;
 
-import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 public class RoleLevelUtil {
 
-    public static RoleEnum getRoleByUserVo(UserVo userVo) {
+    public static String getRoleByUserVo(UserVo userVo) {
 
         String employeeLevel = userVo.getEmployeeLevel();
-        RoleEnum role = null;
+        String role = null;
         if (employeeLevel.equalsIgnoreCase("employee") || employeeLevel.equalsIgnoreCase("leader")) {
-            role = RoleEnum.EMPLOYEE;
+            role = "EMPLOYEE";
         } else {
-            role = RoleEnum.MANAGER;
+            role = "MANAGER";
         }
         return role;
     }
@@ -20,7 +19,6 @@ public class RoleLevelUtil {
     public static boolean checkEmployeeCanViewCustomerAssets(UserVo userVo) {
 
         String employeeLevel = userVo.getEmployeeLevel();
-        RoleEnum role = null;
         if (employeeLevel.equalsIgnoreCase("employee") || employeeLevel.equalsIgnoreCase("leader")) {
             return false;
         } else {

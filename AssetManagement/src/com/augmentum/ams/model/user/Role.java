@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -15,7 +13,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.augmentum.ams.model.base.BaseModel;
-import com.augmentum.ams.model.enumeration.RoleEnum;
 
 /**
  * @author Rudy.Gao
@@ -31,8 +28,7 @@ public class Role extends BaseModel {
 	 * The role name of an user
 	 */
 	@Column(name = "role_name", nullable = false, unique = true, length = 75)
-	@Enumerated(EnumType.STRING)
-	private RoleEnum roleName;
+	private String roleName;
 
 	@ManyToMany(targetEntity = Authority.class, fetch = FetchType.LAZY)
 	@JoinTable(name = "role_authority", joinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "authority_id", referencedColumnName = "id", nullable = false) })
@@ -43,14 +39,6 @@ public class Role extends BaseModel {
 
 	@Transient
 	private boolean isSelected;
-
-	public RoleEnum getRoleName() {
-		return roleName;
-	}
-
-	public void setRoleName(RoleEnum roleName) {
-		this.roleName = roleName;
-	}
 
 	public List<Authority> getAuthorities() {
 		return authorities;
@@ -76,4 +64,11 @@ public class Role extends BaseModel {
 		this.isSelected = isSelected;
 	}
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
 }

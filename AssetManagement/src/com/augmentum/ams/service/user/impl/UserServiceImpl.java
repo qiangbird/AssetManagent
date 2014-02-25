@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
             userDao.save(user);
         }
         List<Role> roles = new ArrayList<Role>();
-        RoleEnum companyRole = RoleLevelUtil.getRoleByUserVo(userVo);
+        String companyRole = RoleLevelUtil.getRoleByUserVo(userVo);
         roles.addAll(user.getRoles());
         Role role = new Role();
         role.setRoleName(companyRole);

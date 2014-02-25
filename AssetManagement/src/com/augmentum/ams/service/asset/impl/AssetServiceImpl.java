@@ -234,7 +234,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 soft.setMaxUseNum(newSoft.getMaxUseNum());
                 soft.setAdditionalInfo(newSoft.getAdditionalInfo());
                 soft.setLicenseKey(newSoft.getLicenseKey());
-                soft.setSoftwareExpiredTime(newSoft.getSoftwareExpiredTime());
                 soft.setManagerVisible(newSoft.isManagerVisible());
                 softwareService.updateSoftware(soft);
                 asset.setSoftware(soft);
@@ -482,7 +481,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             }
             receiver = userService.getUserByUserId(userId);
 
-            if (RoleLevelUtil.getRoleByUserVo(userVo).name().equals(RoleEnum.MANAGER.name())
+            if (RoleLevelUtil.getRoleByUserVo(userVo).equals(RoleEnum.MANAGER.name())
                     || specialRoleService.findSpecialRoleByUserId(userId)) {
                 assigningFlag = true;
             }
@@ -794,13 +793,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             } else {
                 obj.put("customerName", asset.getCustomer().getCustomerName());
             }
-
-            if (null == asset.getUser()) {
-                obj.put("userName", "");
-            } else {
-                obj.put("userName", asset.getUser().getUserName());
-            }
-
+            
+            obj.put("keeper", asset.getKeeper());
             jsonArray.add(obj);
         }
         return jsonArray;

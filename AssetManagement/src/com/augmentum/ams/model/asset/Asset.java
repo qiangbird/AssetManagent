@@ -138,19 +138,19 @@ public class Asset extends BaseModel {
     @IndexedEmbedded(depth = 1)
     private Software software;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy="asset", cascade = CascadeType.ALL)
     @ContainedIn
     private Machine machine;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy="asset", cascade = CascadeType.ALL)
     @ContainedIn
     private Monitor monitor;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy="asset", cascade = CascadeType.ALL)
     @ContainedIn
     private Device device;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy="asset")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy="asset", cascade = CascadeType.ALL)
     @ContainedIn
     private OtherAssets otherAssets;
 

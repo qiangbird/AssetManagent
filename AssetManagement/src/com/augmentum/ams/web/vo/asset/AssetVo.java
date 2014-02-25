@@ -29,7 +29,7 @@ public class AssetVo {
     private String assetId;
 
     @NotBlank(message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_FAILED)
-    @Size(max = 10, message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_LENGTH_FAILED, groups = GroupValidation.class)
+    @Size(max = 36, message = ErrorCodeUtil.ASSET_NANE_VALIDATOR_LENGTH_FAILED, groups = GroupValidation.class)
     private String assetName;
 
     private String manufacturer;

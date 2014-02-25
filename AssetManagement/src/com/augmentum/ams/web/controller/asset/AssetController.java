@@ -226,7 +226,7 @@ public class AssetController extends BaseController {
             }
         }
         modelAndView.setViewName("redirect:/asset/allAssets");
-
+        
         logger.info("saveAsset method end!");
         return modelAndView;
     }

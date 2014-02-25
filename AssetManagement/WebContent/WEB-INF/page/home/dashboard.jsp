@@ -215,8 +215,8 @@
 				<table>
 					<tr>
 						<th><spring:message code="asset.id"/></th>
-						<th><spring:message code="asset.name"/></th>
-						<th><spring:message code="Customer"/></th>
+						<th style="width: 150px;"><spring:message code="asset.name"/></th>
+						<th style="width: 150px;"><spring:message code="Customer"/></th>
 						<th><spring:message code="asset.warranty"/></th>
 					</tr>
 				</table>
@@ -240,7 +240,7 @@
 		<div class="todo_content">
 			<table>
 				<tr>
-					<th style="width: 185px;"><spring:message code="asset.name"/></th>
+					<th style="width: 100px;padding-left: 35px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Date"/></th>
 					<th style="width: 115px;"><spring:message code="delete"/></th>
 				</tr>
@@ -260,7 +260,7 @@
 			<table>
 				<tr>
 					<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
-					<th style="width: 100px;"><spring:message code="asset.name"/></th>
+					<th style="width: 120px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Customer"/></th>
 					<th style="width: 115px;"><spring:message code="todo.returnedTime"/></th>
 				</tr>
@@ -283,7 +283,7 @@
 			<table>
 				<tr>
 					<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
-					<th style="width: 100px;"><spring:message code="asset.name"/></th>
+					<th style="width: 120px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Customer"/></th>
 					<th style="width: 115px;"><spring:message code="todo.receivedTime"/></th>
 				</tr>
@@ -306,9 +306,9 @@
 				<table>
 					<tr>
 						<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
-						<th style="width: 100px;"><spring:message code="asset.name"/></th>
+						<th style="width: 120px;"><spring:message code="asset.name"/></th>
 						<th style="width: 130px;"><spring:message code="Customer"/></th>
-						<th style="width: 115px;"><spring:message code="User"/></th>
+						<th style="width: 100px;"><spring:message code="keeper"/></th>
 					</tr>
 				</table>
 				<input class="confirmButton" id="idleAsset" type="button" value="<spring:message code="returnToIT"/>"/>
@@ -320,6 +320,7 @@
 </div>
 
 	<input type="hidden" id="locale" value="${sessionScope.localeLanguage }">
+	<input type="hidden" id="currentUserRoles" value="${sessionScope.userRoleList }">
     <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
     
 <script type="text/javascript" src="js/home/dashboard.js"></script>
