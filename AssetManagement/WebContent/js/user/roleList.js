@@ -211,7 +211,8 @@ function checkEmployees(listEmployees){
 			
 			// employee already exist
 			for(var j = 0; j< usersRoleInfo.length; j++) {
-				if(employeeId == usersRoleInfo[j].employeeId) {
+				// employee already exist and has already been delete
+				if(employeeId == usersRoleInfo[j].employeeId && usersRoleInfo[j].isDelete != "true") {
 					$("#autoText li").each(function() {
 						var errorEmployeeName = $(this).find("p").text();
 						if(employeeName == errorEmployeeName) {
