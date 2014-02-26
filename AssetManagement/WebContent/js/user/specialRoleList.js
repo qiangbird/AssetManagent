@@ -8,7 +8,8 @@ var isDelete =  [];
 var employees = [];
 
 $(document).ready(function() {
-	findCustomersAndSpecialRoles();
+	findCustomers();
+	findSpecialRoles();
 	
 	$(".roleListContent").delegate(".deleteLink", "click", function(){
 		var parent = $(this).parents(".employeeRoleInfo");
@@ -49,7 +50,52 @@ $(document).ready(function() {
 	$("#cancelButton").click(function(){
 		findSpecialRoles();
 	});
+	$("#bodyMinHight").delegate("#customerName, #token-input-employeeName","blur",function(){
+		if("" != $(".employeeName").val()){
+			$(".token-input-list-facebook").clearValidationMessage();
+		}
+		if("" != $("#customerName").val()){
+			$("#customerName").clearValidationMessage();
+		}
+	});
+	
+	$("#customerName").click(function() {
+	    for(var i = 0; i < customers.length; i++){
+	    		customerNames[i] = customers[i].customerName;
+	    		customerCodes[i] = customers[i].customerCode;
+	    }
+	    $("#customerName").autocomplete({
+	         source : customerNames,
+	         select : function(e,ui) {
+	                $("#customerCode").val(customerCodes[getIndexInArr(customerNames,ui.item.value)]);
+	                $("#project").val("");
+	                var customerCode = customerCodes[getIndexInArr(customerNames,ui.item.value)];
+	                findEmployeesByCustomerCode(customerCode);
+	         }
+	   });
+	});
 });
+
+function findCustomers(){
+	$.ajax({
+	    type : 'GET',
+	    contentType : 'application/json',
+	    url : 'specialRole/findSpecialRoles',
+	    dataType : 'json',
+	    success : function(data) {
+	    	customers = data.customers;
+	    }
+	});
+}
+
+function getIndexInArr(Arr, ele) {
+    for ( var i = 0; i < Arr.length; i++) {
+        if (ele == Arr[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 function clearInputBox(){
 	//delete the token by trigger the click event of the .token-input-delete-token-facebook
@@ -75,21 +121,42 @@ function saveOperation(specialRoles){
 }
 
 function initAddProccess(){
-	var existCustomer = checkCustomer();
-	if(true == existCustomer){
+	if("success" == checkCustomer()){
 		checkEmployees();
 	}else{
-		ShowMsg(i18nProp('message_warn_customer_is_null', null));
+		return;
 	}
 }
 
-function checkCustomer(customer){
-	var customer = $("#customerName").val();
-	if("" != customer.trim()){
-		return true;
-	}else{
-		return false;
-	}
+function checkCustomer(){
+	var validations = new Array();
+    var validation = "success";
+    var customerNameInput = $("#customerName").val();
+    var existCustomer = false;
+    
+    if("" == customerNameInput){
+    	$("#customerCode").val("");
+    }else{
+    	for(var i = 0; i < customers.length; i++){
+    		customerName = customers[i].customerName;
+    		if(customerName == customerNameInput){
+    			$("#customerCode").val(customers[i].customerCode);
+    			existCustomer = true;
+    			break;
+    		}
+    	}
+    }
+    if(false == existCustomer){
+    	$("#customerCode").val("");
+    }
+    var customerCode = $("#customerCode").val();
+    
+    validations.push($("#customerName")
+    		.validateNull(customerCode,i18nProp('message_warn_customer_is_null_or_not_exist')));
+    
+    validation = recordFailInfo(validations);
+    
+    return validation;
 }
 
 function checkEmployees(){
@@ -106,7 +173,8 @@ function checkEmployees(){
 /*			var department = listEmployees[i].split("#")[2];
 			var manager = listEmployees[i].split("#")[3];*/
 			if(employeeName == "") {
-				ShowMsg(i18nProp('message_warn_user_is_null', null));
+				$(".token-input-list-facebook").push($(".token-input-list-facebook")
+						.validateNull(employeeName,i18nProp('message_warn_user_is_null')));
 				return;
 			}else if(employeeId == "" || employeeId == undefined) {  // employee not exist
 				$("#autoText li").each(function() {
@@ -144,7 +212,7 @@ function checkEmployees(){
 		if(0 < errorEmployeeNames.length){
 			var names = errorEmployeeNames.join(",");
 			employees.length = 0;
-			ShowMsg(i18nProp('message_warn_role_illegal', names));
+			showMessageBarForOperationResultMessage(i18nProp('message_warn_role_illegal', names));
 			return;
 		}else{
 			for(var m = 0; m < employees.length; m++){
@@ -173,56 +241,6 @@ function displaySpecialRoleList(specialRoles){
 			lastDivToAppend.find(".managerInRow").text(specialRoles[i].manager);
 		}
 	}
-}
-
-function findCustomersAndSpecialRoles(){
-	$.ajax( {  
-	    type : 'GET',  
-	    contentType : 'application/json',  
-	    url : 'specialRole/findSpecialRoles',  
-	    dataType : 'json',  
-	    success : function(data) { 
-	    	customers = data.customers;
-	    	specialRoles = data.specialRoles;
-	    	var customersLength = customers.length;
-	    	
-	    	for(var i = 0; i < customersLength; i++){
-	    		customerNames[i] = customers[i].customerName;
-	    		customerCodes[i] = customers[i].customerCode;
-	    	}
-		    var customerNameInput = $("#customerName");
-		    var customerNameParent = customerNameInput.parent("div");
-		    customerNameParent.css("z-index", "10");
-		    var customerNamesList = customerNames;
-		    customerNameInput.val("");
-		 
-		    var customerNamePanel = $("<div class='select-panel'>").appendTo(customerNameParent);
-		    var customerNameMessDiv = $("<div class='message-div'></div>").appendTo(customerNamePanel);
-		    var customerNameShdowDiv = initShdowDiv(customerNamePanel, customerNamesList , 10);
-		    closeOrOpenDiv(customerNamePanel);
-		    var customerNameLis = customerNamePanel.find("li");
-		    
-		    customerNameLis.each(function(index) {
-		        $(this).click(function() {
-		            var value = $(this).text();
-		            var customerCode = customerCodes[index];
-		            customerNameInput.val(value);
-		            $("#customerCode").val(customerCode);
-		            clearInputBox();
-		            findEmployeesByCustomerCode(customerCode);
-		            $("#customerName").addClass("select-type");
-		        });
-		    });
-		    
-		    if(0 < specialRoles.length){
-		    	for(var i = 0; i < specialRoles.length; i++){
-		    		specialRoles[i].isNew = "false";
-	        	}
-	        	$(".roleDispaly").find(".employeeRoleInfo").remove();
-		    	displaySpecialRoleList(specialRoles);
-		    }
-	    }
-	});
 }
 
 function findSpecialRoles(){

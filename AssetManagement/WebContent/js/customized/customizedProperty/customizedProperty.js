@@ -10,7 +10,8 @@ var properties = [];
 $(document).ready(function() {
 	getCustomerAndAssetType();
 	$("#cancel").click(function(){
-		checkCustomerNameAndAssetType();
+//		checkCustomerNameAndAssetType();
+		window.history.back();
 	});
 	$("#save").click(function(){
 		initSaveOperation();
@@ -126,11 +127,12 @@ $(document).ready(function() {
 	    changeYear : true,
 	    dateFormat : "yy-mm-dd"
 	});
-	$("#propertyZhName,#propertyEnName, #assetType, #customerName").delegate(this,"focus",function(){
+	$("#propertyZhName,#propertyEnName").delegate(this,"blur",function(){
 		//delete the tips when input data exists
-		$(this).clearValidationMessage();
+		if("" != $(this).val()){
+			$(this).clearValidationMessage();
+		}
 	});
-
 });
 
 function doEditOpertion(object){
@@ -530,19 +532,18 @@ function checkCustomerNameAndAssetType(){
 function initSaveOperation(){
 	var createProperties = new Array();
 	deepCopyArray(createProperties,properties);
-	var validations = new Array();
-    var validation = "success";
+	
 	var assetType = $("#assetType").val();
     var customerName = $("#customerName").val();
 	
-	validations.push($("#assetType")
-			.validateNull(assetType,i18nProp('property_error_customerNameNull')));
-	validations.push($("#customerName")
-			.validateNull(customerName,i18nProp('property_error_assetTypeNull')));
-	
-	validation = recordFailInfo(validations);
-	
-	if("failed" == validation){
+	if("" == assetType && "" == customerName){
+		ShowMsg(i18nProp('message_warn_customerName_and_assetType_are_null', null));
+		return;
+	}else if("" == assetType){
+		ShowMsg(i18nProp('message_warn_assetType_is_null', null));
+		return;
+	}else if("" == customerName){
+		ShowMsg(i18nProp('message_warn_customerName_is_null', null));
 		return;
 	}
 

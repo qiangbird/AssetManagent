@@ -126,7 +126,7 @@ $.ajax({
                 }
             },
             error : function() {
-                alert("error");
+            	showMessageBarForOperationResultMessage("error");
             }
         });
         }

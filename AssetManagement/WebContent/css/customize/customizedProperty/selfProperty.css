@@ -430,7 +430,7 @@
 	border-width: 0;
 }
 
-#cancle {
+#cancel {
 	vertical-align: top;
 	float: right;
 	margin: 9px 35px 10px 10px;
@@ -450,7 +450,7 @@
 	background-image: url("../../../image/common/BTN_Create_80x30.png");
 }
 
-#cancle,#cancleProperty {
+#cancel,#cancleProperty {
 	color: #8A8A8A;
 	background-image: url("../../../image/common/BTN_Cancel_80x30.png");
 }
@@ -459,7 +459,7 @@
 	background-image: url("../../../image/common/BTN_Create_Hover_80x30.png");
 }
 
-#cancle:hover,#cancleProperty:hover {
+#cancel:hover,#cancleProperty:hover {
 	color: #8A8A8A;
 	background-image: url("../../../image/common/BTN_Cancel_Hover_80x30.png");
 }
@@ -651,6 +651,7 @@
 	border-color: #B0E2FF;
 	background-color: #B0E2FF;
 	width: 420px;
+	min-height: 42px;
 }
 
 #propertyDateTypeValue {

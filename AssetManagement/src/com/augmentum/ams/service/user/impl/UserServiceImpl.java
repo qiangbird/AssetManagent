@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
                     /*
                      * user.setExpired(Boolean.TRUE); users.add(user);
                      */
-                    break;
+                    continue;
                 }
             } else {
                 user = new User();

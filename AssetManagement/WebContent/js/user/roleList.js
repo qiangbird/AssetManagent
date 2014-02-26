@@ -78,7 +78,7 @@ $(document).ready(function() {
 								usersRoleInfo[index - 1].isDelete = "true";
 							}
 						}else{
-							ShowMsg(i18nProp('none_IT_and_Admin'));
+							showMessageBarForMessage('none_IT_and_Admin');
 						}
 			      }else{
 			          return;
@@ -102,13 +102,19 @@ $(document).ready(function() {
 			$("#div-loader").show();
 			saveOperation(usersRoleInfo);
 		}else{
-			ShowMsg(i18nProp('none_IT_and_Admin'));
+			showMessageBarForMessage('none_IT_and_Admin');
 		}
 	});
 	
 	$("#cancelButton").click(function(){
 		getUserRoloInfo();
 	});
+	$("#bodyMinHight").delegate("#token-input-employeeName","blur",function(){
+		if("" != $(".employeeName").val()){
+			$(".token-input-list-facebook").clearValidationMessage();
+		}
+	});
+	
 });
 
 function isAtLeastOneITAndAdmin(currentEmployeeId){
@@ -188,15 +194,12 @@ function checkEmployees(listEmployees){
 	var errorEmployeeNames = [];
 	errorEmployeeNames.length = 0;
 	
-	if("false" == itRole && "false" == systemAdminRole) {
-		ShowMsg(i18nProp('message_warn_role_is_null', null));
-	}
-	else {
 		for(var i=0;i<listEmployees.length;i++) {
 			var employeeName = listEmployees[i].split("#")[0];
 			var employeeId = listEmployees[i].split("#")[1];
 			if(employeeName == "") {
-				ShowMsg(i18nProp('message_warn_user_is_null', null));
+				$(".token-input-list-facebook").push($(".token-input-list-facebook")
+						.validateNull(employeeName,i18nProp('message_warn_user_is_null')));
 				return;
 			}else if(employeeId == "" || employeeId == undefined) {  // employee not exist
 				$("#autoText li").each(function() {
@@ -216,9 +219,13 @@ function checkEmployees(listEmployees){
 					$("#autoText li").each(function() {
 						var errorEmployeeName = $(this).find("p").text();
 						if(employeeName == errorEmployeeName) {
-							errorEmployeeNames.push(errorEmployeeName);
-							$(this).css("background-color","#FFF58F");
-							$(this).css("border", "1px solid red");
+							usersRoleInfo[j].isDelete = "true";
+							
+							$(".roleDispaly").find(".employeeRoleInfo").each(function(index){
+								if(employeeName == $(this).find(".employeeNameInRow").text()){
+									$(this).hide();
+								}
+							});
 						}
 					});
 				}
@@ -231,12 +238,17 @@ function checkEmployees(listEmployees){
 			employee.isNew = "true";
 			employees.push(employee);
 			}
+		
 		if(0 < errorEmployeeNames.length){
 			var names = errorEmployeeNames.join(",");
 			employees.length = 0;
-			ShowMsg(i18nProp('message_warn_role_illegal', names));
+			showMessageBarForOperationResultMessage(i18nProp('message_warn_role_illegal', names));
 			return;
 		}else{
+			if("false" == itRole && "false" == systemAdminRole) {
+				showMessageBarForMessage('message_warn_role_is_null');
+				return;
+			}
 			for(var m = 0; m < employees.length; m++){
 				usersRoleInfo.push(employees[m]);
 			}
@@ -244,8 +256,6 @@ function checkEmployees(listEmployees){
 			employees.length = 0;
 			clearInputBox();
 		}
-	}
-	
 }
 
 function saveOperation(usersRoleInfo){
@@ -286,17 +296,17 @@ function getUserRoloInfo(){
 function displayUserRoleInfo(usersRoleInfo){
 	if(null != usersRoleInfo){
 		for(var i = 0; i < usersRoleInfo.length; i++){
-			usersRoleInfo[i].isDelete = "false";
-			$(".roleDispaly").append($(".employeeRoleInfoTemplate").html());
-			var lastDivToAppend = $(".roleDispaly .employeeRoleInfo:last");
-			lastDivToAppend.css("display", "block");
-			var index = lastDivToAppend.index();
-			lastDivToAppend.find("#sequence").text(index);
-			lastDivToAppend.find("#isNew").text(usersRoleInfo[i].isNew);
-			lastDivToAppend.find(".employeeIdInRow").text(usersRoleInfo[i].employeeId);
-			lastDivToAppend.find(".employeeNameInRow").text(usersRoleInfo[i].employeeName);
-			checkRole(usersRoleInfo[i].itRole, "#itInRow", "#itInRowValue", "#itInRowOriginalValue");
-			checkRole(usersRoleInfo[i].systemAdminRole, "#adminInRow", "#adminInRowValue", "#adminInRowriginalValue");
+				usersRoleInfo[i].isDelete = "false";
+				$(".roleDispaly").append($(".employeeRoleInfoTemplate").html());
+				var lastDivToAppend = $(".roleDispaly .employeeRoleInfo:last");
+				lastDivToAppend.css("display", "block");
+				var index = lastDivToAppend.index();
+				lastDivToAppend.find("#sequence").text(index);
+				lastDivToAppend.find("#isNew").text(usersRoleInfo[i].isNew);
+				lastDivToAppend.find(".employeeIdInRow").text(usersRoleInfo[i].employeeId);
+				lastDivToAppend.find(".employeeNameInRow").text(usersRoleInfo[i].employeeName);
+				checkRole(usersRoleInfo[i].itRole, "#itInRow", "#itInRowValue", "#itInRowOriginalValue");
+				checkRole(usersRoleInfo[i].systemAdminRole, "#adminInRow", "#adminInRowValue", "#adminInRowriginalValue");
 		}
 		tooltips(".employeeNameInRow");
 	}

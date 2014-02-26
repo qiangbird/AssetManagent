@@ -76,7 +76,7 @@
     <div class="clear"></div>
     <div id="showError"></div>
     <div class="operateClass">
-        <button id="cancle" value="cancel"  class="operateButton"><spring:message code="cancel" /></button>
+        <button id="cancel" value="cancel"  class="operateButton"><spring:message code="cancel" /></button>
         <button id="save" value="save" class="operateButton"><spring:message code="save" /></button>
         <img id="addProperty" alt="add" src="image/self/ICN_Add_16x16.png"></img>
     </div>
@@ -130,7 +130,7 @@
             </div>
             <div class="rowDiv">
                 <button  id="submitProperty" value="add" class="operateButton"><spring:message code="add" /></button>
-                <button  id="editProperty" value="edit" class="operateButton"><spring:message code="edit" /></button>
+                <button  id="editProperty" value="edit" class="operateButton"><spring:message code="update" /></button>
                 <button  id="cancleProperty" value="cancel" class="operateButton"><spring:message code="cancel" /></button>
             </div>
         </div>

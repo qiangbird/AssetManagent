@@ -18,15 +18,6 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 
-<script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
-<script type="text/javascript" src="js/common/autocomplete.js"></script>
-<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
-<script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
-<script type="text/javascript" src="js/common/uuid.js"></script>
-<script type="text/javascript" src="js/common/header.js"></script>
-<script type="text/javascript" src="messageBar/js/messagebar.js"></script>
-
 <title>Asset Page</title>
 </head>
 <body>
@@ -42,7 +33,7 @@
             <div id="header_top_right">
                 <div id="header_login">
                     <a id="header_login_name"><spring:message code="head.welcome" /> <span id="loginUser">${sessionScope.userVo.employeeName}</span></a>
-                    <a class="decoration_hover cursor_hand" id="header_login_control" href="https://sso.staging.com.cn:8443/cas/logout?service=http://192.168.22.146:8080/AssetManagement
+                    <a class="decoration_hover cursor_hand" id="header_login_control" href="https://sso.staging.com.cn:8443/cas/logout?service=http://localhost:8080/AssetManagement
                     ">Login out</a>
                 </div>
                 <div id="header_i18n">
@@ -151,7 +142,7 @@
 	<script type="text/javascript" src="<%=basePath%>js/common/uuid.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/header.js"></script>
     <script type="text/javascript" src="<%=basePath%>js/common/selfDefineDialog.js"></script>
-    <script type="text/javascript" src="<%=basePath%>js/common/messageBarCommon.js"></script>
     <script type="text/javascript" src="<%=basePath%>messageBar/js/messagebar.js"></script>
+    <script type="text/javascript" src="<%=basePath%>js/common/messageBarCommon.js"></script>
 </body>
 </html>
