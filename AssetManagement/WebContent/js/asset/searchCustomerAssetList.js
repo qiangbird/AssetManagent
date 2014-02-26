@@ -419,6 +419,58 @@ $(document).ready(function(){
 		}
 	});
 	
+	$("#returnToCustomer").click(function(){
+		assetsId=new Array();
+		flag=true;
+		line="";
+		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
+			assetStatus = $(this).parent().find(".Status").text();
+			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
+					assetStatus == "RETURNING_TO_IT"){
+				flag = false;
+				line+=$(this).next().text()+",";
+				return;
+			}else{
+				assetsId[i]=$(this).attr("pk");
+			}
+		});
+		if(flag){
+			if(assetsId == ""){
+				ShowMsg(i18nProp('none_select_record'));
+				return;
+			}else{
+				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
+				 if (yes) {
+					 $.ajax({
+						  type: 'POST',
+						  url: "customerAsset/changeStatus/"+"RETURNED",
+						  data: {
+							  _method: 'PUT',
+							  customerCode:$("#customerCode").val(),
+							  assetsId:assetsId.toString(),
+							  "operation":"Return To Customer"
+							  },
+						  dataType : 'json',
+						  success: function(data){
+							  dataList.search();
+						  }
+						});
+	                }else{
+	                	return;
+	                }
+				});
+			}
+		}else{
+			ShowMsg(i18nProp('status_error_prompt_message',line));
+			return;
+		}
+	});
+	
+	
+	
+	
+	
+	
 	$("#exportIcon").click(function(){
    	 var tipMessage = "";
    	 var assetIds = getActivedAssetIds();

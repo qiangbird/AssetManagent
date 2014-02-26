@@ -207,9 +207,6 @@ public class AssetController extends BaseController {
             asset.setAssetId(assetVo.getAssetId());
             try {
                 assetService.saveAssetAsType(assetVo, asset, "save");
-                // modelAndView.addObject("tips","Create asset"+asset.getAssetId()+" success!");
-                // request.setAttribute("tips","Create asset"+asset.getAssetId()+" success!");
-                // tips="Create asset"+asset.getAssetId()+" success!";
             } catch (Exception e) {
                 logger.error("Save asset error", e);
             }
@@ -223,15 +220,11 @@ public class AssetController extends BaseController {
                     asset.setAssetId(batchIdList.get(i));
                     assetService.saveAssetAsType(assetVo, asset, "save");
                 }
-                // modelAndView.addObject("tips","Batch create "+batchNum+" items asset success!");
-                // request.setAttribute("tips","Batch create "+batchNum+" items asset success!");
-                // tips= "Batch create "+batchNum+" items asset success!";
             } catch (NumberFormatException e) {
                 // TODO
                 logger.error("Number format error!", e);
             }
         }
-        // modelAndView.setViewName("redirect:/asset/allAssets?tips="+tips);
         modelAndView.setViewName("redirect:/asset/allAssets");
 
         logger.info("saveAsset method end!");

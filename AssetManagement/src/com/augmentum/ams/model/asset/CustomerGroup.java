@@ -59,7 +59,7 @@ public class CustomerGroup extends BaseModel {
     /**
      *  The customers in the group
      */
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customerGroup", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customerGroup", cascade = CascadeType.PERSIST)
     @ContainedIn
     private List<Customer> customers;
     

@@ -54,14 +54,14 @@ public class Customer extends BaseModel implements Serializable {
      *  If the groupCode is null, the default process is 
      *  not_share
      */
-	@ManyToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "groupId")
 	@IndexedEmbedded(depth = 1)
     private CustomerGroup customerGroup;
 
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
-	@ContainedIn
+//	@ContainedIn
 	private List<Asset> assets = new ArrayList<Asset>();
 
 	public String getCustomerName() {

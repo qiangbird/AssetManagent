@@ -154,7 +154,8 @@ public class CustomerGroupController {
 		logger.info("editGroup in CustomerGroupController  start");
 		CustomerGroup customerGroup = customerGroupService
 				.getCustomerGroupById(id);
-		List<Customer> customerList = customerService.getCustomerByGroup(id);
+//		List<Customer> customerList = customerService.getCustomerByGroup(id);
+		List<Customer> customerList = customerGroup.getCustomers();
 		List processTypeList = AssetUtil.getProcessTypes();
 
 		modelAndView.addObject("processTypeList", processTypeList);
