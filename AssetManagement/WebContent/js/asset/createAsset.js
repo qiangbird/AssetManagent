@@ -171,7 +171,10 @@ $("#assetUser").click(function() {
             $("#assetUser").blur(
                 function() {
                 if ($(this).val().trim() == "") {
-                    TextMouseOutError(this);
+                	if($("#selectedStatus").val()=="IN_USE"){
+                		TextMouseOutError(this);
+                	}
+                	TextMouseOutNormal(this);
                 } else {
                     if (!checkInArr(userArray,$("#assetUser").val())) {
                         TextMouseOutError(this);

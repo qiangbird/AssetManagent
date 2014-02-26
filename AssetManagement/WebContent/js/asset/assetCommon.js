@@ -331,9 +331,12 @@
 		  }
 	}
   }
-  
+  alert(flag);
 // flag = 0;
   if (flag == 0) {
+	  if($("#assetUser").val()==""){
+		  $("#selectedStatus").val("AVAILABLE");
+	  }
 	  $("#assetFrom").ajaxSubmit(
 			   {
 			       type : 'post',
@@ -351,11 +354,36 @@
 			           showMessageBarForMessage(errorCode);
 			           return false;
 			    	   }else{
-//			    		   if($("#showBatch").val()!=1){
-//			    		   window.location.href="asset/allAssets?tips=Batch create "+$("#showBatch").val()+" items asset success!";
-//			    		   }else{
-//			    			   window.location.href="asset/allAssets?tips=Create asset "+$("#assetId").val()+" success!";
+			    		   
+//			    		   function add(value){
+//			    			   if (value!=1){
+//			    				   aja
+//			    				   啊
+//			    			   }
+//			    			   
 //			    		   }
+			    		   
+			    		   if($("#showBatch").val()!=1){
+			    			   alert("aaaaa");
+			    				 $.ajax({
+			    			   		    type : 'GET',
+			    			   		    contentType : 'application/json',
+			    			   		    url : 'asset/allAssets',
+			    			   		    dataType : 'json',
+			    			   		    success : function(data) {
+			    			   		        console.log(data);
+			    			   		      
+			    			   		        
+			    			   		    }
+			    			   });
+			    				 alert("bbbb");
+			    			   
+			    		   window.location.href="asset/allAssets?tips=Batch create "+$("#showBatch").val()+" items asset success!";
+			    		   }else{
+			    			   window.location.href="asset/allAssets?tips=Create asset "+$("#assetId").val()+" success!";
+			    		   }
+			    		   
+			    		   
 			    	   }
 			       }
 			       });

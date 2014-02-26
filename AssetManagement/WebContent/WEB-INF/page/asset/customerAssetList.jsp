@@ -43,6 +43,7 @@
    		</c:if>
 	</div>
     
+    <input type="hidden" id="customerGroupType" value="${customer.customerGroup.processType }">
     <input type="hidden" id="customerCode" value="${customer.customerCode }">
     <input type="hidden" id="customerCode" value="${customer.customerCode == ''}">
     <input type="hidden" id="customerCode" value="${customer.customerCode != ''}">
@@ -114,40 +115,28 @@
                 <span class="middle" ><spring:message code="SearchButton" /> </span>
                 <span class="right"></span>
             </a>
-            <%-- <shiro:hasAnyRoles name="EMPLOYEE,MANAGER,SPECIAL_ROLE"> --%>
-            <div class="operation_assets_list">
+            
+             <div class="operation_assets_list">
                 <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
-             <c:choose>
-                <c:when test="${sessionScope.userRole == 'Manager'}">
-                    <%-- <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }"> --%>
+                <shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
+                    <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
                     <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
                     <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
-                    <%-- </c:if> --%>
+                    </c:if>
                     <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
                     <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
-                </c:when>
-                <c:otherwise>
+                    
+                    <li id="returnToCustomer" value="RETURNED"><a><spring:message code="returnToCustomer" /></a></li>
+                    
+                 </shiro:hasAnyRoles>
+                <shiro:hasRole name="EMPLOYEE">
                     <li id="takeOver"><a><spring:message code="customer.asset.take.over" /></a></li>
-                    <li id="returnToProject" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.project" /></a></li>
-                </c:otherwise>
-                </c:choose>
+                    <li id="returnToProject" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.project" /></a>
+                    </li>
+                </shiro:hasRole>
                 </ul>
-            </div>
-            <%-- </shiro:hasAnyRoles> --%>
-            <form name="exportForm" id="exportForm" action="customerAsset/export">
-	        	<input type="hidden" name="assetIds" id="assetIds" value=""/>
-	        	
-	        	<input type="hidden" name="assetStatus" id="condition_assetStatus" value="" />
-	        	<input type="hidden" name="assetType" id="condition_assetType" value="" />
-	        	<input type="hidden" name="keyWord" id="condition_keyWord" value="" />
-	        	<input type="hidden" name="searchFields" id="condition_searchFields" value="" />
-	        	<input type="hidden" name="fromTime" id="condition_fromTime" value="" />
-	        	<input type="hidden" name="toTime" id="condition_toTime" value="" />
-	        	
-	        	<input type="hidden" name="customerCode" value="${customer.customerCode }" />
-	        </form>
-	        <a id="exportIcon" ></a>
+            </div> 
         </div>
         </div>
     </div>
