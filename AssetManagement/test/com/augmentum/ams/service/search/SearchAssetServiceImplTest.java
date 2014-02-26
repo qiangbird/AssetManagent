@@ -49,14 +49,13 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
         Page<Asset> page = new Page<Asset>();
         
         SearchCondition sc = new SearchCondition();
-        sc.setKeyWord("");
-        sc.setPageSize(2000);
+        sc.setKeyWord("in_use");
+        sc.setPageSize(1000);
         sc.setPageNum(1);
+//        sc.setUserUuid("4028961242e5d4d70142e5d589880000");
         
         page = searchAssetService.findAllAssetsBySearchCondition(sc);
-        Assert.assertTrue(page.getResult().size() > 0);
         logger.info(page.getResult().size());
-//        SearchCommonUtil.convertAssetListToJSONArray(page.getResult());
     }
     
     @Test

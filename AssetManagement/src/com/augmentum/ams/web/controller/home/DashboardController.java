@@ -1,9 +1,7 @@
 package com.augmentum.ams.web.controller.home;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -57,31 +55,16 @@ public class DashboardController extends BaseController {
 		return jsonObject;
 	}
 
-	@RequestMapping(value = "/getAssetCountForManager", method = RequestMethod.GET)
+	@SuppressWarnings("unchecked")
+    @RequestMapping(value = "/getAssetCountForManager", method = RequestMethod.GET)
 	@ResponseBody
-	public JSONObject getAssetCountForManager(HttpServletRequest request) {
+	public JSONObject getAssetCountForManager(HttpSession session) {
 
 		JSONObject jsonObject = new JSONObject();
 		
-		UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
-				.getAttribute("userVo");
 		User user = (User) SecurityUtils.getSubject().getSession()
 				.getAttribute("currentUser");
-
-		List<CustomerVo> list = null;
-		try {
-			list = remoteCustomerService.getCustomerByEmployeeId(
-					userVo.getEmployeeId(), request);
-		} catch (BusinessException e) {
-			logger.error("get customerVo failed from IAP", e);
-		}
-
-		List<Customer> customers = customerAssetService
-				.findVisibleCustomerList(userVo, list);
-		
-		Set<Customer> set = new HashSet<Customer>(customers); 
-		customers.clear();
-		customers.addAll(set);
+		List<Customer> customers = (List<Customer>)session.getAttribute("customerList");
 		
 		if (0 == customers.size()) {
 			return jsonObject;

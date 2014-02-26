@@ -42,7 +42,6 @@ import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.service.audit.InconsistentService;
 import com.augmentum.ams.service.customized.CustomizedViewItemService;
 import com.augmentum.ams.util.FormatUtil;
-import com.augmentum.ams.util.SearchFieldHelper;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -130,7 +129,9 @@ public class InconsistentServciceImpl implements InconsistentService {
 	@Override
 	public Page<Asset> findAssetForInconsistent(SearchCondition searchCondition)
 			throws BaseException {
-
+	    
+	    Page<Asset> page = new Page<Asset>();
+/*
 		List<String> assetIdList = inconsistentDao.findInconsistentAssetByFileName(searchCondition
 				.getAuditFileName());
 
@@ -247,112 +248,11 @@ public class InconsistentServciceImpl implements InconsistentService {
 
 		FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
 				query, Asset.class).setCriteriaQuery(criteria);
-		page = baseHibernateDao.findByIndex(fullTextQuery, filter, page,
-				Asset.class);
+		page = baseHibernateDao.findByIndex(fullTextQuery, filter, page);
 		fullTextSession.close();
 		return page;
 
 	}
-
-	private String[] getSearchFieldNames(String searchConditions) {
-		String[] fieldNames = FormatUtil.splitString(searchConditions,
-				SystemConstants.SPLIT_COMMA);
-
-		if (null == fieldNames || 0 == fieldNames.length) {
-			fieldNames = SearchFieldHelper.getAssetFields();
-		}
-		return fieldNames;
-	}
-
-	private BooleanQuery getSentenceQuery(QueryBuilder qb,
-			String[] sentenceFields, String keyWord) {
-		BooleanQuery sentenceQuery = new BooleanQuery();
-
-		for (int i = 0; i < sentenceFields.length; i++) {
-			Query query = qb.phrase().onField(sentenceFields[i])
-					.sentence(keyWord).createQuery();
-			sentenceQuery.add(query, Occur.SHOULD);
-		}
-		return sentenceQuery;
-	}
-
-	private BooleanQuery getStatusQuery(String status) {
-		String[] statusConditions;
-		BooleanQuery statusQuery = new BooleanQuery();
-
-		if (null == status || "".equals(status)) {
-			statusConditions = FormatUtil.splitString(
-					SearchFieldHelper.getAssetStatus(), SystemConstants.SPLIT_COMMA);
-		} else {
-			statusConditions = FormatUtil.splitString(status,
-					SystemConstants.SPLIT_COMMA);
-		}
-
-		if (null != statusConditions && 0 < statusConditions.length) {
-
-			for (int i = 0; i < statusConditions.length; i++) {
-				statusQuery.add(new TermQuery(new Term("status",
-						statusConditions[i])), Occur.SHOULD);
-			}
-		}
-		return statusQuery;
-	}
-
-	private BooleanQuery getTypeQuery(String type) {
-		String[] typeConditions;
-		BooleanQuery typeQuery = new BooleanQuery();
-
-		if (null == type || "".equals(type)) {
-			typeConditions = FormatUtil.splitString(
-					SearchFieldHelper.getAssetType(), SystemConstants.SPLIT_COMMA);
-		} else {
-			typeConditions = FormatUtil.splitString(type, SystemConstants.SPLIT_COMMA);
-		}
-
-		if (null != typeConditions && 0 < typeConditions.length) {
-
-			for (int i = 0; i < typeConditions.length; i++) {
-				typeQuery.add(
-						new TermQuery(new Term("type", typeConditions[i])),
-						Occur.SHOULD);
-			}
-		}
-		return typeQuery;
-	}
-
-	private Query getTimeRangeQuery(String fromTime, String toTime) {
-		boolean isNullFromTime = (null == fromTime || "".equals(fromTime));
-		boolean isNullToTime = (null == toTime || "".equals(toTime));
-
-		if (isNullFromTime && !isNullToTime) {
-			fromTime = SystemConstants.SEARCH_MIN_DATE;
-			toTime = UTCTimeUtil.formatFilterTime(toTime);
-			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
-					true);
-		} else if (isNullToTime && !isNullFromTime) {
-			toTime = SystemConstants.SEARCH_MAX_DATE;
-			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
-			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
-					true);
-		} else if (!isNullFromTime && !isNullToTime) {
-			fromTime = UTCTimeUtil.formatFilterTime(fromTime);
-			toTime = UTCTimeUtil.formatFilterTime(toTime);
-			return new TermRangeQuery("checkInTime", fromTime, toTime, true,
-					true);
-		} else {
-			return new TermQuery(
-					new Term("isExpired", Boolean.FALSE.toString()));
-		}
-	}
-
-	private String transferSortName(String sortName) {
-
-		if ("userName".equals(sortName)) {
-			sortName = "user.userName";
-		}
-		return sortName;
-	}
-
 
 	// TODO search inconsistent barcode
 	@Override
@@ -435,7 +335,8 @@ public class InconsistentServciceImpl implements InconsistentService {
 		page = baseHibernateDaoIncons.findByIndex(fullTextQuery, filter, page,
 				Inconsistent.class);
 		fullTextSession.close();
-		return page;
+		*/
+	    return page;
 	}
 
 	private BooleanQuery getDefaultQuery(List<String> barcodeList) {
@@ -448,5 +349,12 @@ public class InconsistentServciceImpl implements InconsistentService {
 		}
 		return bq;
 	}
+
+    @Override
+    public Page<Inconsistent> findInconsistentBarcode(SearchCondition condition)
+            throws BaseException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

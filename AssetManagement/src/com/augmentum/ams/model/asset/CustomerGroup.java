@@ -13,12 +13,14 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 
 /**
  * @description divide the customers into group.
@@ -54,6 +56,7 @@ public class CustomerGroup extends BaseModel {
      */
     @Column(name = "process_type", length = 128, nullable = false)
     @Field(name = "processType", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String processType;
 
     /**

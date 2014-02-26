@@ -239,8 +239,8 @@
 			<table>
 				<tr>
 					<th style="width: 120px;padding-left: 30px;"><spring:message code="asset.name"/></th>
-					<th style="width: 140px;"><spring:message code="Date"/></th>
-					<th style="width: 99px;"><spring:message code="delete"/></th>
+					<th style="width: 130px;"><spring:message code="Date"/></th>
+					<th style="width: 98px;"><spring:message code="delete"/></th>
 				</tr>
 			</table>
 		</div>
@@ -260,7 +260,7 @@
 					<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
 					<th style="width: 120px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Customer"/></th>
-					<th style="width: 115px;"><spring:message code="todo.returnedTime"/></th>
+					<th style="width: 98px;"><spring:message code="todo.returnedTime"/></th>
 				</tr>
 			</table>
 			<input class="confirmButton" id="returnedAsset" type="button" value="<spring:message code='confirm'/>"/>
@@ -283,7 +283,7 @@
 					<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
 					<th style="width: 120px;"><spring:message code="asset.name"/></th>
 					<th style="width: 130px;"><spring:message code="Customer"/></th>
-					<th style="width: 115px;"><spring:message code="todo.receivedTime"/></th>
+					<th style="width: 98px;"><spring:message code="todo.receivedTime"/></th>
 				</tr>
 			</table>
 			<input class="confirmButton" id="receivedAsset" type="button" value="<spring:message code='todo.receive'/>"/>
@@ -306,7 +306,7 @@
 						<th class="tr_checkbox"><div class="div_checkbox_all"></div></th>
 						<th style="width: 120px;"><spring:message code="asset.name"/></th>
 						<th style="width: 130px;"><spring:message code="Customer"/></th>
-						<th style="width: 100px;"><spring:message code="keeper"/></th>
+						<th style="width: 98px;"><spring:message code="keeper"/></th>
 					</tr>
 				</table>
 				<input class="confirmButton" id="idleAsset" type="button" value="<spring:message code="returnToIT"/>"/>

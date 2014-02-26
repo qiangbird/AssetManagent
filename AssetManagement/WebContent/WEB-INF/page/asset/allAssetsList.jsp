@@ -32,7 +32,7 @@
    			<c:when test="${isFixedAsset}">
 		   		<span><spring:message code="navigator.fixed.assets"></spring:message></span>
    			</c:when>
-   			<c:when test="${requestScope.userUuid != '' }">
+   			<c:when test="${requestScope.userUuid != null }">
    				<span><spring:message code="navigator.my.assets"></spring:message></span>
    			</c:when>
    			<c:otherwise>

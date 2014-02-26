@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.SystemException;
 import com.augmentum.ams.model.asset.Customer;
-import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.operationLog.OperationLog;
@@ -125,24 +124,25 @@ public class SearchCommonUtil {
      * @param userCustomColumnList
      * @return
      */
-    public static JSONArray formatGroupListTOJSONArray(List<CustomerGroup> groupList) {
+    public static JSONArray formatGroupListTOJSONArray(List<Customer> groupList) {
         JSONArray arrays = new JSONArray();
 
-        for (CustomerGroup group : groupList) {
+        for (Customer customer : groupList) {
             JSONArray array = new JSONArray();
-            array.add(group.getId());
+            array.add(customer.getId());
             String value = "";
-            value = group.getGroupName();
+            value = customer.getCustomerGroup().getGroupName();
             array.add(value);
-            value = group.getDescription();
+            value = customer.getCustomerGroup().getDescription();
             array.add(value);
-            value = group.getProcessType().toString();
+            value = customer.getCustomerGroup().getProcessType().toString();
             array.add(value);
             StringBuffer sb = new StringBuffer();
-            List<Customer> list = group.getCustomers();
-            for (Customer customer : list) {
-                sb.append(customer.getCustomerName()).append(";");
-            }
+            sb.append(customer.getCustomerName()).append(";");
+//            List<Customer> list = group.getCustomers();
+//            for (Customer customer : list) {
+//                sb.append(customer.getCustomerName()).append(";");
+//            }
             array.add(sb.toString());
 
             value = "<div class='editGroupIcon'></div>/<div class='deleteGroupIcon'></div>";

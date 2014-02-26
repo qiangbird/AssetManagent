@@ -36,12 +36,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
     </div>
 	<div id="bodyMinHight">
     <div class="content">
-    <!-- 核心入口 -->
     	<div class="dataList">
     		<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
-			<div id="searchInputTipDiv" class="inputTipDiv"><span id="label_KeywordPlaceholder"></span></div>
+			<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
 			<input id="keyword" class="input_txt" name="" type="text" value="">
+			<div class="filterDiv filterDiv_common">
+				<button class="filterBtn filter_no_dropDown">
+				</button>
+				<div class="filterBox">
+					<div class="single_condition">
+						<div class="condition_title"><spring:message code="searchBy" /></div>
+						<div class="condition_optional" id="searchFields">
+							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+							<p><input type="checkBox" name="field" value="site"/><label><spring:message code="location.site"/></label></p>
+							<p><input type="checkBox" name="field" value="room"/><label><spring:message code="location.room"/></label></p>
+			        	</div>
+					</div>
+					<a class="reset" href="javascript:void(0);"><spring:message code="reset"/></a>
+				</div>
+			</div>
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
 	        	<span class="middle" ><spring:message code="SearchButton" /></span>
@@ -72,13 +86,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         </div>
         
         <div class="submit-div">
-            <%-- <c:if test="${!isCreatePage }">
-                <input type="hidden" name="_method" value="put" />
-            </c:if> --%>
-<%--             <input class="input-80-30 submit-button" type="submit" value='<spring:message code="submit" />' />
-            <input class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> /> --%>
-          <%--  <c:if test='${location.id==null }'>sssss</c:if>
-           <c:if test='${location.id=="" }'><c:out value="${location.id }"></c:out> </c:if> --%>
            <c:out value="${location.id }"></c:out>
             <input id="submitLocation" class="input-80-30 submit-button" type="button" value='<spring:message code="save" />' />
             <input id="resetLocation" class="input-80-30 reset-button" type="reset" value=<spring:message code="reset" /> />

@@ -15,7 +15,6 @@ import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.search.annotations.Analyzer;
-import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
@@ -61,7 +60,6 @@ public class Customer extends BaseModel implements Serializable {
 
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
-//	@ContainedIn
 	private List<Asset> assets = new ArrayList<Asset>();
 
 	public String getCustomerName() {

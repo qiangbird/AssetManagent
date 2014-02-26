@@ -565,11 +565,10 @@ public class AssetServiceTest {
 		
 		Customer c1 = customerService.getCustomerByName("Augmentum");
 		Customer c2 = customerService.getCustomerByName("Internal Systems");
-		List<Customer> list = new ArrayList<Customer>();
-		list.add(c1);
-		list.add(c2);
 		
-		Page<Asset> page = customerAssetService.findAllCustomerAssetBySearchCondition(searchCondition, list);
+		String[] customerIds = {c1.getId(), c2.getId()};
+		
+		Page<Asset> page = customerAssetService.findCustomerAssetsBySearchCondition(searchCondition, customerIds);
 		logger.info(page.getResult().size());
 	}
 	

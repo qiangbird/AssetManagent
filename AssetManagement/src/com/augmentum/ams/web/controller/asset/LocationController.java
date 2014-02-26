@@ -43,14 +43,11 @@ public class LocationController extends BaseController {
     @RequestMapping("/listLocation")
     public ModelAndView listLocation(HttpServletRequest request) throws BusinessException {
 
-        logger.info("listLocation method start!");
-
         Location location = new Location();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("location", location);
         modelAndView.setViewName("location/locationList");
 
-        logger.info("listLocation method end!");
         return modelAndView;
     }
 
@@ -58,19 +55,18 @@ public class LocationController extends BaseController {
     public ModelAndView findAllAssetsBySearchCondition(SearchCondition searchCondition,
             HttpSession session) throws BaseException {
 
-        logger.info("findAllAssetsBySearchCondition method start!");
-
+        if (null == searchCondition) {
+            searchCondition = new SearchCondition();
+        }
         Page<Location> page = locationService.findAllLocationBySearchCondition(searchCondition);
         List<Location> locationList = page.getResult();
-        JSONArray array = new JSONArray();
-        array = SearchCommonUtil.formatLocationListTOJSONArray(locationList);
+        JSONArray array = SearchCommonUtil.formatLocationListTOJSONArray(locationList);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("fieldsData", array);
         modelAndView.addObject("count", page.getRecordCount());
         modelAndView.addObject("totalPage", page.getTotalPage());
-
-        logger.info("findAllAssetsBySearchCondition method end!");
+        
         return modelAndView;
     }
 

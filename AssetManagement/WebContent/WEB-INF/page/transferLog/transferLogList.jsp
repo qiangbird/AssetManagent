@@ -41,19 +41,17 @@
 				<span class="existedFlag"></span>
 		          <div class="filterBox">
 					<div class="single_condition">
-						<div class="condition_title"><spring:message code="search" /></div>
+						<div class="condition_title"><spring:message code="searchBy" /></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="CheckedAllFields" /></label></p>
-							<p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="operationLog.operatorName" /></label></p>
-							<p><input type="checkBox" name="field" value="action"/><label><spring:message code="operationLog.operation" /></label></p>
-			                <p><input type="checkBox" name="field" value="asset.assetName"/><label><spring:message code="operationLog.operationObject" /></label></p>
-							<p><input type="checkBox" name="field" value="asset.manufacturer"/><label><spring:message code="asset.manufacture" /></label></p>
-			                <p><input type="checkBox" name="field" value="asset.poNo"/><label><spring:message code="asset.po.no" /></label></p>
-			                <p><input type="checkBox" name="field" value="asset.barCode"/><label><spring:message code="asset.bar.code" /></label></p>
+							<p><input type="checkBox" name="field" value="asset.assetId"/><label><spring:message code="asset.id" /></label></p>
+							<p><input type="checkBox" name="field" value="asset.assetName"/><label><spring:message code="asset.name" /></label></p>
+			                <p><input type="checkBox" name="field" value="user.userName"/><label><spring:message code="transferlog.operator" /></label></p>
+			                <p><input type="checkBox" name="field" value="action"/><label><spring:message code="transferlog.action" /></label></p>
 			        	</div>
 					</div>
 			        <div class="single_condition">
-						<div class="condition_title"><spring:message code="searchAsTime" /></div>
+						<div class="condition_title"><spring:message code="transferlog.time" /></div>
 						<div class="condition_optional" id="time">
 							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
                             <span class="dateLine">-</span>

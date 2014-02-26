@@ -6,12 +6,16 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 
 /**
  * @author Rudy.Gao
@@ -20,6 +24,7 @@ import com.augmentum.ams.model.base.BaseModel;
 @Entity
 @Table(name = "location")
 @Indexed(index = "location")
+@Analyzer(impl = IKAnalyzer.class)
 public class Location extends BaseModel implements Serializable{
 
     private static final long serialVersionUID = -6417746800353665624L;
@@ -28,7 +33,8 @@ public class Location extends BaseModel implements Serializable{
      * When display we should use: Site + Room, e.g: Augmetnum Beijing-17201
      */
     @Column(name = "site", nullable = false, length = 32)
-    @Field(name = "site", index = Index.UN_TOKENIZED, store = Store.YES)
+    @Field(name = "site", index = Index.TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String site;
 
     /**

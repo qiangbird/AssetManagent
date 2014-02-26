@@ -40,7 +40,7 @@ public interface CustomerAssetService {
      * @return
      */
     Page<Asset> findCustomerAssetsBySearchCondition(
-            SearchCondition searchCondition, String customerId);
+            SearchCondition searchCondition, String[] customerIds);
 
     /**
      * 
@@ -91,13 +91,6 @@ public interface CustomerAssetService {
             String projectCode, String userName, String assetUserCode,
             HttpServletRequest request) throws BusinessException;
 
-    /**
-     * @author Geoffrey.Zhao
-     * @param customers
-     * @return
-     */
-    Page<Asset> findAllCustomerAssetBySearchCondition(
-            SearchCondition searchCondition, List<Customer> customers);
 
     /**
      * @author John.li
@@ -106,7 +99,6 @@ public interface CustomerAssetService {
      * @throws ExcelException
      * @throws SQLException
      */
-    String exportAssetsForAll(SearchCondition condition,
-            List<Customer> customers, String customerId,
+    String exportAssetsForAll(SearchCondition condition, String[] customerIds,
             HttpServletRequest request) throws ExcelException, SQLException;
 }

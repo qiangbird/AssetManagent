@@ -133,7 +133,7 @@ $(document).ready(function(){
 						$(".idleAssetPanel table").append("<tr><td><div class='div_checkbox' pk=" 
 								+ assetList[i].id + " /></td><td><div style='width:120px;' class='overFlow'>" + assetList[i].assetName 
 								+ "</div></td>" + "<td><div style='width:130px;' class='overFlow'>" + assetList[i].customerName 
-								+ "</div></td>" + "<td><div style='width:100px;' class='overFlow'>" + assetList[i].keeper + "</div></td></tr>");
+								+ "</div></td>" + "<td><div style='width:98px;' class='overFlow'>" + assetList[i].keeper + "</div></td></tr>");
 					}
 					
 					addOverFlowStyle();

@@ -38,15 +38,12 @@ public class TransferLogController extends BaseController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView listTransferLog(HttpServletRequest request, String id) {
 
-		logger.info("listTransferLog method start!");
-
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("transferLog/transferLogList");
-		if (!StringUtils.isBlank(id)) {
+		if (StringUtils.isNotBlank(id)) {
 			request.setAttribute("assetUuId", id);
 		}
 
-		logger.info("listTransferLog method end!");
 		return modelAndView;
 	}
 
@@ -54,7 +51,6 @@ public class TransferLogController extends BaseController {
 	public ModelAndView searchTransferLog(SearchCondition searchCondition,
 			HttpSession session, String id) {
 
-		logger.info("searchTransferLog method start!");
 		String timeOffset = (String)session.getAttribute("timeOffset");
 		
 		if (null == searchCondition) {
@@ -72,7 +68,6 @@ public class TransferLogController extends BaseController {
 		modelAndView.addObject("count", page.getRecordCount());
 		modelAndView.addObject("totalPage", page.getTotalPage());
 
-		logger.info("searchTransferLog method end!");
 		return modelAndView;
 	}
 }

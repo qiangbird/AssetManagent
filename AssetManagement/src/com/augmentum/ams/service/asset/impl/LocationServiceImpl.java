@@ -6,17 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.WildcardQuery;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -29,7 +23,7 @@ import com.augmentum.ams.dao.asset.LocationDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.service.asset.LocationService;
-import com.augmentum.ams.util.FormatUtil;
+import com.augmentum.ams.util.CommonSearchUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -91,49 +85,20 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Page<Location> findAllLocationBySearchCondition(SearchCondition searchCondition) {
 
-        String[] fieldNames = new String[2];
-        fieldNames[0] = "site";
-        fieldNames[1] = "room";
-        Occur[] clauses = new Occur[fieldNames.length];
-
-        for (int i = 0; i < fieldNames.length; i++) {
-            clauses[i] = Occur.SHOULD;
-        }
-
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
         QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder()
                 .forEntity(Location.class).get();
 
-        // create ordinary query, it contains search by keyword and field names
-        BooleanQuery query = new BooleanQuery();
+        // create ordinary query, it contains search by keyword
+        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
+                Location.class, qb, searchCondition.getKeyWord(),
+                searchCondition.getSearchFields());
 
-        String keyWord = searchCondition.getKeyWord();
-
-        // if keyword is null or "", search condition is "*", it will search all
-        // the value based on some one field
-        if (null == keyWord || "".equals(keyWord) || "*".equals(keyWord)) {
-            Query defaultQuery = new TermQuery(new Term("isExpired", Boolean.FALSE.toString()));
-            query.add(defaultQuery, Occur.MUST);
-        } else {
-
-            keyWord = FormatUtil.formatKeyword(keyWord);
-            BooleanQuery bq = new BooleanQuery();
-
-            for (int i = 0; i < fieldNames.length; i++) {
-                Query keyWordWildcardQuery = new WildcardQuery(new Term(fieldNames[i], "*"
-                        + keyWord + "*"));
-                bq.add(keyWordWildcardQuery, Occur.SHOULD);
-            }
-
-            query.add(bq, Occur.MUST);
-        }
-
-        QueryWrapperFilter filter = new QueryWrapperFilter(query);
+        QueryWrapperFilter filter = null;
 
         // add entity associate
         Criteria criteria = session.createCriteria(Location.class);
-        criteria.add(Restrictions.eq("isExpired", Boolean.FALSE));
 
         Page<Location> page = new Page<Location>();
 
@@ -142,10 +107,11 @@ public class LocationServiceImpl implements LocationService {
         page.setPageSize(searchCondition.getPageSize());
         page.setCurrentPage(searchCondition.getPageNum());
         page.setSortOrder(searchCondition.getSortSign());
+        page.setSortColumn(searchCondition.getSortName());
 
-        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, Location.class)
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(keyWordQuery, Location.class)
                 .setCriteriaQuery(criteria);
-        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page, Location.class);
+        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page);
         fullTextSession.close();
         return page;
     }

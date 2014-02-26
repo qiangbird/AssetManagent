@@ -26,7 +26,7 @@ public interface BaseHibernateDao<T extends BaseModel> {
      * @param clazz
      * @return
      */
-    Page<T> findByIndex(FullTextQuery fullTextQuery, QueryWrapperFilter filter, Page<T> page, Class<T> clazz);
+    Page<T> findByIndex(FullTextQuery fullTextQuery, QueryWrapperFilter filter, Page<T> page);
 
     /**
      * @author Grylls.Xu

@@ -206,7 +206,7 @@ div.operation_assets_list ul {
 	margin-left: -20px;
 }
 .site-error{
-border: solid 1px red !important;
+	border: solid 1px red !important;
 }
 
 #location_table td{
@@ -220,8 +220,7 @@ border: solid 1px red !important;
     display: none;
 }
 
-
-#searchButton, #customizedView {
+#customizedView {
 	left: 20px;
 }
 

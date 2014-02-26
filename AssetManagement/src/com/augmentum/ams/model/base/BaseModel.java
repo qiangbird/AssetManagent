@@ -9,8 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.search.annotations.DateBridge;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
 
 
@@ -38,6 +40,7 @@ public class BaseModel implements Serializable {
 	 */
 	@Column(name = "created_time", nullable = false)
 	@Field(name = "createdTime", index = Index.UN_TOKENIZED, store = Store.YES)
+	@DateBridge(resolution = Resolution.SECOND)
 	private Date createdTime;
 
 	/**
@@ -52,6 +55,7 @@ public class BaseModel implements Serializable {
 	 */
 	@Column(name = "updated_time", nullable = false)
 	@Field(name = "updatedTime", index = Index.UN_TOKENIZED, store = Store.YES)
+	@DateBridge(resolution = Resolution.SECOND)
 	private Date updatedTime;
 
 	public String getId() {

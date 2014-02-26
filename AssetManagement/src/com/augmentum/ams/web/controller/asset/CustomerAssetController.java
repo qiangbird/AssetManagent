@@ -73,14 +73,14 @@ public class CustomerAssetController extends BaseController {
 
         ModelAndView modelAndView = new ModelAndView();
         Customer customer = customerService.getCustomerByCode(customerCode);
+        String[] customerIds = {customer.getId()};
 
         if (null == searchCondition) {
             searchCondition = new SearchCondition();
         }
         
         Page<Asset> assetPage = customerAssetService
-                .findCustomerAssetsBySearchCondition(searchCondition,
-                        customer.getId());
+                .findCustomerAssetsBySearchCondition(searchCondition, customerIds);
         String clientTimeOffset = (String) session.getAttribute("timeOffset");
         List<AssetListVo> list = FormatEntityListToEntityVoList
                 .formatAssetListToAssetVoList(assetPage.getResult(),
@@ -207,10 +207,15 @@ public class CustomerAssetController extends BaseController {
         
         Set<Customer> set = new HashSet<Customer>(customers);
         List<Customer> customerList = new ArrayList<Customer>(set);
+        
+        String[] customerIds = new String[customerList.size()];
+        
+        for (int i = 0; i < customerIds.length; i++) {
+            customerIds[i] = customerList.get(i).getId();
+        }
 
         Page<Asset> page = customerAssetService
-                .findAllCustomerAssetBySearchCondition(searchCondition,
-                        customerList);
+                .findCustomerAssetsBySearchCondition(searchCondition, customerIds);
 
         String clientTimeOffset = (String) session.getAttribute("timeOffset");
         List<AssetListVo> assetVoList = FormatEntityListToEntityVoList
@@ -235,12 +240,12 @@ public class CustomerAssetController extends BaseController {
             HttpServletResponse response, String assetIds, 
             String customerCode, SearchCondition condition) {
 
-        String customerId = "";
-        List<Customer> customerList = null; 
+        String[] customerIds = {};
         
         if (StringUtils.isNotBlank(customerCode)) {
+            
             Customer customer = customerService.getCustomerByCode(customerCode);
-            customerId = customer.getId();
+            customerIds[0] = customer.getId();
         } else {
             
             // TODO: change to get customer list from session
@@ -259,9 +264,12 @@ public class CustomerAssetController extends BaseController {
                     .findVisibleCustomerList(userVo, list);
             
             Set<Customer> set = new HashSet<Customer>(customers);
-            customerList = new ArrayList<Customer>(set);
+            List<Customer> customerList = new ArrayList<Customer>(set);
+            
+            for (int i = 0; i < customerList.size(); i++) {
+                customerIds[i] = customerList.get(i).getId();
+            }
         }
-        
         
         if (null == condition) {
             condition = new SearchCondition();
@@ -272,8 +280,7 @@ public class CustomerAssetController extends BaseController {
 
             if (null == assetIds || "".equals(assetIds)) {
                 condition.setIsGetAllRecords(Boolean.TRUE);
-                outPutPath = customerAssetService.exportAssetsForAll(condition,
-                        customerList, customerId, request);
+                outPutPath = customerAssetService.exportAssetsForAll(condition, customerIds, request);
             } else {
                 outPutPath = assetService.exportAssetsByIds(assetIds, request);
             }

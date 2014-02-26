@@ -100,28 +100,5 @@ function setCriteria() {
     });
     criteria.searchFields = searchFields;
     
-    // set asset type
-    var assetType = "";
-    $("#assetType").find(":checked").each(function() {
-        if (assetType == null || assetType == "") {
-            assetType = this.value;
-        } else {
-            assetType = assetType + "," + this.value;
-        }
-    });
-    criteria.assetType = assetType;
-
-    // set asset status
-    var assetStatus = "";
-    $("#assetStatus").find(":checked").each(function() {
-        if (assetStatus == null || assetStatus == "") {
-            assetStatus = this.value;
-        } else {
-            assetStatus = assetStatus + "," + this.value;
-        }
-    });
-    criteria.assetStatus = assetStatus;
+    return criteria;
 }
-
-
-//Below is  about the operations of assets

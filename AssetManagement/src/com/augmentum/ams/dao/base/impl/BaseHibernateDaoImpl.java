@@ -42,7 +42,7 @@ public class BaseHibernateDaoImpl<T extends BaseModel> implements BaseHibernateD
     @SuppressWarnings("unchecked")
     @Override
     public Page<T> findByIndex(FullTextQuery fullTextQuery, QueryWrapperFilter filter,
-            Page<T> page, Class<T> clazz) {
+            Page<T> page) {
 
         if (null != filter) {
             fullTextQuery.setFilter(filter);

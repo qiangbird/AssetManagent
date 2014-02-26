@@ -18,17 +18,18 @@ public class FormatUtil {
     public static String formatKeyword(String keyword) {
 
         keyword = keyword.trim().toLowerCase();
-//        String flags[] = { "\\", "+", "|", "!", "{", "}", "[", "]", "~", "^",
-//                ":", "\"", "AND", "OR", "NOT" };
-//        for (String flag : flags) {
-//            keyword = keyword.replace(flag, "\\" + flag);
-//        }
+        String flags[] = { "\\", "+", "|", "!", "{", "}", "[", "]", "~", "^",
+                ":", "\"", "AND", "OR", "NOT", "_", "-", "&", "#"};
+        for (String flag : flags) {
+            keyword = keyword.replace(flag, "\\" + flag);
+        }
         return keyword;
     }
 
     public static String[] splitString(String param, String mark) {
 
-        if (null == param || "".equals(param) || null == mark || "".equals(mark)) {
+        if (null == param || "".equals(param) || null == mark
+                || "".equals(mark)) {
             return null;
         } else {
             return param.split(mark);
@@ -40,11 +41,14 @@ public class FormatUtil {
         StringBuilder newFileName = new StringBuilder();
         if (null == fileNameList || 0 == fileNameList.size()) {
             String prefix = UTCTimeUtil.formatDateToString(new Date());
-            newFileName.append(prefix).append(SystemConstants.SPLIT_UNDERLINE).append("01");
+            newFileName.append(prefix).append(SystemConstants.SPLIT_UNDERLINE)
+                    .append("01");
         } else {
 
-            String prefix = Collections.max(fileNameList).split(SystemConstants.SPLIT_UNDERLINE)[0];
-            String suffix = Collections.max(fileNameList).split(SystemConstants.SPLIT_UNDERLINE)[1];
+            String prefix = Collections.max(fileNameList).split(
+                    SystemConstants.SPLIT_UNDERLINE)[0];
+            String suffix = Collections.max(fileNameList).split(
+                    SystemConstants.SPLIT_UNDERLINE)[1];
             Integer sequence = Integer.valueOf(suffix) + 1;
 
             if (sequence < 10) {
@@ -52,7 +56,8 @@ public class FormatUtil {
             } else {
                 suffix = sequence.toString();
             }
-            newFileName.append(prefix).append(SystemConstants.SPLIT_UNDERLINE).append(suffix);
+            newFileName.append(prefix).append(SystemConstants.SPLIT_UNDERLINE)
+                    .append(suffix);
         }
         return newFileName.toString();
     }

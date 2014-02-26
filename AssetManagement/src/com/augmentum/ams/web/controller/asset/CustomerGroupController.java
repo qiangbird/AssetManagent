@@ -62,9 +62,9 @@ public class CustomerGroupController {
 
 		logger.info("searchCustomerGroup method in CustomerGroupController start!");
 
-		Page<CustomerGroup> groupPage = customerGroupService
+		Page<Customer> groupPage = customerGroupService
 				.findCustomerGroupBySearchCondition(searchCondition);
-		List<CustomerGroup> groupList = groupPage.getResult();
+		List<Customer> groupList = groupPage.getResult();
 		JSONArray array = new JSONArray();
 		array = SearchCommonUtil.formatGroupListTOJSONArray(groupList);
 		List processTypeList = AssetUtil.getProcessTypes();
