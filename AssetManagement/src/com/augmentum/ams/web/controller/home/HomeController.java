@@ -129,6 +129,11 @@ public class HomeController extends BaseController {
         return "/error/error_404";
     }
 
+    @RequestMapping("/error_500")
+    public String showSystemError() {
+        return "/error/error_500";
+    }
+
     @RequestMapping(value = "/home")
     public String redirectIndex() {
         return "home/dashboard";

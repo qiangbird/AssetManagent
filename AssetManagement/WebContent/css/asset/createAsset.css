@@ -99,7 +99,6 @@ div.asset-input-details {
 
 div.type-details {
 	height: auto;
-	margin-top: 40px;
 }
 
 .asset-input-info  strong {
@@ -178,6 +177,9 @@ left: -2;
 	position: absolute;
 	top: 15px;
 	left: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .asset-input-panel p input {
@@ -577,7 +579,7 @@ left: -2;
 }
 
 .common-requirement-property {
-	height: 420px;
+	height: 500px;
 }
 
 #uploadPhoto input {
@@ -885,3 +887,4 @@ p .dropDownList .dropDownList_icon {
 	border: 1px solid white;
 	line-height: 30px;
 }
+

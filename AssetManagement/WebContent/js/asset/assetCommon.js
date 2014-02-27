@@ -48,6 +48,32 @@
 	      changeYear : true,
 	      dateFormat : "yy-mm-dd"
 		   });
+   
+   $(".showAsSelfDefine").find(".asset-input-panel").each(function(){
+	  $(this).find(".selfPropertyName").each(function(){
+		  var length;
+		  if ($(this).html().charCodeAt(0) > 255) {
+			  length = 10;
+		  } else {
+			  length = 20;
+		  }
+		  if ($(this).html().length > length) {
+			  $(this).poshytip({
+				  className: 'tip-green',
+				  allowTipHover: true,
+				  content: $(this).html()
+			  });
+		  }
+	   });
+   });
+   
+   $(".fixedCheckBox").click(function(){
+   	if("radioCheckOff" == $(this).find("a").attr("class")){
+   		$(this).parents(".radioBoxes").find(".radioCheckOn").attr("class","radioCheckOff");
+   		$(this).find("a").attr("class","radioCheckOn");
+   		$("#fixed").val($(this).find("a").attr("id"));
+   	}
+   });
 	   
    //upload image
    $("#file").change(

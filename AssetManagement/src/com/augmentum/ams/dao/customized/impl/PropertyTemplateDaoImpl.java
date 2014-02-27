@@ -1,7 +1,6 @@
 package com.augmentum.ams.dao.customized.impl;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -64,10 +63,10 @@ public class PropertyTemplateDaoImpl extends BaseDaoImpl<PropertyTemplate> imple
     public PropertyTemplate getPropertyTemplate(String id) {
 
         logger.info(LogHelper.getLogInfo("Get propertyTemplate start", id));
-        
+
         DetachedCriteria criteria = DetachedCriteria.forClass(PropertyTemplate.class);
         criteria.add(Restrictions.eq("id", id));
-        
+
         logger.info(LogHelper.getLogInfo("Get propertyTemplate end"));
 
         return getUnique(criteria);

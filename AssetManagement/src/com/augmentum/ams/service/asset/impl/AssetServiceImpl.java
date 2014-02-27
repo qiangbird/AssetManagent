@@ -310,14 +310,22 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         for (PropertyTemplate pt : defaultPropertyTemplatesList) {
             CustomizedProperty customizedProperty = customizedPropertyService
                     .getByAssetIdAndTemplateId(asset.getId(), pt.getId());
-            if (null == customizedProperty) {
-                CustomizedProperty newCustomizedProperty = new CustomizedProperty();
-                newCustomizedProperty.setValue(pt.getValue());
-                newCustomizedProperty.setAsset(asset);
-                newCustomizedProperty.setPropertyTemplate(pt);
-                customizedPropertyService.saveCustomizedProperty(newCustomizedProperty);
-                propertyTemplatesList.add(pt);
-            } else {
+            /*
+             * if (null == customizedProperty) { CustomizedProperty
+             * newCustomizedProperty = new CustomizedProperty();
+             * newCustomizedProperty.setValue(pt.getValue());
+             * newCustomizedProperty.setAsset(asset);
+             * newCustomizedProperty.setPropertyTemplate(pt);
+             * customizedPropertyService
+             * .saveCustomizedProperty(newCustomizedProperty);
+             * propertyTemplatesList.add(pt); } else { if
+             * (operation.equals("show")) { if
+             * (!(pt.getPropertyType().equals("selectType"))) {
+             * pt.setValue(customizedProperty.getValue()); } } else {
+             * pt.setValue(customizedProperty.getValue()); }
+             * propertyTemplatesList.add(pt); }
+             */
+            if (null != customizedProperty) {
                 if (operation.equals("show")) {
                     if (!(pt.getPropertyType().equals("selectType"))) {
                         pt.setValue(customizedProperty.getValue());
@@ -325,8 +333,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 } else {
                     pt.setValue(customizedProperty.getValue());
                 }
-                propertyTemplatesList.add(pt);
             }
+            propertyTemplatesList.add(pt);
         }
         return propertyTemplatesList;
     }

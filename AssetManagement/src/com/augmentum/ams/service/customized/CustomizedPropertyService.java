@@ -1,5 +1,7 @@
 package com.augmentum.ams.service.customized;
 
+import java.util.List;
+
 import com.augmentum.ams.model.customized.CustomizedProperty;
 
 public interface CustomizedPropertyService {
@@ -40,4 +42,8 @@ public interface CustomizedPropertyService {
      * @return
      */
     public CustomizedProperty getByAssetIdAndTemplateId(String assetId, String templateId);
+
+    public void deleteByTemplateId(String id);
+
+    public List<CustomizedProperty> getByPropertyTemplateId(String id);
 }

@@ -18,7 +18,6 @@ String basePath = request.getScheme() + "://"
 <base href="<%=basePath%>">
 <title>View Asset</title>
 <link rel="stylesheet" href="css/asset/viewAsset.css" type="text/css">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="autocomplete/css/autocomplete.css"
     type="text/css">
 </head>
@@ -59,58 +58,58 @@ String basePath = request.getScheme() + "://"
                         <form:hidden path="id" />
                         <p>
                             <label><spring:message code="asset.id" /></label>
-                            <form:input path="assetId" readonly="true" />
+                            <form:input path="assetId" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.name" /></label>
-                            <form:input path="assetName" readonly="true" />
+                            <form:input path="assetName" readonly="readonly" />
                         </p>
                         <p>
 
                             <label><spring:message code="asset.type" /></label>
-                            <form:input path="type" id="assetType" readonly="true" />
+                            <form:input path="type" id="assetType" readonly="readonly" />
 
                         </p>
                         <p>
                             <label><spring:message code="asset.bar.code" /></label>
-                            <form:input path="barCode" readonly="true" />
+                            <form:input path="barCode" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.series.no" /></label>
-                            <form:input path="seriesNo" readonly="true" />
+                            <form:input path="seriesNo" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.po.no" /></label>
-                            <form:input path="poNo" readonly="true" />
+                            <form:input path="poNo" readonly="readonly" />
 
                         </p>
                         <p>
                             <label><spring:message code="asset.ownership" /></label>
-                            <form:input path="ownerShip" readonly="true" />
+                            <form:input path="ownerShip" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.used.by" /></label>
-                            <form:input path="customer.customerName" readonly="true" />
+                            <form:input path="customer.customerName" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="project" /></label>
-                            <form:input path="project.projectName" readonly="true" />
+                            <form:input path="project.projectName" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.status" /></label>
-                            <form:input path="status" readonly="true" />
+                            <form:input path="status" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.check.in.date" /></label>
-                            <form:input path="checkInTime" readonly="true" />
+                            <form:input path="checkInTime" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.check.out.date" /></label>
-                            <form:input path="checkOutTime" readonly="true" />
+                            <form:input path="checkOutTime" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="keeper" /></label>
-                            <form:input path="keeper" readonly="true" />
+                            <form:input path="keeper" readonly="readonly" />
                         </p>
 
                     </div>
@@ -128,40 +127,40 @@ String basePath = request.getScheme() + "://"
                     </div>
                     <div class="common-asset-input-right asset-input-panel">
                         <p>
-                            <form:hidden path="photoPath" readonly="true"
+                            <form:hidden path="photoPath" readonly="readonly"
                                 placeholder="Please select a photo" class="truePhotoName" />
 
                         </p>
 
                         <p>
                             <label> <spring:message code="asset.entity" /></label>
-                            <form:input path="entity" readonly="true" />
+                            <form:input path="entity" readonly="readonly" />
                         </p>
                          <p>
                             <label><spring:message code="asset.site" /></label>
-                            <form:input path="site" readonly="true" />
+                            <form:input path="site" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.location" /></label>
-                            <form:input path="location" readonly="true" />
+                            <form:input path="location" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.user" /></label>
-                            <form:input path="user.userName" readonly="true" />
+                            <form:input path="user.userName" readonly="readonly" />
                         </p>
                         <p>
                             <label><spring:message code="asset.manufacture" /></label>
-                            <form:input path="manufacturer" readonly="true" />
+                            <form:input path="manufacturer" readonly="readonly" />
                         </p>
 
                         <p>
                             <label><spring:message code="asset.warranty" /></label>
-                            <form:input path="warrantyTime" readonly="true" />
+                            <form:input path="warrantyTime" readonly="readonly" />
                         </p>
 
                         <p>
                             <label><spring:message code="asset.vendor" /></label>
-                            <form:input path="vendor" readonly="true" />
+                            <form:input path="vendor" readonly="readonly" />
                         </p>
 
                         <p>
@@ -171,8 +170,8 @@ String basePath = request.getScheme() + "://"
                         
                         <p>
                             <label><spring:message code="asset.memo" /></label>
-                            <%-- <form:input path="memo" readonly="true" /> --%>
-                            <form:textarea path="memo" rows="1" cols="15" readonly="true" />
+                            <%-- <form:input path="memo" readonly="readonly" /> --%>
+                            <form:textarea path="memo" rows="1" cols="15" readonly="readonly" />
                         </p>
                     </div>
                     <div class="clear"></div>
@@ -190,11 +189,11 @@ String basePath = request.getScheme() + "://"
                             <div class="asset-input-left asset-input-panel">
                                 <p>
                                     <label><spring:message code="asset.machine.subtype" /></label>
-                                    <form:input path="machine.subtype" readonly="true" />
+                                    <form:input path="machine.subtype" readonly="readonly" />
                                 </p>
                                 <p>
                                     <label><spring:message code="asset.machine.speification" /></label>
-                                    <form:input path="machine.specification" readonly="true" />
+                                    <form:input path="machine.specification" readonly="readonly" />
                                 </p>
                             </div>
                         </div>
@@ -203,12 +202,12 @@ String basePath = request.getScheme() + "://"
                             <div class="asset-input-left asset-input-panel">
                                 <p>
                                     <label><spring:message code="asset.machine.addtional.config" /></label>
-                                    <form:input path="machine.configuration" readonly="true" />
+                                    <form:input path="machine.configuration" readonly="readonly" />
 
                                 </p>
                                 <p>
                                     <label><spring:message code="asset.machine.mac.address" /></label>
-                                    <form:input path="machine.address" readonly="true" />
+                                    <form:input path="machine.address" readonly="readonly" />
                                 </p>
                             </div>
                         </div>
@@ -224,13 +223,13 @@ String basePath = request.getScheme() + "://"
                             <form:hidden path="monitor.id" />
                             <p>
                                 <label><spring:message code="asset.monitor.size" /></label>
-                                <form:input path="monitor.size" id="size" class="l-text"  readonly="true" />
+                                <form:input path="monitor.size" id="size" class="l-text"  readonly="readonly" />
                             </p>
                         </div>
                         <div class="asset-input-right asset-input-panel">
                             <p>
                                 <label><spring:message code="asset.monitor.detail" /></label>
-                                <form:input path="monitor.detail" class="l-text"  readonly="true" />
+                                <form:input path="monitor.detail" class="l-text"  readonly="readonly" />
                             </p>
                         </div>
                         <div class="clear"></div>
@@ -245,7 +244,7 @@ String basePath = request.getScheme() + "://"
                             <p>
                                 <label><spring:message code="asset.device.subtype" /></label>
                                 <form:input path="device.deviceSubtype.subtypeName"
-                                    id="deviceSubtypeSelect" class="form-control l-text"  readonly="true" />
+                                    id="deviceSubtypeSelect" class="form-control l-text"  readonly="readonly" />
 
                                 <span class="image-span"></span>
                             </p>
@@ -254,7 +253,7 @@ String basePath = request.getScheme() + "://"
                             <p>
                                 <label><spring:message code="asset.device.configuration" /></label>
                                 <form:input path="device.configuration" id="configuration"
-                                    class="l-text"  readonly="true" />
+                                    class="l-text"  readonly="readonly" />
                             </p>
                         </div>
                         <div class="clear"></div>
@@ -269,23 +268,23 @@ String basePath = request.getScheme() + "://"
                             <form:hidden path="software.id" />
                             <p>
                                 <label><spring:message code="asset.software.version" /></label>
-                                <form:input path="software.version" id="version" class="l-text"  readonly="true" />
+                                <form:input path="software.version" id="version" class="l-text"  readonly="readonly" />
                             </p>
                     <%--      <c:choose>
                             <c:when test="${asset.software.managerVisible }">
                             <p>
                                 <label><spring:message code="asset.software.version" /></label>
-                                <form:input path="software.version" id="version" class="l-text"  readonly="true" />
+                                <form:input path="software.version" id="version" class="l-text"  readonly="readonly" />
                             </p>
                             </c:when>
                             <c:otherwise>
                             <p>
                             <label><spring:message code="asset.software.version" /></label>
                              <shiro:hasAnyRoles name="EMPLOYEE,MANAGER,SPECIAL_ROLE">
-                               <input type="text" value="**********" class="l-text"  readonly="true" >
+                               <input type="text" value="**********" class="l-text"  readonly="readonly" >
                              </shiro:hasAnyRoles>
                              <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
-                               <form:input path="software.version" id="version" class="l-text"  readonly="true" />
+                               <form:input path="software.version" id="version" class="l-text"  readonly="readonly" />
                              </shiro:hasAnyRoles>
                              </p>
                             </c:otherwise>
@@ -294,14 +293,14 @@ String basePath = request.getScheme() + "://"
                             <c:when test="${asset.software.managerVisible }">
                              <p>
                                 <label><spring:message code="asset.software.additional.info" /></label>
-                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
+                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="readonly" />
                             </p> 
                             </c:when>
                             <c:otherwise>
                              <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
                              <p>
                                 <label><spring:message code="asset.software.additional.info" /></label>
-                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="true" />
+                                <form:input path="software.additionalInfo" id="additionalInfo" class="l-text"  readonly="readonly" />
                             </p> 
                              </shiro:hasAnyRoles>
                             </c:otherwise>
@@ -313,18 +312,18 @@ String basePath = request.getScheme() + "://"
                             <p>
                                 <label><spring:message code="asset.software.license.key" /></label>
                                  <form:input path="software.licenseKey" id="licenseKey"
-                                    class="l-text"  readonly="true" />
+                                    class="l-text"  readonly="readonly" />
                             </p>
                             </c:when>
                             <c:otherwise>
                             <p>
                             <label><spring:message code="asset.software.license.key" /></label>
                              <shiro:hasAnyRoles name="EMPLOYEE,MANAGER,SPECIAL_ROLE">
-                               <input type="text" value="**********" class="l-text"  readonly="true" >
+                               <input type="text" value="**********" class="l-text"  readonly="readonly" >
                              </shiro:hasAnyRoles>
                              <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
                              <form:input path="software.licenseKey" id="licenseKey"
-                                    class="l-text"  readonly="true" />
+                                    class="l-text"  readonly="readonly" />
                              </shiro:hasAnyRoles>
                              </p>
                             </c:otherwise>
@@ -344,7 +343,7 @@ String basePath = request.getScheme() + "://"
                             <p class="p-textarea">
                                 <label><spring:message code="asset.non.it.asset.detail" /></label>
                                 <span class="p-textarea-span"> <form:textarea
-                                        path="otherAssets.detail" id="details" class="l-textarea"  readonly="true" />
+                                        path="otherAssets.detail" id="details" class="l-textarea"  readonly="readonly" />
                                 </span>
                             </p>
                         </div>
@@ -367,30 +366,26 @@ String basePath = request.getScheme() + "://"
                                 <c:if test="${selfProperty.position == 'sortableLeft'}">
                                     <c:if test="${selfProperty.propertyType == 'inputType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out value="${selfProperty.enName}" /> </label>
-                                            <input value="${selfProperty.value }" readonly="true">
+                                            <label class="selfPropertyName">${selfProperty.enName} </label>
+                                            <input value="${selfProperty.value }" readonly="readonly">
                                         </p>
                                     </c:if>
                                     <c:if test="${selfProperty.propertyType == 'selectType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out value="${selfProperty.enName}" /> </label>
-                                            <input type="text" readonly="true" value="${selfProperty.value }">
+                                            <label class="selfPropertyName">${selfProperty.enName} </label>
+                                            <input type="text" readonly="readonly" value="${selfProperty.value }">
                                         </p>
                                     </c:if>
                                     <c:if test="${selfProperty.propertyType == 'dateType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out value="${selfProperty.enName}" /> </label>
-                                            <input readonly="true" value="${selfProperty.value }">
+                                            <label class="selfPropertyName">${selfProperty.enName} </label>
+                                            <input readonly="readonly" value="${selfProperty.value }">
                                         </p>
                                     </c:if>
 
                                     <c:if test="${selfProperty.propertyType == 'textAreaType'}">
                                         <p class="p-textarea">
-                                            <label class="selfPropertyName"><c:out
-                                                    value="${selfProperty.enName}" /> </label> <input readonly="true"
+                                            <label class="selfPropertyName">${selfProperty.enName}</label> <input readonly="readonly"
                                                 value="${selfProperty.value }" />
                                         </p>
                                     </c:if>
@@ -407,33 +402,29 @@ String basePath = request.getScheme() + "://"
                                 <c:if test="${selfProperty.position == 'sortableRight'}">
                                     <c:if test="${selfProperty.propertyType == 'inputType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out  value="${selfProperty.enName}" /> </label> 
-                                            <input readonly="true" value="${selfProperty.value }">
+                                            <label class="selfPropertyName">${selfProperty.enName} </label> 
+                                            <input readonly="readonly" value="${selfProperty.value }">
                                         </p>
                                     </c:if>
 
                                     <c:if test="${selfProperty.propertyType == 'selectType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out value="${selfProperty.enName}" /> </label> 
-                                            <input type="text"  readonly="true" value="${selfProperty.value }">
+                                            <label class="selfPropertyName">${selfProperty.enName} </label> 
+                                            <input type="text"  readonly="readonly" value="${selfProperty.value }">
                                         </p>
                                     </c:if>
 
                                     <c:if test="${selfProperty.propertyType == 'dateType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out value="${selfProperty.enName}" /> </label>
-                                            <input readonly ="true" value="${selfProperty.value }">
+                                            <label class="selfPropertyName">${selfProperty.enName} </label>
+                                            <input readonly="readonly" value="${selfProperty.value }">
                                         </p>
                                     </c:if>
 
                                     <c:if test="${selfProperty.propertyType == 'textAreaType'}">
                                         <p>
-                                            <label class="selfPropertyName">
-                                            <c:out value="${selfProperty.enName}" /> </label>
-                                            <input type="text" value="${selfProperty.value }" readonly="true" />
+                                            <label class="selfPropertyName">${selfProperty.enName} </label>
+                                            <input type="text" value="${selfProperty.value }" readonly="readonly" />
                                         </p>
                                     </c:if>
                                 </c:if>
@@ -450,10 +441,7 @@ String basePath = request.getScheme() + "://"
     </form:form>
 	<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
     <script type="text/javascript" src="js/asset/viewAsset.js"></script>
-    <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
     <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
-    <script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
         <script type="text/javascript" src="js/asset/assetCommon.js"></script>
         
 </body>

@@ -24,9 +24,9 @@
 			</map>
 		</property>
 	</bean>
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="warnLogCategory" value="WARN" />
-        <property name="defaultErrorView" value="/error/error_404"></property>  
+        <property name="defaultErrorView" value="/error_500"></property>  
         <property name="exceptionAttribute" value="error"></property>  
         <property name="defaultStatusCode" value="500" />
     </bean> 

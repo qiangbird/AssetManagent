@@ -1,5 +1,7 @@
 package com.augmentum.ams.service.customized.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,16 @@ public class CustomizedPropertyServiceImpl implements CustomizedPropertyService 
     @Override
     public CustomizedProperty getByAssetIdAndTemplateId(String assetId, String templateId) {
         return customizedPropertyDao.getByAssetIdAndTemplateId(assetId, templateId);
+    }
+
+    @Override
+    public void deleteByTemplateId(String id) {
+        customizedPropertyDao.deleteByTemplateId(id);
+    }
+
+    @Override
+    public List<CustomizedProperty> getByPropertyTemplateId(String id) {
+        return customizedPropertyDao.getByPropertyTemplateId(id);
     }
 
 }

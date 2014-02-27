@@ -218,6 +218,7 @@ String basePath = request.getScheme() + "://"
 							</span>
 						</p>
 					</div>
+					<div class="clear"></div>
 				</div>
 
 
@@ -262,7 +263,7 @@ String basePath = request.getScheme() + "://"
 								</p>
 							</div>
 						</div>
-
+                        <div class="clear"></div>
 					</div>
 
 
@@ -287,6 +288,7 @@ String basePath = request.getScheme() + "://"
 								</span>
 							</p>
 						</div>
+						<div class="clear"></div>
 					</div>
 
 					<div id="deviceDetails" class="type-details" style="display: none">
@@ -310,6 +312,7 @@ String basePath = request.getScheme() + "://"
 									class="l-text" />
 							</p>
 						</div>
+						<div class="clear"></div>
 					</div>
 					
 					<div id="softwareDetails" class="type-details"
@@ -396,6 +399,7 @@ String basePath = request.getScheme() + "://"
                      </c:choose> 
                          </p>
                         </div>
+                        <div class="clear"></div>
                     </div>
 					
 					<div id="otherAssetsDetails" class="type-details"
@@ -414,8 +418,8 @@ String basePath = request.getScheme() + "://"
 						</div>
 
 						<div class="asset-input-right asset-input-panel"></div>
+					   <div class="clear"></div>
 					</div>
-
 				</div>
 
 
@@ -434,8 +438,7 @@ String basePath = request.getScheme() + "://"
 											<%-- <c:if test="${selfProperty.isRequired}">
 						<span>*</span>					
 						</c:if>  --%>
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label> <input type="hidden"
+											<label class="selfPropertyName">${selfProperty.enName}</label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}"> <input
 												type="text" class="l-text selfPropertyVlaue"
 												name="${selfProperty.enName}" id="${selfProperty.id}"
@@ -444,8 +447,7 @@ String basePath = request.getScheme() + "://"
 									</c:if>
 									<c:if test="${selfProperty.propertyType == 'selectType'}">
 										<p>
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label>
+											<label class="selfPropertyName">${selfProperty.enName}</label>
 											<%-- <input type="text" class="l-select" name="${selfProperty.enName}" id="${selfProperty.id}" value="${selfProperty.value }"> --%>
 
 											<input type="hidden" class="selfId"
@@ -460,8 +462,7 @@ String basePath = request.getScheme() + "://"
 									</c:if>
 									<c:if test="${selfProperty.propertyType == 'dateType'}">
 										<p>
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label> <input type="hidden"
+											<label class="selfPropertyName">${selfProperty.enName} </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}"> <input
 												type="text" class="l-date selfPropertyVlaue"
 												name="${selfProperty.enName}" id="${selfProperty.id}"
@@ -495,8 +496,7 @@ String basePath = request.getScheme() + "://"
 											<%--    <c:if test="${selfProperty.isRequired}">
                         <span>*</span>                  
                         </c:if> --%>
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label> <input type="hidden"
+											<label class="selfPropertyName">${selfProperty.enName} </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}"> <input
 												type="text" class="l-text selfPropertyVlaue"
 												name="${selfProperty.enName}" id="${selfProperty.id}"
@@ -506,8 +506,7 @@ String basePath = request.getScheme() + "://"
 
 									<c:if test="${selfProperty.propertyType == 'selectType'}">
 										<p>
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label> <input type="hidden"
+											<label class="selfPropertyName">${selfProperty.enName} </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}"> <select
 												id="DropList"
 												class="l-select dropDownSelect selfPropertyVlaue">
@@ -523,8 +522,7 @@ String basePath = request.getScheme() + "://"
 
 									<c:if test="${selfProperty.propertyType == 'dateType'}">
 										<p>
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label> <input type="hidden"
+											<label class="selfPropertyName">${selfProperty.enName} </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}"> <input
 												type="text" class="l-date selfPropertyVlaue"
 												name="${selfProperty.enName}" id="${selfProperty.id}"
@@ -534,8 +532,7 @@ String basePath = request.getScheme() + "://"
 
 									<c:if test="${selfProperty.propertyType == 'textAreaType'}">
 										<p class="p-textarea">
-											<label class="selfPropertyName"><c:out
-													value="${selfProperty.enName}" /> </label> <input type="hidden"
+											<label class="selfPropertyName">${selfProperty.enName} </label> <input type="hidden"
 												class="selfId" value="${selfProperty.id}">
 											<textarea class="l-textArea selfPropertyVlaue"
 												name="${selfProperty.enName}" id="${selfProperty.id}"  >${selfProperty.value }</textarea>
@@ -562,6 +559,7 @@ String basePath = request.getScheme() + "://"
 					<div id="showError"></div>
 				</div>
 			</form:form>
+			<div class="clear"></div>
 			<input type="hidden" id="localeCode" name="localeCode"
 				value="${sessionScope.i18n }">
 		</div>

@@ -3,21 +3,29 @@ package com.augmentum.ams.service.customized.impl;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.augmentum.ams.dao.customized.PropertyTemplateDao;
+import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.customized.CustomizedProperty;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.enumeration.PropertyTypeEnum;
 import com.augmentum.ams.model.user.User;
+import com.augmentum.ams.service.customized.CustomizedPropertyService;
 import com.augmentum.ams.service.customized.PropertyTemplateService;
+import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.customized.PropertyTemplateVo;
 
@@ -28,6 +36,9 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
 
     @Autowired
     private PropertyTemplateDao propertyTemplateDao;
+
+    @Autowired
+    private CustomizedPropertyService customizedPropertyService;
 
     /*
      * (non-Javadoc)
@@ -45,6 +56,7 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
         JSONObject selfProperty = null;
         Date nowTime = UTCTimeUtil.localDateToUTC();
         List<PropertyTemplate> propertyTemplates = new ArrayList<PropertyTemplate>();
+        List<PropertyTemplate> originalProperties = new ArrayList<PropertyTemplate>();
         JSONArray selfPropertyArray = JSONArray.fromObject(propertyTemplateVo.getSelfProperties());
 
         try {
@@ -61,6 +73,12 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
                     propertyTemplate = getPropertyTemplateById(selfProperty.getString("id"));
                     if (Boolean.TRUE == selfProperty.getBoolean("isDelete")) {
                         propertyTemplate.setExpired(Boolean.TRUE);
+
+                        customizedPropertyService.deleteByTemplateId(propertyTemplate.getId());
+                    } else {
+                        PropertyTemplate updatedpropertyTemplate = new PropertyTemplate();
+                        BeanUtils.copyProperties(updatedpropertyTemplate, propertyTemplate);
+                        originalProperties.add(updatedpropertyTemplate);
                     }
                 }
                 setValueOfPropertyTemplate(propertyTemplate, selfProperty, nowTime);
@@ -68,9 +86,76 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
                 propertyTemplates.add(propertyTemplate);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new BusinessException(ErrorCodeUtil.UNKNOWN_EXCEPTION_0401001,
+                    "Save PropertyTemplate failure!");
         }
         propertyTemplateDao.saveOrUpdateAll(propertyTemplates);
+        checkChangeTypeOrValue(originalProperties, propertyTemplates);
+    }
+
+    private void checkChangeTypeOrValue(List<PropertyTemplate> originalProperties,
+            List<PropertyTemplate> propertyTemplates) {
+
+        List<PropertyTemplate> updatedproperties = new ArrayList<PropertyTemplate>();
+
+        for (PropertyTemplate propertyTemplate : propertyTemplates) {
+            if (null != propertyTemplate.getId()) { // update
+                updatedproperties.add(propertyTemplate);
+            }
+        }
+
+        if (null == originalProperties || null == updatedproperties
+                || originalProperties.size() != updatedproperties.size()) {
+            logger.info("OriginalProperties or updatedproperties is not exist or don't have the same size!");
+            return;
+        } else {
+            // put them into the map
+            Map<String, PropertyTemplate> originalPropertiesMap = new HashMap<String, PropertyTemplate>();
+
+            for (PropertyTemplate propertyTemplate : originalProperties) {
+                originalPropertiesMap.put(propertyTemplate.getId(), propertyTemplate);
+            }
+
+            for (int i = 0; i < updatedproperties.size(); i++) {
+                if (originalPropertiesMap.containsKey(updatedproperties.get(i).getId())) {
+                    String updatePropertyType = updatedproperties.get(i).getPropertyType();
+                    String originalPropertyType = originalPropertiesMap.get(
+                            updatedproperties.get(i).getId()).getPropertyType();
+
+                    if (StringUtils.isBlank(updatePropertyType)
+                            || StringUtils.isBlank(originalPropertyType)) {
+                        throw new BusinessException(ErrorCodeUtil.DATA_NOT_EXIST,
+                                "updatePropertyType or originalPropertyType is null!");
+                    }
+
+                    // temporary ignore the situation that only update the value
+                    // of the properyTemplate.
+                    if (!updatePropertyType.equals(originalPropertyType)) {
+                        // update the corresponding value of the
+                        // customizedPropery
+                        List<CustomizedProperty> customizedProperties = customizedPropertyService
+                                .getByPropertyTemplateId(updatedproperties.get(i).getId());
+
+                        if (null != customizedProperties) {
+                            for (CustomizedProperty customizedProperty : customizedProperties) {
+                                customizedProperty.setValue(updatedproperties.get(i).getValue());
+                                customizedPropertyService
+                                        .updateCustomizedProperty(customizedProperty);
+                            }
+                        } else {
+                            throw new BusinessException(ErrorCodeUtil.DATA_NOT_EXIST,
+                                    "The customizedProperty with id : "
+                                            + updatedproperties.get(i).getId()
+                                            + " is not exist in the database!");
+                        }
+                    }
+                } else {
+                    throw new BusinessException(ErrorCodeUtil.DATA_NOT_EXIST,
+                            "Can't find updatedproperties in originalProperties of the database!");
+                }
+            }
+        }
+
     }
 
     /*

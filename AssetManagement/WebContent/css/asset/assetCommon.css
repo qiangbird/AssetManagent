@@ -30,3 +30,61 @@ p lable{
 	font-family: Arial;
 	font-size: 14px;
 }
+
+.clear {
+    clear: both;
+}
+
+.radioCheckOn {
+    margin-left: 4px;
+    margin-right: 5px;
+    width: 14px;
+    height: 14px;
+    display: block;
+    float: left;
+    cursor:pointer;
+    background: url(../../image/customize/customizedView/icn_radio_active_14x14.png) no-repeat;
+}
+.radioCheckOff {
+    margin-left: 4px;
+    margin-right: 5px;
+    width: 14px;
+    height: 14px;
+    display: block;
+    float: left;
+    cursor:pointer;
+    background: url(../../image/customize/customizedView/icn_radio_14x14.png) no-repeat;
+}
+
+.radioBoxes {
+    color: #7A7373;
+    font-family: arial;
+    font-size: 14px;
+    float: left;
+    margin-left: 137px;
+    margin-top: -6px;
+}
+
+.requiredFalse {
+    display: block;
+    float: left;
+    margin-right: 15px;
+}
+
+.requiredTrue {
+    display: block;
+    float: left;
+    margin-right: 15px;
+}
+
+.fixedCheckBox {
+	width: 75px;
+	height: 14px;
+	padding-top: 5px;
+    padding-bottom: 5px;
+	float: left;
+}
+
+.fixedCheckBox:HOVER {
+    cursor: pointer;
+}

@@ -161,9 +161,12 @@ html .ui-autocomplete {
 }
 
 .asset-input-panel p label {
-	width: 130px;
+	width: 136px;
 	position: absolute;
 	top: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .asset-input-panel p input {
