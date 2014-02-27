@@ -25,99 +25,111 @@ import com.augmentum.ams.web.vo.customized.PropertyTemplateVo;
 public class PropertyTemplateServiceImpl implements PropertyTemplateService {
 
     private Logger logger = Logger.getLogger(PropertyTemplateServiceImpl.class);
-    
-	@Autowired
-	private PropertyTemplateDao propertyTemplateDao;
 
-	/* (non-Javadoc)
-	 * @see com.augmentum.ams.service.customized.PropertyTemplateService#savePropertyTemplate(com.augmentum.ams.web.vo.customized.PropertyTemplateVo, com.augmentum.ams.model.asset.Customer, com.augmentum.ams.model.user.User)
-	 */
-	@Override
-	public void savePropertyTemplate(PropertyTemplateVo propertyTemplateVo, Customer customer, User user){
-		
-		JSONObject selfProperty = null;
-		Date nowTime = UTCTimeUtil.localDateToUTC();
-		List<PropertyTemplate> propertyTemplates = new ArrayList<PropertyTemplate>();
-		JSONArray selfPropertyArray = JSONArray.fromObject(propertyTemplateVo.getSelfProperties());
-		
-		try {
-			for(int i = 0; i < selfPropertyArray.size(); i++) {
-				PropertyTemplate propertyTemplate = new PropertyTemplate();
-				selfProperty = JSONObject.fromObject(selfPropertyArray.get(i));
-				
-				if(Boolean.TRUE == selfProperty.getBoolean("isNew")){ //create
-					propertyTemplate.setCreatedTime(nowTime);
-					propertyTemplate.setAssetType(propertyTemplateVo.getAssetType());
-					propertyTemplate.setCustomer(customer);
-					propertyTemplate.setCreator(user);
-				}else { //update
-					propertyTemplate = getPropertyTemplateById(selfProperty.getString("id"));
-					if(Boolean.TRUE == selfProperty.getBoolean("isDelete")){
-						propertyTemplate.setExpired(Boolean.TRUE);
-					}
-				}
-				setValueOfPropertyTemplate(propertyTemplate,
-			            selfProperty,  nowTime);
-				
-				propertyTemplates.add(propertyTemplate);
-			}
+    @Autowired
+    private PropertyTemplateDao propertyTemplateDao;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.augmentum.ams.service.customized.PropertyTemplateService#
+     * savePropertyTemplate
+     * (com.augmentum.ams.web.vo.customized.PropertyTemplateVo,
+     * com.augmentum.ams.model.asset.Customer,
+     * com.augmentum.ams.model.user.User)
+     */
+    @Override
+    public void savePropertyTemplate(PropertyTemplateVo propertyTemplateVo, Customer customer,
+            User user) {
+
+        JSONObject selfProperty = null;
+        Date nowTime = UTCTimeUtil.localDateToUTC();
+        List<PropertyTemplate> propertyTemplates = new ArrayList<PropertyTemplate>();
+        JSONArray selfPropertyArray = JSONArray.fromObject(propertyTemplateVo.getSelfProperties());
+
+        try {
+            for (int i = 0; i < selfPropertyArray.size(); i++) {
+                PropertyTemplate propertyTemplate = new PropertyTemplate();
+                selfProperty = JSONObject.fromObject(selfPropertyArray.get(i));
+
+                if (Boolean.TRUE == selfProperty.getBoolean("isNew")) { // create
+                    propertyTemplate.setCreatedTime(nowTime);
+                    propertyTemplate.setAssetType(propertyTemplateVo.getAssetType());
+                    propertyTemplate.setCustomer(customer);
+                    propertyTemplate.setCreator(user);
+                } else { // update
+                    propertyTemplate = getPropertyTemplateById(selfProperty.getString("id"));
+                    if (Boolean.TRUE == selfProperty.getBoolean("isDelete")) {
+                        propertyTemplate.setExpired(Boolean.TRUE);
+                    }
+                }
+                setValueOfPropertyTemplate(propertyTemplate, selfProperty, nowTime);
+
+                propertyTemplates.add(propertyTemplate);
+            }
         } catch (Exception e) {
-        	e.printStackTrace();
+            e.printStackTrace();
         }
-		propertyTemplateDao.saveOrUpdateAll(propertyTemplates);
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.augmentum.ams.service.customized.PropertyTemplateService#getPropertyTemplate(java.lang.String)
-	 */
-	@Override
-	public PropertyTemplate getPropertyTemplateById(String id) throws ParseException {
-		
-	    PropertyTemplate propertyTemplate = propertyTemplateDao.getPropertyTemplate(id);
-	    
-		return propertyTemplate;
-	}
+        propertyTemplateDao.saveOrUpdateAll(propertyTemplates);
+    }
 
-	/* (non-Javadoc)
-	 * @see com.augmentum.ams.service.customized.PropertyTemplateService#getPropertyTemplate(java.lang.String, java.lang.String)
-	 */
-	@Override
-	public JSONArray findPropertyTemplateByCustomerAndAssetType(String customerName,
-			String assetType) throws ParseException {
-		
-	    List<PropertyTemplate> propertyTemplates = propertyTemplateDao
-	            .findSelfDefinedProperties(customerName, assetType);
-	    JSONArray selfPropertyArray = new JSONArray();
-	    
-        for(PropertyTemplate propertyTemplate : propertyTemplates) {
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.augmentum.ams.service.customized.PropertyTemplateService#
+     * getPropertyTemplate(java.lang.String)
+     */
+    @Override
+    public PropertyTemplate getPropertyTemplateById(String id) throws ParseException {
+
+        PropertyTemplate propertyTemplate = propertyTemplateDao.getPropertyTemplate(id);
+
+        return propertyTemplate;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.augmentum.ams.service.customized.PropertyTemplateService#
+     * getPropertyTemplate(java.lang.String, java.lang.String)
+     */
+    @Override
+    public JSONArray findPropertyTemplateByCustomerAndAssetType(String customerName,
+            String assetType) throws ParseException {
+
+        List<PropertyTemplate> propertyTemplates = propertyTemplateDao.findSelfDefinedProperties(
+                customerName, assetType);
+        JSONArray selfPropertyArray = new JSONArray();
+
+        for (PropertyTemplate propertyTemplate : propertyTemplates) {
             JSONObject selfProperty = new JSONObject();
-            
+
             selfProperty.put("id", propertyTemplate.getId());
             selfProperty.put("propertyType", propertyTemplate.getPropertyType());
-            
-            if(PropertyTypeEnum.SELECT_TYPE.getPropertyType()
-                    .equals(propertyTemplate.getPropertyType())) {
+
+            if (PropertyTypeEnum.SELECT_TYPE.getPropertyType().equals(
+                    propertyTemplate.getPropertyType())) {
                 String propertyValue = propertyTemplate.getValue();
                 selfProperty.put("value", propertyValue.split("#"));
-            }else{
+            } else {
                 selfProperty.put("value", propertyTemplate.getValue());
             }
             selfProperty.put("position", propertyTemplate.getPosition());
             selfProperty.put("enName", propertyTemplate.getEnName());
             selfProperty.put("zhName", propertyTemplate.getZhName());
             selfProperty.put("sequence", propertyTemplate.getSequence());
-            selfProperty.put("isRequired", propertyTemplate.isRequired());
-            selfProperty.put("description", propertyTemplate.getDescription());
+            selfProperty.put("required", propertyTemplate.isRequired());
+            selfProperty.put("propertyDescription", propertyTemplate.getDescription());
             selfPropertyArray.add(selfProperty);
         }
-		
-		return selfPropertyArray;
-		
-	}
 
-	private PropertyTemplate setValueOfPropertyTemplate(PropertyTemplate propertyTemplate,
-            JSONObject selfProperty, Date nowTime){
-        
+        return selfPropertyArray;
+
+    }
+
+    private PropertyTemplate setValueOfPropertyTemplate(PropertyTemplate propertyTemplate,
+            JSONObject selfProperty, Date nowTime) {
+
         propertyTemplate.setUpdatedTime(nowTime);
         propertyTemplate.setPropertyType(selfProperty.getString("propertyType"));
         propertyTemplate.setValue(selfProperty.getString("value"));
@@ -127,8 +139,7 @@ public class PropertyTemplateServiceImpl implements PropertyTemplateService {
         propertyTemplate.setRequired(selfProperty.getBoolean("required"));
         propertyTemplate.setSequence(selfProperty.getInt("sequence"));
         propertyTemplate.setDescription(selfProperty.getString("propertyDescription"));
-        
+
         return propertyTemplate;
     }
 }
-

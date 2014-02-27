@@ -24,9 +24,9 @@ function validateAssetForm(){
     	validations.push($("#checkedOutTime").validateDate(checkedOutTime,checkedInTime,"Check out time should larger than check in time !"));
     	}
     	if("IN_USE" == assetStatus){
-    	if("" == assetUser || $("#assetUser").hasClass("input-text-error")){
-    		$("#assetUser").push($("#assetUser").validateNull(assetUser,"Asset user cannot be null and must be a employee name !"));
-    	}
+	    	if("" == assetUser || $("#assetUser").hasClass("input-text-error")){
+	    		$("#assetUser").push($("#assetUser").validateNull(assetUser,"Asset user cannot be null and must be a employee name !"));
+	    	}
     	}else{
     		if($("#assetUser").hasClass("input-text-error")){
         		$("#assetUser").push($("#assetUser").validateNull(assetUser,"Asset must be a employee name !"));

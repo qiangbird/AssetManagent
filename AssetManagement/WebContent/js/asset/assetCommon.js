@@ -331,7 +331,6 @@
 		  }
 	}
   }
-  alert(flag);
 // flag = 0;
   if (flag == 0) {
 	  if($("#assetUser").val()==""){

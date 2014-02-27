@@ -373,7 +373,7 @@ String basePath = request.getScheme() + "://"
                 <div id="bodyShadow"></div>
                 <div class="operation">
                     <div class="operation_location">
-                        <input type="button" value='<spring:message code="submit" />' class="submit-button" id="submitForm" />
+                        <input type="button" value='<spring:message code="save" />' class="submit-button" id="submitForm" />
                         <input type="button" value='<spring:message code="cancel" />' class="cancel-button" onclick="window.history.back();" />
                     </div>
                     <div id="showError"></div>
@@ -385,24 +385,16 @@ String basePath = request.getScheme() + "://"
         </div>
         </div>
         <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-        <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
-        <script type="text/javascript"
-            src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
-        <script type="text/javascript"
-            src="js/common/jquery.i18n.properties-1.0.9.js"></script>
         <script type="text/javascript" src="js/common/jquery-validate.min.js"></script>
         <script type="text/javascript" src="js/common/jquery.form.js"></script>
         <script type="text/javascript" src="js/asset/createAsset.js"></script>
         <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
         <script type="text/javascript" src="js/asset/assetCommon.js"></script>
-        <script type="text/javascript" src="js/common/messageBarCommon.js"></script>
         
         <!-- add front page validation -->
         <script type="text/javascript" src="js/common/validation.js"></script>
         <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
         <script type="text/javascript" src="js/asset/assetValidation.js"></script>
-        
-        <script type="text/javascript" src="messageBar/js/messagebar.js"></script>
         
 </body>
 </html>

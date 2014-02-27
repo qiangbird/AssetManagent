@@ -309,7 +309,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
 
         for (PropertyTemplate pt : defaultPropertyTemplatesList) {
             CustomizedProperty customizedProperty = customizedPropertyService
-                    .getCustomizedPropertyByTemplateId(pt.getId());
+                    .getByAssetIdAndTemplateId(asset.getId(), pt.getId());
             if (null == customizedProperty) {
                 CustomizedProperty newCustomizedProperty = new CustomizedProperty();
                 newCustomizedProperty.setValue(pt.getValue());
@@ -793,7 +793,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             } else {
                 obj.put("customerName", asset.getCustomer().getCustomerName());
             }
-            
+
             obj.put("keeper", asset.getKeeper());
             jsonArray.add(obj);
         }

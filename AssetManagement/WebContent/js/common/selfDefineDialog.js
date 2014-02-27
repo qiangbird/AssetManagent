@@ -71,7 +71,7 @@ function i18nProp(message, line) {
 		return $.i18n.prop(message);
 	}else{
 		if (line.lastIndexOf(",") != -1) {
-			return $.i18n.prop(message, line.trim().substring(0, line.trim().length - 1));
+			return $.i18n.prop(message, line.trim().substring(0, line.trim().length));
 		} else {
 			return $.i18n.prop(message, line);
 		}

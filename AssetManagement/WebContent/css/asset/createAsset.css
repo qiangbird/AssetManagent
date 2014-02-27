@@ -211,7 +211,7 @@ left: -2;
 	font-size: 14px;
 	color: #555555;
 	font-family: Arial;
-	overflow: hidden;
+	overflow: auto;
 	/* background: url("../../image/asset/create/IPX_300x70_Normal.png")
 		no-repeat; */
 }

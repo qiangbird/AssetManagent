@@ -8,29 +8,29 @@ import com.augmentum.ams.model.customized.CustomizedProperty;
 import com.augmentum.ams.service.customized.CustomizedPropertyService;
 
 @Service("customizedPropertyService")
-public class CustomizedPropertyServiceImpl implements CustomizedPropertyService{
-	
-	@Autowired
-	private CustomizedPropertyDao customizedPropertyDao;
+public class CustomizedPropertyServiceImpl implements CustomizedPropertyService {
 
-	@Override
-	public CustomizedProperty getCustomizedPropertyById(String id) {
-		return customizedPropertyDao.getCustomizedPropertyById(id);
-	}
+    @Autowired
+    private CustomizedPropertyDao customizedPropertyDao;
 
-	@Override
-	public void saveCustomizedProperty(CustomizedProperty customizedProperty) {
-		customizedPropertyDao.save(customizedProperty);
-	}
+    @Override
+    public CustomizedProperty getCustomizedPropertyById(String id) {
+        return customizedPropertyDao.getCustomizedPropertyById(id);
+    }
 
-	@Override
-	public void updateCustomizedProperty(CustomizedProperty customizedProperty) {
-		customizedPropertyDao.updateCustomizedProperty(customizedProperty);
-	}
+    @Override
+    public void saveCustomizedProperty(CustomizedProperty customizedProperty) {
+        customizedPropertyDao.save(customizedProperty);
+    }
 
-	@Override
-	public CustomizedProperty getCustomizedPropertyByTemplateId(String templateId) {
-		return customizedPropertyDao.getCustomizedPropertyByTemplateId(templateId);
-	}
+    @Override
+    public void updateCustomizedProperty(CustomizedProperty customizedProperty) {
+        customizedPropertyDao.updateCustomizedProperty(customizedProperty);
+    }
+
+    @Override
+    public CustomizedProperty getByAssetIdAndTemplateId(String assetId, String templateId) {
+        return customizedPropertyDao.getByAssetIdAndTemplateId(assetId, templateId);
+    }
 
 }

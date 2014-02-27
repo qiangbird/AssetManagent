@@ -554,7 +554,7 @@ String basePath = request.getScheme() + "://"
 				<div id="bodyShadow"></div>
 				<div class="operation">
 					<div class="operation_location">
-						<input type="button" value="<spring:message code="submit" />" 
+						<input type="button" value="<spring:message code="save" />" 
 						class="submit-button" id="submitForm" />
 						<input type="button" value='<spring:message code="cancel" />'
 							class="cancel-button" onclick="window.history.back();" />
