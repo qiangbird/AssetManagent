@@ -63,6 +63,7 @@ public class AuditController extends BaseController{
         }
         modelAndView.addObject(SystemConstants.FILE_NAME, auditVo.getAuditFileName());
         modelAndView.addObject(SystemConstants.PERCENT_NUMBER, percentNum);
+        modelAndView.addObject("auditFileId", auditFile.getId());
         
         return modelAndView;
     }
@@ -127,12 +128,13 @@ public class AuditController extends BaseController{
      }
     
     @RequestMapping(value = "/inventoryAsset", method = RequestMethod.GET)
-    public ModelAndView redirectInventoryAsset(String flag, String auditFileName) {
+    public ModelAndView redirectInventoryAsset(String flag, String auditFileName, String auditFileId) {
     	
     	ModelAndView modelAndView = new ModelAndView("audit/inventoryAssetList");
     	
     	modelAndView.addObject("flag", flag);
     	modelAndView.addObject("auditFileName", auditFileName);
+    	modelAndView.addObject("auditFileId", auditFileId);
     	
     	return modelAndView;
     }

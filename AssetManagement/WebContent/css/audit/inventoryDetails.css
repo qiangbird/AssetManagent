@@ -573,7 +573,7 @@ table.dataTable thead th {
 	height: 40px;
 	display: inline-block;
 	background: url("../../image/common/IMG_Tab_BKG_4x40.png") repeat-x;
-	margin-left: -60px;
+	margin-left: -10px;
 }
 
 .tab-head {

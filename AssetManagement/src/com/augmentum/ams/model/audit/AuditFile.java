@@ -14,6 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Indexed;
+import org.wltea.analyzer.lucene.IKAnalyzer;
+
 import com.augmentum.ams.model.base.BaseModel;
 import com.augmentum.ams.model.user.User;
 
@@ -23,6 +27,8 @@ import com.augmentum.ams.model.user.User;
  */
 @Entity
 @Table(name = "audit_file")
+@Indexed(index = "audit_file")
+@Analyzer(impl = IKAnalyzer.class)
 public class AuditFile extends BaseModel {
 
 	private static final long serialVersionUID = 7910432215158859830L;

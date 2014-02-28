@@ -97,30 +97,28 @@ public class InconsistentController extends BaseController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/viewInconsistentBarcode", method = RequestMethod.GET)
-	public ModelAndView findInconsistentBarcode(SearchCondition searchCondition) throws BaseException {
+	@RequestMapping(value = "/findInconsistentList", method = RequestMethod.GET)
+	public ModelAndView findInconsistentBySearchCondition(SearchCondition searchCondition,
+	        HttpSession session, String auditFileId) throws BaseException {
 		
 		if (null == searchCondition) {
 			searchCondition = new SearchCondition();
 		}
-		Page<Inconsistent> page = inconsistentService.findInconsistentBarcode(searchCondition);
+		Page<Inconsistent> page = inconsistentService.findInconsistentBySearchCondition(searchCondition, auditFileId);
 		
-		JSONArray array = new JSONArray();
-		
-		for (Inconsistent incons : page.getResult()) {
-			
-			JSONArray json = new JSONArray();
-			
-			json.add(incons.getId());
-			json.add(incons.getBarCode());
-			array.add(json);
-		}
-		
-		ModelAndView modelAndView = new ModelAndView();
-
-		modelAndView.addObject("fieldsData", array);
-		modelAndView.addObject("count", page.getRecordCount());
-		modelAndView.addObject("totalPage", page.getTotalPage());
+        String clientTimeOffset = (String) session.getAttribute("timeOffset");
+        
+        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+                .findUserCustomColumns("inconsistent", getUserIdByShiro());
+        
+        JSONArray array = SearchCommonUtil.formatInconsistentListToJSONArray(page.getResult(),
+                userCustomColumnList, clientTimeOffset);
+        
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("fieldsData", array);
+        modelAndView.addObject("count", page.getRecordCount());
+        modelAndView.addObject("totalPage", page.getTotalPage());
+        
 		return modelAndView;
 	}
 }

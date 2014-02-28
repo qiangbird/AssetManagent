@@ -32,12 +32,13 @@
 	<div id="viewMoreDetailDialog">
    	 	<input id="flag" type="hidden" value="${flag }"></input>
    	 	<input id="auditFileName" type="hidden" value="${auditFileName }"></input>
+   	 	<input id="auditFileId" type="hidden" value="${auditFileId }"></input>
+   	 	
     	<div id="checkResult">
     		<div class="tab-head"></div>
     		<div class="inventory-status" id="auditLink"><spring:message code="viewMoreDialog_auditLink"/></div>
    			<div class="inventory-status" id="unAuditLink"><spring:message code="viewMoreDialog_unauditLink"/></div>
    			<div class="inventory-status" id="inconsistentLink"><spring:message code="viewMoreDialog_inconsistentLink"/></div>
-   			<div class="inventory-status" id="barcodeLink"><spring:message code="viewMoreDialog_inconsBarcodeLink" /></div>
    			<div class="clear"></div>
     	</div>
     	

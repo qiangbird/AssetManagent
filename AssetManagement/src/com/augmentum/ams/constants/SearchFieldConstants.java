@@ -13,12 +13,8 @@ public class SearchFieldConstants {
             "customer.customerName", "ownerShip", "memo", "vendor", "entity",
             "assetName" };
 
-    public static final String ASSET_STATUS = "available,idle,in_use,borrowed,returned,broken,write_off,assigning,returning_to_it";
-
-    public static final String ASSET_TYPE = "device,machine,software,monitor,otherassets";
-
     public static final String[] CUSTOMER_GROUP_FIELDS = { "groupName",
-            "description", "processType" };
+            "description", "processType", "customers.customerName" };
 
     public static final String[] TRANSFER_LOG_FIELDS = { "asset.assetId",
             "asset.assetName", "user.userName", "action", "asset.manufacturer",
@@ -36,7 +32,7 @@ public class SearchFieldConstants {
             "asset.status", "assigner.userName", "assigner.userName_forSort",
             "returner.userName", "returner.userName_forSort" };
 
-    public static final String[] INCONSISTENT_FIELDS = { "asset.assetId",
+    public static final String[] INCONSISTENT_FIELDS = { "barcode", "asset.assetId",
             "asset.assetName", "asset.user.userName",
             "asset.project.projectName", "asset.customer.customerName",
             "asset.poNo", "asset.barCode", "asset.entity", "asset.keeper",

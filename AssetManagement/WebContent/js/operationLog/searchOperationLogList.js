@@ -31,25 +31,6 @@ $(document).ready(function() {
         yearRange: "2000:2030"
     });
     
-    function AddI18n(message) {
-        $("#label_" + message).html(msg(message));
-        if (message == "CheckInTime") {
-            var $temp = $("#label_" + message).parent().siblings(".condition_optional").children("p").children("input");
-            $temp.attr("content", msg(message));
-        } 
-        $("#label_" + message).siblings("input").attr("content", msg(message));
-     }
-//     var localeCode = $("#localeCode").val();
-    var i18n = $("#language").val();
-     jQuery.i18n.properties({
-        name : 'message',
-        path : 'i18n/',
-        mode : 'map',
-        language : i18n,
-        callback : function() {
-        }
-     });
-     
 });
 
 //search list

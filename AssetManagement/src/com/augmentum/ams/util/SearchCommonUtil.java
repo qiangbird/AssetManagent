@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.json.JSONArray;
@@ -18,6 +19,7 @@ import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
+import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.UserCustomColumn;
@@ -27,7 +29,8 @@ public class SearchCommonUtil {
 
     static Logger logger = Logger.getLogger(SearchCommonUtil.class);
 
-    private static String getAssetListVoValueByProperty(AssetListVo assetListVo, String fieldName) {
+    private static String getAssetListVoValueByProperty(
+            AssetListVo assetListVo, String fieldName) {
         PropertyDescriptor pd = null;
         Object obj = null;
         try {
@@ -58,7 +61,8 @@ public class SearchCommonUtil {
         }
     }
 
-    public static JSONArray formatAssetVoListTOJSONArray(List<AssetListVo> assetVoList,
+    public static JSONArray formatAssetVoListTOJSONArray(
+            List<AssetListVo> assetVoList,
             List<UserCustomColumn> userCustomColumnList, String uuid) {
         JSONArray arrays = new JSONArray();
 
@@ -67,20 +71,28 @@ public class SearchCommonUtil {
             array.add(assetListVo.getId());
 
             for (UserCustomColumn userCustomColumn : userCustomColumnList) {
-                String fieldName = userCustomColumn.getCustomizedColumn().getSortName();
+                String fieldName = userCustomColumn.getCustomizedColumn()
+                        .getSortName();
                 String value = "";
                 if ("assetId".equals(fieldName)) {
                     if (!StringUtils.isBlank(uuid)) {
-                        value = "<a href='asset/view/" + assetListVo.getId() + "?uuid=" + uuid
+                        value = "<a href='asset/view/"
+                                + assetListVo.getId()
+                                + "?uuid="
+                                + uuid
                                 + "' style='color: #418FB5'>"
-                                + getAssetListVoValueByProperty(assetListVo, fieldName) + "</a>";
+                                + getAssetListVoValueByProperty(assetListVo,
+                                        fieldName) + "</a>";
                     } else {
-                        value = "<a href='asset/view/" + assetListVo.getId()
+                        value = "<a href='asset/view/"
+                                + assetListVo.getId()
                                 + "' style='color: #418FB5'>"
-                                + getAssetListVoValueByProperty(assetListVo, fieldName) + "</a>";
+                                + getAssetListVoValueByProperty(assetListVo,
+                                        fieldName) + "</a>";
                     }
                 } else {
-                    value = getAssetListVoValueByProperty(assetListVo, fieldName);
+                    value = getAssetListVoValueByProperty(assetListVo,
+                            fieldName);
                 }
                 array.add(value);
             }
@@ -98,7 +110,8 @@ public class SearchCommonUtil {
      * @param userCustomColumnList
      * @return
      */
-    public static JSONArray formatLocationListTOJSONArray(List<Location> locationList) {
+    public static JSONArray formatLocationListTOJSONArray(
+            List<Location> locationList) {
         JSONArray arrays = new JSONArray();
 
         for (Location location : locationList) {
@@ -125,27 +138,28 @@ public class SearchCommonUtil {
      * @param userCustomColumnList
      * @return
      */
-    public static JSONArray formatGroupListTOJSONArray(List<CustomerGroup> groupList) {
+    public static JSONArray formatGroupListTOJSONArray(
+            List<CustomerGroup> groupList) {
         JSONArray arrays = new JSONArray();
 
         for (CustomerGroup customerGroup : groupList) {
-            
+
             JSONArray array = new JSONArray();
-            
+
             array.add(customerGroup.getId());
             String value = "";
             value = customerGroup.getGroupName();
             array.add(value);
-            
+
             value = customerGroup.getDescription();
             array.add(value);
-            
+
             value = customerGroup.getProcessType();
             array.add(value);
-            
+
             StringBuffer sb = new StringBuffer();
             List<Customer> list = customerGroup.getCustomers();
-            
+
             for (Customer customer : list) {
                 sb.append(customer.getCustomerName()).append(";");
             }
@@ -153,13 +167,14 @@ public class SearchCommonUtil {
 
             value = "<div class='editGroupIcon'></div>/<div class='deleteGroupIcon'></div>";
             array.add(value);
-            
+
             arrays.add(array);
         }
         return arrays;
     }
 
-    public static JSONArray formatTransferLogListTOJSONArray(List<TransferLog> result,
+    public static JSONArray formatTransferLogListTOJSONArray(
+            List<TransferLog> result,
             List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
 
         JSONArray arrays = new JSONArray();
@@ -170,28 +185,33 @@ public class SearchCommonUtil {
             array.add(transferLog.getId());
 
             for (UserCustomColumn userCustomColumn : userCustomColumnList) {
-                String fieldName = userCustomColumn.getCustomizedColumn().getSortName();
+                String fieldName = userCustomColumn.getCustomizedColumn()
+                        .getSortName();
                 String value = "";
 
                 if ("time".equals(fieldName)) {
-                    value = UTCTimeUtil.utcToLocalTime(transferLog.getTime(), clientTimeOffset,
+                    value = UTCTimeUtil.utcToLocalTime(transferLog.getTime(),
+                            clientTimeOffset,
                             SystemConstants.TIME_SECOND_PATTERN);
                 } else if ("asset.checkInTime".equals(fieldName)) {
                     if (null == transferLog.getAsset().getCheckInTime()) {
                         value = "";
                     } else {
-                        value = UTCTimeUtil.utcToLocalTime(transferLog.getAsset().getCheckInTime(),
-                                clientTimeOffset, SystemConstants.DATE_DAY_PATTERN);
+                        value = UTCTimeUtil.utcToLocalTime(transferLog
+                                .getAsset().getCheckInTime(), clientTimeOffset,
+                                SystemConstants.DATE_DAY_PATTERN);
                     }
                 } else {
 
                     try {
                         value = BeanUtils.getProperty(transferLog, fieldName);
                     } catch (IllegalAccessException e) {
-                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
                                 "IllegalAccessException when get property from transferlog");
                     } catch (InvocationTargetException e) {
-                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
                                 "InvocationTargetException when get property from transferlog");
                     } catch (NoSuchMethodException e) {
                         throw new SystemException(ErrorCodeUtil.SYSTEM_ERROR,
@@ -206,8 +226,9 @@ public class SearchCommonUtil {
         return arrays;
     }
 
-    public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(List<ToDo> todoList,
-            List<UserCustomColumn> userCustomColumnList, String timeOffset) {
+    public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(
+            List<ToDo> todoList, List<UserCustomColumn> userCustomColumnList,
+            String timeOffset) {
         JSONArray arrays = new JSONArray();
 
         for (ToDo todo : todoList) {
@@ -227,23 +248,32 @@ public class SearchCommonUtil {
                         value = "";
                     } else {
                         if ("asset.customer".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo, "asset.customer.customerName");
+                            value = BeanUtils.getProperty(todo,
+                                    "asset.customer.customerName");
                         } else if ("asset.project".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo, "asset.project.projectName");
+                            value = BeanUtils.getProperty(todo,
+                                    "asset.project.projectName");
                         } else if ("asset.user".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo, "asset.user.userName");
+                            value = BeanUtils.getProperty(todo,
+                                    "asset.user.userName");
                         } else if ("assigner".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo, "assigner.userName");
+                            value = BeanUtils.getProperty(todo,
+                                    "assigner.userName");
                         } else if ("returner".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo, "returner.userName");
+                            value = BeanUtils.getProperty(todo,
+                                    "returner.userName");
                         } else if ("returnedTime".equals(columnName)
                                 || "receivedTime".equals(columnName)) {
-                            
-                            if (SystemConstants.DATA_MAX_DATE_TOSTRING.equals((String) obj)) {
+
+                            if (SystemConstants.DATA_MAX_DATE_TOSTRING
+                                    .equals((String) obj)) {
                                 value = "";
                             } else {
-                                value = UTCTimeUtil.formatUTCStringToLocalString((String) obj,
-                                        timeOffset, SystemConstants.TIME_SECOND_PATTERN);
+                                value = UTCTimeUtil
+                                        .formatUTCStringToLocalString(
+                                                (String) obj,
+                                                timeOffset,
+                                                SystemConstants.TIME_SECOND_PATTERN);
                             }
                         } else {
                             value = (String) obj;
@@ -266,7 +296,8 @@ public class SearchCommonUtil {
         return arrays;
     }
 
-    public static JSONArray formatOperationLogListTOJSONArray(List<OperationLog> result,
+    public static JSONArray formatOperationLogListTOJSONArray(
+            List<OperationLog> result,
             List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
 
         JSONArray arrays = new JSONArray();
@@ -279,12 +310,97 @@ public class SearchCommonUtil {
             array.add(operationLog.getOperation());
             array.add(operationLog.getOperationObject());
             array.add(operationLog.getOperationObjectID());
-            array.add(UTCTimeUtil.utcToLocalTime(operationLog.getUpdatedTime(), clientTimeOffset,
-                    "yyyy-MM-dd HH:mm:ss"));
+            array.add(UTCTimeUtil.utcToLocalTime(operationLog.getUpdatedTime(),
+                    clientTimeOffset, "yyyy-MM-dd HH:mm:ss"));
 
             arrays.add(array);
         }
         return arrays;
+    }
 
+    public static JSONArray formatInconsistentListToJSONArray(
+            List<Inconsistent> inconsistents,
+            List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
+
+        JSONArray arrays = new JSONArray();
+
+        for (Inconsistent inconsistent : inconsistents) {
+
+            JSONArray array = new JSONArray();
+            array.add(inconsistent.getId());
+            
+            if (null == inconsistent.getAsset()) {
+                
+                for (UserCustomColumn column : userCustomColumnList) {
+                    String columnName = column.getCustomizedColumn().getSortName();
+                    
+                    if (columnName.equals("asset.barCode")) {
+                        array.add(inconsistent.getBarCode());
+                    } else {
+                        array.add("");
+                    }
+                }
+            } else {
+                
+                for (UserCustomColumn column : userCustomColumnList) {
+                    
+                    String columnName = column.getCustomizedColumn().getSortName();
+                    String value = "";
+                    try {
+                        
+                        Object obj = BeanUtils
+                                .getProperty(inconsistent, columnName);
+                        
+                        if (null == obj) {
+                            value = "";
+                        } else {
+                            if ("asset.customer".equals(columnName)) {
+                                value = BeanUtils.getProperty(inconsistent,
+                                        "asset.customer.customerName");
+                            } else if ("asset.project".equals(columnName)) {
+                                value = BeanUtils.getProperty(inconsistent,
+                                        "asset.project.projectName");
+                            } else if ("asset.user".equals(columnName)) {
+                                value = BeanUtils.getProperty(inconsistent,
+                                        "asset.user.userName");
+                            } else if ("asset.location".equals(columnName)) {
+                                value = BeanUtils.getProperty(inconsistent, "asset.location.site") 
+                                        + BeanUtils.getProperty(inconsistent, "asset.location.room");
+                            } else if ("asset.checkInTime".equals(columnName)
+                                    || "asset.checkOutTime".equals(columnName)
+                                    || "asset.warrantyTime".equals(columnName)) {
+                                
+                                Date temp = UTCTimeUtil.formatStringToDate(obj.toString(), 
+                                        SystemConstants.TIME_SECOND_PATTERN);
+                                Date localDate = UTCTimeUtil.utcToLocalTime(temp, clientTimeOffset);
+                                
+                                value = UTCTimeUtil.formatDateToString(localDate, SystemConstants.DATE_DAY_PATTERN);
+                                
+                            } else if ("asset.fixed".equals(columnName)) {
+                                if (Boolean.TRUE.equals(obj)) {
+                                    value = "Yes";
+                                } else {
+                                    value = "No";
+                                }
+                            } else {
+                                value = (String) obj;
+                            }
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                                "IllegalAccessException when get property from todo asset");
+                    } catch (InvocationTargetException e) {
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                                "InvocationTargetException when get property from todo asset");
+                    } catch (NoSuchMethodException e) {
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                                "NoSuchMethodException when get property from todo asset");
+                    }
+                    array.add(value);
+                }
+            }
+            arrays.add(array);
+        }
+        return arrays;
     }
 }

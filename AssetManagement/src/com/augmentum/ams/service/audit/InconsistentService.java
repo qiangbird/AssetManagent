@@ -29,7 +29,7 @@ public interface InconsistentService {
      * @author Geoffrey.Zhao
      * @return
      */
-    Page<Inconsistent> findInconsistentBarcode(SearchCondition condition) throws BaseException;
+    Page<Inconsistent> findInconsistentBySearchCondition(SearchCondition condition, String auditFileId) throws BaseException;
 
     /**
      * @author Geoffrey.Zhao

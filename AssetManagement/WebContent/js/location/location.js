@@ -100,7 +100,7 @@ $(document).ready(function() {
  			  });
  	});
  	$("#room").click(function(){
- 	$("#room").removeClass("site-error");
+ 		$("#room").removeClass("site-error");
  	});
  	//edit group
  	$(".dataList").delegate(".editLocationIcon","click",function(){
@@ -121,29 +121,28 @@ $(document).ready(function() {
  		  });
  	});
      //delete group
-     	$(".dataList").delegate(".deleteLocationIcon","click",function(){
-     		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
-     		
-     		
-     		ShowMsg(i18nProp('operation_confirm_message'),function(yes){
- 				 if (yes) {
- 					 $.ajax({
- 			    		    type : 'DELETE',
- 			    		    contentType : 'application/json',
- 			    		    url : 'location/delete/' + pk,
- 			    		    dataType : 'json',
- 			    		    data:{
- 			    		    	 _method: 'DELETE',
- 			    		    },
- 			    		    success : function(data) {
- 			    		    	dataList.search();
- 			    		     }
- 			    		  });
- 	                }else{
- 	                	return;
- 	                }
- 				});
-     	});
+ 	$(".dataList").delegate(".deleteLocationIcon","click",function(){
+ 		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
+ 		
+ 		ShowMsg(i18nProp('operation_confirm_message'),function(yes){
+			 if (yes) {
+				 $.ajax({
+		    		    type : 'DELETE',
+		    		    contentType : 'application/json',
+		    		    url : 'location/delete/' + pk,
+		    		    dataType : 'json',
+		    		    data:{
+		    		    	 _method: 'DELETE',
+		    		    },
+		    		    success : function(data) {
+		    		    	dataList.search();
+		    		     }
+		    	});
+            }else{
+            	return;
+            }
+		});
+ 	});
      	
      	//submit
      	$("#submitLocation").click(function(){

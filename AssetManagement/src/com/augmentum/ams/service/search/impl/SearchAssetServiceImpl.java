@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
@@ -78,19 +77,25 @@ public class SearchAssetServiceImpl implements SearchAssetService {
 
         // create filter based on advanced search condition, it used for further
         // filtering query result
-        BooleanQuery filterQuery = new BooleanQuery();
+        BooleanQuery filterQuery = null;
 
         if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
-            filterQuery.add(
-                    new TermQuery(new Term("user.id", searchCondition
+            
+            if (null == filterQuery) {
+                filterQuery = new BooleanQuery();
+            }
+            filterQuery.add(new TermQuery(new Term("user.id", searchCondition
                             .getUserUuid())), Occur.MUST);
         }
 
         // get fixed assets list
         if (null != searchCondition.getIsFixedAsset()
                 && searchCondition.getIsFixedAsset()) {
-            filterQuery.add(
-                    new TermQuery(new Term("fixed", Boolean.TRUE.toString())),
+            
+            if (null == filterQuery) {
+                filterQuery = new BooleanQuery();
+            }
+            filterQuery.add(new TermQuery(new Term("fixed", Boolean.TRUE.toString())),
                     Occur.MUST);
         }
 
@@ -99,6 +104,10 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 && searchCondition.getIsWarrantyExpired()) {
             String fromTime = UTCTimeUtil.formatCurrentTimeForFilterTime();
             String toTime = UTCTimeUtil.getAssetExpiredTimeForFilterTime();
+            
+            if (null == filterQuery) {
+                filterQuery = new BooleanQuery();
+            }
             filterQuery.add(new TermRangeQuery("warrantyTime", fromTime,
                     toTime, true, true), Occur.MUST);
         }
@@ -111,24 +120,20 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                     .getCustomizedViewItemQuery(searchCondition
                             .getCustomizedViewId());
 
+            if (null == filterQuery) {
+                filterQuery = new BooleanQuery();
+            }
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
-            BooleanQuery statusQuery = CommonSearchUtil
-                    .searchByAssetStatus(searchCondition.getAssetStatus());
-            BooleanQuery typeQuery = CommonSearchUtil
-                    .searchByAssetType(searchCondition.getAssetType());
-            Query checkInTimeQuery = CommonSearchUtil.searchByTimeRangeQuery(
-                    "checkInTime", searchCondition.getFromTime(),
-                    searchCondition.getToTime());
-
-            filterQuery.add(statusQuery, Occur.MUST);
-            filterQuery.add(typeQuery, Occur.MUST);
-
-            if (null != checkInTimeQuery) {
-                filterQuery.add(checkInTimeQuery, Occur.MUST);
-            }
+            CommonSearchUtil.addFilterQueryForAsset(searchCondition,
+                    filterQuery, "checkInTime");
         }
-        QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
+        
+        QueryWrapperFilter filter = null;
+        
+        if (null != filterQuery) {
+            filter = new QueryWrapperFilter(filterQuery);
+        }
 
         // add entity associate
         Criteria criteria = session.createCriteria(Asset.class)

@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.hibernate.Criteria;
@@ -119,7 +118,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
         // filter query by customer
         filterQuery.add(getCustomerQuery(customerIds), Occur.MUST);
-        
+
         // If customizedViewId is not empty, only use the
         // customizedViewItemQuery
         if (null != searchCondition.getCustomizedViewId()
@@ -130,20 +129,9 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
-            BooleanQuery statusQuery = CommonSearchUtil
-                    .searchByAssetStatus(searchCondition.getAssetStatus());
-            BooleanQuery typeQuery = CommonSearchUtil
-                    .searchByAssetType(searchCondition.getAssetType());
-            Query checkInTimeQuery = CommonSearchUtil.searchByTimeRangeQuery(
-                    "checkInTime", searchCondition.getFromTime(),
-                    searchCondition.getToTime());
-
-            filterQuery.add(statusQuery, Occur.MUST);
-            filterQuery.add(typeQuery, Occur.MUST);
-
-            if (null != checkInTimeQuery) {
-                filterQuery.add(checkInTimeQuery, Occur.MUST);
-            }
+            
+            CommonSearchUtil.addFilterQueryForAsset(searchCondition,
+                    filterQuery, "checkInTime");
         }
 
         QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
@@ -258,7 +246,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
 
         customerVisibleList.addAll(nonGroupCustomerList);
-        
+
         Set<Customer> customers = new HashSet<Customer>(customerVisibleList);
         customerVisibleList.clear();
         customerVisibleList.addAll(customers);

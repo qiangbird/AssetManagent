@@ -47,21 +47,6 @@ public class InconsistentServiceTest extends BaseCaseTest {
 	}
 	
 	@Test
-	public void testFindInconsistentBarcode() throws BaseException {
-		SearchCondition sc = new SearchCondition();
-		sc.setSortName("barcode");
-		sc.setSortSign("asc");
-		sc.setAuditFileName("2014-01-08_01");
-		sc.setPageSize(100);
-//		sc.setKeyWord("0110102");
-		
-		Page<Inconsistent> page = inconsistentService.findInconsistentBarcode(sc);
-		for (Inconsistent incons : page.getResult()) {
-			logger.info(page.getResult() + "---" +incons.getBarCode());
-		}
-	}
-	
-	@Test
 	public void testFindInconsistentList() {
 		JSONArray array = inconsistentService.findInconsistentAssets("2014-01-08_01", 0, 100);
 		logger.info(array.size());

@@ -16,6 +16,7 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
@@ -63,6 +64,7 @@ public class CustomerGroup extends BaseModel {
      *  The customers in the group
      */
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customerGroup", cascade = CascadeType.PERSIST)
+    @IndexedEmbedded(depth = 1)
     @ContainedIn
     private List<Customer> customers;
     

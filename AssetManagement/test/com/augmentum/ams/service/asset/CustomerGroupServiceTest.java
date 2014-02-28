@@ -15,9 +15,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.augmentum.ams.dao.asset.CustomerGroupDao;
+import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
+import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -36,6 +39,10 @@ public class CustomerGroupServiceTest {
     private CustomerGroupService customerGroupService;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CustomerGroupDao customerGroupDao;
+    @Autowired
+    private BaseHibernateDao<CustomerGroup> baseHibernateDao;
     
     @Test
     public void saveCustomerGroupTest(){
@@ -69,6 +76,25 @@ public class CustomerGroupServiceTest {
         
         Page<CustomerGroup> page = customerGroupService.findCustomerGroupBySearchCondition(sc);
         logger.info(page.getResult().size());
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCreateIndex() {
+        String hql = "FROM CustomerGroup";
+        List<CustomerGroup> list = (List<CustomerGroup>)customerGroupDao.getHibernateTemplate().find(hql);
+        Class<CustomerGroup>[] clazzes = new Class[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            CustomerGroup customerGroup = list.get(i);
+            Class clazz =  customerGroup.getClass();
+            clazzes[i] = clazz;
+        }
+        try {
+            baseHibernateDao.createIndex(clazzes);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
 }

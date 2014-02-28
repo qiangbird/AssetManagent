@@ -15,7 +15,7 @@ var dataListInfo = {
 	            $.ajax({
 	                type : "POST",
 	                contentType : "application/json",
-	                url : "searchCommon/column/getColumns?category=asset",
+	                url : getCustomColumnAfterUpdate(),
 	                dataType : "json",
 	                success : function(data) {
 	                    dataList.opts.columns = data.columns;
@@ -88,44 +88,34 @@ $(document).ready(function() {
 	
 	var flag = $("#flag").val();
 	if(flag == "audited"){
-		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink", "#barcodeLink");
+		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink");
 		showInventoryAsset("audited");
 	}
 	else if(flag == "unaudited"){
-		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink", "#barcodeLink");
+		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink");
 		showInventoryAsset("unaudited");
 	}
 	else if(flag == "inconsistent"){
-		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink", "#barcodeLink");
+		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink");
 		showInventoryAsset("inconsistent");
 	}
 	
 	$("#auditLink").click(function(){
-		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink", "#barcodeLink");
+		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink");
 		showFilterbox();
 		showInventoryAsset("audited");
 	});
 	
 	$("#unAuditLink").click(function(){
-		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink", "#barcodeLink");
+		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink");
 		showFilterbox();
 		showInventoryAsset("unaudited");
 	});
 	
 	$("#inconsistentLink").click(function(){
-		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink", "#barcodeLink");
+		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink");
 		showFilterbox();
-		showInventoryAsset("inconsistent");
-	});
-	
-	$("#barcodeLink").click(function(){
-		changeLinkBgcolor("#barcodeLink", "#auditLink", "#unAuditLink", "#inconsistentLink");
-		$(".filterDiv").hide();
-		$("#customizedViewButton").hide();
-		$("#searchButton").css("left", "30px");
-		
-		showInconsistentBarcode(fileName);
-		$(".dataList-div-nineSqurt").hide();
+		showInconsistent("inconsistent");
 	});
 	
 });
@@ -163,12 +153,36 @@ function showInventoryAsset(flag) {
 	});
 }
 
-function showInconsistentBarcode(fileName) {
-	$(".dataList > div:gt(0)").remove();
-	dataListInfo.columns = [{ EN : 'Barcode', ZH : '条形码', sortName : 'barcode', width : 200, headerId: 1, isMustShow : true }];
-	initTableForBarcode(fileName);
-    dataList.setShow("Barcode");
-    dataList.search();
+function showInconsistent(flag) {
+	$.ajax({
+		type: 'POST',
+	    url: "searchCommon/column/getColumns?category=inconsistent",
+	    contentType : "application/json",
+	    dataType : "json",
+	    data: {},
+	    success:function(data){
+	    	$(".dataList > div:gt(0)").remove();
+	    	dataListInfo.columns = data.columns;
+	    	
+	    	initTable(flag, fileName);
+            dataList.setShow(data.showFields);
+            dataList.search();
+            
+            //columns sortable event
+            $(".dataList-div-fields").sortable({
+                cancel: 'a',
+                items: '>div:gt(0)',
+                placeholder: "sortable-placeholder",
+                revert: true,
+                start: function(event, ui) {
+                    $(ui.item).addClass("dataList-div-fields-border");
+                },
+                stop: function(event, ui){
+                    $(ui.item).removeClass("dataList-div-fields-border");
+                }
+            });
+	    }
+	});
 }
 
 function initTable(flag, fileName) {
@@ -219,7 +233,7 @@ function getURLForInventoryAsset(flag) {
 	if (flag == "audited" || flag == "unaudited") {
 		return "audit/viewInventoryAsset";
 	} else if (flag == "inconsistent") {
-		return "inconsistent/viewInconsistentAsset";
+		return "inconsistent/findInconsistentList?auditFileId=" + $("#auditFileId").val();
 	}
 }
 
@@ -307,9 +321,18 @@ function showFilterbox() {
 	$("#customizedViewButton").show();
 }
 
-function changeLinkBgcolor(link1, link2, link3, link4) {
+function changeLinkBgcolor(link1, link2, link3) {
 	$(link1).addClass("selected-status");
 	$(link2).removeClass("selected-status");
 	$(link3).removeClass("selected-status");
-	$(link4).removeClass("selected-status");
+}
+
+function getCustomColumnAfterUpdate() {
+	var categoryType = $("#flag").val();
+	
+	if (categoryType == "inconsistent") {
+		return "searchCommon/column/getColumns?category=inconsistent";
+	} else {
+		return "searchCommon/column/getColumns?category=asset";
+	}
 }

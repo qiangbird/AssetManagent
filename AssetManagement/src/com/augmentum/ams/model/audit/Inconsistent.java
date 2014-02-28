@@ -44,6 +44,7 @@ public class Inconsistent extends BaseModel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "audit_file_id")
+	@IndexedEmbedded(depth = 1)
 	private AuditFile auditFile;
 
 	public String getBarCode() {

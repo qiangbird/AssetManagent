@@ -13,7 +13,6 @@ function ShowMsg(msg, callback) {
 
 $(function() {
 	
-	var i18n = $("#locale").val();
 	jQuery.i18n.properties({
 		name : 'jqueryi18n',
 		path : 'i18n/',

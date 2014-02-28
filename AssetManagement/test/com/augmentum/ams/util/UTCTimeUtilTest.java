@@ -53,4 +53,5 @@ public class UTCTimeUtilTest extends BaseCaseTest{
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - 8);
         Assert.assertTrue(calendar.getTime().toString().equals(UTCTimeUtil.localDateToUTC("2013-12-12").toString()));
     }
+    
 }

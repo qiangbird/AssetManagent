@@ -119,22 +119,19 @@
              <div class="operation_assets_list">
                 <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
-                <shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
-                    <c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
-                    <li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
-                    <li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
-                    </c:if>
-                    <li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
-                    <li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
-                    
-                    <li id="returnToCustomer" value="RETURNED"><a><spring:message code="returnToCustomer" /></a></li>
-                    
-                 </shiro:hasAnyRoles>
-                <shiro:hasRole name="EMPLOYEE">
-                    <li id="takeOver"><a><spring:message code="customer.asset.take.over" /></a></li>
-                    <li id="returnToProject" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.project" /></a>
-                    </li>
-                </shiro:hasRole>
+                	<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
+                    	<c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
+                    		<li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
+                    		<li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
+                    	</c:if>
+                    	<li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
+                    	<li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
+                    	<li id="returnToCustomer" value="RETURNED"><a><spring:message code="returnToCustomer" /></a></li>
+                 	</shiro:hasAnyRoles>
+                	<shiro:hasRole name="EMPLOYEE">
+                    	<li id="takeOver"><a><spring:message code="customer.asset.take.over" /></a></li>
+                    	<li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
+                	</shiro:hasRole>
                 </ul>
             </div> 
         </div>

@@ -25,6 +25,7 @@
  <jsp:include page="../common/header.jsp" />
 <div id="inventoryDetails">
 <input type="hidden" name="fileName" id="fileName" value="${fileName}"/>
+<input type="hidden" name="auditFileId" id="auditFileId" value="${auditFileId}"/>
 <input type="hidden" name="percentage" id="percentage" value="${percentNum}"/>
 <input type="hidden" name="operator" id="operator" value="${operator}"/>
 <input type="hidden" name="operationTime" id="operationTime" value="${operationTime}"/>
@@ -121,7 +122,7 @@
             </div>
       </div>
         </div>
-       	<div id="viewMoreDetails">
+       	<div id="viewMoreDetails" style="overflow: auto;">
    		</div>
         </div>
 

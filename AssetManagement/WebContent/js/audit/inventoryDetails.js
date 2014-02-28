@@ -32,6 +32,7 @@ function showDataListDialog() {
 function refreshData(){
 	var auditFileName=$("#fileName").val();
 	var percentNum=$("#percentage").val();
+	var auditFileId=$("#auditFileId").val();
 	
 	loadStatusBar(percentNum);
 	
@@ -51,17 +52,17 @@ function refreshData(){
      }
 	);
 	showAudited("#aa");  
-	showIncons(auditFileName);
+	showIncons(auditFileId);
 
 }
 
-function showIncons(auditFileName){
+function showIncons(auditFileId){
 	$("#inconsTableContent").children().remove();
 	AddInconsTable();
 	
 	$("#iconsView").bind("click", function(){
     	showDataListDialog();
-       	$("#viewMoreDetails").load("audit/inventoryAsset?flag=inconsistent" + "&auditFileName=" + auditFileName);
+       	$("#viewMoreDetails").load("audit/inventoryAsset?flag=inconsistent" + "&auditFileId=" + auditFileId);
     });
 	
     $("#inconsTable").dataTable({

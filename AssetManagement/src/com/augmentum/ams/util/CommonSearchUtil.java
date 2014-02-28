@@ -20,8 +20,10 @@ import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
+import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 import common.Logger;
 
 public class CommonSearchUtil {
@@ -65,13 +67,17 @@ public class CommonSearchUtil {
                 searchFields = SearchFieldConstants.CUSTOMER_GROUP_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.CUSTOMER_GROUP_FIELDS;
             } else if (clazz == Location.class) {
-                
+
                 searchFields = SearchFieldConstants.LOCATION_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.LOCATION_FIELDS;
             } else if (clazz == ToDo.class) {
-                
+
                 searchFields = SearchFieldConstants.TODO_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.TODO_FIELDS;
+            } else if (clazz == Inconsistent.class) {
+
+                searchFields = SearchFieldConstants.INCONSISTENT_FIELDS;
+                sentenceSearchFields = SearchFieldConstants.INCONSISTENT_SENTENCE_FIELDS;
             }
         } else {
             sentenceSearchFields = searchFields;
@@ -143,12 +149,12 @@ public class CommonSearchUtil {
      * @param status
      * @return
      */
-    public static BooleanQuery searchByAssetStatus(String status) {
+    public static BooleanQuery searchByAssetStatus(String status, Class<?> clazz) {
 
         BooleanQuery assetStatusQuery = new BooleanQuery();
 
         if (StringUtils.isBlank(status)) {
-            status = SearchFieldConstants.ASSET_STATUS;
+            return null;
         }
 
         String[] statusConditions = FormatUtil.splitString(status,
@@ -157,8 +163,14 @@ public class CommonSearchUtil {
         if (null != statusConditions && 0 < statusConditions.length) {
 
             for (int i = 0; i < statusConditions.length; i++) {
-                assetStatusQuery.add(new TermQuery(new Term("status",
-                        statusConditions[i])), Occur.SHOULD);
+
+                if (clazz == Asset.class) {
+                    assetStatusQuery.add(new TermQuery(new Term("status",
+                            statusConditions[i])), Occur.SHOULD);
+                } else {
+                    assetStatusQuery.add(new TermQuery(new Term("asset.status",
+                            statusConditions[i])), Occur.SHOULD);
+                }
             }
         }
 
@@ -170,12 +182,12 @@ public class CommonSearchUtil {
      * @param type
      * @return
      */
-    public static BooleanQuery searchByAssetType(String type) {
+    public static BooleanQuery searchByAssetType(String type, Class<?> clazz) {
 
         BooleanQuery assetTypeQuery = new BooleanQuery();
 
         if (StringUtils.isBlank(type)) {
-            type = SearchFieldConstants.ASSET_TYPE;
+            return null;
         }
 
         String[] typeConditions = FormatUtil.splitString(type,
@@ -184,8 +196,14 @@ public class CommonSearchUtil {
         if (null != typeConditions && 0 < typeConditions.length) {
 
             for (int i = 0; i < typeConditions.length; i++) {
-                assetTypeQuery.add(new TermQuery(new Term("type",
-                        typeConditions[i])), Occur.SHOULD);
+
+                if (clazz == Asset.class) {
+                    assetTypeQuery.add(new TermQuery(new Term("type",
+                            typeConditions[i])), Occur.SHOULD);
+                } else {
+                    assetTypeQuery.add(new TermQuery(new Term("asset.type",
+                            typeConditions[i])), Occur.SHOULD);
+                }
             }
         }
         return assetTypeQuery;
@@ -235,5 +253,37 @@ public class CommonSearchUtil {
             sortName = "user.userName_forSort";
         }
         return sortName;
+    }
+
+    /**
+     * @author Geoffrey.Zhao
+     * @param condition
+     */
+    public static void addFilterQueryForAsset(SearchCondition searchCondition,
+            BooleanQuery filterQuery, String fileName) {
+        
+        if (null == filterQuery) {
+            filterQuery = new BooleanQuery();
+        }
+        
+        BooleanQuery statusQuery = CommonSearchUtil.searchByAssetStatus(
+                searchCondition.getAssetStatus(), Inconsistent.class);
+        BooleanQuery typeQuery = CommonSearchUtil.searchByAssetStatus(
+                searchCondition.getAssetType(), Inconsistent.class);
+        Query checkInTimeQuery = CommonSearchUtil.searchByTimeRangeQuery(
+                fileName, searchCondition.getFromTime(),
+                searchCondition.getToTime());
+
+        if (null != statusQuery) {
+            filterQuery.add(statusQuery, Occur.MUST);
+        }
+
+        if (null != typeQuery) {
+            filterQuery.add(typeQuery, Occur.MUST);
+        }
+
+        if (null != checkInTimeQuery) {
+            filterQuery.add(checkInTimeQuery, Occur.MUST);
+        }
     }
 }

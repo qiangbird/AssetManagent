@@ -206,17 +206,17 @@ public class AuditServiceImpl implements AuditService {
 
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
-            BooleanQuery statusQuery = CommonSearchUtil
-                    .searchByAssetStatus(searchCondition.getAssetStatus());
-            BooleanQuery typeQuery = CommonSearchUtil
-                    .searchByAssetType(searchCondition.getAssetType());
+            BooleanQuery statusQuery = CommonSearchUtil.searchByAssetStatus(
+                    searchCondition.getAssetStatus(), Asset.class);
+            BooleanQuery typeQuery = CommonSearchUtil.searchByAssetType(
+                    searchCondition.getAssetType(), Asset.class);
             Query checkInTimeQuery = CommonSearchUtil.searchByTimeRangeQuery(
                     "checkInTime", searchCondition.getFromTime(),
                     searchCondition.getToTime());
 
             filterQuery.add(statusQuery, Occur.MUST);
             filterQuery.add(typeQuery, Occur.MUST);
-            
+
             if (null != checkInTimeQuery) {
                 filterQuery.add(checkInTimeQuery, Occur.MUST);
             }
@@ -246,13 +246,14 @@ public class AuditServiceImpl implements AuditService {
         fullTextSession.close();
         return page;
     }
-    
+
     private BooleanQuery getAssetIdQuery(List<String> assetIds) {
-        
+
         BooleanQuery assetQuery = new BooleanQuery();
-        
+
         for (int i = 0; i < assetIds.size(); i++) {
-            assetQuery.add(new TermQuery(new Term("id", assetIds.get(i))), Occur.SHOULD);
+            assetQuery.add(new TermQuery(new Term("id", assetIds.get(i))),
+                    Occur.SHOULD);
         }
         return assetQuery;
     }

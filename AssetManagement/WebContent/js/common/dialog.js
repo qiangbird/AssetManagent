@@ -1,5 +1,4 @@
 $(function() {
-//	i18nForLogin();
 	// delete btn dialog
 	$('#dialog_assign').dialog( {
 		autoOpen : false, // set autoOpen false, dialog will stay hidden until.dialog ('open') is called on it.
