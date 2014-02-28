@@ -18,6 +18,8 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.enumeration.ProcessTypeEnum;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 /**
  * 
@@ -59,6 +61,14 @@ public class CustomerGroupServiceTest {
     @Test
     public void deleteCustomerGroup() {
         customerGroupService.deleteCustomerGroupById("402896124466e075014466e2488b0000");
+    }
+    
+    @Test
+    public void testFindCustomerGroupBySearchCondition() {
+        SearchCondition sc = new SearchCondition();
+        
+        Page<CustomerGroup> page = customerGroupService.findCustomerGroupBySearchCondition(sc);
+        logger.info(page.getResult().size());
     }
     
 }

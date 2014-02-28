@@ -204,8 +204,25 @@ public class UTCTimeUtil {
         calendar.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
         return calendar.getTime();
     }
-
-    // TODO transfer time to string 'yyyyMMddHHmmSS', it's lucene date index
+    
+    public static String formatMaxUTCTimeForSearch(String localDate) {
+        
+        if (StringUtils.isBlank(localDate)) {
+            return "";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(formatStringToDate(localDate,
+                SystemConstants.TIME_SECOND_PATTERN));
+        
+        int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);
+        int dstOffset = calendar.get(Calendar.DST_OFFSET);
+        calendar.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
+        Date date = calendar.getTime();
+        
+        return formatDateToString(date, SystemConstants.FILTER_TIME_PATTERN);
+    }
+    
+    // transfer fromTime to string 'yyyyMMddHHmmss', it's lucene date index
     // type.
     // used for search condition
     public static String formatFilterTime(String filterTime) {
@@ -216,6 +233,71 @@ public class UTCTimeUtil {
 
         StringBuilder stringBuilder = new StringBuilder();
         Date firstFormatDate = UTCTimeUtil.localDateToUTC(filterTime);
+        
+        String secondTimeString = UTCTimeUtil.formatDateToString(
+                firstFormatDate, SystemConstants.TIME_SECOND_PATTERN);
+        Date secondFormatDate = UTCTimeUtil
+                .localDateToUTCForSearchIndex(secondTimeString);
+        String newFilterTime = UTCTimeUtil.formatDateToString(secondFormatDate,
+                SystemConstants.FILTER_TIME_PATTERN);
+        stringBuilder.append(newFilterTime);
+        return stringBuilder.toString();
+
+    }
+
+    // transfer fromTime to string 'yyyyMMddHHmmss', it's lucene date index
+    // type.
+    // used for search condition
+    public static String formatFromFilterTime(String filterTime) {
+
+        if (StringUtils.isBlank(filterTime)) {
+            return "";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        Date originDate = UTCTimeUtil.formatStringToDate(filterTime, SystemConstants.DATE_DAY_PATTERN);
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(originDate);
+        cal.add(Calendar.DAY_OF_MONTH, 0);
+        Date date = cal.getTime();
+        
+        String time = UTCTimeUtil.formatDateToString(date, SystemConstants.DATE_DAY_PATTERN);
+        
+        Date firstFormatDate = UTCTimeUtil.localDateToUTC(time);
+        
+        String secondTimeString = UTCTimeUtil.formatDateToString(
+                firstFormatDate, SystemConstants.TIME_SECOND_PATTERN);
+        Date secondFormatDate = UTCTimeUtil
+                .localDateToUTCForSearchIndex(secondTimeString);
+        String newFilterTime = UTCTimeUtil.formatDateToString(secondFormatDate,
+                SystemConstants.FILTER_TIME_PATTERN);
+        stringBuilder.append(newFilterTime);
+        return stringBuilder.toString();
+
+    }
+    
+    // transfer toTime to string 'yyyyMMddHHmmss', it's lucene date index
+    // type.
+    // used for search condition
+    public static String formatToFilterTime(String filterTime) {
+
+        if (StringUtils.isBlank(filterTime)) {
+            return "";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        Date originDate = UTCTimeUtil.formatStringToDate(filterTime, SystemConstants.DATE_DAY_PATTERN);
+        
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(originDate);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        Date date = cal.getTime();
+        
+        String time = UTCTimeUtil.formatDateToString(date, SystemConstants.DATE_DAY_PATTERN);
+        
+        Date firstFormatDate = UTCTimeUtil.localDateToUTC(time);
+        
         String secondTimeString = UTCTimeUtil.formatDateToString(
                 firstFormatDate, SystemConstants.TIME_SECOND_PATTERN);
         Date secondFormatDate = UTCTimeUtil

@@ -181,7 +181,7 @@ public class Asset extends BaseModel {
     @Column(name = "keeper", length = 2000)
     @Field(name = "keeper", index = Index.TOKENIZED, store = Store.YES)
     private String keeper;
-
+    
     public String getAssetName() {
         return assetName;
     }

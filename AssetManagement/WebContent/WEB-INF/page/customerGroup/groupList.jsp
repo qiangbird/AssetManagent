@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -8,11 +10,12 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<link rel="stylesheet" href="css/common/autocomplete.css"
-	type="text/css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" type="text/css" href="css/common/autocomplete.css">
 <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
-<link rel="stylesheet" href="css/common/tip-green/tip-green.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="css/common/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/common/tip-green/tip-green.css">
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
 <link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
@@ -21,10 +24,12 @@
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
 <link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
-<link rel="stylesheet" href="css/asset/groupManagement.css"type="text/css">
+<link rel="stylesheet" type="text/css" href="css/asset/groupManagement.css">
+<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
+
 <script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
 <script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
 </head>
 <body>
 	<jsp:include page="../common/header.jsp" />
@@ -40,7 +45,7 @@
     	<div class="dataList">
     		<div id="searchCondition">
 			<input type="hidden" id="keyword_content" value="">
-			<div id="searchInputTipDiv" class="inputTipDiv"><span id="label_KeywordPlaceholder"></span></div>
+			<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
 			<input id="keyword" class="input_txt" name="" type="text" value="">
 			<a id="searchButton" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>
@@ -126,7 +131,6 @@
  	
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/user/userInfoTips.js"></script>
-<script type="text/javascript" src="js/asset/groupManagement.js"></script> 
 <script type="text/javascript" src="js/common/autocomplete.js"></script>
 <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
 <script type="text/javascript" src="js/common/common.js"></script>
@@ -135,8 +139,8 @@
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 <script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
-<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 <script type="text/javascript" src="js/common/autocomplete.js"></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
+<script type="text/javascript" src="js/customerGroup/groupManagement.js"></script> 
 </body>
 </html>

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import com.augmentum.ams.dao.asset.CustomerGroupDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
-import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.service.asset.CustomerGroupService;
@@ -34,7 +33,7 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
     @Autowired
     private CustomerGroupDao customerGroupDao;
     @Autowired
-    private BaseHibernateDao<Customer> baseHibernateDao;
+    private BaseHibernateDao<CustomerGroup> baseHibernateDao;
     @Autowired
     protected SessionFactory sessionFactory;
 
@@ -79,7 +78,6 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
     @Override
     public void updateCustomerGroup(CustomerGroup customerGroup) {
 
-        logger.info("UpdateCustomerGroup method start!");
         // delete
         List<Customer> list = customerService.getCustomerByGroup(customerGroup
                 .getId());
@@ -106,45 +104,41 @@ public class CustomerGroupServiceImpl implements CustomerGroupService {
                 customerService.updateCustomer(customer);
             }
         }
-        customerGroupDao.updateCustomerGroup(customerGroup);
+        customerGroupDao.update(customerGroup);
 
-        logger.info("UpdateCustomerGroup method end!");
     }
 
     @Override
-    public Page<Customer> findCustomerGroupBySearchCondition(
+    public Page<CustomerGroup> findCustomerGroupBySearchCondition(
             SearchCondition searchCondition) {
 
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
         QueryBuilder qb = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity(Customer.class).get();
+                .buildQueryBuilder().forEntity(CustomerGroup.class).get();
 
         // create ordinary query, it contains search by keyword
         BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
-                Asset.class, qb, searchCondition.getKeyWord(),
+                CustomerGroup.class, qb, searchCondition.getKeyWord(),
                 searchCondition.getSearchFields());
 
-        // create filter based on advanced search condition, it used for further
-        // filtering query result
-        BooleanQuery booleanQuery = new BooleanQuery();
-
-        QueryWrapperFilter filter = new QueryWrapperFilter(booleanQuery);
+        QueryWrapperFilter filter = null;
 
         // add entity associate
-        Criteria criteria = session.createCriteria(Customer.class);
-        criteria.setFetchMode("customerGroup", FetchMode.JOIN);
+        Criteria criteria = session.createCriteria(CustomerGroup.class);
+        criteria.setFetchMode("customers", FetchMode.JOIN);
 
-        Page<Customer> page = new Page<Customer>();
+        Page<CustomerGroup> page = new Page<CustomerGroup>();
 
         // set page parameters, sort column, sort sign, page size, current page
         // num
         page.setPageSize(searchCondition.getPageSize());
         page.setCurrentPage(searchCondition.getPageNum());
         page.setSortOrder(searchCondition.getSortSign());
+        page.setSortColumn(searchCondition.getSortName());
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
-                keyWordQuery, Customer.class).setCriteriaQuery(criteria);
+                keyWordQuery, CustomerGroup.class).setCriteriaQuery(criteria);
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page);
         fullTextSession.close();
         return page;

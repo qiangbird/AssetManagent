@@ -3,7 +3,9 @@ package com.augmentum.ams.service.asset.impl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -256,6 +258,10 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
 
         customerVisibleList.addAll(nonGroupCustomerList);
+        
+        Set<Customer> customers = new HashSet<Customer>(customerVisibleList);
+        customerVisibleList.clear();
+        customerVisibleList.addAll(customers);
 
         return customerVisibleList;
 

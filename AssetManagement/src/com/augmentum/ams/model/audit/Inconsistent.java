@@ -39,7 +39,7 @@ public class Inconsistent extends BaseModel {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "asset_id", unique = false)
-	@IndexedEmbedded(depth = 1)
+	@IndexedEmbedded(depth = 2)
 	private Asset asset;
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -91,6 +91,7 @@ body,button,input,select,option{
 	width: 130px;
 	padding: 5px 9px 10px;
 	border-radius:2px;
+	right: 9px;
 }
 .dataList-div-fields > div{
 	line-height: 16px;

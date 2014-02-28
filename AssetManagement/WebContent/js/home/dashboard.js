@@ -60,7 +60,7 @@ $(document).ready(function(){
 	});
 	
 	$("#viewMore_returnedAsset").click(function(){
-		window.location.href = "todo/redirectTodoList?todoFlag=returned";
+		window.location.href = "todo/todoList?todoFlag=returned";
 	});
 	
 	// get received asset panel
@@ -112,7 +112,7 @@ $(document).ready(function(){
 	});
 	
 	$("#viewMore_receivedAsset").click(function(){
-		window.location.href = "todo/redirectTodoList?todoFlag=received";
+		window.location.href = "todo/todoList?todoFlag=received";
 	});
 	
 	// get idle asset panel

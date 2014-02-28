@@ -13,9 +13,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.DateBridge;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
@@ -42,23 +45,28 @@ public class ToDo extends BaseModel {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "received_time")
 	@Field(name = "receivedTime", index = Index.UN_TOKENIZED, store = Store.YES)
+	@DateBridge(resolution = Resolution.SECOND)
 	private Date receivedTime;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "returned_time")
 	@Field(name = "returnedTime", index = Index.UN_TOKENIZED, store = Store.YES)
+	@DateBridge(resolution = Resolution.SECOND)
 	private Date returnedTime;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "assigner_id")
+	@IndexedEmbedded(depth = 1)
 	private User assigner;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "returner_id")
+	@IndexedEmbedded(depth = 1)
 	private User returner;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "asset_id")
+	@IndexedEmbedded(depth = 2)
 	private Asset asset;
 
 	public Date getReceivedTime() {

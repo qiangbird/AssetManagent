@@ -17,9 +17,8 @@ public class SearchFieldConstants {
 
     public static final String ASSET_TYPE = "device,machine,software,monitor,otherassets";
 
-    public static final String[] CUSTOMER_GROUP_FIELDS = {
-            "customerGroup.groupName", "customerGroup.description",
-            "customerGroup.processType", "customerName" };
+    public static final String[] CUSTOMER_GROUP_FIELDS = { "groupName",
+            "description", "processType" };
 
     public static final String[] TRANSFER_LOG_FIELDS = { "asset.assetId",
             "asset.assetName", "user.userName", "action", "asset.manufacturer",
@@ -28,7 +27,28 @@ public class SearchFieldConstants {
     public static final String[] OPERATION_LOG_FIELDS = { "operatorID",
             "operatorID", "operationObject", "operation", "operationObjectID",
             "operationObjectID" };
-    
-    public static final String[] LOCATION_FIELDS = {"site", "room"};
+
+    public static final String[] LOCATION_FIELDS = { "site", "room" };
+
+    public static final String[] TODO_FIELDS = { "asset.assetId",
+            "asset.assetName", "asset.customer.customerName",
+            "asset.project.projectName", "asset.user.userName", "asset.type",
+            "asset.status", "assigner.userName", "assigner.userName_forSort",
+            "returner.userName", "returner.userName_forSort" };
+
+    public static final String[] INCONSISTENT_FIELDS = { "asset.assetId",
+            "asset.assetName", "asset.user.userName",
+            "asset.project.projectName", "asset.customer.customerName",
+            "asset.poNo", "asset.barCode", "asset.entity", "asset.keeper",
+            "asset.manufacturer", "asset.memo", "asset.ownerShip",
+            "asset.seriesNo", "asset.status", "asset.type", "asset.vendor",
+            "asset.location.site", "asset.location.room",
+            "asset.user.userName_forSort" };
+
+    public static final String[] INCONSISTENT_SENTENCE_FIELDS = {
+            "asset.manufacturer", "asset.seriesNo", "asset.user.userName",
+            "asset.project.projectName", "asset.customer.customerName",
+            "asset.ownerShip", "asset.memo", "asset.vendor", "asset.entity",
+            "asset.assetName" };
 
 }

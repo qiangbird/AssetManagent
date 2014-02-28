@@ -7,7 +7,6 @@ $(document).ready(function() {
     findDataListInfo("group");
     
     $("#searchButton").click(function() {
-        
         setCriteria();
         criteria.pageNum = 1;
         dataList.criteria = criteria;
@@ -27,7 +26,7 @@ $(document).ready(function() {
      // add place holder event for keyword
      removePlaceholderForKeyWord();
      
-  // drop down operation for asset list
+     // drop down operation for asset list
      $(".operation_assets_list").find("ul").hide();
      $(".dialogBody").hide();
      
@@ -36,7 +35,6 @@ $(document).ready(function() {
      }).mouseout(function() {
          $(this).find("ul").hide();
      });
-     
 });
 
 // init dataList information for search list
@@ -48,22 +46,6 @@ var dataListInfo = {
     hasCheckbox : true,
     pageItemSize : 5,
     url : 'group/search',
-    updateShowField : {
-        url : 'searchCommon/column/updateColumns',
-        callback : function(data) {
-            $.ajax({
-                type : "POST",
-                contentType : "application/json",
-                url : "searchCommon/column/getColumns?category=group",
-                dataType : "json",
-                success : function(data) {
-                    dataList.opts.columns = data.columns;
-                    dataList.setShow(data.showFields);
-                    dataList.search();
-                }
-            });
-        }
-    },
     updateShowSize : {
         url : 'searchCommon/pageSize/updatePageSize',
         callback : function() {
@@ -97,28 +79,6 @@ function setCriteria() {
         }
     });
     criteria.searchFields = searchFields;
-    
-    // set asset type
-    var assetType = "";
-    $("#assetType").find(":checked").each(function() {
-        if (assetType == null || assetType == "") {
-            assetType = this.value;
-        } else {
-            assetType = assetType + "," + this.value;
-        }
-    });
-    criteria.assetType = assetType;
-
-    // set asset status
-    var assetStatus = "";
-    $("#assetStatus").find(":checked").each(function() {
-        if (assetStatus == null || assetStatus == "") {
-            assetStatus = this.value;
-        } else {
-            assetStatus = assetStatus + "," + this.value;
-        }
-    });
-    criteria.assetStatus = assetStatus;
 }
 
 // get value according to index sequence
@@ -129,192 +89,6 @@ function getIndexInArr(Arr, ele) {
        }
     }
     return -1;
-}
-
-// gain customer name autocomplete
-$("#customerName").focus(function() {
-    $(this).attr("placeholder", "");
-    var custCode = [];
-    var custName = [];
-    
-    $.ajax({
-        type : 'GET',
-        contentType : 'application/json',
-        url : 'customer/getCustomerInfo',
-        dataType : 'json',
-        success : function(data) {
-           var length = data.customerList.length;
-           for ( var i = 0; i < length; i++) {
-              custName[i] = data.customerList[i].customerName;
-              custCode[i] = data.customerList[i].customerCode;
-           }
-           $("#customerName").autocomplete(
-               {
-                  minLength: 0,
-                  source : custName,
-                  select : function(e, ui) {
-                      $("#customerCode").val(custCode[getIndexInArr(custName, ui.item.value)]);
-                      $("#projectName").val("");
-                   }
-             });
-            }
-         });
-});
-
-$("#customerName").blur(function() {
-    if ($(this).val() == "") {
-        $(this).attr("placeholder", "Please enter customer name");
-    }
-});
-
-
-// gain project name autocomplete based on customer name
-$("#projectName").focus(function() {
-    $(this).attr("placeholder", "");
-    var customerCode = $("#customerCode").val();
-    var projectName = [];
-    var projectCode = [];
-    
-    if (customerCode != "") {
-        $.ajax({
-          type : 'GET',
-          contentType : 'application/json',
-          url : 'project/getProjectByCustomerCode?customerCode='+customerCode,
-          dataType : 'json',
-          success : function(data) {
-              var length = data.projectList.length;
-              for ( var i = 0; i < length; i++) {
-                  projectName[i] = data.projectList[i].projectName;
-                  projectCode[i] = data.projectList[i].projectCode;
-               }
-               $("#projectName").autocomplete({
-                  minLength: 0,
-                  source : projectName,
-                  select : function(e, ui) {
-                     $("#projectCode").val(projectCode[getIndexInArr(projectName, ui.item.value)]);
-                  }
-               });
-            }
-        });
-    } else {
-        return;
-    }
-});
-
-$("#projectName").blur(function() {
-    if ($(this).val() == "") {
-        $(this).attr("placeholder", "Please enter project name");
-    }
-});
-
-// asset reviver autocomplete (all employees)
-$("#userName").focus(function() {
-    $(this).attr("placeholder", "");
-    var employeeName = [];
-    var employeeValue = [];
-    $.ajax({
-        type : 'GET',
-        contentType : 'application/json',
-        url : 'user/getEmployeeDataSource',
-        dataType : 'json',
-        success : function(data) {
-            var length = data.employeeInfo.length;
-            for ( var i = 0; i < length; i++) {
-               employeeName[i] = data.employeeInfo[i].label;
-               employeeValue[i] = data.employeeInfo[i].value;
-            }
-            $("#userName").autocomplete({
-               minLength: 0,
-               source : employeeName,
-               select : function(e, ui) {
-                    var temp = employeeValue[getIndexInArr(employeeName, ui.item.value)];
-                   $("#userId").val(temp.split("#")[1]);
-               }
-            });
-        }
-    });
- });
-
-$("#userName").blur(function() {
-    if ($(this).val() == "") {
-        $(this).attr("placeholder", "Please enter user name");
-    }
-});
-
-// get all checkbox active asset ids
-function getActivedAssetIds() {
-    var assetIds = [];
-    var assetIdsStr = "";
-    $('.row .dataList-checkbox-active').each(function(){
-        assetIds.push(($(this).attr('pk')));
-    });
-    
-    for (var i = 0; i < assetIds.length; i++) {
-        assetIdsStr = (assetIdsStr + assetIds[i]) + (((i + 1) == assetIds.length) ? '':','); 
-    }
-    return assetIdsStr;
-}
-
-// check checkbox actived asset
-function checkActivedAssetIds() {
-    var assetIds = getActivedAssetIds();
-    if (assetIds == "") {
-        ShowMsg("Please select one asset at least");
-        return false;
-    }
-    return true;
-}
-
-// confirm assign assets
-$("#confirm_assign").click(function() {
-    
-    if ($("#customerName").val() == "" || $("#customerCode").val() == "") {
-        $("#customerName").css("border-color", "red");
-        return;
-    } else {
-        $.ajax({
-            type : 'GET',
-            contentType : 'application/json',
-            url : 'asset/itAssignAssets',
-            dataType : 'json',
-            data: {
-                userId: $("#userId").val(),
-                assetIds: getActivedAssetIds(),
-                projectName: $("#projectName").val(),
-                projectCode: $("#projectCode").val(),
-                customerName: $("#customerName").val(),
-                customerCode: $("#customerCode").val()
-            },
-            success : function(data) {
-                criteria.pageNum = 1;
-                dataList.search();
-            }
-        });
-        closeDialog();
-    }
-});
-
-// cancel assign assets
-$("#cancel_assign").click(function() {
-    closeDialog();
-});
-
-// close dialog and clean text content
-function closeDialog() {
-    $("#projectName").val("");
-    $("#projectCode").val("");
-    $("#projectName").attr("placeholder", "Please enter project name");
-    
-    $("#customerName").val("");
-    $("#customerCode").val("");
-    $("#customerName").attr("placeholder", "Please enter customer name");
-    $("#customerName").css("border-color", "");
-    
-    $("#userName").val("");
-    $("#userId").val("");
-    $("#userName").attr("placeholder", "Please enter user name");
-    
-    $("#dialog_assign").dialog("close");
 }
 
 $(document).ready(function(){
@@ -340,7 +114,6 @@ $(document).ready(function(){
     	    url : 'customer/getCustomerInfo',
     	    dataType : 'json',
     	    success : function(data) {
-    	    	 console.log(data.customerList);
     	    	length = data.customerList.length;
     	    	var customers = [];
         	    for ( var i = 0; i < length; i++) {
@@ -477,9 +250,6 @@ $(document).ready(function(){
 	$("#groupName").click(function(){
 		$("#groupName").removeClass("group-error");
 		});
-	
-	
-    
 });
 
 /**

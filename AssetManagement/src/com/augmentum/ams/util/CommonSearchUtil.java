@@ -21,6 +21,7 @@ import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.operationLog.OperationLog;
+import com.augmentum.ams.model.todo.ToDo;
 import common.Logger;
 
 public class CommonSearchUtil {
@@ -67,6 +68,10 @@ public class CommonSearchUtil {
                 
                 searchFields = SearchFieldConstants.LOCATION_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.LOCATION_FIELDS;
+            } else if (clazz == ToDo.class) {
+                
+                searchFields = SearchFieldConstants.TODO_FIELDS;
+                sentenceSearchFields = SearchFieldConstants.TODO_FIELDS;
             }
         } else {
             sentenceSearchFields = searchFields;
@@ -201,17 +206,17 @@ public class CommonSearchUtil {
         if (isNullFromTime && !isNullToTime) {
 
             fromTime = SystemConstants.SEARCH_MIN_DATE;
-            toTime = UTCTimeUtil.formatFilterTime(toTime);
+            toTime = UTCTimeUtil.formatToFilterTime(toTime);
             return new TermRangeQuery(fieldName, fromTime, toTime, true, true);
         } else if (isNullToTime && !isNullFromTime) {
 
             toTime = SystemConstants.SEARCH_MAX_DATE;
-            fromTime = UTCTimeUtil.formatFilterTime(fromTime);
+            fromTime = UTCTimeUtil.formatFromFilterTime(fromTime);
             return new TermRangeQuery(fieldName, fromTime, toTime, true, true);
         } else if (!isNullFromTime && !isNullToTime) {
 
-            fromTime = UTCTimeUtil.formatFilterTime(fromTime);
-            toTime = UTCTimeUtil.formatFilterTime(toTime);
+            fromTime = UTCTimeUtil.formatFromFilterTime(fromTime);
+            toTime = UTCTimeUtil.formatToFilterTime(toTime);
             return new TermRangeQuery(fieldName, fromTime, toTime, true, true);
         } else {
 

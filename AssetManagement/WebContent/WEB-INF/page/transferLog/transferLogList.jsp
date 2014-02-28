@@ -77,7 +77,7 @@
 <script type="text/javascript" src="js/common/common.js"></script>
 <script type="text/javascript" src="js/search/searchCommon.js"></script>
 <script type="text/javascript" src="searchList/js/DataList.js"></script>
-<script type="text/javascript" src="js/asset/searchTransferLogList.js" ></script>
+<script type="text/javascript" src="js/transferLog/searchTransferLogList.js" ></script>
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 <script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 </html>

@@ -8,12 +8,15 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.augmentum.ams.dao.base.BaseHibernateDao;
+import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.BaseCaseTest;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 public class ToDoServiceTest extends BaseCaseTest {
 
@@ -21,6 +24,10 @@ public class ToDoServiceTest extends BaseCaseTest {
 	private ToDoService todoService;
 	@Autowired
 	private UserCustomColumnsService userCustomColumnsService;
+	@Autowired
+	private ToDoDao todoDao;
+	@Autowired
+	private BaseHibernateDao<ToDo> baseHibernateDao;
 	
 	
 	private Logger logger = Logger.getLogger(ToDoServiceTest.class);
@@ -45,4 +52,30 @@ public class ToDoServiceTest extends BaseCaseTest {
 		todoService.confirmReturnedAndReceivedAsset("4028961242fa20eb0142fb206b5c123d", "AVAILABLE");
 	}
 	
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCreateIndex() {
+        String hql = "FROM ToDo";
+        List<ToDo> list = (List<ToDo>)todoDao.getHibernateTemplate().find(hql);
+        Class<ToDo>[] clazzes = new Class[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ToDo todo = list.get(i);
+            Class clazz =  todo.getClass();
+            clazzes[i] = clazz;
+        }
+        try {
+            baseHibernateDao.createIndex(clazzes);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void testFindToDoListBySearchCondition() {
+        SearchCondition sc = new SearchCondition();
+        Page<ToDo> page = todoService.findToDoListBySearchCondition(sc, null);
+        logger.info(page.getResult().size());
+    }
+    
 }

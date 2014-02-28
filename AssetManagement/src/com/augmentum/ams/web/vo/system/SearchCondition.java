@@ -7,7 +7,7 @@ public class SearchCondition {
     
     private String sortName;
     
-    private String sortSign;
+    private String sortSign = "desc";
     
     private Integer pageSize = 10;
     

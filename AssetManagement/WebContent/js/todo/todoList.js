@@ -7,7 +7,7 @@ var dataListInfo = {
 	    pageSizes : [10, 20, 30, 50],
 	    hasCheckbox : true,
 	    pageItemSize : 5,
-	    url : getToDoURL(),
+	    url : 'todo/findTodoList?flag=' + $("#todoFlag").val(),
 	    updateShowField : {
 	        url : 'searchCommon/column/updateColumns',
 	        callback : function(data) {
@@ -32,44 +32,48 @@ var dataListInfo = {
 
 $(document).ready(function(){
 	
-	$.ajax({
-		type : "POST",
-		contentType : "application/json",
-		url : "searchCommon/column/getColumns?category=todo",
-		dataType : "json",
-		data : {},
-		error : function() {
-			alert("init dataList error");
-		},
-		success : function(data) {
-			dataListInfo.columns = data.columns;
-			searchList();
-			dataList.setShow(data.showFields);
-
-			// columns sortable event
-			$(".dataList-div-fields").sortable({
-				cancel : 'a',
-				items : '>div:gt(0)',
-				placeholder : "sortable-placeholder",
-				revert : true,
-				start : function(event, ui) {
-					$(ui.item).addClass("dataList-div-fields-border");
-				},
-				stop : function(event, ui) {
-					$(ui.item).removeClass("dataList-div-fields-border");
-				}
-			});
-		}
-	});
-	
-	
-	criteria.currentPage = 1;
-    criteria.sortName = 'updatedTime';
-    criteria.sortSign = 'desc';
+	// categoryFlag = 1, it means category is 'asset'
+	initCriteria(11);
+	findDataListInfo("todo");
     
-    dataListInfo.criteria = criteria;
-    dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
+    $(".filterDiv input[type='checkBox']").each(function(){
+    	if ($(this).val() != "all") {
+    		$(this).attr("content", $(this).siblings("label").html());
+    	}
+    });
     
+    $(".filterDiv input[type='text']").each(function(){
+    	$(this).attr("content", $(this).val());
+    });
+    
+    $(".filterDiv").filterBox({});
+    
+    $("#searchButton").click(function() {
+        setCriteria();
+        criteria.pageNum = 1;
+        dataList.criteria = criteria;
+        dataList.search();
+    });
+    
+    $("#keyword").keydown(function() {
+        if(event.keyCode == 13) {
+            setCriteria();
+            criteria.pageNum = 1;
+            dataList.criteria = criteria;
+            dataList.search();
+        }
+    });
+    
+    $(".dateInput").datepicker({
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: "yy-mm-dd",
+        yearRange: "2000:2030"
+    });
+    
+     // add place holder event for keyword
+     removePlaceholderForKeyWord();
+	
     // confirm returned asset event
     $("#confirmReturnedButton").click(function(){
     	if (checkActivedAssetIds()) {
@@ -127,6 +131,24 @@ function searchList() {
 	dataList.search();
 }
 
+function setCriteria() {
+	
+	criteria.keyWord = $("#keyword").val();
+    criteria.fromTime = $("#fromTime").val();
+    criteria.toTime = $("#toTime").val();
+    
+    // set search fields
+    var searchFields = "";
+    $("#searchFields").find(":checked").each(function() {
+        if (searchFields == null || searchFields == "") {
+            searchFields = this.value;
+        } else {
+            searchFields = searchFields + "," + this.value;
+        }
+    });
+    criteria.searchFields = searchFields;
+}
+
 function getActivedAssetIds() {
     var assetIds = [];
     $('.row .dataList-checkbox-active').each(function(){
@@ -142,19 +164,4 @@ function checkActivedAssetIds() {
         return false;
     }
     return true;
-}
-
-function getToDoURL() {
-	var todoFlag = $("#todoFlag").val();
-	var url = "todo/viewReturnedAsset";
-	
-	if (todoFlag == "returned") {
-		url = "todo/viewReturnedAsset";
-	} else if (todoFlag == "received") {
-		url = "todo/viewReceivedAsset";
-	} else {
-		url = "todo/viewReturnedAsset";
-	}
-	return url;
-	
 }

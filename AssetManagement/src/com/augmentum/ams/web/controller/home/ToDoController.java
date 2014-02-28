@@ -25,6 +25,8 @@ import com.augmentum.ams.service.todo.ToDoService;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 @Controller("toDoController")
 @RequestMapping(value = "/todo")
@@ -162,12 +164,44 @@ public class ToDoController extends BaseController {
         return null;
     }
 
-    // TODO redirect returnedAssetList page
-    @RequestMapping(value = "/redirectTodoList")
+    // redirect returnedAssetList page
+    @RequestMapping(value = "/todoList")
     public String redirectReturnedListPage(String todoFlag,
             HttpServletRequest request) {
         request.setAttribute("todoFlag", todoFlag);
-        return "asset/todoList";
+        return "todo/todoList";
+    }
+    
+    @RequestMapping(value = "/findTodoList", method = RequestMethod.GET)
+    public ModelAndView findToDoListBySearchCondition(SearchCondition searchCondition, 
+            String flag, HttpSession session) {
+        
+        if (null == searchCondition) {
+            searchCondition = new SearchCondition();
+        }
+        
+        User user = null;
+        if ("received".equals(flag)) {
+            user = (User) SecurityUtils.getSubject().getSession()
+                    .getAttribute("currentUser");
+        }
+
+        Page<ToDo> page = todoService.findToDoListBySearchCondition(searchCondition, user);
+
+        String clientTimeOffset = (String) session.getAttribute("timeOffset");
+
+        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+                .findUserCustomColumns("todo", getUserIdByShiro());
+        JSONArray array = SearchCommonUtil.formatReturnedAndReceivedAssetTOJSONArray(
+                page.getResult(), userCustomColumnList, clientTimeOffset);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("fieldsData", array);
+        modelAndView.addObject("count", page.getRecordCount());
+        modelAndView.addObject("totalPage", page.getTotalPage());
+        modelAndView.addObject("searchCondition", searchCondition);
+
+        return modelAndView;
     }
 
 }

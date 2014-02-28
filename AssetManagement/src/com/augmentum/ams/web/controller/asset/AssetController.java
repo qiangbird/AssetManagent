@@ -561,8 +561,6 @@ public class AssetController extends BaseController {
     public ModelAndView findMyAssetsBySearchCondition(SearchCondition searchCondition, String uuid,
             HttpSession session, HttpServletRequest request) throws BaseException {
 
-        logger.info("findMyAssetsBySearchCondition method end!");
-
         if (null == searchCondition) {
             searchCondition = new SearchCondition();
         }
@@ -587,7 +585,6 @@ public class AssetController extends BaseController {
         modelAndView.addObject("totalPage", page.getTotalPage());
         modelAndView.addObject("searchCondition", searchCondition);
 
-        logger.info("findMyAssetsBySearchCondition method end!");
         return modelAndView;
     }
 

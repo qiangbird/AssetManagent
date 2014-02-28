@@ -447,7 +447,7 @@
             this.$head.add(this.$body).width(_width).css('margin-left',0);
             for(var i =0; i < this.opts.columns.length; i++){
                 // assign given sortName: assetId, userName, type, status, barCode, poNo, checkInTime, checkOutTime, warrantyTime
-                var sortNames = "assetId,userName,type,status,barCode,poNo,checkInTime,checkOutTime,warrantyTime,asset.assetId,user.userName," +
+                var sortNames = "assetId,userName_forSort,type,status,barCode,poNo,checkInTime,checkOutTime,warrantyTime,asset.assetId,user.userName," +
                 		"time,asset.barCode,asset.checkInTime";
                 var sort = '</span>';
                 var pointer = 'default';

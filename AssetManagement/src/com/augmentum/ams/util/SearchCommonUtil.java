@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.SystemException;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.operationLog.OperationLog;
@@ -124,29 +125,35 @@ public class SearchCommonUtil {
      * @param userCustomColumnList
      * @return
      */
-    public static JSONArray formatGroupListTOJSONArray(List<Customer> groupList) {
+    public static JSONArray formatGroupListTOJSONArray(List<CustomerGroup> groupList) {
         JSONArray arrays = new JSONArray();
 
-        for (Customer customer : groupList) {
+        for (CustomerGroup customerGroup : groupList) {
+            
             JSONArray array = new JSONArray();
-            array.add(customer.getId());
+            
+            array.add(customerGroup.getId());
             String value = "";
-            value = customer.getCustomerGroup().getGroupName();
+            value = customerGroup.getGroupName();
             array.add(value);
-            value = customer.getCustomerGroup().getDescription();
+            
+            value = customerGroup.getDescription();
             array.add(value);
-            value = customer.getCustomerGroup().getProcessType().toString();
+            
+            value = customerGroup.getProcessType();
             array.add(value);
+            
             StringBuffer sb = new StringBuffer();
-            sb.append(customer.getCustomerName()).append(";");
-//            List<Customer> list = group.getCustomers();
-//            for (Customer customer : list) {
-//                sb.append(customer.getCustomerName()).append(";");
-//            }
-            array.add(sb.toString());
+            List<Customer> list = customerGroup.getCustomers();
+            
+            for (Customer customer : list) {
+                sb.append(customer.getCustomerName()).append(";");
+            }
+            array.add(sb.substring(0, sb.length() - 1).toString());
 
             value = "<div class='editGroupIcon'></div>/<div class='deleteGroupIcon'></div>";
             array.add(value);
+            
             arrays.add(array);
         }
         return arrays;
@@ -231,8 +238,13 @@ public class SearchCommonUtil {
                             value = BeanUtils.getProperty(todo, "returner.userName");
                         } else if ("returnedTime".equals(columnName)
                                 || "receivedTime".equals(columnName)) {
-                            value = UTCTimeUtil.formatUTCStringToLocalString((String) obj,
-                                    timeOffset, SystemConstants.TIME_SECOND_PATTERN);
+                            
+                            if (SystemConstants.DATA_MAX_DATE_TOSTRING.equals((String) obj)) {
+                                value = "";
+                            } else {
+                                value = UTCTimeUtil.formatUTCStringToLocalString((String) obj,
+                                        timeOffset, SystemConstants.TIME_SECOND_PATTERN);
+                            }
                         } else {
                             value = (String) obj;
                         }

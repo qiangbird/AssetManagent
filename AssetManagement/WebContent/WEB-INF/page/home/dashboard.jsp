@@ -39,7 +39,7 @@
 				<th><spring:message code="other"/></th>
 				<th><spring:message code="total"/></th>
 			</tr>
-			<shiro:hasRole name="IT">
+			<shiro:hasAnyRoles name="IT,SYSTEM_ADMIN">
 			<tr class="tr-all-asset">
 				<td class="tr-header" content="allAssets"><spring:message code="navigator.all.assets"/></td>
 				<td></td>
@@ -141,7 +141,7 @@
 				<td></td>
 			</tr>
 			-->
-			</shiro:hasRole>
+			</shiro:hasAnyRoles>
 			<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE,EMPLOYEE">
 			<tr class="tr-customer-asset">
 				<td class="tr-header-customer" style="cursor: pointer; font-weight: bold;" content="Customer Asset">

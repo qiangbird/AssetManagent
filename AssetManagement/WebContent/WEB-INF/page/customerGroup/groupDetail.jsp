@@ -105,7 +105,7 @@
 	</div>
 	</div>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-<script type="text/javascript" src="js/asset/groupCustomerManagement.js"></script>
+<script type="text/javascript" src="js/customerGroup/groupCustomerManagement.js"></script>
 <script type="text/javascript" src="js/common/autocomplete.js"></script>
 <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
 </body>

@@ -49,7 +49,7 @@ public class CustomerGroupController {
 		List processTypeList = AssetUtil.getProcessTypes();
 
 		modelAndView.addObject("processTypeList", processTypeList);
-		modelAndView.setViewName("asset/groupList");
+		modelAndView.setViewName("customerGroup/groupList");
 
 		logger.info("listCustomerGroup method in CustomerGroupController end!");
 		return modelAndView;
@@ -60,13 +60,10 @@ public class CustomerGroupController {
 			HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		logger.info("searchCustomerGroup method in CustomerGroupController start!");
-
-		Page<Customer> groupPage = customerGroupService
+		Page<CustomerGroup> groupPage = customerGroupService
 				.findCustomerGroupBySearchCondition(searchCondition);
-		List<Customer> groupList = groupPage.getResult();
-		JSONArray array = new JSONArray();
-		array = SearchCommonUtil.formatGroupListTOJSONArray(groupList);
+		List<CustomerGroup> groupList = groupPage.getResult();
+		JSONArray array = SearchCommonUtil.formatGroupListTOJSONArray(groupList);
 		List processTypeList = AssetUtil.getProcessTypes();
 
 		modelAndView.addObject("fieldsData", array);
@@ -74,7 +71,6 @@ public class CustomerGroupController {
 		modelAndView.addObject("totalPage", groupPage.getTotalPage());
 		modelAndView.addObject("processTypeList", processTypeList);
 
-		logger.info("searchCustomerGroup method in CustomerGroupController end!");
 		return modelAndView;
 	}
 
@@ -82,8 +78,6 @@ public class CustomerGroupController {
 	@RequestMapping(value = "/update")
 	public ModelAndView updateGroup(CustomerGroup group, String customerCodes,
 			HttpServletRequest request) {
-
-		logger.info("updateGroup method in CustomerGroupController start!");
 
 		ModelAndView modelAndView = new ModelAndView();
 		String codes[] = customerCodes.split(",");
@@ -141,7 +135,6 @@ public class CustomerGroupController {
 		}
 		modelAndView.setViewName("redirect:/group/list");
 
-		logger.info("updateGroup method in CustomerGroupController end!");
 		return modelAndView;
 	}
 
@@ -154,16 +147,14 @@ public class CustomerGroupController {
 		logger.info("editGroup in CustomerGroupController  start");
 		CustomerGroup customerGroup = customerGroupService
 				.getCustomerGroupById(id);
-//		List<Customer> customerList = customerService.getCustomerByGroup(id);
 		List<Customer> customerList = customerGroup.getCustomers();
 		List processTypeList = AssetUtil.getProcessTypes();
 
 		modelAndView.addObject("processTypeList", processTypeList);
 		modelAndView.addObject("customerGroup", customerGroup);
 		modelAndView.addObject("customerList", customerList);
-		modelAndView.setViewName("asset/groupEdit");
+//		modelAndView.setViewName("asset/groupEdit");
 
-		logger.info("editGroup in CustomerGroupController  end");
 		return modelAndView;
 	}
 
@@ -174,11 +165,7 @@ public class CustomerGroupController {
 	public ModelAndView deleteGroup(String id, HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		logger.info("deleteGroup in CustomerGroupController  start!");
-
 		customerGroupService.deleteCustomerGroupById(id);
-
-		logger.info("deleteGroup in CustomerGroupController  end!");
 		return modelAndView;
 	}
 
@@ -186,13 +173,10 @@ public class CustomerGroupController {
 	public ModelAndView manageGroupCustomer(String id,
 			HttpServletRequest request) {
 
-		logger.info("manageGroupCustomer in CustomerGroupController  start!");
-
 		CustomerGroup customerGroup = customerGroupService
 				.getCustomerGroupById(id);
 
-		logger.info("manageGroupCustomer in CustomerGroupController  end!");
-		return new ModelAndView("/asset/groupDetail", "customerGroup",
+		return new ModelAndView("/customerGroup/groupDetail", "customerGroup",
 				customerGroup);
 	}
 
