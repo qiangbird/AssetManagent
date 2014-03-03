@@ -152,8 +152,13 @@ public class InconsistentServciceImpl implements InconsistentService {
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
 
-            CommonSearchUtil.addFilterQueryForAsset(searchCondition,
-                    filterQuery, "asset.checkInTime");
+            BooleanQuery booleanQuery = CommonSearchUtil.addFilterQueryForAsset(
+                    searchCondition, "asset.checkInTime", Inconsistent.class);
+            if (null != booleanQuery) {
+                
+                filterQuery.add(CommonSearchUtil.addFilterQueryForAsset(
+                        searchCondition, "asset.checkInTime", Inconsistent.class), Occur.MUST);
+            }
         }
         QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
 

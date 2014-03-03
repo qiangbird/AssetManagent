@@ -16,8 +16,8 @@ import com.augmentum.ams.web.vo.asset.AssetVo;
 
 public class FormatEntityListToEntityVoList {
 
-    public static List<AssetListVo> formatAssetListToAssetVoList(List<Asset> assetList,
-            String clientTimeOffset) {
+    public static List<AssetListVo> formatAssetListToAssetVoList(
+            List<Asset> assetList, String clientTimeOffset) {
         List<AssetListVo> assetListVos = new ArrayList<AssetListVo>();
 
         for (Asset asset : assetList) {
@@ -42,24 +42,28 @@ public class FormatEntityListToEntityVoList {
 
             if (null != asset.getCheckInTime()) {
                 assetListVo.setCheckInTime(UTCTimeUtil.formatDateToString(
-                        UTCTimeUtil.utcToLocalTime(asset.getCheckInTime(), clientTimeOffset),
+                        UTCTimeUtil.utcToLocalTime(asset.getCheckInTime(),
+                                clientTimeOffset),
                         SystemConstants.DATE_DAY_PATTERN));
             }
 
             if (null != asset.getCheckOutTime()) {
                 assetListVo.setCheckOutTime(UTCTimeUtil.formatDateToString(
-                        UTCTimeUtil.utcToLocalTime(asset.getCheckOutTime(), clientTimeOffset),
+                        UTCTimeUtil.utcToLocalTime(asset.getCheckOutTime(),
+                                clientTimeOffset),
                         SystemConstants.DATE_DAY_PATTERN));
             }
 
             if (null != asset.getWarrantyTime()) {
                 assetListVo.setWarrantyTime(UTCTimeUtil.formatDateToString(
-                        UTCTimeUtil.utcToLocalTime(asset.getWarrantyTime(), clientTimeOffset),
+                        UTCTimeUtil.utcToLocalTime(asset.getWarrantyTime(),
+                                clientTimeOffset),
                         SystemConstants.DATE_DAY_PATTERN));
             }
 
             if (null != asset.getCustomer()) {
-                assetListVo.setCustomerName(asset.getCustomer().getCustomerName());
+                assetListVo.setCustomerName(asset.getCustomer()
+                        .getCustomerName());
             }
 
             if (null != asset.getUser()) {
@@ -67,7 +71,8 @@ public class FormatEntityListToEntityVoList {
             }
 
             if (null != asset.getLocation()) {
-                assetListVo.setSite(asset.getLocation().getSite() + asset.getLocation().getRoom());
+                assetListVo.setSite(asset.getLocation().getSite()
+                        + asset.getLocation().getRoom());
             }
 
             if (null != asset.getProject()) {
@@ -79,8 +84,8 @@ public class FormatEntityListToEntityVoList {
         return assetListVos;
     }
 
-    public static void purchaseItemToAssetVo(PurchaseItem purchaseItem, AssetVo assetVo,
-            String timeOffset) {
+    public static void purchaseItemToAssetVo(PurchaseItem purchaseItem,
+            AssetVo assetVo, String timeOffset) {
 
         try {
             assetVo.setPurchaseItemId(purchaseItem.getId());
@@ -92,7 +97,8 @@ public class FormatEntityListToEntityVoList {
 
             assetVo.setCustomer(customer);
             assetVo.setType(purchaseItem.getItemType());
-            assetVo.setSite(purchaseItem.getDataSite().replace("Augmentum ", ""));
+            assetVo.setSite(purchaseItem.getDataSite()
+                    .replace("Augmentum ", ""));
             assetVo.setEntity(purchaseItem.getEntitySite());
             assetVo.setPoNo(purchaseItem.getPoNo());
             assetVo.setAssetName(purchaseItem.getItemName());
@@ -104,9 +110,10 @@ public class FormatEntityListToEntityVoList {
 
             assetVo.setProject(project);
             assetVo.setVendor(purchaseItem.getVendorName());
-            assetVo.setBatchNumber(String.valueOf(purchaseItem.getFinalQuantity()));
-            assetVo.setCheckInTime(UTCTimeUtil.utcToLocalTime(purchaseItem.getDeliveryDate(),
-                    timeOffset, "yyyy-MM-dd"));
+            assetVo.setBatchNumber(String.valueOf(purchaseItem
+                    .getFinalQuantity()));
+            assetVo.setCheckInTime(UTCTimeUtil.utcToLocalTime(
+                    purchaseItem.getDeliveryDate(), timeOffset, "yyyy-MM-dd"));
 
         } catch (Exception e) {
             throw new SystemException(e, ErrorCodeUtil.DATA_NOT_EXIST,

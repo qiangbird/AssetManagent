@@ -6,7 +6,6 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.search.FullTextQuery;
@@ -61,7 +60,7 @@ public class OperationLogServiceImpl implements OperationLogService {
         BooleanQuery filterQuery = new BooleanQuery();
 
         Query timeQuery = CommonSearchUtil.searchByTimeRangeQuery(
-                "updatedTime", searchCondition.getFromTime(),
+                "createdTime", searchCondition.getFromTime(),
                 searchCondition.getToTime());
         
         if (null != timeQuery) {
@@ -72,8 +71,6 @@ public class OperationLogServiceImpl implements OperationLogService {
 
         // add entity associate
         Criteria criteria = session.createCriteria(OperationLog.class);
-        criteria.setFetchMode("user", FetchMode.JOIN)
-                .setFetchMode("asset", FetchMode.JOIN);
 
         Page<OperationLog> page = new Page<OperationLog>();
 

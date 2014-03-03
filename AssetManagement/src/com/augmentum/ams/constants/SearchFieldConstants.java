@@ -20,9 +20,8 @@ public class SearchFieldConstants {
             "asset.assetName", "user.userName", "action", "asset.manufacturer",
             "asset.barCode", "asset.seriesNo", "asset.poNo" };
 
-    public static final String[] OPERATION_LOG_FIELDS = { "operatorID",
-            "operatorID", "operationObject", "operation", "operationObjectID",
-            "operationObjectID" };
+    public static final String[] OPERATION_LOG_FIELDS = { "operatorName",
+            "operatorID", "operationObject", "operation", "operationObjectID" };
 
     public static final String[] LOCATION_FIELDS = { "site", "room" };
 

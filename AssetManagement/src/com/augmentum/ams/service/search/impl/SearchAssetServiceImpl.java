@@ -80,22 +80,24 @@ public class SearchAssetServiceImpl implements SearchAssetService {
         BooleanQuery filterQuery = null;
 
         if (!StringUtils.isBlank(searchCondition.getUserUuid())) {
-            
+
             if (null == filterQuery) {
                 filterQuery = new BooleanQuery();
             }
-            filterQuery.add(new TermQuery(new Term("user.id", searchCondition
+            filterQuery.add(
+                    new TermQuery(new Term("user.id", searchCondition
                             .getUserUuid())), Occur.MUST);
         }
 
         // get fixed assets list
         if (null != searchCondition.getIsFixedAsset()
                 && searchCondition.getIsFixedAsset()) {
-            
+
             if (null == filterQuery) {
                 filterQuery = new BooleanQuery();
             }
-            filterQuery.add(new TermQuery(new Term("fixed", Boolean.TRUE.toString())),
+            filterQuery.add(
+                    new TermQuery(new Term("fixed", Boolean.TRUE.toString())),
                     Occur.MUST);
         }
 
@@ -104,7 +106,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 && searchCondition.getIsWarrantyExpired()) {
             String fromTime = UTCTimeUtil.formatCurrentTimeForFilterTime();
             String toTime = UTCTimeUtil.getAssetExpiredTimeForFilterTime();
-            
+
             if (null == filterQuery) {
                 filterQuery = new BooleanQuery();
             }
@@ -125,12 +127,21 @@ public class SearchAssetServiceImpl implements SearchAssetService {
             }
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
-            CommonSearchUtil.addFilterQueryForAsset(searchCondition,
-                    filterQuery, "checkInTime");
+            
+            BooleanQuery booleanQuery = CommonSearchUtil.addFilterQueryForAsset(
+                    searchCondition, "checkInTime", Asset.class);
+            if (null != booleanQuery) {
+                
+                if (null == filterQuery) {
+                    filterQuery = new BooleanQuery();
+                }
+                filterQuery.add(CommonSearchUtil.addFilterQueryForAsset(
+                        searchCondition, "checkInTime", Asset.class), Occur.MUST);
+            }
         }
-        
+
         QueryWrapperFilter filter = null;
-        
+
         if (null != filterQuery) {
             filter = new QueryWrapperFilter(filterQuery);
         }

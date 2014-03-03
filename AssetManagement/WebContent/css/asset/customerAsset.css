@@ -2,7 +2,7 @@ div.operation_assets_list {
 	width: 150px;
 	position: relative;
 	top: 20px;
-	left: 725px;
+	left: 728px;
 	position: absolute;
 	z-index: 1;
 	background: url("../../image/asset/assetList/BTN_Action_150x30.png")
@@ -28,7 +28,6 @@ div.operation_assets_list ul li a {
 }
 
 div.operation_assets_list ul li {
-	margin-left: -40px;
 	background-color: #cfe6bb;
 	position: relative;
 	z-index: 1;
@@ -36,7 +35,6 @@ div.operation_assets_list ul li {
 }
 
 div.operation_assets_list ul li:hover {
-	margin-left: -40px;
 	background-color: #c2ddb6;
 	position: relative;
 	z-index: 1;
@@ -46,7 +44,6 @@ div.operation_assets_list:hover {
 	width: 150px;
 	position: relative;
 	top: 20px;
-	left: 713px;
 	position: absolute;
 	z-index: 1;
 	background:

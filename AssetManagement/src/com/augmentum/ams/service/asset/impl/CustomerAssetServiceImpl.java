@@ -26,6 +26,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
@@ -129,9 +130,14 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
 
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
-            
-            CommonSearchUtil.addFilterQueryForAsset(searchCondition,
-                    filterQuery, "checkInTime");
+
+            BooleanQuery booleanQuery = CommonSearchUtil.addFilterQueryForAsset(
+                    searchCondition, "checkInTime", Asset.class);
+            if (null != booleanQuery) {
+                
+                filterQuery.add(CommonSearchUtil.addFilterQueryForAsset(
+                        searchCondition, "checkInTime", Asset.class), Occur.MUST);
+            }
         }
 
         QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
@@ -263,16 +269,21 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
             Asset asset = assetService.getAsset(id);
             asset.setStatus(status);
             asset.setUser(null);
-            assetService.updateAsset(asset);
 
             // generate todo list for return to IT operation
             if ("RETURNING_TO_IT".equals(status)) {
+                
+                asset.setCustomer(null);
+                asset.setProject(null);
+                
                 ToDo todo = new ToDo();
                 todo.setAsset(asset);
                 todo.setReturnedTime(date);
                 todo.setReturner(returner);
+                todo.setReceivedTime(SystemConstants.DB_MAX_DATE);
                 todoDao.save(todo);
-            }
+            } 
+            assetService.updateAsset(asset);
         }
     }
 
@@ -327,6 +338,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
         }
         for (String id : uuId) {
             Asset asset = assetService.getAsset(id);
+            asset.setCustomer(customer);
             asset.setProject(project);
             asset.setUser(user);
             asset.setStatus(StatusEnum.IN_USE.toString());

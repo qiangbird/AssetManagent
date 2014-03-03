@@ -130,6 +130,7 @@
 	        </shiro:hasRole>
 	        </c:if>
 	        
+	        <shiro:hasRole name="IT">
 	        <form name="exportForm" id="exportForm" action="asset/export">
 	        	<input type="hidden" name="assetIds" id="assetIds" value=""/>
 	        	
@@ -144,6 +145,7 @@
 	        	<input type="hidden" name="isWarrantyExpired" value="${isWarrantyExpired }" />
 	        </form>
 	        <a id="exportIcon" ></a>
+	        </shiro:hasRole>
 	    </div>
     	</div>
     </div>

@@ -44,6 +44,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="filterDiv filterDiv_common">
 				<button class="filterBtn filter_no_dropDown">
 				</button>
+				<span class="existedFlag"></span>
 				<div class="filterBox">
 					<div class="single_condition">
 						<div class="condition_title"><spring:message code="searchBy" /></div>

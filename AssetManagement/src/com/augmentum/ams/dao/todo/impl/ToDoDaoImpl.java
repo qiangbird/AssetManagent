@@ -8,6 +8,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.base.impl.BaseDaoImpl;
 import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.model.todo.ToDo;
@@ -26,7 +27,7 @@ public class ToDoDaoImpl extends BaseDaoImpl<ToDo> implements ToDoDao {
                 .setFetchMode("asset.user", FetchMode.JOIN);
 
         criteria.add(Restrictions.eq("isExpired", Boolean.FALSE))
-                .add(Restrictions.isNotNull("returnedTime"))
+                .add(Restrictions.eq("receivedTime", SystemConstants.DB_MAX_DATE))
                 .addOrder(Order.desc("returnedTime"));
         
         return findByCriteria(criteria);
@@ -53,7 +54,7 @@ public class ToDoDaoImpl extends BaseDaoImpl<ToDo> implements ToDoDao {
         criteria.createAlias("asset.user", "user")
                 .add(Restrictions.eq("user.id", user.getId()))
                 .add(Restrictions.eq("isExpired", Boolean.FALSE))
-                .add(Restrictions.isNotNull("receivedTime"))
+                .add(Restrictions.eq("returnedTime", SystemConstants.DB_MAX_DATE))
                 .addOrder(Order.desc("receivedTime"));
 
         return findByCriteria(criteria);

@@ -45,10 +45,6 @@
     
     <input type="hidden" id="customerGroupType" value="${customer.customerGroup.processType }">
     <input type="hidden" id="customerCode" value="${customer.customerCode }">
-    <input type="hidden" id="customerCode" value="${customer.customerCode == ''}">
-    <input type="hidden" id="customerCode" value="${customer.customerCode != ''}">
-    <input type="hidden" id="customerCode" value="${customer.customerCode == null}">
-    <input type="hidden" id="customerCode" value="${customer.customerCode != null}">
     <input type="hidden" id="userRole" value="${sessionScope.userRole }">
     <input type="hidden" id="userCode" value="${sessionScope.userVo.employeeId }">
     <div id="bodyMinHight">
@@ -120,11 +116,9 @@
                 <a class="a_operations_assets_list"><spring:message code="customer.asset.operation" /></a>
                 <ul>
                 	<shiro:hasAnyRoles name="MANAGER,SPECIAL_ROLE">
-                    	<c:if test="${requestScope.customer.customerGroup.processType == 'SHARED' }">
-                    		<li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
-                    		<li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
-                    	</c:if>
+                   		<li id="takeOver" value=""><a><spring:message code="customer.asset.take.over" /></a></li>
                     	<li id="assgin"><a><spring:message code="customer.asset.assign" /></a></li>
+                   		<li id="returnToProject" value="AVAILABLE"><a><spring:message code="customer.asset.return.to.project" /></a></li>
                     	<li id="returnToIT" value="RETURNING_TO_IT"><a><spring:message code="customer.asset.return.to.it" /></a></li>
                     	<li id="returnToCustomer" value="RETURNED"><a><spring:message code="returnToCustomer" /></a></li>
                  	</shiro:hasAnyRoles>
@@ -134,6 +128,21 @@
                 	</shiro:hasRole>
                 </ul>
             </div> 
+            
+            <shiro:hasRole name="MANAGER">
+	        <form name="exportForm" id="exportForm" action="asset/export">
+	        	<input type="hidden" name="assetIds" id="assetIds" value=""/>
+	        	
+	        	<input type="hidden" name="assetStatus" id="condition_assetStatus" value="" />
+	        	<input type="hidden" name="assetType" id="condition_assetType" value="" />
+	        	<input type="hidden" name="keyWord" id="condition_keyWord" value="" />
+	        	<input type="hidden" name="searchFields" id="condition_searchFields" value="" />
+	        	<input type="hidden" name="fromTime" id="condition_fromTime" value="" />
+	        	<input type="hidden" name="toTime" id="condition_toTime" value="" />
+	        	
+	        </form>
+	        <a id="exportIcon" ></a>
+	        </shiro:hasRole>
         </div>
         </div>
     </div>
@@ -145,49 +154,40 @@
     <input type="hidden" id="status" value="${status }" />
     <input type="hidden" id="type" value="${type }" />
     
-     <table>
-            <tr>
-            
-            <td valign="top">
-      <form action="customerAsset/assginAssets" method="post" id="dialog">
-         <table  id="assginTable">
-        <div class="create-table">
-            <input type="hidden" name="_method" value="put">
-            <input type="hidden" name="customerCode" value="${customer.customerCode }"/>
-            <input type="hidden" name="ids" id="ids"/>
-            <div>
-                <tr><td><spring:message code="project" /></td>
-                <td>
-                <select id="DropList" class="dropDownSelect" name="projectCode">
-                <c:forEach var="project" items="${projectList }">
-                <option value="${project.projectCode}">${project.projectName }</option>
-                </c:forEach>
-                </select>
-                </td>
-                </tr>
-            </div>
-            <div>
-                <tr><td><spring:message code="asset.user" /></td><td><input type="text" name="userName" id="user"/>
-                <input type="hidden" name="assetUserCode" id="assetUserCode">
-                </td></tr>
-            </div>
-        
-        <div class="submit-div">
-            <input class="input-80-30 submit-button" type="submit" value="<spring:message code='submit' />" />
-            <input class="input-80-30 reset-button" type="reset" value="<spring:message code='cancel' />" />
-            </tr>
-        </div>
-        </div>
-        </table>
-    </form>
-            </td>
-            </tr>
-        </table>
-        
+    <div id="dialog" title="<spring:message code='managerAssign.dialog.title'/>">
+	      <div>
+	          <label id="label_CustomerName"><spring:message code="customer"/></label>
+	          <select id="customer" class="dropDownSelect" name="assignCustomerCode">
+                	<c:forEach var="customer" items="${sessionScope.customerList }">
+                		<option value="${customer.customerCode}">${customer.customerName }</option>
+                	</c:forEach>
+              </select>
+	      </div>
+	      <div>
+	          <label id="label_ProjectName"><spring:message code="project"/></label>
+	          <input id="projectName" type="text"  name="projectName" placeholder="<spring:message code='dialog.placeholder.project'/>"/>
+	          <input type="hidden" id="projectCode" name="projectCode"/>
+	          
+	      </div>
+	      <div>
+	          <label id="label_UserName"><spring:message code="asset.user"/></label>
+	          <input id="userName" type="text" name="userName" placeholder="<spring:message code='dialog.placeholder.user'/>"/>
+	          <input type="hidden" id="userId" name="userId">
+	      </div>
+          <a id="confirm_assign" class="a_common_button green_button_thirty">
+        	<span class="left"></span>
+        	<span class="middle" ><label id="label_ConfirmAssign"><spring:message code="confirm"/></label> </span>
+        	<span class="right"></span>
+          </a>
+          <p>
+	          <input type="button" id="cancel_assign" value="<spring:message code='cancel'/>">
+          </p>
+    </div>
+    
+    
 	<div id="dialog-confirm" title="Operation confirm">
 	  <p id="confirm-message-body"></p>
 	</div>
-	<!-- <label id="label_Operation_Warning"></label> -->
 	<div id="dialog-warning" title="<label id='label_Operation_Warning'></label>">
 		<p id="warning-message-body"></p>
 	</div>

@@ -2,6 +2,10 @@ var dataList;
 var criteria = {};
 
 $(document).ready(function() {
+	
+	placeholder_project = $("#projectName").attr("placeholder");
+	placeholder_user = $("#userName").attr("placeholder");
+	
     // categoryFlag = 1, it means category is 'asset'
     initCriteria(1);
     findDataListInfo("asset");
@@ -63,6 +67,312 @@ $(document).ready(function() {
         changeYear: true,
         dateFormat: "yy-mm-dd",
         yearRange: "2000:2030"
+    });
+    
+    
+	//operation menu
+	$(".operation_assets_list").hover(function() {
+			$(".operation_assets_list ul li").show();
+		}, function() {
+			$(".operation_assets_list ul li").hide();
+	});
+	
+    if ("zh_CN" == $("#locale").val()) {
+	   	 $("#label_CustomerName").css("margin-left", "58px");
+	   	 $("#label_UserName").css("margin-left", "58px");
+	   	 $("#dialog_assign div span").css("left", "80px");
+    } else if ("en_US" == $("#locale").val()) {
+	   	 $("#label_CustomerName").css("margin-left", "40px");
+	   	 $("#label_UserName").css("margin-left", "73px");
+	   	 $("#dialog_assign div span").css("left", "60px");
+    }
+	
+	//employee operations
+	$("#takeOver").click(function(){
+		assetsId = new Array();
+		flag=true;
+		line="";
+		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
+			assetStatus = $(this).parent().find(".Status").text();
+			if($("#userRole").val()=="Employee"){
+				if(assetStatus == "AVAILABLE"){
+					assetsId[i]=$(this).attr("pk");
+				}else{
+					flag = false;
+					line+=$(this).next().text()+",";
+					return;
+				}
+			}else{
+				if(assetStatus == "AVAILABLE"||assetStatus =="IN_USE"){
+					assetsId[i]=$(this).attr("pk");
+				}else{
+					flag = false;
+					line+=$(this).next().text()+",";
+					return;
+				}
+			}
+		});
+		if(flag){
+			if(assetsId == ""){
+				ShowMsg(i18nProp('none_select_record'));
+				return;
+			}else{
+				ShowMsg(i18nProp('message_confirm_asset_takeOver', $('.row .dataList-checkbox-active').size().toString()),function(yes){
+					 if (yes) {
+						 $.ajax({
+							  type: 'POST',
+							  url: "customerAsset/takeOver",
+							  data: {
+								  _method: 'PUT',
+								  customerCode:$("#customerCode").val(),
+								  assetsId:assetsId.toString(),
+								  userCode:$("#userCode").val()
+								  },
+							  dataType : 'json',
+							  success: function(data){
+								  dataList.search();
+							  }
+							});
+		                }else{
+		                	return;
+		                }
+				});
+			}
+		}else{
+			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			return;
+		}
+	});
+	
+	//manager operations
+	$("#returnToProject").click(function() {
+		flag=true;
+		assetsId = new Array();
+		line="";
+		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
+			assetStatus = $(this).parent().find(".Status").text();
+			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
+					assetStatus == "RETURNING_TO_IT"||assetStatus == "AVAILABLE"){
+				flag = false;
+				line+=$(this).next().text()+",";
+				return;
+			}else{
+				assetsId[i]=$(this).attr("pk");
+			}
+		});
+		if(flag){
+			if(assetsId == ""){
+				ShowMsg(i18nProp('none_select_record'));
+				return;
+			}else{
+				//do i18n for all show message
+				ShowMsg(i18nProp('message_confirm_asset_returnToProject', $('.row .dataList-checkbox-active').size().toString()),function(yes){
+					 if (yes) {
+						 $.ajax({
+							 contentType : 'application/x-www-form-urlencoded', 
+							  type: 'POST',
+							  url: "customerAsset/changeStatus/"+"AVAILABLE",
+							  data: {
+								  _method: 'PUT',
+								  "customerCode":$("#customerCode").val(),
+								  "assetsId":assetsId.toString(),
+								  "operation":"Return To Project"
+								  },
+							  dataType : 'json',
+							  success: function(data){
+								  dataList.search();
+							  }
+							});
+		                }else{
+		                	return;
+		                }
+				});
+			}
+		}else{
+			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			return;
+		}
+		
+		
+	});
+	
+
+	$("#assgin").click(function(){
+		
+		$("#dialog").dialog({
+	        autoOpen:false,
+	        closeOnEscape: true,
+	        draggable: false,
+	        height: 300,
+	        width: 500,
+	        modal: true,
+	        position: "center",
+	        resizable: false,
+	        title: i18nProp('managerAssign_dialog_title'),
+	        bgiframe: true,
+	        
+	        close: closeDialog()
+	    });
+		
+		assignIds = new Array();
+		flag = true;
+		line = "";
+		
+		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
+			assetStatus = $(this).parent().find(".Status").text();
+			
+			if(assetStatus == "AVAILABLE"||assetStatus =="IN_USE"){
+				assignIds[i]=$(this).attr("pk");
+			}else{
+				flag = false;
+				line+=$(this).next().text()+",";
+				return;
+			}
+		});
+		if(flag){
+			if(assignIds == ""){
+				ShowMsg(i18nProp('none_select_record'));
+				return;
+			}else{
+				$("#ids").val(getActivedAssetIds());
+				$("#dialog").dialog("open");
+			}
+		}else{
+			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			return;
+		}
+	});
+	
+	
+	$("#returnToIT").click(function(){
+		assetsId=new Array();
+		flag=true;
+		line="";
+		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
+			assetStatus = $(this).parent().find(".Status").text();
+			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
+					assetStatus == "RETURNING_TO_IT" || $(this).siblings(".Ownership").html() != "Augmentum"){
+				flag = false;
+				line+=$(this).next().text()+",";
+				return;
+			}else{
+				assetsId[i]=$(this).attr("pk");
+			}
+		});
+		if(flag){
+			if(assetsId == ""){
+				ShowMsg(i18nProp('none_select_record'));
+				return;
+			}else{
+				ShowMsg(i18nProp('message_confirm_asset_returnToIT', $('.row .dataList-checkbox-active').size().toString()),function(yes){
+				 if (yes) {
+					 $.ajax({
+						  type: 'POST',
+						  url: "customerAsset/changeStatus/"+"RETURNING_TO_IT",
+						  data: {
+							  _method: 'PUT',
+							  customerCode:$("#customerCode").val(),
+							  assetsId:assetsId.toString(),
+							  "operation":"Return To IT"
+							  },
+						  dataType : 'json',
+						  success: function(data){
+							  dataList.search();
+						  }
+						});
+	                }else{
+	                	return;
+	                }
+				});
+			}
+		}else{
+			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			return;
+		}
+	});
+	
+	$("#returnToCustomer").click(function(){
+		assetsId=new Array();
+		flag=true;
+		line="";
+		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
+			assetStatus = $(this).parent().find(".Status").text();
+			
+			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
+					assetStatus == "RETURNING_TO_IT" || $(this).siblings(".Ownership").html() == "Augmentum"){
+				flag = false;
+				line+=$(this).next().text()+",";
+				return;
+			}else{
+				assetsId[i]=$(this).attr("pk");
+			}
+		});
+		if(flag){
+			if(assetsId == ""){
+				ShowMsg(i18nProp('none_select_record'));
+				return;
+			}else{
+				ShowMsg(i18nProp('message_confirm_asset_returnToCustomer', $('.row .dataList-checkbox-active').size().toString()),function(yes){
+				 if (yes) {
+					 $.ajax({
+						  type: 'POST',
+						  url: "customerAsset/changeStatus/"+"RETURNED",
+						  data: {
+							  _method: 'PUT',
+							  customerCode:$("#customerCode").val(),
+							  assetsId:assetsId.toString(),
+							  "operation":"Return To Customer"
+							  },
+						  dataType : 'json',
+						  success: function(data){
+							  dataList.search();
+						  }
+						});
+	                }else{
+	                	return;
+	                }
+				});
+			}
+		}else{
+			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			return;
+		}
+	});
+	
+	$("#exportIcon").click(function(){
+   	 var tipMessage = "";
+   	 var assetIds = getActivedAssetIds();
+        
+        if (assetIds != "") {
+       	 
+            tipMessage = i18nProp('message_confirm_asset_export', $('.row .dataList-checkbox-active').size().toString());
+            ShowMsg(tipMessage, function(yes){
+                if (yes) {
+               	 $("#assetIds").val(assetIds);
+               	 $('#exportForm').submit();
+                }else{
+                    return;
+                }
+            });
+        } else {
+       	 tipMessage = i18nProp('message_confirm_asset_export', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
+            ShowMsg(tipMessage, function(yes){
+                if (yes) {
+               	 $("#assetIds").val(null);
+               	 
+               	 $("#condition_keyWord").val(criteria.keyWord);
+	           	 $("#condition_fromTime").val(criteria.fromTime);
+	           	 $("#condition_toTime").val(criteria.toTime);
+	           	 $("#condition_assetStatus").val(criteria.assetStatus);
+	           	 $("#condition_assetType").val(criteria.assetType);
+	           	 $("#condition_searchFields").val(criteria.searchFields);
+           	 
+               	 $('#exportForm').submit();
+                }else{
+                    return;
+                }
+            });
+        }
     });
     
 });
@@ -161,353 +471,6 @@ function setCriteria() {
     return criteria;
 }
 
-
-//Below is  about the operations of assets
-$(document).ready(function(){
-	$("#dialog").dialog({
-        autoOpen:false,
-        closeOnEscape: true,
-        draggable: false,
-        height: 280,
-        width: 500,
-        show: "blind",
-        hide: "blind",
-        modal: true,
-        position: "center",
-        resizable: false,
-        title: i18nProp('manageAssign_dialog_title'),
-        bgiframe: true
-    });
-	//operation menu
-	$(".operation_assets_list").hover(
-			function() {
-				$(".operation_assets_list ul li").show();
-	}, 
-	function() {
-		$(".operation_assets_list ul li").hide();
-	});
-	
-	//employee operations
-	$("#takeOver").click(function(){
-		assetsId = new Array();
-		flag=true;
-		line="";
-		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
-			assetStatus = $(this).parent().find(".Status").text();
-			if($("#userRole").val()=="Employee"){
-				if(assetStatus == "AVAILABLE"){
-					assetsId[i]=$(this).attr("pk");
-				}else{
-					flag = false;
-					line+=$(this).next().text()+",";
-					return;
-				}
-			}else{
-				if(assetStatus == "AVAILABLE"||assetStatus =="IN_USE"){
-					assetsId[i]=$(this).attr("pk");
-				}else{
-					flag = false;
-					line+=$(this).next().text()+",";
-					return;
-				}
-			}
-		});
-		if(flag){
-			if(assetsId == ""){
-				ShowMsg(i18nProp('none_select_record'));
-				return;
-			}else{
-				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
-					 if (yes) {
-						 $.ajax({
-							  type: 'POST',
-							  url: "customerAsset/takeOver",
-							  data: {
-								  _method: 'PUT',
-								  customerCode:$("#customerCode").val(),
-								  assetsId:assetsId.toString(),
-								  userCode:$("#userCode").val()
-								  },
-							  dataType : 'json',
-							  success: function(data){
-								  dataList.search();
-							  }
-							});
-		                }else{
-		                	return;
-		                }
-				});
-			}
-		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line));
-			return;
-		}
-	});
-	
-	//manager operations
-	$("#returnToProject").click(function() {
-		flag=true;
-		assetsId = new Array();
-		line="";
-		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
-			assetStatus = $(this).parent().find(".Status").text();
-			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
-					assetStatus == "RETURNING_TO_IT"||assetStatus =="RETURNING_TO_CUSTOMER"
-						||assetStatus == "AVAILABLE"){
-				flag = false;
-				line+=$(this).next().text()+",";
-				return;
-			}else{
-				assetsId[i]=$(this).attr("pk");
-			}
-		});
-		if(flag){
-			if(assetsId == ""){
-				ShowMsg(i18nProp('none_select_record'));
-				return;
-			}else{
-				//do i18n for all show message
-				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
-					 if (yes) {
-						 $.ajax({
-							 contentType : 'application/x-www-form-urlencoded', 
-							  type: 'POST',
-							  //Status  <--  buttton value
-							  url: "customerAsset/changeStatus/"+"AVAILABLE",
-							  data: {
-								  _method: 'PUT',
-								  "customerCode":$("#customerCode").val(),
-								  "assetsId":assetsId.toString(),
-								  "operation":"Return To Project"
-								  },
-							  dataType : 'json',
-							  success: function(data){
-								  dataList.search();
-							  }
-							});
-		                }else{
-		                	return;
-		                }
-				});
-			}
-		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line));
-			return;
-		}
-		
-		
-	});
-	
-
-	$("#assgin").click(function(){
-		assignIds = new Array();
-		flag=true;
-		line="";
-		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
-			assetStatus = $(this).parent().find(".Status").text();
-			if(assetStatus == "AVAILABLE"||assetStatus =="IN_USE"){
-				assignIds[i]=$(this).attr("pk");
-			}else{
-				flag = false;
-				line+=$(this).next().text()+",";
-				return;
-			}
-		});
-		if(flag){
-			if(assignIds == ""){
-				ShowMsg(i18nProp('none_select_record'));
-				return;
-			}else{
-			$("#dialog").dialog("open");
-			$(".dropDownList").remove();
-			$("#DropList").DropDownList({
-			       multiple : false,
-			       header : false
-			  });
-			}
-		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line));
-			return;
-		}
-		
-		
-	});
-
-	//select all employee below customer
-	$("#user").click(function(){
-		customerCode = $("#customerCode").val();
-		userCode="";
-	      $.ajax({
-	          type : 'GET',
-	          contentType : 'application/json',
-	          url : 'user/getEmployeeAsCustomer',
-	          dataType : 'json',
-	          data:{customerCode:customerCode},
-	          success : function(data) {
-	             console.log(data);
-	             employeeName = [];
-	             employeeCode = [];
-	             length = data.employeeInfo.length;
-	             for ( var i = 0; i < length; i++) {
-	                employeeName[i] = data.employeeInfo[i].label;
-	                employeeCode[i] = data.employeeInfo[i].employeeCode;
-	             }
-	             userArray = employeeName;
-	             $("#user").autocomplete(
-	            		 {
-                       	 minLength: 0,
-                         source : employeeName,
-                         select : function(e,ui) {
- 	                       $("#assetUserCode").val(employeeCode[getIndexInArr(employeeName,ui.item.label)]);
- 	                     }
-                         
-                         });
-	          },
-	          error : function() {
-	             alert("error");
-	          }
-	      });
-	});
-	
-	$(".submit-button").click(function(){
-		$("#ids").val(assignIds.toString());
-	});
-	$("#returnToIT").click(function(){
-		assetsId=new Array();
-		flag=true;
-		line="";
-		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
-			assetStatus = $(this).parent().find(".Status").text();
-			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
-					assetStatus == "RETURNING_TO_IT"||assetStatus =="RETURNING_TO_CUSTOMER"){
-				flag = false;
-				line+=$(this).next().text()+",";
-				return;
-			}else{
-				assetsId[i]=$(this).attr("pk");
-			}
-		});
-		if(flag){
-			if(assetsId == ""){
-				ShowMsg(i18nProp('none_select_record'));
-				return;
-			}else{
-				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
-				 if (yes) {
-					 $.ajax({
-						  type: 'POST',
-						  url: "customerAsset/changeStatus/"+"RETURNING_TO_IT",
-						  data: {
-							  _method: 'PUT',
-							  customerCode:$("#customerCode").val(),
-							  assetsId:assetsId.toString(),
-							  "operation":"Return To IT"
-							  },
-						  dataType : 'json',
-						  success: function(data){
-							  dataList.search();
-						  }
-						});
-	                }else{
-	                	return;
-	                }
-				});
-			}
-		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line));
-			return;
-		}
-	});
-	
-	$("#returnToCustomer").click(function(){
-		assetsId=new Array();
-		flag=true;
-		line="";
-		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
-			assetStatus = $(this).parent().find(".Status").text();
-			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
-					assetStatus == "RETURNING_TO_IT"){
-				flag = false;
-				line+=$(this).next().text()+",";
-				return;
-			}else{
-				assetsId[i]=$(this).attr("pk");
-			}
-		});
-		if(flag){
-			if(assetsId == ""){
-				ShowMsg(i18nProp('none_select_record'));
-				return;
-			}else{
-				ShowMsg(i18nProp('operation_confirm_message'),function(yes){
-				 if (yes) {
-					 $.ajax({
-						  type: 'POST',
-						  url: "customerAsset/changeStatus/"+"RETURNED",
-						  data: {
-							  _method: 'PUT',
-							  customerCode:$("#customerCode").val(),
-							  assetsId:assetsId.toString(),
-							  "operation":"Return To Customer"
-							  },
-						  dataType : 'json',
-						  success: function(data){
-							  dataList.search();
-						  }
-						});
-	                }else{
-	                	return;
-	                }
-				});
-			}
-		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line));
-			return;
-		}
-	});
-	
-	
-	
-	
-	
-	
-	$("#exportIcon").click(function(){
-   	 var tipMessage = "";
-   	 var assetIds = getActivedAssetIds();
-        
-        if (assetIds != "") {
-       	 
-            tipMessage = i18nProp('message_confirm_asset_export', $('.row .dataList-checkbox-active').size().toString());
-            ShowMsg(tipMessage, function(yes){
-                if (yes) {
-               	 $("#assetIds").val(assetIds);
-               	 $('#exportForm').submit();
-                }else{
-                    return;
-                }
-            });
-        } else {
-       	 tipMessage = i18nProp('message_confirm_asset_export', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
-            ShowMsg(tipMessage, function(yes){
-                if (yes) {
-               	 $("#assetIds").val(null);
-               	 
-               	 $("#condition_keyWord").val(criteria.keyWord);
-	           	 $("#condition_fromTime").val(criteria.fromTime);
-	           	 $("#condition_toTime").val(criteria.toTime);
-	           	 $("#condition_assetStatus").val(criteria.assetStatus);
-	           	 $("#condition_assetType").val(criteria.assetType);
-	           	 $("#condition_searchFields").val(criteria.searchFields);
-           	 
-               	 $('#exportForm').submit();
-                }else{
-                    return;
-                }
-            });
-        }
-    });
-});
-
 function checkInArr(Arr, ele) {
     console.log(Arr);
     for ( var i = 0; i < Arr.length; i++) {
@@ -533,4 +496,127 @@ function getActivedAssetIds() {
         assetIds.push(($(this).attr('pk')));
     });
     return assetIds.toString();
+}
+
+$("#customer").change(function(){
+	$("#projectName").val("");
+	$("#projectCode").val("");
+	$("#projectName").attr("placeholder", placeholder_project);
+	
+	$("#userName").val("");
+	$("#userId").val("");
+	$("#userName").attr("placeholder", placeholder_user);
+});
+
+
+$("#projectName").focus(function() {
+    $(this).attr("placeholder", "");
+    var customerCode = $("#customer").val();
+    var projectName = [];
+    var projectCode = [];
+    
+    if (customerCode != "") {
+        $.ajax({
+          type : 'GET',
+          contentType : 'application/json',
+          url : 'project/getProjectByCustomerCode?customerCode=' + customerCode,
+          dataType : 'json',
+          success : function(data) {
+              var length = data.projectList.length;
+              for ( var i = 0; i < length; i++) {
+                  projectName[i] = data.projectList[i].projectName;
+                  projectCode[i] = data.projectList[i].projectCode;
+               }
+               $("#projectName").autocomplete({
+                  minLength: 0,
+                  source : projectName,
+                  select : function(e, ui) {
+                     $("#projectCode").val(projectCode[getIndexInArr(projectName, ui.item.value)]);
+                  }
+               });
+            }
+        });
+    } else {
+        return;
+    }
+});
+
+//select all employee below customer
+$("#userName").focus(function(){
+	customerCode = $("#customer").val();
+	userCode = "";
+      $.ajax({
+          type : 'GET',
+          contentType : 'application/json',
+          url : 'user/getEmployeeAsCustomer',
+          dataType : 'json',
+          data : {customerCode : customerCode},
+          success : function(data) {
+             employeeName = [];
+             employeeCode = [];
+             length = data.employeeInfo.length;
+             for ( var i = 0; i < length; i++) {
+                employeeName[i] = data.employeeInfo[i].label;
+                employeeCode[i] = data.employeeInfo[i].employeeCode;
+             }
+             userArray = employeeName;
+             $("#userName").autocomplete({
+               	 minLength: 0,
+                 source : employeeName,
+                 select : function(e,ui) {
+                   $("#userId").val(employeeCode[getIndexInArr(employeeName,ui.item.label)]);
+                 }
+             });
+          },
+          error : function() {
+             alert("error");
+          }
+      });
+});
+
+//confirm assign assets
+$("#confirm_assign").click(function() {
+    
+    $.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'customerAsset/assginAssets',
+        dataType : 'json',
+        data: {
+            userId: $("#userId").val(),
+            userName: $("#userName").val(),
+            assetIds: getActivedAssetIds(),
+            projectCode: $("#projectCode").val(),
+            assignCustomerCode: $("#customer").val()
+        },
+        success : function(data) {
+        	$("div .dataList-div-loader").show();
+            criteria.pageNum = 1;
+            dataList.search();
+        }
+    });
+    closeDialog();
+    $("div .dataList-div-loader").show();
+});
+
+// cancel assign assets
+$("#cancel_assign").click(function() {
+    closeDialog();
+});
+
+// close dialog and clean text content
+function closeDialog() {
+    $("#projectName").val("");
+    $("#projectCode").val("");
+    $("#projectName").attr("placeholder", placeholder_project);
+    
+    $("#userName").val("");
+    $("#userId").val(""); 
+    $("#userName").attr("placeholder", placeholder_user);
+    
+    $("#customer").find("option").each(function(){
+    	$(this).removeAttr("selected");
+    });
+    
+    $("#dialog").dialog("close");
 }

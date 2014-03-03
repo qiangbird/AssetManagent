@@ -5,15 +5,30 @@ $(document).ready(function() {
     // categoryFlag = 8, it means category is 'operationLog'
     initCriteria(8);
     findDataListInfo("operation log");
+    
+    $(".filterDiv input[type='checkBox']").each(function(){
+    	if ($(this).val() != "all") {
+    		$(this).attr("content", $(this).siblings("label").html());
+    	}
+    });
+    
+    $(".filterDiv input[type='text']").each(function(){
+    	$(this).attr("content", $(this).val());
+    });
+    
     $(".filterDiv").filterBox({});
+    
     $("#searchButton").click(function() {
         
         setCriteria();
         dataList.criteria = criteria;
-        criteria.sortName = null;
+        criteria.sortName = 'createdTime';
         criteria.pageNum = 1;
         dataList.search();
     });
+    
+    // add place holder event for keyword
+    removePlaceholderForKeyWord();
     
    // add keypress event for search feature
     $("#keyword").keydown(function() {
@@ -64,11 +79,8 @@ var dataListInfo = {
         callback : function() {
         }
     }
-//    ,
-//    contentHandler : function(str) {
-//        return resultContentHandle(str);
-//    }
 };
+
 function searchList() {
     dataList = $(".dataList").DataList(dataListInfo);
     dataList.search();
@@ -91,29 +103,5 @@ function setCriteria() {
         }
     });
     criteria.searchFields = searchFields;
-    
-    // set asset type
-    var assetType = "";
-    $("#assetType").find(":checked").each(function() {
-        if (assetType == null || assetType == "") {
-            assetType = this.value;
-        } else {
-            assetType = assetType + "," + this.value;
-        }
-    });
-    criteria.assetType = assetType;
-
-    // set asset status
-    var assetStatus = "";
-    $("#assetStatus").find(":checked").each(function() {
-        if (assetStatus == null || assetStatus == "") {
-            assetStatus = this.value;
-        } else {
-            assetStatus = assetStatus + "," + this.value;
-        }
-    });
-    criteria.assetStatus = assetStatus;
 }
 
-
-//Below is  about the operations of assets

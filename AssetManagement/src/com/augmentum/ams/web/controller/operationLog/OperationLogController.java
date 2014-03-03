@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.operationLog.OperationLogService;
@@ -42,8 +41,6 @@ public class OperationLogController extends BaseController {
 	public ModelAndView searchTransferLog(SearchCondition searchCondition,
 			HttpSession session, String id) {
 
-		logger.info("searchTransferLog method start!");
-
 		String clientTimeOffset = (String) session.getAttribute("timeOffset");
 
 		if (null == searchCondition) {
@@ -61,7 +58,6 @@ public class OperationLogController extends BaseController {
 		modelAndView.addObject("count", page.getRecordCount());
 		modelAndView.addObject("totalPage", page.getTotalPage());
 
-		logger.info("searchTransferLog method end!");
 		return modelAndView;
 	}
 

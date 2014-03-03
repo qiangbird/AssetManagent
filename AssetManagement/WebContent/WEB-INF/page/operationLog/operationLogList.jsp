@@ -50,8 +50,8 @@
 			        	</div>
 					</div>
 			        <div class="single_condition">
-						<div class="condition_title"><spring:message code="searchAsTime" /></div>
-						<div class="condition_optional" id="updatedTime">
+						<div class="condition_title"><spring:message code="operationLog.createdTime" /></div>
+						<div class="condition_optional" id="createdTime">
 							<p class="dateP"><input id="fromTime" class="dateInput" type="text" name="field" /></p>
                             <span class="dateLine">-</span>
                             <p class="dateP"><input id="toTime" class="dateInput" type="text" name="field" /></p>

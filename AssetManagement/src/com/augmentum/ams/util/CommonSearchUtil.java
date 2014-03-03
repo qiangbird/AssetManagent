@@ -259,31 +259,41 @@ public class CommonSearchUtil {
      * @author Geoffrey.Zhao
      * @param condition
      */
-    public static void addFilterQueryForAsset(SearchCondition searchCondition,
-            BooleanQuery filterQuery, String fileName) {
+    public static BooleanQuery addFilterQueryForAsset(SearchCondition searchCondition, String fileName, Class<?> clazz) {
         
-        if (null == filterQuery) {
-            filterQuery = new BooleanQuery();
-        }
+        BooleanQuery booleanQuery = null;
         
         BooleanQuery statusQuery = CommonSearchUtil.searchByAssetStatus(
-                searchCondition.getAssetStatus(), Inconsistent.class);
-        BooleanQuery typeQuery = CommonSearchUtil.searchByAssetStatus(
-                searchCondition.getAssetType(), Inconsistent.class);
+                searchCondition.getAssetStatus(), clazz);
+        BooleanQuery typeQuery = CommonSearchUtil.searchByAssetType(
+                searchCondition.getAssetType(), clazz);
         Query checkInTimeQuery = CommonSearchUtil.searchByTimeRangeQuery(
                 fileName, searchCondition.getFromTime(),
                 searchCondition.getToTime());
 
         if (null != statusQuery) {
-            filterQuery.add(statusQuery, Occur.MUST);
+            
+            if (null == booleanQuery) {
+                booleanQuery = new BooleanQuery();
+            }
+            booleanQuery.add(statusQuery, Occur.MUST);
         }
 
         if (null != typeQuery) {
-            filterQuery.add(typeQuery, Occur.MUST);
+            
+            if (null == booleanQuery) {
+                booleanQuery = new BooleanQuery();
+            }
+            booleanQuery.add(typeQuery, Occur.MUST);
         }
 
         if (null != checkInTimeQuery) {
-            filterQuery.add(checkInTimeQuery, Occur.MUST);
+            
+            if (null == booleanQuery) {
+                booleanQuery = new BooleanQuery();
+            }
+            booleanQuery.add(checkInTimeQuery, Occur.MUST);
         }
+        return booleanQuery;
     }
 }

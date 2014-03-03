@@ -121,3 +121,60 @@
     background: #23A5E3;
     color: #FFFFFF;
 }
+
+#cancel_assign {
+	width: 80px;
+    height: 30px;
+    background: url("../../img/BTN_Cancel_80x30.png") no-repeat;
+	margin-left: 5px;
+	cursor: pointer;
+	font-family: Arial;
+	font-size: 18px;
+	position: absolute;
+	top: 142px;
+	left: 263px;
+}
+
+#dialog div {
+	height: 40px;
+	width: 390px;
+	text-align: center;
+	line-height: 40px;
+}
+
+#dialog div label {
+	text-align: center;
+	line-height: 35px;
+	vertical-align: middle;
+}
+
+#confirm_assign {
+	left: 143px;
+	top: 15px;
+}
+
+#dialog div input[type="text"] {
+	height: 33px;
+	width: 250px;
+	font-family: Arial;
+	font-size: 14px;
+}
+
+#dialog div span {
+	color: #FF0000;
+	position: absolute;
+	left: 60px;
+	top: 10px;
+}
+
+#label_CustomerName {
+	margin-left: 40px;
+}
+
+#label_ProjectName {
+	margin-left: 58px;
+}
+
+#label_UserName {
+	margin-left: 73px;
+}

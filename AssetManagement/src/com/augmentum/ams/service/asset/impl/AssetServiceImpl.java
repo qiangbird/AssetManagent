@@ -509,6 +509,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                         ToDo todo = new ToDo();
                         todo.setAsset(asset);
                         todo.setReceivedTime(date);
+                        todo.setReturnedTime(SystemConstants.DB_MAX_DATE);
                         todo.setAssigner(assigner);
                         todoDao.save(todo);
 

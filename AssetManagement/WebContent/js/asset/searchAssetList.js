@@ -544,8 +544,7 @@ function checkActivedAssetsStatusForAssign() {
     $('.row .dataList-checkbox-active').each(function(){
         var status = $(this).siblings(".Status").html();
        
-        if (status == "ASSIGNING" || status == "RETURNING_TO_CUSTOMER"
-            || status == "RETURNING_TO_IT" || status == "RETURNED"
+        if (status == "ASSIGNING" || status == "RETURNING_TO_IT" || status == "RETURNED"
                 || status == "BORROWED" || status == "IDLE") {
             
             lineNum += $(this).siblings(".w-30").html() + ", ";
@@ -566,8 +565,7 @@ function checkActivedAssetsStatusForReturn() {
     $('.row .dataList-checkbox-active').each(function(){
         var status = $(this).siblings(".Status").html();
         
-        if (status == "ASSIGNING" || status == "RETURNING_TO_CUSTOMER"
-            || status == "RETURNING_TO_IT" || status == "RETURNED"
+        if (status == "ASSIGNING" || status == "RETURNING_TO_IT" || status == "RETURNED"
                 || $(this).siblings(".Ownership").html() == "Augmentum") {
             
             lineNum += $(this).siblings(".w-30").html() + ", ";
@@ -621,11 +619,11 @@ $("#cancel_assign").click(function() {
 function closeDialog() {
     $("#projectName").val("");
     $("#projectCode").val("");
-    $("#projectName").attr("placeholder", placeholder_customer);
+    $("#projectName").attr("placeholder", placeholder_project);
     
     $("#customerName").val("");
     $("#customerCode").val("");
-    $("#customerName").attr("placeholder", placeholder_project);
+    $("#customerName").attr("placeholder", placeholder_customer);
     $("#customerName").css("border-color", "");
     
     $("#userName").val("");

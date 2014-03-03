@@ -120,24 +120,16 @@ public class CustomerAssetController extends BaseController {
         return "asset/customerAssetList";
     }
 
-    @RequestMapping(value = "assginAssets", method = RequestMethod.PUT)
-    public ModelAndView assginAssets(String customerCode, String ids,
-            String projectCode, String userName, String assetUserCode,
+    @RequestMapping(value = "assginAssets")
+    public ModelAndView assginAssets(String assignCustomerCode, String assetIds,
+            String projectCode, String userName, String userId,
             HttpServletRequest request) throws BusinessException {
 
-        logger.info("assginAssets method start!");
-        logger.info(customerCode + "\t" + projectCode + "\t" + userName + "\t"
-                + assetUserCode);
-
         ModelAndView modelAndView = new ModelAndView();
-        customerAssetService.assginCustomerAsset(customerCode, ids,
-                projectCode, userName, assetUserCode, request);
-        transferLogService.saveTransferLog(ids, "Assign");
+        customerAssetService.assginCustomerAsset(assignCustomerCode, assetIds,
+                projectCode, userName, userId, request);
+        transferLogService.saveTransferLog(assetIds, "Assign");
 
-        modelAndView.addObject("customerCode", customerCode);
-        modelAndView.setViewName("redirect:/customerAsset/listCustomerAsset");
-
-        logger.info("assginAssets method end!");
         return modelAndView;
     }
 
@@ -146,14 +138,11 @@ public class CustomerAssetController extends BaseController {
     public String returnToOperation(@PathVariable String status,
             String assetsId, String customerCode, String operation) {
 
-        logger.info("returnToOperation method start!");
-
         User returner = (User) SecurityUtils.getSubject().getSession()
                 .getAttribute("currentUser");
         customerAssetService.returnCustomerAsset(returner, status, assetsId);
         transferLogService.saveTransferLog(assetsId, operation);
 
-        logger.info("returnToOperation method end!");
         return null;
     }
 
