@@ -10,8 +10,9 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<link rel="stylesheet" type="text/css" href="css/customize/customizedView/createCustomizedView.css" />
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
+<link rel="stylesheet" href="autocomplete/css/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="css/customize/customizedView/createCustomizedView.css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -42,6 +43,32 @@
           </div>
           <span id="viewNameImg"></span>
     </div>
+    <div id="addView">
+    <div class="filter">
+    <span class="columnNameText"><spring:message code="customized.view.advanced.filtering"/>:</span>
+    <div class="customizedViewItem">
+          <input id="columnName" class="inText select-type" type="text" value="" placeholder="Select column"/>
+          <input id="columnType" type="hidden" value="" />
+          <input id="searchColumn" type="hidden" value="" />
+          <input id="realTable" type="hidden" value="" />
+    </div>
+    <div class="customizedViewItem marginLeft searchCondition">
+          <input id="searchCondition" class="inText select-type" type="text"  readonly="readonly"
+               value=""  placeholder="Select criteria"/>
+    </div>
+    <div class="customizedViewItem marginLeft value">
+          <input id="value" class="inText valueInput" type="text" value=""/>
+          <input id="datepic" class="inText datepic" type="text"  readonly="readonly"
+               value="" placeholder="Select date"/>
+    </div>
+    <div class="addToFilter marginLeft" >
+          <input id="addToFilter" type="button" value=<spring:message code="customized.view.add.to.filter"/> class="addToFilter-button" />
+          <input id="updateToFilter" type="button" value=<spring:message code="update"/> class="addToFilter-button" />
+    </div>
+    </div>
+    <br>
+    <br>
+    </div>
     <div id="filterContent">
     <span class="filterSetText"> <spring:message code="customized.view.filter.set"/>:</span>
     <div class="radioBoxes">
@@ -71,37 +98,6 @@
     </c:forEach>
   </div>
   
-  <div id="addView">
-  <br>
-  <br>
-  
-    <div class="filter">
-    <span class="columnNameText"><spring:message code="customized.view.advanced.filtering"/>:</span>
-    <div class="customizedViewItem">
-          <input id="columnName" class="inText select-type" type="text"  readonly="readonly"
-               value="" />
-          <input id="columnType" type="hidden" value="" />
-          <input id="searchColumn" type="hidden" value="" />
-          <input id="realTable" type="hidden" value="" />
-    </div>
-    <div class="customizedViewItem marginLeft searchCondition">
-          <input id="searchCondition" class="inText select-type" type="text"  readonly="readonly"
-               value=""  />
-    </div>
-    <div class="customizedViewItem marginLeft value">
-          <input id="value" class="inText select-type" type="text"  readonly="readonly"
-               value=""/>
-          <input id="datepic" class="inText datepic" type="text"  readonly="readonly"
-               value="" placeholder="Select date"/>
-    </div>
-    <div class="addToFilter marginLeft" >
-          <input id="addToFilter" type="button" value=<spring:message code="customized.view.add.to.filter"/> class="addToFilter-button" />
-          <input id="updateToFilter" type="button" value=<spring:message code="update"/> class="addToFilter-button" />
-    </div>
-    </div>
-    <br>
-    <br>
-    </div>
     <div class="saveOperation" >
   	<c:choose>  
 	   <c:when test="${customizedView.viewName != null}">

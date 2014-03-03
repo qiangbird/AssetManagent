@@ -1,4 +1,17 @@
 ﻿$(document).ready(function() {
+if("true" == $("#fixed").val()){
+		$("#false").attr("class","radioCheckOff");
+		$("#true").attr("class","radioCheckOn");
+}else{
+	$("#false").attr("class","radioCheckOn");
+	$("#true").attr("class","radioCheckOff");
+}
+$("#cancelCopy").click(function(){
+//	window.history.back();
+//	window.location.replace("asset/view/"+$("#assetId").val());
+	window.location.href="asset/view/"+$("#assetId").val();
+}); 
+
  var userArray = new Array();
    $("#assetType").DropDownList({
        multiple : false,

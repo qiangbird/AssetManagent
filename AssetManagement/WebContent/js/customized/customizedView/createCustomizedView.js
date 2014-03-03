@@ -1,6 +1,7 @@
 var simpleCreateInfoMap = [];
 var searchConditionInfoMap = [];
 var valueInfoMap = [];
+var autocomplateValueInfoMap = [];
 var columnTypes = [];
 var realNames = [];
 var realTables = [];
@@ -276,7 +277,8 @@ function chooseColumn() {
 	    contentType : 'application/json',  
 	    url : 'customizedColumn/getDefaultCustomizedColumn',  
 	    dataType : 'json',  
-	    success : function(data) { 
+	    success : function(data) {
+	    	 
 	    	objectColumn = data.customizedColumns;
 	    	length = data.customizedColumns.length;
 	    	for(var i = 0; i < length; i++) {
@@ -294,7 +296,7 @@ function chooseColumn() {
 		    input.val("");
 		 
 		    var panel = $("<div class='select-panel'>").appendTo(p);
-		    var messDiv = $("<div class='message-div'>" + "Select column" + "</div>").appendTo(panel);
+		    var messDiv = $("<div class='message-div'></div>").appendTo(panel);
 		    var shdowDiv = initShdowDiv(panel, list , 10);
 		    closeOrOpenDiv(panel);
 		    
@@ -303,27 +305,90 @@ function chooseColumn() {
 		        $(this).click(function() {
 		            $(".type-details").css("display", "none");
 		            var value = $(this).text();
-		            var columnType = columnTypes[index];
-		            $("#columnType").val(columnType);
-		            var realName = realNames[index];
-		            var searchColumn = searchColumns[index];
-		            $("#searchColumn").val(searchColumn);
-		            var realTable = realTables[index];
-		            $("#realTable").val(realTable);
+		            setHiddenValueOfColumn(index);
 		            input.val(value);
-		            $("#columnName").addClass("select-type");
 		            
+/*		            var columnType = columnTypes[index];
+		            var realName = realNames[index];
 		            if("" != columnType) {
 		            	chooseCriteria(columnType, null);
 		            	chooseValue(columnType, realName,realTable, null);
-		            }
+		            }*/
 		        });
 		    });
 	    }
 	});
 }
 
-function chooseCriteria(type, searchConditon) {
+$(".ui-autocomplete").find(".ui-menu-item").each(function(){
+		  var uiCornerAll = $(this).find(".ui-corner-all");
+		  var length;
+		  if (uiCornerAll.html().charCodeAt(0) > 255) {
+			  length = 10;
+		  } else {
+			  length = 20;
+		  }
+		  if (uiCornerAll.html().length > length) {
+			  uiCornerAll.poshytip({
+				  className: 'tip-green',
+				  allowTipHover: true,
+				  content: uiCornerAll.html()
+			  });
+		  }
+ });
+
+$(".shadow-div").find("ul li").each(function(){
+	  var p = $(this).find("p");
+	  var length;
+	  if (p.html().charCodeAt(0) > 255) {
+		  length = 10;
+	  } else {
+		  length = 20;
+	  }
+	  if (p.html().length > length) {
+		  p.poshytip({
+			  className: 'tip-green',
+			  allowTipHover: true,
+			  content: p.html()
+		  });
+	  }
+});
+
+function setHiddenValueOfColumn(index){
+	var columnType = columnTypes[index];
+    $("#columnType").val(columnType);
+    var realName = realNames[index];
+    var searchColumn = searchColumns[index];
+    $("#searchColumn").val(searchColumn);
+    var realTable = realTables[index];
+    $("#realTable").val(realTable);
+    
+    if("" != columnType) {
+    	chooseCriteria(columnType, null);
+    	chooseValue(columnType, realName,realTable, null);
+    }
+}
+
+function getIndexInArr(Arr, ele) {
+    for ( var i = 0; i < Arr.length; i++) {
+        if (ele == Arr[i]) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+$("#columnName").click(function() {
+    $("#columnName").autocomplete({
+         source : simpleCreateInfoMap,
+         select : function(e,ui) {
+        	 var index = getIndexInArr(simpleCreateInfoMap,ui.item.value);
+        	 setHiddenValueOfColumn(index);
+         }
+   });
+});
+
+function chooseCriteria(type, search) {
 	// initiate the UI
 	$(".searchCondition").show();
 	$("#value").show();
@@ -336,63 +401,131 @@ function chooseCriteria(type, searchConditon) {
 		return;
 	}
 	
+	if("boolean" == type){
+		$("#searchCondition").val("is");
+		$(".searchCondition").attr("readonly", "readonly");
+		$(".searchCondition").find(".select-panel").remove();
+		return;
+	}
+	
+	if("status" == $("#searchColumn").val() || "type" == $("#searchColumn").val()){
+		var conditionsInfoMap = ["is", "is not"];
+		setCriteriaDropDownList(conditionsInfoMap);
+		return;
+	}
+	
 	$.ajax( {  
 	    type : 'POST',  
 	    contentType : 'application/json',  
 	    url : 'customizedColumn/getSearchCondition?type=' + type,  
 	    dataType : 'json',  
-	    success : function(data) { 
-	    	objectSearchCondition = data.searchCondition;
-	    	length = data.searchCondition.length;
-	    	if(0 == length){
-	    		searchConditionInfoMap = [];
-	    	}
-	    	for(var i = 0; i < length; i++) {
-	    		searchConditionInfoMap[i] = objectSearchCondition[i];
-	    	}
-	    
-		    var input = $("#searchCondition");
-		    var p = input.parent("div");
-		    p.css("z-index", "10");
-		    var list = searchConditionInfoMap;
-		    var panel = $("<div class='select-panel'>").appendTo(p);
-		    
-		    // if the searchConditon is not null, poformance the eidt operation
-		    if(null != searchConditon){
-		    	input.val(searchConditon);
-		    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-		    }else{
-		    	input.val("");
-		    	var messDiv = $("<div class='message-div'>" + "Select criteria" + "</div>").appendTo(panel);
-		    }
-		    var shdowDiv = initShdowDiv(panel, list , 10);
-		    closeOrOpenDiv(panel);
-		    
-		    var lis = panel.find("li");
-		    lis.each(function() {
-		        $(this).click(function() {
-		            $(".type-details").css("display", "none");
-		            var value = $(this).text();
-		            input.val(value);
-		            $("#searchCondition").addClass("select-type");
-		        });
-		    });
+	    success : function(data) {
+	    	setCriteriaDropDownList(data.searchCondition);
 	    }
 	});
 }
 
+function setCriteriaDropDownList(searchCondition){
+	 
+	objectSearchCondition = searchCondition;
+	length = searchCondition.length;
+	if(0 == length){
+		searchConditionInfoMap = [];
+	}
+	for(var i = 0; i < length; i++) {
+		searchConditionInfoMap[i] = objectSearchCondition[i];
+	}
+
+    var input = $("#searchCondition");
+    var p = input.parent("div");
+    p.css("z-index", "10");
+    var list = searchConditionInfoMap;
+    var panel = $("<div class='select-panel'>").appendTo(p);
+    
+    // if the searchConditon is not null, poformance the eidt operation
+/*    if(null != searchConditon){
+    	input.val(searchConditon);
+    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
+    }else{*/
+    	input.val("");
+    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
+    /*}*/
+    var shdowDiv = initShdowDiv(panel, list , 10);
+    closeOrOpenDiv(panel);
+    
+    var lis = panel.find("li");
+    lis.each(function() {
+        $(this).click(function() {
+            $(".type-details").css("display", "none");
+            var value = $(this).text();
+            input.val(value);
+        });
+    });
+
+}
+
 function chooseValue(columnType, realName, realTable, value) {
+	// initiate the UI
+	$("#value").show();
+	$(".datepic").hide();
+	valueInfoMap.length = 0;
+	
+	// check column type
+	if("boolean" == columnType){
+		$("#value").removeClass("valueInput");
+		$("#value").addClass("select-type");
+		valueInfoMap = ["true", "false"];
+		setValueDropdownList(valueInfoMap);
+	}else if("date" == columnType){
+		$("#value").hide();
+		$(".datepic").show();
+		$(".value").find(".select-panel").remove();
+		
+		//initiate the original class
+		$(".value").find("input:last").attr("class", "inText datepic");
+		
+		//Bind datapicker event of jqueryUI:
+		//Generate a unique id to bind the datepicker event,
+		//otherwise the new generate element to bind the 
+		//datepicker can't work well.
+		var date = new Date().getTime();
+		$(".value").find("input:last").attr("id", "datepic" + date);
+		$("#datepic" + date).datepicker({
+			changeMonth : true,
+			changeYear : true,
+			dateFormat : "yy-mm-dd"
+		});
+		return;
+	}
+	
+	if("status" == $("#searchColumn").val()){
+		$("#value").removeClass("valueInput");
+		$("#value").addClass("select-type");
+		valueInfoMap = ["AVAILABLE", "IDLE","IN_USE", "BORROWED", "RETURNED", "BROKEN", "WRITE_OFF"];
+		setValueDropdownList(valueInfoMap);
+		return;
+	}
+	if("status" == $("#searchColumn").val()){
+		$("#value").removeClass("valueInput");
+		$("#value").addClass("select-type");
+		valueInfoMap = ["DEVICE", "MACHINE","", "MONITOR", "SOFTWARE", "OTHERASSETS"];
+		setValueDropdownList(valueInfoMap);
+		return;
+	}
 	$.ajax( {  
 	    type : 'POST',  
-	    contentType : 'application/json',  
+	    contentType : 'application/json',
 	    url : 'customizedColumn/getValues?realName=' + realName + '&realTable=' + realTable,  
 	    dataType : 'json',  
 	    success : function(data) { 
-	    	// initiate the UI
+	    	$("#value").removeClass("select-type");
+			$("#value").addClass("valueInput");
+	    	autocomplateValueInfoMap = data.values;
+/*	    	// initiate the UI
 	    	$("#value").show();
-    		$(".datepic").hide();
+    		$(".datepic").hide();*/
     		
-    		// check column type
+/*    		// check column type
 	    	if("boolean" == columnType){
 	    		valueInfoMap = ["true", "false"];
 	    	}else if("date" == columnType){
@@ -415,8 +548,8 @@ function chooseValue(columnType, realName, realTable, value) {
 					dateFormat : "yy-mm-dd"
 				});
 	    		return;
-	    	}else{
-	    		objectValue = data.values;
+	    	}else{*/
+	    		/*objectValue = data.values;
 	    		length = data.values.length;
 	    		if(0 == length){
 	    			valueInfoMap = [];
@@ -438,7 +571,7 @@ function chooseValue(columnType, realName, realTable, value) {
 		    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
 		    }else{
 		    	input.val("");
-		    	var messDiv = $("<div class='message-div'>" + "Select value" + "</div>").appendTo(panel);
+		    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
 		    }
 		    var shdowDiv = initShdowDiv(panel, list , 10);
 		    closeOrOpenDiv(panel);
@@ -451,8 +584,57 @@ function chooseValue(columnType, realName, realTable, value) {
 		            input.val(value);
 		            $("#value").addClass("select-type");
 		        });
-		    });
+		    });*/
 	    }
+	});
+}
+
+$("#value").click(function() {
+	if(0 < autocomplateValueInfoMap.length){
+		$("#value").autocomplete({
+			source : autocomplateValueInfoMap,
+			select : function(e,ui) {
+			}
+		});
+	}
+});
+
+function setValueDropdownList(values){
+	autocomplateValueInfoMap.length = 0;
+	objectValue = values;
+	length = values.length;
+	if(0 == length){
+		valueInfoMap = [];
+	}
+	for(var i = 0; i < length; i++) {
+		valueInfoMap[i] = String(objectValue[i]);
+	}
+
+	var input = $("#value");
+	var p = input.parent("div");
+	p.css("z-index", "10");
+	var list = valueInfoMap;
+	var panel = $("<div class='select-panel'>").appendTo(p);
+	
+	// if the value is not null, poformance the eidt operation
+/*	if(null != value){
+		input.val(value);
+		var messDiv = $("<div class='message-div'></div>").appendTo(panel);
+	}else{*/
+		input.val("");
+		var messDiv = $("<div class='message-div'></div>").appendTo(panel);
+/*	}*/
+	var shdowDiv = initShdowDiv(panel, list , 10);
+	closeOrOpenDiv(panel);
+	
+	var lis = panel.find("li");
+	lis.each(function() {
+	    $(this).click(function() {
+	        $(".type-details").css("display", "none");
+	        var value = $(this).text();
+	        input.val(value);
+	        $("#value").addClass("select-type");
+	    });
 	});
 }
 
@@ -464,7 +646,15 @@ function initShdowDiv(obj, list, z) {
     var len = list.length < 8 ? list.length : 8;
     var divHeight = len*26;
     
-    var inputWidth = obj.width(); 
+    /*var inputWidth = obj.width(); 
+    
+    var width = inputWidth + 4;
+    var height = divHeight + 15;
+    
+    var cWidth = inputWidth - 10;
+    var cHeight = height - 15;*/
+    
+    var inputWidth = 150; 
     
     var width = inputWidth + 4;
     var height = divHeight + 15;
@@ -472,11 +662,11 @@ function initShdowDiv(obj, list, z) {
     var cWidth = inputWidth - 10;
     var cHeight = height - 15;
     
-    var d =$("<div class='shadow-div'>").css("width", width)
+    var d =$("<div class='shadow-div'>").css("width", "150")
                .css("height", height)
                .css("position", "relative")
                .css("top", "0")
-               .css("left", "3px")
+               .css("margin-left","-130px")
                .css("display", "none")
                .css("z-index", z)
                .appendTo(obj); 
@@ -568,14 +758,17 @@ function closeOrOpenDiv(panel) {
     var showDiv = panel.find(".shadow-div");
     
     messDiv.click(function() {
-        $(".active").css("display", "none");
+/*        $(".active").css("display", "none");
         $(".active").removeClass("active");
-        $(this).text("");
+        $(this).text("");*/
         var display = showDiv.css("display");
         if(display == "none") {
            showDiv.addClass("active");
            showDiv.css("display", "block");
-        } 
+        }else{
+        	showDiv.removeClass("active");
+            showDiv.css("display", "none");
+        }
         return false;
     });
     

@@ -17,14 +17,11 @@ String basePath = request.getScheme() + "://"
 <head>
 <base href="<%=basePath%>">
 <title>Edit Assets</title>
+<link rel="stylesheet" href="css/asset/assetCommon.css" type="text/css">
 <link rel="stylesheet" href="css/asset/createAsset.css" type="text/css">
 <link rel="stylesheet" href="css/asset/editAsset.css" type="text/css">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="autocomplete/css/autocomplete.css"
 	type="text/css">
-<link rel="stylesheet" href="css/asset/assetCommon.css" type="text/css">
-<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
-<link rel="stylesheet" type="text/css" href="messageBar/css/messagebar.css">
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
@@ -139,9 +136,18 @@ String basePath = request.getScheme() + "://"
 							<form:input path="keeper" id="keeperSelect" class="l-text"
 								readonly="readonly" />
 						</p>
-
-
-
+                        <shiro:hasRole name="IT">
+                        <p>
+                            <label><spring:message code="navigator.fixed.assets" /></label>
+                            <form:input path="fixed" id="fixed" type="hidden" value=""/>
+                        </p>
+                            <div class="radioBoxes">
+                                <div class="fixedCheckBox"><a class="radioCheckOn" id="false"></a><span class="requiredFalse">
+                                <spring:message code="customized.property.false" /></span></div>
+                                <div class="fixedCheckBox"><a class="radioCheckOff" id="true"></a><span class="requiredTrue">
+                                <spring:message code="customized.property.true" /></span></div>
+                            </div>
+                        </shiro:hasRole>
 					</div>
 
 					<div id="picDiv">
@@ -218,8 +224,8 @@ String basePath = request.getScheme() + "://"
 							</span>
 						</p>
 					</div>
-					<div class="clear"></div>
 				</div>
+					<div class="clear"></div>
 
 
 				<%-- <%@include file="showAsSelect.txt"%>  --%>
@@ -263,8 +269,8 @@ String basePath = request.getScheme() + "://"
 								</p>
 							</div>
 						</div>
-                        <div class="clear"></div>
 					</div>
+                        <div class="clear"></div>
 
 
 					<div id="monitorDetails" class="type-details" style="display: none">
@@ -288,8 +294,8 @@ String basePath = request.getScheme() + "://"
 								</span>
 							</p>
 						</div>
-						<div class="clear"></div>
 					</div>
+						<div class="clear"></div>
 
 					<div id="deviceDetails" class="type-details" style="display: none">
 						<div class="commons">
@@ -312,8 +318,8 @@ String basePath = request.getScheme() + "://"
 									class="l-text" />
 							</p>
 						</div>
-						<div class="clear"></div>
 					</div>
+						<div class="clear"></div>
 					
 					<div id="softwareDetails" class="type-details"
                         style="display: none">
@@ -399,8 +405,8 @@ String basePath = request.getScheme() + "://"
                      </c:choose> 
                          </p>
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 					
 					<div id="otherAssetsDetails" class="type-details"
 						style="display: none">
@@ -418,9 +424,9 @@ String basePath = request.getScheme() + "://"
 						</div>
 
 						<div class="asset-input-right asset-input-panel"></div>
-					   <div class="clear"></div>
 					</div>
 				</div>
+					   <div class="clear"></div>
 
 
 				<div class="showAsSelfDefine">

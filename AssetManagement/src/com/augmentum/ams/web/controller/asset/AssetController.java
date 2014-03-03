@@ -14,7 +14,6 @@ import javax.validation.Valid;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,13 +175,7 @@ public class AssetController extends BaseController {
      * @throws UnsupportedEncodingException
      */
     @RequestMapping(value = "/saveAsset", method = RequestMethod.POST)
-    public ModelAndView saveAsset(HttpServletRequest request, @Validated/*
-                                                                         * (
-                                                                         * GroupValidation
-                                                                         * .
-                                                                         * class
-                                                                         * )
-                                                                         */AssetVo assetVo,
+    public ModelAndView saveAsset(HttpServletRequest request, @Validated AssetVo assetVo,
             BindingResult bindingResult, String batchCreate, String batchCount)
             throws BusinessException, UnsupportedEncodingException {
 
@@ -594,7 +587,7 @@ public class AssetController extends BaseController {
             String assetIds, SearchCondition condition) {
 
         String outPutPath = null;
-        
+
         if (null == condition) {
             condition = new SearchCondition();
         }

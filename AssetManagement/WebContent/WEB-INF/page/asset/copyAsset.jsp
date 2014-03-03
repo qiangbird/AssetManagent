@@ -3,6 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %> 
 <%
 request.setCharacterEncoding("UTF-8");
 response.setCharacterEncoding("UTF-8");
@@ -147,6 +148,18 @@ String basePath = request.getScheme() + "://"
 							<form:input path="keeper" id="keeperSelect" class="l-text"
 								readonly="readonly" />
 						</p>
+						<shiro:hasRole name="IT">
+                        <p>
+                            <label><spring:message code="navigator.fixed.assets" /></label>
+                            <form:input path="fixed" id="fixed" type="hidden" value=""/>
+                        </p>
+                            <div class="radioBoxes">
+                                <div class="fixedCheckBox"><a class="radioCheckOn" id="false"></a><span class="requiredFalse">
+                                <spring:message code="customized.property.false" /></span></div>
+                                <div class="fixedCheckBox"><a class="radioCheckOff" id="true"></a><span class="requiredTrue">
+                                <spring:message code="customized.property.true" /></span></div>
+                            </div>
+                        </shiro:hasRole>
 
 					</div>
 
@@ -219,6 +232,7 @@ String basePath = request.getScheme() + "://"
 						</p>
 					</div>
 				</div>
+				<div class="clear"></div>
 				<div class="showAsSelect">
 
 					<div id="machineDetails" class="type-details" style="display: none">
@@ -262,7 +276,7 @@ String basePath = request.getScheme() + "://"
 						</div>
 
 					</div>
-
+                    <div class="clear"></div>
 
 					<div id="monitorDetails" class="type-details" style="display: none">
 						<div class="commons">
@@ -286,7 +300,7 @@ String basePath = request.getScheme() + "://"
 							</p>
 						</div>
 					</div>
-
+                    <div class="clear"></div>
 					<div id="deviceDetails" class="type-details" style="display: none">
 						<div class="commons">
 							<strong><spring:message code="asset.device.details" /></strong>
@@ -309,7 +323,7 @@ String basePath = request.getScheme() + "://"
 							</p>
 						</div>
 					</div>
-
+                    <div class="clear"></div>
                   <div id="softwareDetails" class="type-details"
                         style="display: none">
                         <div class="commons">
@@ -343,7 +357,7 @@ String basePath = request.getScheme() + "://"
                          </p>
                         </div>
                     </div>
-                    
+                    <div class="clear"></div>
 					<div id="otherAssetsDetails" class="type-details"
 						style="display: none">
 						<div class="commons">
@@ -361,9 +375,9 @@ String basePath = request.getScheme() + "://"
 
 						<div class="asset-input-right asset-input-panel"></div>
 					</div>
-
+                    <div class="clear"></div>
 				</div>
-
+                    <div class="clear"></div>
 				<div class="asset-batch-create">
 					<span id="batchCreatCkBox">
 					 <input type="checkbox" id="batchCreate" name="batchCreate">
@@ -383,7 +397,7 @@ String basePath = request.getScheme() + "://"
 						<button value='<spring:message code="save" />'
 						 class="submit-button" id="submitForm" ><spring:message code="save" /></button>
 						<button value='<spring:message code="cancel" />'
-						 class="cancel-button" onclick="window.history.back();" ><spring:message code="cancel" /></button>
+						 id="cancelCopy" ><spring:message code="cancel" /></button>
 					</div>
 					<div id="showError"></div>
 				</div>
@@ -394,22 +408,14 @@ String basePath = request.getScheme() + "://"
 		</div>
 		</div>
 		<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
-		<script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
-		<script type="text/javascript"
-			src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
-		<script type="text/javascript"
-			src="js/common/jquery.i18n.properties-1.0.9.js"></script>
 		<script type="text/javascript" src="js/common/jquery-validate.min.js"></script>
 		<script type="text/javascript" src="js/common/jquery.form.js"></script>
-		<script type="text/javascript" src="js/asset/copyAsset.js"></script>
 		<script type="text/javascript" src="autocomplete/js/autocomplete.js"></script>
 		<script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 		<script type="text/javascript" src="js/asset/assetCommon.js"></script>
-		<script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 		<!-- add front page validation -->
         <script type="text/javascript" src="js/common/validation.js"></script>
-        <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
         <script type="text/javascript" src="js/asset/assetValidation.js"></script>
-        <script type="text/javascript" src="messageBar/js/messagebar.js"></script>
+		<script type="text/javascript" src="js/asset/copyAsset.js"></script>
 </body>
 </html>

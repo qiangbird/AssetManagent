@@ -90,11 +90,6 @@ div.asset-input-details {
 	clear: both;
 }
 
-div.type-details {
-	height: auto;
-	margin-top: 40px;
-}
-
 .asset-input-info  strong {
 	display: block;
 	height: 40px;
@@ -485,10 +480,6 @@ html .ui-autocomplete {
 	width: 460px;
 	margin-right: auto;
 	margin-top: 0px;
-}
-
-.common-requirement-property {
-	height: 475px;
 }
 
 #uploadPhoto input {
@@ -954,10 +945,6 @@ li {
 	color: #FFFFFF;
 }
 
-.showAsSelect {
-	margin-top: 10px;
-}
-
 #picDiv {
 	float: left;
 	position: relative;
@@ -1053,4 +1040,8 @@ BODY {
 	SCROLLBAR-TRACK-COLOR: #fd76c2; 
 	SCROLLBAR-DARKSHADOW-COLOR: #f629b9; 
 	SCROLLBAR-BASE-COLOR: #e9cfe0 
-} 
+}
+
+.showAsSelect {
+    margin-top: 40px;
+}

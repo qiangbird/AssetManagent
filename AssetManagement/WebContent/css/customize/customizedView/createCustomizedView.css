@@ -89,7 +89,6 @@
 }
 
 .select-type {
-	cursor: pointer;
     border-radius: 3px;
     box-shadow: inset 0 0 5px #BFBFBF;
     background: url("../../../image/customize/customizedView/icon_arrow_down.png") 133px 15px no-repeat, 
@@ -190,7 +189,7 @@
 
 .filter {
 	float: left;
-    margin-top: 0px;
+    margin-top: 20px;
     height: 19px;
     margin-bottom: 20px;
 }
@@ -315,16 +314,16 @@
 
 .select-panel {
     height: 28px;
-    width: 150px;
-    cursor: pointer;
+    width: 20px;
     position: relative;
 	margin-top: -28px;
-	margin-left: -4px;
+	margin-left: 130px;
 }
 
 .message-div {
+	cursor: pointer;
     height: 28px;
-    width: 150px;
+    width: 20px;
     line-height: 28px;
     color: #A0A0A0;
     text-indent: 9px;
@@ -354,6 +353,7 @@
 	height:25px;
 	margin: 0px;
 	font-size: 16px;
+	cursor: pointer;
 }
 
 .valueInput {
@@ -573,4 +573,52 @@
 	width: auto;
 	min-height: 0px;
 	height: auto;
+}
+
+.valueInput {
+	border-radius: 3px; 
+	border-radius: 3px;
+	box-shadow: inset 0 0 5px #BFBFBF;
+	border: 1px solid #BFBFBF;
+	font-family: arial;
+	color: #7A7373;
+	text-align: left;
+	background: white;
+}
+
+.ui-state-hover {
+	background: #23A5E3 !important;
+    color: #FFFFFF !important;
+    border: 0px !important;
+    font-size: 16px !important;
+    margin: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.ui-menu-item{
+	background: #F5F5F5 !important;
+	text-indent: 6px !important;
+	font-family: Arial !important;
+	border-bottom: 1px solid white !important;
+	font-size: 16px !important;
+	height: 25px !important;
+}
+.ui-autocomplete {
+	border: 1.9px solid #428DC2 !important;
+	padding-top: 4px !important;
+	padding-left: 3px !important;
+	padding-bottom: 4px !important;
+	font-family: arial !important;
+	font-size: 16px !important;
+}
+
+.ui-menu-item a{
+	line-height: 25px !important;
+	padding-top: 0px !important;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }

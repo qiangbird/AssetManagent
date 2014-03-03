@@ -365,15 +365,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             if (null != assetVo.getUser()) {
                 assetUser = userService.getUserByName(assetVo.getUser().getUserName());
             }
-            // String locationAddr = assetVo.getLocation();
-            // Location location = null;
-            // try {
-            // location = locationService.getLocationBySiteAndRoom(
-            // locationAddr.trim().substring(0, 6), locationAddr
-            // .trim().substring(6, locationAddr.length()));
-            // } catch (Exception e) {
-            // logger.error("Get location error!", e);
-            // }
             Location location = locationService.getLocationBySiteAndRoom(
                     "Augmentum " + assetVo.getSite(), assetVo.getLocation());
             asset.setProject(project);
@@ -394,13 +385,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             asset.setWarrantyTime(UTCTimeUtil.localDateToUTC(assetVo.getWarrantyTime()));
             asset.setVendor(assetVo.getVendor());
             asset.setMemo(assetVo.getMemo());
-            // asset.setSoftware(assetVo.getSoftware());
-            // if(null != assetVo.getSoftware()){
-            // assetVo.getSoftware().setSoftwareExpiredTime(UTCTimeUtil.localDateToUTC(assetVo
-            // .getSoftwareExpiredTime()));
-            // }
-            // asset.getSoftware().setSoftwareExpiredTime((UTCTimeUtil.localDateToUTC(assetVo
-            // .getSoftwareExpiredTime())));
+            asset.setFixed(assetVo.isFixed());
         } catch (Exception e) {
             logger.error("AssetVo to asset error!", e);
         }

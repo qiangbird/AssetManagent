@@ -1,4 +1,11 @@
 ﻿$(document).ready(function() {
+	if("true" == $("#fixed").val()){
+		$("#false").attr("class","radioCheckOff");
+		$("#true").attr("class","radioCheckOn");
+	}else{
+		$("#false").attr("class","radioCheckOn");
+		$("#true").attr("class","radioCheckOff");
+	}
    $("#selectedStatus").DropDownList({
        multiple : false,
        header : false

@@ -97,10 +97,6 @@ div.asset-input-details {
 	clear: both;
 }
 
-div.type-details {
-	height: auto;
-}
-
 .asset-input-info  strong {
 	display: block;
 	height: 40px;
@@ -167,10 +163,10 @@ html .ui-autocomplete {
 }
 
 .asset-input-panel p span {
-color: #FF0000;
-position: absolute;
-top: 10px;
-left: -2;
+	color: #FF0000;
+	position: absolute;
+	top: 15px;
+	left: -2;
 }
 .asset-input-panel p label {
 	width: 125px;
@@ -444,7 +440,7 @@ left: -2;
 	no-repeat;
 }
 
-.operation .cancel-button {
+.operation #cancelCopy {
 	background:
 		url("../../image/customize/customizedView/BTN_Cancel_80x30.png");
 	no-repeat;
@@ -462,7 +458,7 @@ left: -2;
     border: 0px;
 }
 
-.operation .cancel-button:hover {
+.operation #cancelCopy:hover {
 	background:
 		url("../../image/customize/customizedView/BTN_Cancel_Hover_80x30.png");
 	no-repeat;
@@ -576,10 +572,6 @@ left: -2;
 	width: 460px;
 	margin-right: auto;
 	margin-top: 0px;
-}
-
-.common-requirement-property {
-	height: 500px;
 }
 
 #uploadPhoto input {
@@ -737,7 +729,6 @@ left: -2;
 
 .showAsSelfDefine {
 	position: relative;
-	margin-top: 150px;
 	display: none;
 }
 

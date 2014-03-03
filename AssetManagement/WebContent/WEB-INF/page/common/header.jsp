@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
+<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 

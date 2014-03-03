@@ -1,6 +1,6 @@
 ﻿$(document).ready(function() {
 // get the needed data from background
-	
+
 $("#assetType").DropDownList({
     multiple : false,
     header : false

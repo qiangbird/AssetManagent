@@ -134,15 +134,14 @@ String basePath = request.getScheme() + "://"
                         <shiro:hasRole name="IT">
                         <p>
                             <label><spring:message code="navigator.fixed.assets" /></label>
-                            <%-- <form:input path="fixed" id="keeperSelect" class="l-text" /> --%>
                             <form:input path="fixed" id="fixed" type="hidden" value="false"/>
+                        </p>
                             <div class="radioBoxes">
 			                    <div class="fixedCheckBox"><a class="radioCheckOn" id="false"></a><span class="requiredFalse">
 			                    <spring:message code="customized.property.false" /></span></div>
 			                    <div class="fixedCheckBox"><a class="radioCheckOff" id="true"></a><span class="requiredTrue">
 			                    <spring:message code="customized.property.true" /></span></div>
 			                </div>
-                        </p>
                         </shiro:hasRole>
                     </div>
 
@@ -218,8 +217,8 @@ String basePath = request.getScheme() + "://"
                             </span>
                         </p>
                     </div>
-                    <div class="clear"></div>
                 </div>
+                    <div class="clear"></div>
                 <%--  <%@include file="showAsSelect.txt"%>  --%>
                 <div class="showAsSelect">
 
@@ -260,8 +259,8 @@ String basePath = request.getScheme() + "://"
                                 </p>
                             </div>
                         </div>
-                    <div class="clear"></div>
                     </div>
+                    <div class="clear"></div>
 
 
                     <div id="monitorDetails" class="type-details" style="display: none">
@@ -285,8 +284,8 @@ String basePath = request.getScheme() + "://"
                                 </span>
                             </p>
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                     <div id="deviceDetails" class="type-details" style="display: none">
                         <div class="commons">
@@ -309,8 +308,8 @@ String basePath = request.getScheme() + "://"
                                     class="l-text" />
                             </p>
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                     <div id="softwareDetails" class="type-details"
                         style="display: none">
@@ -354,8 +353,8 @@ String basePath = request.getScheme() + "://"
                             </p> --%>
 
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                     <div id="otherAssetsDetails" class="type-details"
                         style="display: none">

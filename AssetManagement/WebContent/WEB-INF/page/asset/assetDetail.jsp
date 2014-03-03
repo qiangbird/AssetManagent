@@ -17,9 +17,9 @@ String basePath = request.getScheme() + "://"
 <head>
 <base href="<%=basePath%>">
 <title>View Asset</title>
+<link rel="stylesheet" href="autocomplete/css/autocomplete.css" type="text/css">
+<link rel="stylesheet" href="css/asset/assetCommon.css" type="text/css">
 <link rel="stylesheet" href="css/asset/viewAsset.css" type="text/css">
-<link rel="stylesheet" href="autocomplete/css/autocomplete.css"
-    type="text/css">
 </head>
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
@@ -111,6 +111,15 @@ String basePath = request.getScheme() + "://"
                             <label><spring:message code="keeper" /></label>
                             <form:input path="keeper" readonly="readonly" />
                         </p>
+                        <shiro:hasRole name="IT">
+                        <p id="fixBlock">
+                            <label><spring:message code="navigator.fixed.assets" /></label>
+                            <form:input path="fixed" id="fixed" type="hidden" />
+                            <span id="isFixed">Yes</span>
+                            <span id="nonFixed">No</span>
+                            
+                        </p>
+                        </shiro:hasRole>
 
                     </div>
 
@@ -174,8 +183,8 @@ String basePath = request.getScheme() + "://"
                             <form:textarea path="memo" rows="1" cols="15" readonly="readonly" />
                         </p>
                     </div>
-                    <div class="clear"></div>
                 </div>
+                    <div class="clear"></div>
 
 
                 <%-- <%@include file="showAsSelect.txt"%>  --%>
@@ -211,8 +220,8 @@ String basePath = request.getScheme() + "://"
                                 </p>
                             </div>
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
 
                     <div id="monitorDetails" class="type-details" style="display: none">
@@ -232,8 +241,8 @@ String basePath = request.getScheme() + "://"
                                 <form:input path="monitor.detail" class="l-text"  readonly="readonly" />
                             </p>
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                     <div id="deviceDetails" class="type-details" style="display: none">
                         <div class="commons">
@@ -256,8 +265,8 @@ String basePath = request.getScheme() + "://"
                                     class="l-text"  readonly="readonly" />
                             </p>
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                     <div id="softwareDetails" class="type-details"
                         style="display: none">
@@ -330,8 +339,8 @@ String basePath = request.getScheme() + "://"
                          </c:choose> 
 
                         </div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                     <div id="otherAssetsDetails" class="type-details"
                         style="display: none">
@@ -349,10 +358,11 @@ String basePath = request.getScheme() + "://"
                         </div>
 
                         <div class="asset-input-right asset-input-panel"></div>
-                        <div class="clear"></div>
                     </div>
+                        <div class="clear"></div>
 
                 </div>
+                <div class="clear"></div>
 
                 <div class="showAsSelfDefine">
                     <c:if test="${selfPropertyCount!='0' }">

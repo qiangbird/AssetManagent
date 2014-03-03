@@ -88,3 +88,25 @@ p lable{
 .fixedCheckBox:HOVER {
     cursor: pointer;
 }
+
+#isFixed, #nonFixed {
+	display: none;
+	margin-left: 150px;
+    color: #555555;
+}
+
+#fixBlock{
+	position: relative;
+}
+
+.common-requirement-property {
+    height: 500px;
+}
+
+.showAsSelfDefine{
+	margin-top: 40px;
+}
+
+.showAsSelect {
+	margin-top: 25px;
+}
