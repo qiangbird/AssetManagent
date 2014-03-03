@@ -63,7 +63,7 @@
     </div>
     <div class="addToFilter marginLeft" >
           <input id="addToFilter" type="button" value=<spring:message code="customized.view.add.to.filter"/> class="addToFilter-button" />
-          <input id="updateToFilter" type="button" value=<spring:message code="update"/> class="addToFilter-button" />
+          <!-- <input id="updateToFilter" type="button" value=<spring:message code="update"/> class="addToFilter-button" /> -->
     </div>
     </div>
     <br>
@@ -79,6 +79,7 @@
       <div class="columnElement columnNameTitleHead" ><spring:message code="customized.view.column.name"/></div>
       <div class="columnElement criteriaTitle" ><spring:message code="customized.view.criteria"/></div>
       <div class="columnElement valueTitle" ><spring:message code="customized.view.value"/></div>
+      <div class="columnElement valueTitle" ><spring:message code="navigator.operation"/></div>
     </div>
 	<c:forEach items="${customizedViewItems}" var="customizedViewItem">
       <div class="filterInfo">
@@ -90,12 +91,45 @@
         <div class="columnData columnNameTitle typeInColumn"><p>${customizedViewItem.columnType }</p></div>
         <div class="columnData columnNameTitle searchColumnInColumn"><p>${customizedViewItem.searchColumn }</p></div>
         <div class="columnData columnNameTitle realTableInColumn"><p>${customizedViewItem.realTable }</p></div>
-        <div class="columnData criteriaTitle criteriaInColumn"><p>${customizedViewItem.searchCondition }</p></div>
-        <div class="columnData valueTitle valueInColumn"><p><p>${customizedViewItem.value}</p></div>
-        <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"><img src="<%=basePath%>/image/customize/customizedView/icon_delete_normal.png"></a></p></div>
-        <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"><img src="<%=basePath%>/image/customize/customizedView/icon_edit_normal.png"></a></p></div>
+        <div class="columnData criteriaTitle criteriaInColumn">
+	        <input class="inText select-type eidtCriteriaInput" type="text" readonly="readonly">
+	        <p>${customizedViewItem.searchCondition }</p>
+	    </div>
+        <div class="columnData valueTitle valueInColumn">
+            <input class="inText eidtValueInput" type="text" >
+            <input id="datepic" class="inText editDatepic" type="text"  readonly="readonly"
+               value="" placeholder="Select date"/>
+            <p>${customizedViewItem.value}</p>
+        </div>
+        <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_delete_normal.png"> --%></a></p></div>
+        <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_edit_normal.png"> --%></a></p></div>
       </div>
     </c:forEach>
+  </div>
+  
+  <div id="filterInfoTemplate">
+      <div class="filterInfo">
+        <div class="columnData sequence itemIdInColumn"><p>
+        <input type="hidden" id="itemId" class='itemId' value="" />
+        <input type="hidden" id="isDelete" class='isDelete' value="no" />
+        <input type="hidden" class='isEdit' value="no" /></p></div>
+        <div class="columnData columnNameTitle nameInColumn"><p></p></div>
+        <div class="columnData columnNameTitle typeInColumn"><p></p></div>
+        <div class="columnData columnNameTitle searchColumnInColumn"><p></p></div>
+        <div class="columnData columnNameTitle realTableInColumn"><p></p></div>
+        <div class="columnData criteriaTitle criteriaInColumn">
+	        <input class="inText select-type eidtCriteriaInput" type="text" readonly="readonly">
+	        <p></p>
+	    </div>
+        <div class="columnData valueTitle valueInColumn">
+            <input class="inText eidtValueInput" type="text" >
+            <input id="datepic" class="inText editDatepic" type="text"  readonly="readonly"
+               value="" placeholder="Select date"/>
+            <p></p>
+        </div>
+        <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"></a></p></div>
+        <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"></a></p></div>
+      </div>
   </div>
   
     <div class="saveOperation" >

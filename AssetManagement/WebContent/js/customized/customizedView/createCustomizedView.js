@@ -6,6 +6,7 @@ var columnTypes = [];
 var realNames = [];
 var realTables = [];
 var searchColumns = [];
+var isEditting = false;
 
 $(document).ready(function() {
     chooseColumn();
@@ -75,52 +76,103 @@ $(document).ready(function() {
     
     $("#filterContent").delegate(".eidtLink", "click",function(){
     	markTheEditedRow(this);
-    	
-    	//change the button to 'Update'
-    	$("#addToFilter").hide();
-    	$("#updateToFilter").show();
-    	
-    	addNoticeBound();
-    	
     	var parent = $(this).parents(".filterInfo");
-    	var columnType = parent.find(".typeInColumn").text();
+    	
+    	// get the value of the criteria and value in the filterInfo
+    	var criteria = parent.find(".criteriaInColumn").children("p").text();
+    	var value = parent.find(".valueInColumn").children("p").text();
+    	
+    	//clear the text of the criteria and value in the filterInfo
+    	parent.find(".criteriaInColumn").children("p").text("");
+    	parent.find(".valueInColumn").children("p").text("");
+    	
+    	//show the edit input
+    	var editCriteriaInput = parent.find(".criteriaInColumn").find(".eidtCriteriaInput");
+    	var eidtValueInput = parent.find(".valueInColumn").find(".eidtValueInput");
+    	var eidtDateInput = parent.find(".valueInColumn").find(".editDatepic");
+    	var columnType = parent.find(".typeInColumn").children("p").text();
+    	
+    	editCriteriaInput.show();
+    	editCriteriaInput.val(criteria);
+    	
+    	if("date" == columnType){
+    		eidtValueInput.hide();
+    		eidtDateInput.show();
+    		eidtDateInput.val(value);
+    	}else{
+    		eidtValueInput.show();
+    		eidtDateInput.hide();
+    		eidtValueInput.val(value);
+    	}
+    	
+    	//set edit criteria input to drop down list
+    	var searchColumn = parent.find(".searchColumnInColumn").children("p").text();
+    	var columnType = parent.find(".typeInColumn").children("p").text();
+    	chooseCriteria(editCriteriaInput, columnType, searchColumn);
+    	
+    	//set edit value input to drop down list
     	var realName = parent.find(".searchColumnInColumn").text();
     	var realTable = parent.find(".realTableInColumn").text();
-    	
-    	$(".customizedViewItem").find(".select-panel").remove();
-    	$(".customizedViewItem").find("#columnName").attr("readonly", "readonly");
-    	$("#columnName").val(parent.find(".nameInColumn").text());
-    	
-    	var searchCondition = parent.find(".criteriaInColumn").text();
-    	var value = parent.find(".valueInColumn").text();
-    	
-	    chooseCriteria(columnType, searchCondition),
-	    chooseValue(columnType, realName, realTable, value);
+	    chooseValue(eidtValueInput, columnType, realName, realTable, searchColumn);
     });
     
-    $(".addToFilter").delegate("#updateToFilter", "click",function(){
-    	var flag = false;
-    	flag = checkCriteriaAndValue();
+    $(document).click(function(e){
+    	var currentObject = $(e.target);
     	
-    	if(true == flag){
-    		updateTheFilter();
-    		
-    		//change the button to 'Add to Filter'
-        	$("#addToFilter").show();
-        	$("#updateToFilter").hide();
-        	
-        	//reset the columnName, criteria and value input box
-        	$("#columnName").val("");
-        	$("#searchCondition").val("");
-        	$("#value").val("");
-        	$(".datepic").val("");
-        	
-        	$(".customizedViewItem").find(".select-panel").remove();
-        	$(".searchCondition").find(".select-panel").remove();
-        	$(".value").find(".select-panel").remove();
-        	
-        	chooseColumn();
+    	//exclude the irrelevant elements
+    	if(currentObject.is('p') || currentObject.is('a')){
+    		return;
     	}
+    	if("message-div" == currentObject.attr("class") ||
+    			"value" == currentObject.attr("id") || 
+    			"addToFilter" == currentObject.attr("id") ||
+    			"viewName" == currentObject.attr("id")){
+    		return;
+    	}
+    	if(undefined != currentObject.attr("class")){
+    		var classes = [];
+    		classes = currentObject.attr("class").split(" ");
+    		var length = classes.length;
+    		
+    		for(var i = 0; i < length; i++){
+    			if(classes[i].match("inText")){
+        			return;
+        		}
+    		}
+    	}
+    	
+    	//check the edited row in the list
+    	$("#filterContent").find(".filterInfo").each(function(){
+    		var eidtCriteriaInput = $(this).find(".eidtCriteriaInput");
+    		
+        	if("inline-block" == eidtCriteriaInput.css("display")){
+        		var eidtValueInput = $(this).find(".eidtValueInput");
+        		var eidtDateInput = $(this).find(".editDatepic");
+        		
+        		var editCriteria = eidtCriteriaInput.val();
+        		var editValue;
+        		
+        		if("inline-block" == eidtDateInput.css("display")){
+        			editValue = eidtDateInput.val();
+        		}else{
+        			editValue = eidtValueInput.val();
+        		}
+        		$(this).find(".criteriaInColumn").children("p").text(editCriteria);
+        		$(this).find(".valueInColumn").children("p").text(editValue);
+        		
+        		eidtCriteriaInput.val("");
+        		eidtValueInput.val("");
+        		eidtDateInput.val("");
+        		
+        		eidtCriteriaInput.hide();
+        		eidtValueInput.hide();
+        		eidtDateInput.hide();
+        		
+        		eidtCriteriaInput.find("input").attr("class", "inText select-type eidtCriteriaInput");
+        		eidtValueInput.find("input:first").attr("class", "inText eidtValueInput");
+        		eidtValueInput.find("input:last").attr("class", "inText editDatepic");
+        		}
+        	});
     });
     
     $("#cancel").click(function(){
@@ -136,14 +188,6 @@ $(document).ready(function() {
     	}
     });
 });
-
-function addNoticeBound(){
-	$("#columnName").addClass("notice-bound");
-	$("#searchCondition").addClass("notice-bound");
-	$("#value").addClass("notice-bound");
-	$("#datepic").addClass("notice-bound");
-	setTimeout("removeNoticeBound()", 5000);
-}
 
 function removeNoticeBound(){
 	$("#columnName").removeClass("notice-bound");
@@ -184,7 +228,7 @@ function checkCriteriaAndValue(){
 }
 
 function markTheEditedRow(object){
-	$(".filterInfo").each(function(){
+	$("#filterContent .filterInfo").each(function(){
 		$(this).find(".isEdit").val("no");
 	});
 	
@@ -192,28 +236,18 @@ function markTheEditedRow(object){
 }
 
 function doAppendFunction(columnName, searchCondition, columnType, searchColumn, realTable, value){
-	var p = $(".filterHead").parent();
-	var row = $("<div class='filterInfo'></div>").appendTo(p);
-	var itemIdInColumn = $("<div class='columnData sequence itemIdInColumn'> " +
-			"<p><input type='hidden' id='itemId' value='' />" +
-			"<input type='hidden' id='isDelete' class='isDelete' value='no' />" +
-			"<input type='hidden' class='isEdit' value='no' /></p></div>").appendTo(row);
-	var nameInColumn = $("<div class='columnData columnNameTitle nameInColumn'> " +
-			"<p>" + columnName + "</p></div>").appendTo(row);
-	var typeInColumn = $("<div class='columnData columnNameTitle typeInColumn'>" +
-			"<p>" + columnType + "</p></div>").appendTo(row);
-	var searchColumnInColumn = $("<div class='columnData columnNameTitle searchColumnInColumn'>" +
-			"<p>" + searchColumn + "</p></div>").appendTo(row);
-	var realTableInColumn = $("<div class='columnData columnNameTitle realTableInColumn'>" +
-			"<p>" + realTable + "</p></div>").appendTo(row);
-	var criteriaInColumn = $("<div class='columnData criteriaTitle criteriaInColumn'> " +
-			"<p>" + searchCondition + "</p></div>").appendTo(row);
-	var valueInColumn = $("<div class='columnData valueTitle valueInColumn'> " +
-			"<p>" + value + "</p></div>").appendTo(row);
-	var deleteButton = $("<div class='columnData deleteButton'>" +
-	"<p class='linkText'><a class='deleteLink'></a></p></div>").appendTo(row);
-	var editButton = $("<div class='columnData editButton'><p class='linkText'>" +
-	"<a class='eidtLink'></a></p></div>").appendTo(row);
+	var parent = $(".filterHead").parent();
+	var filterInfoTemplate = $("#filterInfoTemplate"); 
+	
+	parent.append(filterInfoTemplate.html());
+	var lastFilterInfo = parent.find(".filterInfo:last");
+	
+	lastFilterInfo.find(".nameInColumn").children("p").text(columnName);
+	lastFilterInfo.find(".typeInColumn").children("p").text(columnType);
+	lastFilterInfo.find(".searchColumnInColumn").children("p").text(searchColumn);
+	lastFilterInfo.find(".realTableInColumn").children("p").text(realTable);
+	lastFilterInfo.find(".criteriaInColumn").children("p").text(searchCondition);
+	lastFilterInfo.find(".valueInColumn").children("p").text(value);
 }
 
 function setForm(){
@@ -227,35 +261,35 @@ function setForm(){
 	var searchColumns = [];
 	var realTables = [];
 	
-	$(".nameInColumn").each(function(index){
+	$("#filterContent .nameInColumn").each(function(index){
 		columns[index] = $(this).text();
 	});
 	
-	$(".typeInColumn").each(function(index){
+	$("#filterContent .typeInColumn").each(function(index){
 		columnTypes[index] = $(this).text();
 	});
 	
-	$(".searchColumnInColumn").each(function(index){
+	$("#filterContent .searchColumnInColumn").each(function(index){
 		searchColumns[index] = $(this).text();
 	});
 	
-	$(".realTableInColumn").each(function(index){
+	$("#filterContent .realTableInColumn").each(function(index){
 		realTables[index] = $(this).text();
 	});
 	
-	$(".criteriaInColumn").each(function(index){
-		searchConditions[index] = $(this).text();
+	$("#filterContent .criteriaInColumn").each(function(index){
+		searchConditions[index] = $(this).children("p").text();
 	});
 	
-	$(".valueInColumn").each(function(index){
-		values[index] = $(this).text();
+	$("#filterContent .valueInColumn").each(function(index){
+		values[index] = $(this).children("p").text();
 	});
 	
-	$(".itemIdInColumn").each(function(index){
+	$("#filterContent .itemIdInColumn").each(function(index){
 		customizedViewItemIds[index] = $(this).find("#itemId").val();
 	});
 	
-	$(".itemIdInColumn").each(function(index){
+	$("#filterContent .itemIdInColumn").each(function(index){
 		isDeletes[index] = $(this).find("#isDelete").val();
 	});
 	
@@ -307,13 +341,6 @@ function chooseColumn() {
 		            var value = $(this).text();
 		            setHiddenValueOfColumn(index);
 		            input.val(value);
-		            
-/*		            var columnType = columnTypes[index];
-		            var realName = realNames[index];
-		            if("" != columnType) {
-		            	chooseCriteria(columnType, null);
-		            	chooseValue(columnType, realName,realTable, null);
-		            }*/
 		        });
 		    });
 	    }
@@ -364,8 +391,10 @@ function setHiddenValueOfColumn(index){
     $("#realTable").val(realTable);
     
     if("" != columnType) {
-    	chooseCriteria(columnType, null);
-    	chooseValue(columnType, realName,realTable, null);
+    	var searchCondition = $("#searchCondition");
+    	var value = $("#value");
+    	chooseCriteria(searchCondition, columnType, searchColumn);
+    	chooseValue(value, columnType, realName,realTable, searchColumn);
     }
 }
 
@@ -388,11 +417,7 @@ $("#columnName").click(function() {
    });
 });
 
-function chooseCriteria(type, search) {
-	// initiate the UI
-	$(".searchCondition").show();
-	$("#value").show();
-	
+function chooseCriteria(inputID, type, searchColumn) {
 	//check column type
 	if("boolean" == type){
 		$("#searchCondition").val("is");
@@ -401,16 +426,9 @@ function chooseCriteria(type, search) {
 		return;
 	}
 	
-	if("boolean" == type){
-		$("#searchCondition").val("is");
-		$(".searchCondition").attr("readonly", "readonly");
-		$(".searchCondition").find(".select-panel").remove();
-		return;
-	}
-	
-	if("status" == $("#searchColumn").val() || "type" == $("#searchColumn").val()){
+	if("status" == searchColumn || "type" == searchColumn){
 		var conditionsInfoMap = ["is", "is not"];
-		setCriteriaDropDownList(conditionsInfoMap);
+		setCriteriaDropDownList(inputID, conditionsInfoMap);
 		return;
 	}
 	
@@ -420,36 +438,29 @@ function chooseCriteria(type, search) {
 	    url : 'customizedColumn/getSearchCondition?type=' + type,  
 	    dataType : 'json',  
 	    success : function(data) {
-	    	setCriteriaDropDownList(data.searchCondition);
+	    	setCriteriaDropDownList(inputID, data.searchCondition);
 	    }
 	});
 }
 
-function setCriteriaDropDownList(searchCondition){
+function setCriteriaDropDownList(inputID, searchCondition){
 	 
 	objectSearchCondition = searchCondition;
-	length = searchCondition.length;
-	if(0 == length){
-		searchConditionInfoMap = [];
+	
+	if(undefined == searchCondition){
+		searchConditionInfoMap.length = 0;
+	}else{
+		searchConditionInfoMap.length = objectSearchCondition.length;
+		for(var i = 0; i < objectSearchCondition.length; i++) {
+			searchConditionInfoMap[i] = objectSearchCondition[i];
+		}
 	}
-	for(var i = 0; i < length; i++) {
-		searchConditionInfoMap[i] = objectSearchCondition[i];
-	}
-
-    var input = $("#searchCondition");
+	var input = inputID;
     var p = input.parent("div");
     p.css("z-index", "10");
     var list = searchConditionInfoMap;
     var panel = $("<div class='select-panel'>").appendTo(p);
-    
-    // if the searchConditon is not null, poformance the eidt operation
-/*    if(null != searchConditon){
-    	input.val(searchConditon);
-    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-    }else{*/
-    	input.val("");
-    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-    /*}*/
+    var messDiv = $("<div class='message-div'></div>").appendTo(panel);
     var shdowDiv = initShdowDiv(panel, list , 10);
     closeOrOpenDiv(panel);
     
@@ -464,52 +475,99 @@ function setCriteriaDropDownList(searchCondition){
 
 }
 
-function chooseValue(columnType, realName, realTable, value) {
+function chooseValue(inputID, columnType, realName, realTable, searchColumn) {
 	// initiate the UI
 	$("#value").show();
 	$(".datepic").hide();
 	valueInfoMap.length = 0;
 	
+	if("value" == inputID.attr("id")){
+		$("#value").val("");
+	}
+	
 	// check column type
 	if("boolean" == columnType){
-		$("#value").removeClass("valueInput");
-		$("#value").addClass("select-type");
+		if("value" == inputID.attr("id")){
+			$("#value").removeClass("valueInput");
+			$("#value").addClass("select-type");
+		}else{
+			$("#filterContent .filterInfo").each(function(){
+				if("yes" == $(this).find(".isEdit").val()){
+					$(this).find(".eidtValueInput").addClass("select-type");
+				}
+			});
+		}
 		valueInfoMap = ["true", "false"];
-		setValueDropdownList(valueInfoMap);
+		setValueDropdownList(inputID, valueInfoMap);
+		return;
 	}else if("date" == columnType){
-		$("#value").hide();
-		$(".datepic").show();
-		$(".value").find(".select-panel").remove();
-		
-		//initiate the original class
-		$(".value").find("input:last").attr("class", "inText datepic");
-		
-		//Bind datapicker event of jqueryUI:
-		//Generate a unique id to bind the datepicker event,
-		//otherwise the new generate element to bind the 
-		//datepicker can't work well.
-		var date = new Date().getTime();
-		$(".value").find("input:last").attr("id", "datepic" + date);
-		$("#datepic" + date).datepicker({
-			changeMonth : true,
-			changeYear : true,
-			dateFormat : "yy-mm-dd"
-		});
+		if("value" == inputID.attr("id")){
+			$("#value").hide();
+			$("#datepic").show();
+			$(".value").find(".select-panel").remove();
+			
+			//initiate the original class
+			$(".value").find("input:last").attr("class", "inText datepic");
+			
+			//Bind datapicker event of jqueryUI:
+			//Generate a unique id to bind the datepicker event,
+			//otherwise the new generate element to bind the 
+			//datepicker can't work well.
+			var date = new Date().getTime();
+			$(".value").find("input:last").attr("id", "datepic" + date);
+			$("#datepic" + date).datepicker({
+				changeMonth : true,
+				changeYear : true,
+				dateFormat : "yy-mm-dd"
+			});
+		}else{
+			$("#filterContent .filterInfo").each(function(){
+				if("yes" == $(this).find(".isEdit").val()){
+					var valueInColumn = $(this).find(".valueInColumn");
+					
+					valueInColumn.find("input:first").hide();
+					valueInColumn.find("input:last").show();
+					
+					valueInColumn.find(".select-panel").remove();
+					valueInColumn.find("input:last").attr("class", "inText editDatepic");
+					
+					var date = new Date().getTime();
+					valueInColumn.find("input:last").attr("id", "datepic" + date);
+					valueInColumn.find("#datepic" + date).datepicker({
+						changeMonth : true,
+						changeYear : true,
+						dateFormat : "yy-mm-dd"
+					});
+				}
+			});
+		}
 		return;
 	}
 	
-	if("status" == $("#searchColumn").val()){
-		$("#value").removeClass("valueInput");
-		$("#value").addClass("select-type");
+	if("status" == searchColumn){
+		if("value" == inputID.attr("id")){
+			$("#value").removeClass("valueInput");
+			$("#value").addClass("select-type");
+		}else{
+			$("#filterContent .filterInfo").each(function(){
+				if("yes" == $(this).find(".isEdit").val()){
+					$(this).find(".eidtValueInput").addClass("select-type");
+				}
+			});
+		}
 		valueInfoMap = ["AVAILABLE", "IDLE","IN_USE", "BORROWED", "RETURNED", "BROKEN", "WRITE_OFF"];
-		setValueDropdownList(valueInfoMap);
+		setValueDropdownList(inputID, valueInfoMap);
 		return;
 	}
-	if("status" == $("#searchColumn").val()){
-		$("#value").removeClass("valueInput");
-		$("#value").addClass("select-type");
-		valueInfoMap = ["DEVICE", "MACHINE","", "MONITOR", "SOFTWARE", "OTHERASSETS"];
-		setValueDropdownList(valueInfoMap);
+	if("type" == searchColumn){
+		if("value" == inputID.attr("id")){
+			$("#value").removeClass("valueInput");
+			$("#value").addClass("select-type");
+		}else{
+			$(".eidtValueInput").addClass("select-type");
+		}
+		valueInfoMap = ["DEVICE", "MACHINE", "MONITOR", "SOFTWARE", "OTHERASSETS"];
+		setValueDropdownList(inputID, valueInfoMap);
 		return;
 	}
 	$.ajax( {  
@@ -520,71 +578,14 @@ function chooseValue(columnType, realName, realTable, value) {
 	    success : function(data) { 
 	    	$("#value").removeClass("select-type");
 			$("#value").addClass("valueInput");
+			
+			$("#filterContent .filterInfo").each(function(){
+				if("yes" == $(this).find(".isEdit").val()){
+					$(".eidtValueInput").removeClass("select-type");
+					$(".eidtValueInput").addClass("eidtValueInput");
+				}
+			});
 	    	autocomplateValueInfoMap = data.values;
-/*	    	// initiate the UI
-	    	$("#value").show();
-    		$(".datepic").hide();*/
-    		
-/*    		// check column type
-	    	if("boolean" == columnType){
-	    		valueInfoMap = ["true", "false"];
-	    	}else if("date" == columnType){
-	    		$("#value").hide();
-	    		$(".datepic").show();
-	    		$(".value").find(".select-panel").remove();
-	    		
-	    		//initiate the original class
-	    		$(".value").find("input:last").attr("class", "inText datepic");
-	    		
-	    		//Bind datapicker event of jqueryUI:
-	    		//Generate a unique id to bind the datepicker event,
-				//otherwise the new generate element to bind the 
-				//datepicker can't work well.
-				var date = new Date().getTime();
-				$(".value").find("input:last").attr("id", "datepic" + date);
-	    		$("#datepic" + date).datepicker({
-					changeMonth : true,
-					changeYear : true,
-					dateFormat : "yy-mm-dd"
-				});
-	    		return;
-	    	}else{*/
-	    		/*objectValue = data.values;
-	    		length = data.values.length;
-	    		if(0 == length){
-	    			valueInfoMap = [];
-	    		}
-	    		for(var i = 0; i < length; i++) {
-	    			valueInfoMap[i] = String(objectValue[i]);
-	    		}
-	    	}
-	    
-		    var input = $("#value");
-		    var p = input.parent("div");
-		    p.css("z-index", "10");
-		    var list = valueInfoMap;
-		    var panel = $("<div class='select-panel'>").appendTo(p);
-		    
-		    // if the value is not null, poformance the eidt operation
-		    if(null != value){
-		    	input.val(value);
-		    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-		    }else{
-		    	input.val("");
-		    	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-		    }
-		    var shdowDiv = initShdowDiv(panel, list , 10);
-		    closeOrOpenDiv(panel);
-		    
-		    var lis = panel.find("li");
-		    lis.each(function() {
-		        $(this).click(function() {
-		            $(".type-details").css("display", "none");
-		            var value = $(this).text();
-		            input.val(value);
-		            $("#value").addClass("select-type");
-		        });
-		    });*/
 	    }
 	});
 }
@@ -599,31 +600,35 @@ $("#value").click(function() {
 	}
 });
 
-function setValueDropdownList(values){
+$("#filterContent").delegate(".eidtValueInput","click", function() {
+	if(0 < autocomplateValueInfoMap.length){
+		$(".eidtValueInput").autocomplete({
+			source : autocomplateValueInfoMap,
+			select : function(e,ui) {
+			}
+		});
+	}
+});
+
+function setValueDropdownList(inputID, values){
 	autocomplateValueInfoMap.length = 0;
 	objectValue = values;
 	length = values.length;
 	if(0 == length){
-		valueInfoMap = [];
-	}
-	for(var i = 0; i < length; i++) {
-		valueInfoMap[i] = String(objectValue[i]);
+		valueInfoMap.length = 0;
+	}else{
+		valueInfoMap.length = objectValue.length;
+		for(var i = 0; i < objectValue.length; i++) {
+			valueInfoMap[i] = String(objectValue[i]);
+		}
 	}
 
-	var input = $("#value");
+	var input = inputID;
 	var p = input.parent("div");
 	p.css("z-index", "10");
 	var list = valueInfoMap;
 	var panel = $("<div class='select-panel'>").appendTo(p);
-	
-	// if the value is not null, poformance the eidt operation
-/*	if(null != value){
-		input.val(value);
-		var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-	}else{*/
-		input.val("");
-		var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-/*	}*/
+	var messDiv = $("<div class='message-div'></div>").appendTo(panel);
 	var shdowDiv = initShdowDiv(panel, list , 10);
 	closeOrOpenDiv(panel);
 	
@@ -645,14 +650,6 @@ function initShdowDiv(obj, list, z) {
     }
     var len = list.length < 8 ? list.length : 8;
     var divHeight = len*26;
-    
-    /*var inputWidth = obj.width(); 
-    
-    var width = inputWidth + 4;
-    var height = divHeight + 15;
-    
-    var cWidth = inputWidth - 10;
-    var cHeight = height - 15;*/
     
     var inputWidth = 150; 
     
@@ -758,9 +755,6 @@ function closeOrOpenDiv(panel) {
     var showDiv = panel.find(".shadow-div");
     
     messDiv.click(function() {
-/*        $(".active").css("display", "none");
-        $(".active").removeClass("active");
-        $(this).text("");*/
         var display = showDiv.css("display");
         if(display == "none") {
            showDiv.addClass("active");
