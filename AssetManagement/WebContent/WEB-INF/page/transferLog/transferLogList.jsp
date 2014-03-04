@@ -23,6 +23,7 @@
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<input id="categoryType" type="hidden" value="transfer log">
 	<div id="blank">
        <a href="home"><spring:message code="navigator.home"></spring:message></a>
        <b>&gt;</b>

@@ -1,3 +1,10 @@
+$(document).ready(function(){
+	$("#createView").click(function(){
+		var categoryType = $("#categoryType").val();
+		window.location.href = "customizedView/goToNewCustomizedView?categoryType=" + categoryType;
+	});
+});
+
 function handleException(data) {
 	var isSuccess = true;
 	var errorCode = data.errorCode;

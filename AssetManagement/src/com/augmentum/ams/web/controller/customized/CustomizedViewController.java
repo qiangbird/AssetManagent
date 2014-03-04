@@ -33,8 +33,13 @@ public class CustomizedViewController extends BaseController {
     private CustomizedViewItemService customizedViewItemService;
 
     @RequestMapping(value = "/goToNewCustomizedView")
-    public String goToNewCustomizedView() {
-        return "customized/customizedView/createCustomizedView";
+    public ModelAndView goToNewCustomizedView(String categoryType) {
+        
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("customized/customizedView/createCustomizedView");
+        modelAndView.addObject("categoryType", categoryType);
+        
+        return modelAndView;
     }
 
     @RequestMapping(value = "/newCustomizedView", method = RequestMethod.POST)

@@ -18,6 +18,7 @@
 <body>
 <jsp:include page="../../common/header.jsp" />
 <form name="newView" action="customizedView/newCustomizedView" method="post">
+	<input type="hidden" name="categoryType" value="${categoryType}">
 	<input type="hidden" name="customizedViewId" value="${customizedView.id}">
 	<input type="hidden" name="viewName" id="formViewName">
 	<input type="hidden" name="columns" id="formColumns">
