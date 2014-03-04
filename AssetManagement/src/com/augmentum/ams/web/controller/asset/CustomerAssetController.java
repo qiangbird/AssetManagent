@@ -64,31 +64,29 @@ public class CustomerAssetController extends BaseController {
     private Logger logger = Logger.getLogger(CustomerAssetController.class);
 
     @RequestMapping(value = "searchCustomerAssetsList")
-    public ModelAndView listAssetsAsCustomerCode(
-            SearchCondition searchCondition, String customerCode,
-            HttpSession session) {
+    public ModelAndView listAssetsAsCustomerCode(SearchCondition searchCondition,
+            String customerCode, HttpSession session) {
 
         ModelAndView modelAndView = new ModelAndView();
         Customer customer = customerService.getCustomerByCode(customerCode);
-        
+
         if (null == customerCode) {
             modelAndView.addObject("fieldsData", null);
             modelAndView.addObject("count", 0);
             modelAndView.addObject("totalPage", 0);
         } else {
-            
-            String[] customerIds = {customer.getId()};
-            
+
+            String[] customerIds = { customer.getId() };
+
             if (null == searchCondition) {
                 searchCondition = new SearchCondition();
             }
-            
-            Page<Asset> assetPage = customerAssetService
-                    .findCustomerAssetsBySearchCondition(searchCondition, customerIds);
+
+            Page<Asset> assetPage = customerAssetService.findCustomerAssetsBySearchCondition(
+                    searchCondition, customerIds);
             String clientTimeOffset = (String) session.getAttribute("timeOffset");
-            List<AssetListVo> list = FormatEntityListToEntityVoList
-                    .formatAssetListToAssetVoList(assetPage.getResult(),
-                            clientTimeOffset);
+            List<AssetListVo> list = FormatEntityListToEntityVoList.formatAssetListToAssetVoList(
+                    assetPage.getResult(), clientTimeOffset);
             List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                     .findUserCustomColumns("asset", getUserIdByShiro());
             JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
@@ -98,20 +96,18 @@ public class CustomerAssetController extends BaseController {
             modelAndView.addObject("totalPage", assetPage.getTotalPage());
             modelAndView.addObject("searchCondition", searchCondition);
         }
-
         return modelAndView;
     }
 
     // goCustomerAsset
     @RequestMapping(value = "listCustomerAsset", method = RequestMethod.GET)
-    public String listCustomerAsset(String customerCode,
-            HttpServletRequest request, String status, String type)
-            throws BusinessException {
+    public String listCustomerAsset(String customerCode, HttpServletRequest request, String status,
+            String type) throws BusinessException {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("customerCode", customerCode);
         Customer customer = customerService.getCustomerByCode(customerCode);
-        
+
         if (null == customer) {
             customer = remoteCustomerService.getCustomerByCodefromIAP(request, customerCode);
         }
@@ -124,12 +120,12 @@ public class CustomerAssetController extends BaseController {
 
     @RequestMapping(value = "assginAssets")
     public ModelAndView assginAssets(String assignCustomerCode, String assetIds,
-            String projectCode, String userName, String userId,
-            HttpServletRequest request) throws BusinessException {
+            String projectCode, String userName, String userId, HttpServletRequest request)
+            throws BusinessException {
 
         ModelAndView modelAndView = new ModelAndView();
-        customerAssetService.assginCustomerAsset(assignCustomerCode, assetIds,
-                projectCode, userName, userId, request);
+        customerAssetService.assginCustomerAsset(assignCustomerCode, assetIds, projectCode,
+                userName, userId, request);
         transferLogService.saveTransferLog(assetIds, "Assign");
 
         return modelAndView;
@@ -137,11 +133,10 @@ public class CustomerAssetController extends BaseController {
 
     @RequestMapping(value = "changeStatus/{status}", method = RequestMethod.PUT)
     @ResponseBody
-    public String returnToOperation(@PathVariable String status,
-            String assetsId, String customerCode, String operation) {
+    public String returnToOperation(@PathVariable String status, String assetsId,
+            String customerCode, String operation) {
 
-        User returner = (User) SecurityUtils.getSubject().getSession()
-                .getAttribute("currentUser");
+        User returner = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
         customerAssetService.returnCustomerAsset(returner, status, assetsId);
         transferLogService.saveTransferLog(assetsId, operation);
 
@@ -150,8 +145,8 @@ public class CustomerAssetController extends BaseController {
 
     @RequestMapping(value = "takeOver", method = RequestMethod.PUT)
     @ResponseBody
-    public String takeOver(String assetsId, String customerCode,
-            String userCode, HttpServletRequest request) {
+    public String takeOver(String assetsId, String customerCode, String userCode,
+            HttpServletRequest request) {
 
         logger.info("takeOver method in CustomerAssetController start!");
 
@@ -163,8 +158,8 @@ public class CustomerAssetController extends BaseController {
     }
 
     @RequestMapping(value = "/listAllCustomerAssets")
-    public String redirectAllCustomerAssetList(HttpServletRequest request,
-            String type, String status) {
+    public String redirectAllCustomerAssetList(HttpServletRequest request, String type,
+            String status) {
 
         request.setAttribute("type", type);
         request.setAttribute("status", status);
@@ -182,25 +177,24 @@ public class CustomerAssetController extends BaseController {
             searchCondition = new SearchCondition();
         }
 
-        List<Customer> customers = (List<Customer>)session.getAttribute("customerList");
-        
+        List<Customer> customers = (List<Customer>) session.getAttribute("customerList");
+
         String[] customerIds = new String[customers.size()];
-        
+
         for (int i = 0; i < customerIds.length; i++) {
             customerIds[i] = customers.get(i).getId();
         }
 
-        Page<Asset> page = customerAssetService
-                .findCustomerAssetsBySearchCondition(searchCondition, customerIds);
+        Page<Asset> page = customerAssetService.findCustomerAssetsBySearchCondition(
+                searchCondition, customerIds);
 
         String clientTimeOffset = (String) session.getAttribute("timeOffset");
         List<AssetListVo> assetVoList = FormatEntityListToEntityVoList
-                .formatAssetListToAssetVoList(page.getResult(),
-                        clientTimeOffset);
+                .formatAssetListToAssetVoList(page.getResult(), clientTimeOffset);
         List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                 .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(
-                assetVoList, userCustomColumnList, "");
+        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(assetVoList,
+                userCustomColumnList, "");
 
         modelAndView.addObject("fieldsData", array);
         modelAndView.addObject("count", page.getRecordCount());
@@ -212,51 +206,49 @@ public class CustomerAssetController extends BaseController {
 
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @ResponseBody
-    public void exportAssets(HttpServletRequest request,
-            HttpServletResponse response, String assetIds, 
-            String customerCode, SearchCondition condition) {
+    public void exportAssets(HttpServletRequest request, HttpServletResponse response,
+            String assetIds, String customerCode, SearchCondition condition) {
 
         String[] customerIds = {};
-        
+
         if (StringUtils.isNotBlank(customerCode)) {
-            
+
             Customer customer = customerService.getCustomerByCode(customerCode);
             customerIds[0] = customer.getId();
         } else {
-            
+
             // TODO: change to get customer list from session
-            UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
-                    .getAttribute("userVo");
-            
+            UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession().getAttribute("userVo");
+
             List<CustomerVo> list = null;
             try {
-                list = remoteCustomerService.getCustomerByEmployeeId(
-                        userVo.getEmployeeId(), request);
+                list = remoteCustomerService.getCustomerByEmployeeId(userVo.getEmployeeId(),
+                        request);
             } catch (BusinessException e) {
                 logger.error("get customerVo failed from IAP", e);
             }
-            
-            List<Customer> customers = customerAssetService
-                    .findVisibleCustomerList(userVo, list);
-            
+
+            List<Customer> customers = customerAssetService.findVisibleCustomerList(userVo, list);
+
             Set<Customer> set = new HashSet<Customer>(customers);
             List<Customer> customerList = new ArrayList<Customer>(set);
-            
+
             for (int i = 0; i < customerList.size(); i++) {
                 customerIds[i] = customerList.get(i).getId();
             }
         }
-        
+
         if (null == condition) {
             condition = new SearchCondition();
         }
-        
+
         String outPutPath = null;
         try {
 
             if (null == assetIds || "".equals(assetIds)) {
                 condition.setIsGetAllRecords(Boolean.TRUE);
-                outPutPath = customerAssetService.exportAssetsForAll(condition, customerIds, request);
+                outPutPath = customerAssetService.exportAssetsForAll(condition, customerIds,
+                        request);
             } else {
                 outPutPath = assetService.exportAssetsByIds(assetIds, request);
             }

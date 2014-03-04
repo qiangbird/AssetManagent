@@ -18,52 +18,57 @@ import com.augmentum.ams.service.customized.CustomizedViewService;
 import com.augmentum.ams.web.vo.customized.CustomizedViewVo;
 
 @Service("customizedViewService")
-public class CustomizedViewServiceImpl implements CustomizedViewService{
-	
+public class CustomizedViewServiceImpl implements CustomizedViewService {
+
     private Logger logger = Logger.getLogger(CustomizedViewServiceImpl.class);
-    
-	@Autowired
-	private CustomizedViewDao customizedViewDao;
+
+    @Autowired
+    private CustomizedViewDao customizedViewDao;
 
     @Override
     public CustomizedView saveCustomizedView(CustomizedViewVo customizedViewVo) {
 
         CustomizedView customizedView = new CustomizedView();
-        
+
         customizedView.setCreatorId(customizedViewVo.getCreatorId());
         customizedView.setCreatorName(customizedViewVo.getCreatorName());
         customizedView.setOperators(customizedViewVo.getOperator());
         customizedView.setViewName(customizedViewVo.getViewName());
-        
+        customizedView.setCategoryType(customizedViewVo.getCategoryType());
+
         customizedViewDao.save(customizedView);
-        
+
         return customizedView;
     }
 
     @Override
     public void deleteCustomizedView(CustomizedViewVo customizedViewVo) throws BaseException {
 
-        CustomizedView customizedView = this.getCustomizedViewById(customizedViewVo.getCustomizedViewId());
+        CustomizedView customizedView = this.getCustomizedViewById(customizedViewVo
+                .getCustomizedViewId());
         customizedViewDao.delete(customizedView);
     }
 
     @Override
-    public CustomizedView updateCustomizedView(CustomizedViewVo customizedViewVo) throws BaseException {
+    public CustomizedView updateCustomizedView(CustomizedViewVo customizedViewVo)
+            throws BaseException {
 
-        CustomizedView customizedView = this.getCustomizedViewById(customizedViewVo.getCustomizedViewId());
-        
+        CustomizedView customizedView = this.getCustomizedViewById(customizedViewVo
+                .getCustomizedViewId());
+
         customizedView.setOperators(customizedViewVo.getOperator());
         customizedView.setViewName(customizedViewVo.getViewName());
-        
+
         customizedViewDao.update(customizedView);
-        
+
         return customizedView;
     }
 
     @Override
     public CustomizedView getCustomizedViewById(String customizedViewId) throws BaseException {
 
-        CustomizedView customizedView = customizedViewDao.get(CustomizedView.class, customizedViewId);
+        CustomizedView customizedView = customizedViewDao.get(CustomizedView.class,
+                customizedViewId);
 
         return customizedView;
     }
@@ -73,27 +78,27 @@ public class CustomizedViewServiceImpl implements CustomizedViewService{
 
         List<CustomizedView> customizedViews = new ArrayList<CustomizedView>();
         try {
-			customizedViews = customizedViewDao.findCustomizedViewsByUser(creatorId);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        //TODO if customizedViews = null
+            customizedViews = customizedViewDao.findCustomizedViewsByUser(creatorId);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // TODO if customizedViews = null
         return customizedViews;
     }
-    
+
     @Override
-    public JSONArray changeCustomizedViewToJson(List<CustomizedView> customizedViews){
-        
+    public JSONArray changeCustomizedViewToJson(List<CustomizedView> customizedViews) {
+
         JSONArray array = new JSONArray();
-        
-        for(int i = 0; i < customizedViews.size(); i++){
+
+        for (int i = 0; i < customizedViews.size(); i++) {
             JSONObject object = new JSONObject();
             object.put("customizedViewId", customizedViews.get(i).getId());
             object.put("viewName", customizedViews.get(i).getViewName());
             array.add(object);
         }
-        
+
         return array;
     }
 

@@ -19,68 +19,78 @@ import com.augmentum.ams.model.base.BaseModel;
  */
 @Entity
 @Table(name = "customized_view")
-public class CustomizedView extends BaseModel{
+public class CustomizedView extends BaseModel {
 
     private static final long serialVersionUID = -7477644860669562800L;
 
-	@Column(name = "view_name", length = 32, nullable = false)
-	private String viewName;
+    @Column(name = "view_name", length = 32, nullable = false)
+    private String viewName;
 
-	/**
+    /**
      * The operators like: or, and
      */
-	@Column(length = 32, nullable = false)
-	@Enumerated(value = EnumType.STRING)
-	private String operators;
+    @Column(length = 32, nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private String operators;
 
-	@Column(name = "creator_id", length = 32)
-	private String creatorId;
+    @Column(name = "creator_id", length = 32)
+    private String creatorId;
 
-	@Column(name = "creator_name", length = 32)
-	private String creatorName;
+    @Column(name = "creator_name", length = 32)
+    private String creatorName;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "customizedView")
-	private List<CustomizedViewItem> selfViewItems = new ArrayList<CustomizedViewItem>();
+    @Column(name = "category_type", length = 32)
+    private String categoryType;
 
-	public String getViewName() {
-    	return viewName;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customizedView")
+    private List<CustomizedViewItem> selfViewItems = new ArrayList<CustomizedViewItem>();
+
+    public String getCategoryType() {
+        return categoryType;
     }
 
-	public void setViewName(String viewName) {
-    	this.viewName = viewName;
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
     }
 
-	public String getOperators() {
-    	return operators;
+    public String getViewName() {
+        return viewName;
     }
 
-	public void setOperators(String operators) {
-    	this.operators = operators;
+    public void setViewName(String viewName) {
+        this.viewName = viewName;
     }
 
-	public String getCreatorId() {
-    	return creatorId;
+    public String getOperators() {
+        return operators;
     }
 
-	public void setCreatorId(String creatorId) {
-    	this.creatorId = creatorId;
+    public void setOperators(String operators) {
+        this.operators = operators;
     }
 
-	public String getCreatorName() {
-    	return creatorName;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-	public void setCreatorName(String creatorName) {
-    	this.creatorName = creatorName;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
-	public List<CustomizedViewItem> getSelfViewItems() {
-    	return selfViewItems;
+    public String getCreatorName() {
+        return creatorName;
     }
 
-	public void setSelfViewItems(List<CustomizedViewItem> selfViewItems) {
-    	this.selfViewItems = selfViewItems;
+    public void setCreatorName(String creatorName) {
+        this.creatorName = creatorName;
     }
-	
-	
+
+    public List<CustomizedViewItem> getSelfViewItems() {
+        return selfViewItems;
+    }
+
+    public void setSelfViewItems(List<CustomizedViewItem> selfViewItems) {
+        this.selfViewItems = selfViewItems;
+    }
+
 }

@@ -138,15 +138,12 @@ a {
 }
 
 .menuLi {
-	padding-left: 10px;
-	padding-right: 0px;
+	padding-left: 9px;
+	padding-right: 9px;
 	float: left;
 }
 
 .menuLi:hover {
-	padding-left: 10px;
-	padding-right: 10px;
-	float: left;
 	background-color: #3F8FB5;
 }
 

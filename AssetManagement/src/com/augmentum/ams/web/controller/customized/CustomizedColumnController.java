@@ -1,4 +1,4 @@
-package com.augmentum.ams.web.controller.asset;
+package com.augmentum.ams.web.controller.customized;
 
 import java.util.ArrayList;
 import java.util.List;

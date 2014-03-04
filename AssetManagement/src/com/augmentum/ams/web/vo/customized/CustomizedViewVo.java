@@ -6,60 +6,75 @@ package com.augmentum.ams.web.vo.customized;
  * @time Oct 31, 2013 11:07:50 AM
  */
 public class CustomizedViewVo {
-    
+
     private String operator;
-    
+
     private String viewName;
-    
+
     private String creatorId;
-    
+
+    private String categoryType;
+
     private String creatorName;
-    
+
     private String[] columns;
-    
+
     private String[] searchConditions;
-    
+
     private String[] values;
-    
+
     private String customizedViewId;
-    
+
     private String[] customizedViewItemIds;
-    
+
     private String[] isDeletes;
-    
+
     private String[] columnTypes;
-    
+
     private String[] searchColumns;
-    
+
     private String[] realTables;
-    
+
+    public String getCategoryType() {
+        return categoryType;
+    }
+
+    public void setCategoryType(String categoryType) {
+        this.categoryType = categoryType;
+    }
+
     public String[] getRealTables() {
         return realTables;
     }
+
     public void setRealTables(String[] realTables) {
         this.realTables = realTables;
     }
+
     public String[] getSearchColumns() {
         return searchColumns;
     }
+
     public void setSearchColumns(String[] searchColumns) {
         this.searchColumns = searchColumns;
     }
+
     public String[] getColumnTypes() {
         return columnTypes;
     }
+
     public void setColumnTypes(String[] columnTypes) {
         this.columnTypes = columnTypes;
     }
-    public CustomizedViewVo(){
+
+    public CustomizedViewVo() {
     }
-    //create
-    public CustomizedViewVo(String operator, String viewName,
-            String[] columns, String[] searchConditions,
-            String[] values, String creatorId, String creatorName,
-            String[] columnTypes, String[] searchColumns,
-            String[] realTables){
-        
+
+    // create
+    public CustomizedViewVo(String operator, String viewName, String[] columns,
+            String[] searchConditions, String[] values, String creatorId, String creatorName,
+            String[] columnTypes, String[] searchColumns, String[] realTables) {
+
         this.values = values;
         this.columns = columns;
         this.operator = operator;
@@ -70,17 +85,15 @@ public class CustomizedViewVo {
         this.searchColumns = searchColumns;
         this.realTables = realTables;
         this.searchConditions = searchConditions;
-        
+
     }
-    
-    //update
-    public CustomizedViewVo(String operator, String viewName,
-            String[] columns, String[] searchConditions,
-            String[] values, String[] customizedViewItemIds,
-            String[] isDeletes, String[] columnTypes,
-            String[] searchColumns, String customizedViewId,
-            String[] realTables){
-        
+
+    // update
+    public CustomizedViewVo(String operator, String viewName, String[] columns,
+            String[] searchConditions, String[] values, String[] customizedViewItemIds,
+            String[] isDeletes, String[] columnTypes, String[] searchColumns,
+            String customizedViewId, String[] realTables) {
+
         this.values = values;
         this.columns = columns;
         this.operator = operator;
@@ -92,9 +105,9 @@ public class CustomizedViewVo {
         this.customizedViewId = customizedViewId;
         this.realTables = realTables;
         this.customizedViewItemIds = customizedViewItemIds;
-        
+
     }
-    
+
     public String[] getCustomizedViewItemIds() {
         return customizedViewItemIds;
     }
