@@ -71,12 +71,12 @@ $(document).ready(function() {
 		          return;
 		      }
 		    });
-    	
     });
     
     $("#filterContent").delegate(".eidtLink", "click",function(){
     	markTheEditedRow(this);
     	var parent = $(this).parents(".filterInfo");
+    	saveAndHiddenEditInputBox();
     	
     	// get the value of the criteria and value in the filterInfo
     	var criteria = parent.find(".criteriaInColumn").children("p").text();
@@ -120,27 +120,30 @@ $(document).ready(function() {
     	var currentObject = $(e.target);
     	
     	//exclude the irrelevant elements
-    	if(currentObject.is('p') || currentObject.is('a')){
-    		return;
-    	}
-    	if("message-div" == currentObject.attr("class") ||
-    			"value" == currentObject.attr("id") || 
-    			"addToFilter" == currentObject.attr("id") ||
-    			"viewName" == currentObject.attr("id")){
-    		return;
-    	}
-    	if(undefined != currentObject.attr("class")){
-    		var classes = [];
-    		classes = currentObject.attr("class").split(" ");
-    		var length = classes.length;
-    		
-    		for(var i = 0; i < length; i++){
-    			if(classes[i].match("inText")){
-        			return;
-        		}
+    	if(currentObject.parents(".filterInfo").length != 0){
+    		if(currentObject.is('p') || currentObject.is('a')){
+    			return;
+    		}else if("message-div" == currentObject.attr("class")){
+    			return;
+    		}else if(undefined != currentObject.attr("class")){
+    			var classes = [];
+    			classes = currentObject.attr("class").split(" ");
+    			var length = classes.length;
+    			
+    			for(var i = 0; i < length; i++){
+    				if(classes[i].match("inText")){
+    					return;
+    				}
+    			}
+    		}else{
+    			saveAndHiddenEditInputBox();
     		}
+    	}else{
+    		saveAndHiddenEditInputBox();
     	}
-    	
+    });
+    
+    function saveAndHiddenEditInputBox(){
     	//check the edited row in the list
     	$("#filterContent").find(".filterInfo").each(function(){
     		var eidtCriteriaInput = $(this).find(".eidtCriteriaInput");
@@ -173,7 +176,7 @@ $(document).ready(function() {
         		eidtValueInput.find("input:last").attr("class", "inText editDatepic");
         		}
         	});
-    });
+    }
     
     $("#cancel").click(function(){
     	window.history.back();
