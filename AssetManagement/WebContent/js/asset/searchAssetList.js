@@ -5,6 +5,7 @@ var placeholder_project;
 var placeholder_user;
 
 $(document).ready(function() {
+	findUserCustomizedView();
 	
 	placeholder_customer = $("#customerName").attr("placeholder");
 	placeholder_project = $("#projectName").attr("placeholder");

@@ -17,6 +17,11 @@
 </head>
 <body>
 <jsp:include page="../../common/header.jsp" />
+<div id="blank">
+   <a href="home"><spring:message code="navigator.home"></spring:message></a>
+   <b>&gt;</b>
+   <span><spring:message code="createView"/></span>
+</div>
 <div id="bodyMinHight">
 <div class="customizedView">
     <div class="create-new-button">

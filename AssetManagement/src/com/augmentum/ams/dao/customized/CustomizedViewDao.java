@@ -16,8 +16,8 @@ public interface CustomizedViewDao extends BaseDao<CustomizedView> {
      * @return
      * @throws ParseException
      */
-    List<CustomizedView> findCustomizedViewsByUser(String userId) throws ParseException;
+    List<CustomizedView> findCustomizedViewsByUser(String userId);
 
-    List<CustomizedView> findByUserAndCategory(String userId, String category);
+    List<CustomizedView> findByUserAndCategoryType(String userId, String category);
 
 }

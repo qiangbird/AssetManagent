@@ -112,8 +112,9 @@
 	                <li><a id="" class="existCustomizedView" ></a></li>
 	            </ul>
 		        <ul id="viewUl">
-	                <li><a id="createView" href="customizedView/goToNewCustomizedView"><spring:message code="createView"/></a></li>
-	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
+	                <li><a id="createView" ><spring:message code="createView"/></a></li>
+	                <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement">
+	                   <spring:message code="manageView"/></a></li>
 	            </ul>
             </div>
             
@@ -202,7 +203,6 @@
 <script type="text/javascript" src="searchList/js/DataList.js"></script>
 <script type="text/javascript" src="js/asset/searchAssetList.js" ></script>
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
-<script type="text/javascript" src="js/search/searchCustomizedView.js" ></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="js/common/messageBarCommon.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/common/jquery.form.js"></script>

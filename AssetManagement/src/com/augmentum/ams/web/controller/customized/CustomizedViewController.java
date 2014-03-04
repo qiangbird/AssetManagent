@@ -34,11 +34,15 @@ public class CustomizedViewController extends BaseController {
 
     @RequestMapping(value = "/goToNewCustomizedView")
     public ModelAndView goToNewCustomizedView(String categoryType) {
-        
+
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customized/customizedView/createCustomizedView");
-        modelAndView.addObject("categoryType", categoryType);
-        
+
+        CustomizedView customizedView = new CustomizedView();
+
+        customizedView.setCategoryType(categoryType);
+        modelAndView.addObject("customizedView", customizedView);
+
         return modelAndView;
     }
 
@@ -46,14 +50,14 @@ public class CustomizedViewController extends BaseController {
     public ModelAndView saveCustomizedViewAndItem(CustomizedViewVo customizedViewVo)
             throws ParameterException, BusinessException {
 
-    	RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
-    	ModelAndView modelAndView = new ModelAndView(redirectView);
-    	
-    	customizedViewVo.setCreatorId(getUserIdByShiro());
-    	customizedViewVo.setCreatorName(getUserNameByShiro());
-    	
-    	customizedViewItemService.saveCustomizedViewItem(customizedViewVo);
-    	
+        RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
+        ModelAndView modelAndView = new ModelAndView(redirectView);
+
+        customizedViewVo.setCreatorId(getUserIdByShiro());
+        customizedViewVo.setCreatorName(getUserNameByShiro());
+
+        customizedViewItemService.saveCustomizedViewItem(customizedViewVo);
+
         return modelAndView;
     }
 
@@ -89,6 +93,7 @@ public class CustomizedViewController extends BaseController {
 
         List<CustomizedView> customizedViews = customizedViewService
                 .findCustomizedViewByUser(creatorId);
+
         modelAndView.addObject("customizedViews", customizedViews);
 
         return modelAndView;
@@ -96,12 +101,12 @@ public class CustomizedViewController extends BaseController {
 
     @RequestMapping(value = "/findCustomizedViewByUserForManu")
     @ResponseBody
-    public JSONArray findCustomizedViewByUserForManu() {
+    public JSONArray findCustomizedViewByUserForManu(String categoryType) {
 
         String creatorId = getUserIdByShiro();
 
-        List<CustomizedView> customizedViews = customizedViewService
-                .findCustomizedViewByUser(creatorId);
+        List<CustomizedView> customizedViews = customizedViewService.findByUserAndCategoryType(
+                creatorId, categoryType);
 
         return customizedViewService.changeCustomizedViewToJson(customizedViews);
     }

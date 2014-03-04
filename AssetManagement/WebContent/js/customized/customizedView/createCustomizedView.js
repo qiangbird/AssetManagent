@@ -11,40 +11,49 @@ var isEditting = false;
 $(document).ready(function() {
     chooseColumn();
     
+    $("#columnName, #viewName").blur(function(){
+		//delete the tips when input data exists
+		if("" != $(this).val()){
+			$(this).clearValidationMessage();
+		}
+	});
+    
     $("#addToFilter").click(function(){
+    	var validations = new Array();
+        
     	var columnName = $("#columnName").val();
     	var searchCondition = $("#searchCondition").val();
-    	var value = $("#value").val();
-    	var columnType = $("#columnType").val();
-    	var searchColumn = $("#searchColumn").val();
-    	var realTable = $("#realTable").val();
     	
-    	if("none" == $("#value").css("display")){
-    		value = $(".datepic").val();
-    	}
-    	if("" != columnName && "" != searchCondition && "" != value){
-    		doAppendFunction(columnName, searchCondition, columnType, searchColumn, realTable, value);
-    	}
+        validations.push($("#columnName")
+    			.validateNull(columnName,i18nProp('message_warn_column_is_null')));
+        validations.push($("#searchCondition")
+        		.validateNull(searchCondition,i18nProp('message_warn_criteria_is_null')));
+        
+        if("failed" == recordFailInfo(validations)){
+        	return;
+        }else{
+        	var value = $("#value").val();
+        	var columnType = $("#columnType").val();
+        	var searchColumn = $("#searchColumn").val();
+        	var realTable = $("#realTable").val();
+        	
+        	if("none" == $("#value").css("display")){
+        		value = $(".datepic").val();
+        	}
+        	doAppendFunction(columnName, searchCondition, columnType, searchColumn, realTable, value);
+        }
     });
     
-   $("#viewName").bind('input propertychange', function() {
-    	var viewName = $("#viewName").val();
-    	if("" != viewName.trim()){
-    		$(".error-box-viewName").removeClass("error-box-dipaly");
-    		$("#viewNameImg").removeClass("error-image-span");
-    	}else {
-    		$(".error-box-viewName").addClass("error-box-dipaly");
-    		$("#viewNameImg").addClass("error-image-span");
-    	}
-   });
-   
     $("#save").click(function(){
     	setForm();
     	var viewName = $("#viewName").val();
-    	
-    	if("" == viewName.trim()){
-    		$(".error-box-viewName").addClass("error-box-dipaly");
-    		$("#viewNameImg").addClass("error-image-span");
+    	var validations = new Array();
+        
+        validations.push($("#viewName")
+    			.validateNull(viewName,i18nProp('message_warn_viewName_is_null')));
+        
+    	if("failed" == recordFailInfo(validations)){
+    		return;
     	}else{
     		document.newView.submit();
     	}
@@ -192,13 +201,6 @@ $(document).ready(function() {
     });
 });
 
-function removeNoticeBound(){
-	$("#columnName").removeClass("notice-bound");
-	$("#searchCondition").removeClass("notice-bound");
-	$("#value").removeClass("notice-bound");
-	$("#datepic").removeClass("notice-bound");
-}
-
 function updateTheFilter(){
 	
 	var searchCondition = $("#searchCondition").val();
@@ -308,16 +310,21 @@ function setForm(){
 }
 
 function chooseColumn() {
+	var categoryType = $("#categoryType").val();
 	
 	$.ajax( {  
-	    type : 'GET',  
-	    contentType : 'application/json',  
-	    url : 'customizedColumn/getDefaultCustomizedColumn',  
-	    dataType : 'json',  
+		type: "POST",
+		contentType : 'application/x-www-form-urlencoded',
+		dataType : 'json',  
+	    url : 'customizedColumn/getDefaultCustomizedColumn',
+	    data: {
+	    	categoryType:categoryType
+	    },
 	    success : function(data) {
 	    	 
-	    	objectColumn = data.customizedColumns;
-	    	length = data.customizedColumns.length;
+	    	objectColumn = data;
+	    	length = data.length;
+	    	
 	    	for(var i = 0; i < length; i++) {
 	    		simpleCreateInfoMap[i] = objectColumn[i].enName;
 	    		columnTypes[i] = objectColumn[i].columnType;
@@ -342,6 +349,9 @@ function chooseColumn() {
 		        $(this).click(function() {
 		            $(".type-details").css("display", "none");
 		            var value = $(this).text();
+		            if("" != value){
+		            	$("#columnName").clearValidationMessage();
+		            } 
 		            setHiddenValueOfColumn(index);
 		            input.val(value);
 		        });
@@ -472,6 +482,9 @@ function setCriteriaDropDownList(inputID, searchCondition){
         $(this).click(function() {
             $(".type-details").css("display", "none");
             var value = $(this).text();
+            if("" != value){
+            	$("#searchCondition").clearValidationMessage();
+            } 
             input.val(value);
         });
     });
@@ -594,7 +607,8 @@ function chooseValue(inputID, columnType, realName, realTable, searchColumn) {
 }
 
 $("#value").click(function() {
-	if(0 < autocomplateValueInfoMap.length){
+	
+	if(undefined != autocomplateValueInfoMap && 0 < autocomplateValueInfoMap.length){
 		$("#value").autocomplete({
 			source : autocomplateValueInfoMap,
 			select : function(e,ui) {

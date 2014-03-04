@@ -2,6 +2,8 @@ var dataList;
 var criteria = {};
 
 $(document).ready(function() {
+	findUserCustomizedView();
+	
     // categoryFlag = 8, it means category is 'operationLog'
     initCriteria(8);
     findDataListInfo("operation log");

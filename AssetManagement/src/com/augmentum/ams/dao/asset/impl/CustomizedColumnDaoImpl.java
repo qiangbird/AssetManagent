@@ -21,7 +21,7 @@ public class CustomizedColumnDaoImpl extends BaseDaoImpl<CustomizedColumn> imple
      */
     @Override
     public List<CustomizedColumn> findDefaultColumns(String category) {
-        
+
         String hql = "FROM CustomizedColumn WHERE categoryType = ? AND isExpired = ? ORDER BY sequence asc";
         return super.find(hql, category, Boolean.FALSE);
     }
@@ -41,6 +41,8 @@ public class CustomizedColumnDaoImpl extends BaseDaoImpl<CustomizedColumn> imple
         hql.append(realName);
         hql.append(" FROM ");
         hql.append(realTable);
+        hql.append(" ");
+        hql.append(realTable.toLowerCase());
         hql.append(" WHERE isExpired = ?");
         List<String> values = super.hibernateTemplate.find(hql.toString(), Boolean.FALSE);
 
@@ -49,7 +51,7 @@ public class CustomizedColumnDaoImpl extends BaseDaoImpl<CustomizedColumn> imple
 
     @Override
     public List<CustomizedColumn> findAllColumns() {
-        
+
         String hql = "FROM CustomizedColumn WHERE isExpired = ? ORDER BY sequence asc";
         return super.find(hql, Boolean.FALSE);
     }

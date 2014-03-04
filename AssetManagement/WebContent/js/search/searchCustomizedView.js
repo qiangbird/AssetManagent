@@ -1,22 +1,28 @@
 var customizedViews = [];
 
 $(document).ready(function(){
-	
-	findUserCustomizedView();
-	
 	$("#customizedViewButton").mouseenter(function(){
 		$("#viewUl").show();
 	}).mouseleave(function(){
 		$("#viewUl").hide();
 	});
+	
+	$("#createView").click(function(){
+		var categoryType = $("#categoryType").val();
+		window.location.href = "customizedView/goToNewCustomizedView?categoryType=" + categoryType;
+	});
 });
 
 function findUserCustomizedView(){
+	var categoryType = $("#categoryType").val();
+	
 	$.ajax({
 		type: "POST",
-		contentType: "application/json",
 		dataType : "json",
 		url: "customizedView/findCustomizedViewByUserForManu",
+		data: {
+			categoryType:categoryType
+		},
 		success: function(data){
 			customizedViews = data;
 			

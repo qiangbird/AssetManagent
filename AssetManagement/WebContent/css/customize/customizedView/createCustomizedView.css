@@ -2,10 +2,15 @@
 	outline: none;
 }
 
+.allAsset, .customerAllAsset, .transferLog, .operationLog{
+	display: none;
+}
+
 .customizedView {
 	width: 960px; 
 	margin-left: auto; 
 	margin-right: auto;
+	margin-top: 5px;
 }
 
 .viewName{

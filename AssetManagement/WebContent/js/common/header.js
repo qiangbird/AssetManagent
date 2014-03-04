@@ -1,11 +1,19 @@
 $(document).ready(function(){
 	$(".menuLi,.headerNavigationEnd").mouseover(function() {
 		$(this).find("ul").show();
-		$(this).parents(".firstMenuUl").find(".menuLi").css("background-color","");
-		$(this).css("background-color","#3F8FB5");
 	}).mouseout(function() {
 		$(this).find("ul").hide();
 	});
+	
+/*	$(".menuLi li a, .menuLi").click(function() {
+		var menuLi = $(this).parents(".firstMenuUl").find(".menuLi");
+		menuLi.css("background-color","");
+		if($(this).is("a")){
+			$(this).parents(".menuLi").css("background-color","#3F8FB5");
+		}else{
+			$(this).css("background-color","#3F8FB5");
+		}
+	});*/
 	
 	// Get timeOffset between current client date time and UTC time, return string 
     var getTimeOffset = function() {

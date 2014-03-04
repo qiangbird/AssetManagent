@@ -1,7 +1,6 @@
 package com.augmentum.ams.dao.customized.impl;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,8 +19,12 @@ public class CustomizedViewItemDaoImpl extends BaseDaoImpl<CustomizedViewItem> i
 
     private Logger logger = Logger.getLogger(CustomizedViewItemDaoImpl.class);
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.dao.customized.CustomizedViewItemDao#findByCustomizedViewId(java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.dao.customized.CustomizedViewItemDao#findByCustomizedViewId
+     * (java.lang.String)
      */
     @Override
     public List<CustomizedViewItem> findByCustomizedViewId(String customizedViewId)
@@ -42,8 +45,12 @@ public class CustomizedViewItemDaoImpl extends BaseDaoImpl<CustomizedViewItem> i
         return customizedViewItems;
     }
 
-    /* (non-Javadoc)
-     * @see com.augmentum.ams.dao.customized.CustomizedViewItemDao#saveCustomizedViewItem(java.util.List)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.augmentum.ams.dao.customized.CustomizedViewItemDao#saveCustomizedViewItem
+     * (java.util.List)
      */
     @Override
     public void saveCustomizedViewItem(List<CustomizedViewItem> customizedViewItems) {

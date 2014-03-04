@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.constants.SystemConstants;
@@ -25,14 +26,12 @@ public class CustomizedColumnController extends BaseController {
     @Autowired
     private CustomizedColumnService customizedColumnService;
 
-    @RequestMapping(value = "/getDefaultCustomizedColumn", method = RequestMethod.GET)
-    public ModelAndView getDefaultCustomizedColumn() {
+    @RequestMapping(value = "/getDefaultCustomizedColumn", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONArray getDefaultCustomizedColumn(String categoryType) {
 
-        ModelAndView modelAndView = new ModelAndView();
-        // TODO category is hard code, need to be replace by dynamic parameter.
-        String category = "asset";
         List<CustomizedColumn> customizedColumns = customizedColumnService
-                .findDefaultCustomizedColumns(category);
+                .findDefaultCustomizedColumns(categoryType);
         JSONArray columns = new JSONArray();
 
         for (CustomizedColumn column : customizedColumns) {
@@ -45,9 +44,7 @@ public class CustomizedColumnController extends BaseController {
             temp.put("searchColumn", column.getSearchColumn());
             columns.add(temp);
         }
-        modelAndView.addObject("customizedColumns", columns);
-
-        return modelAndView;
+        return columns;
     }
 
     @RequestMapping(value = "/getSearchCondition", method = RequestMethod.POST)

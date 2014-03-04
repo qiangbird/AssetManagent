@@ -57,7 +57,7 @@
                 	<li class="menuLi"><a href="home"><spring:message code="navigator.home" /></a></li>
                 </shiro:authenticated>
                 <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
-                <li class="menuLi"><a><spring:message code="navigator.asset.list" /></a>
+                <li class="menuLi"><a href="asset/allAssets"><spring:message code="navigator.asset.list" /></a>
                     <ul class="sencndMenuUl">
                         <li><a href="asset/allAssets"><spring:message code="navigator.all.assets" /></a></li>
                         <li><a href="asset/allAssets?isFixedAsset=true"><spring:message code="navigator.fixed.assets" /></a></li>
@@ -145,5 +145,6 @@
     <script type="text/javascript" src="<%=basePath%>js/common/selfDefineDialog.js"></script>
     <script type="text/javascript" src="<%=basePath%>messageBar/js/messagebar.js"></script>
     <script type="text/javascript" src="<%=basePath%>js/common/messageBarCommon.js"></script>
+    <script type="text/javascript" src="js/search/searchCustomizedView.js" ></script>
 </body>
 </html>

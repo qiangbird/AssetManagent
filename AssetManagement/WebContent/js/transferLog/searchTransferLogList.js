@@ -2,6 +2,8 @@ var dataList;
 var criteria = {};
 
 $(document).ready(function() {
+	findUserCustomizedView();
+	
     // categoryFlag = 9, it means category is 'transferLog'
     initCriteria(9);
     findDataListInfo("transfer log");

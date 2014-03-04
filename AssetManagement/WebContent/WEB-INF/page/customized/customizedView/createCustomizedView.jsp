@@ -17,8 +17,14 @@
 </head>
 <body>
 <jsp:include page="../../common/header.jsp" />
+<div id="blank">
+   <a href="home"><spring:message code="navigator.home"></spring:message></a>
+   <b>&gt;</b>
+   <span><spring:message code="createView"/></span>
+</div>
+
 <form name="newView" action="customizedView/newCustomizedView" method="post">
-	<input type="hidden" name="categoryType" value="${categoryType}">
+	<input type="hidden" id="categoryType" name="categoryType" value="${customizedView.categoryType}">
 	<input type="hidden" name="customizedViewId" value="${customizedView.id}">
 	<input type="hidden" name="viewName" id="formViewName">
 	<input type="hidden" name="columns" id="formColumns">
@@ -37,30 +43,24 @@
           <span class="viewNameText"><spring:message code="customized.view.name"/>:</span>
           <input id="viewName" class="inTextForViewName" type="text" 
                value="${customizedView.viewName}" placeholder=<spring:message code="customized.view.name.tip.message"/> />
-          <div class="error-box-viewName">
-          	<div class="error-left-viewName"></div>
-          	<div class="error-middle-viewName"></div>
-          	<div class="error-right-viewName"></div>
-          </div>
-          <span id="viewNameImg"></span>
     </div>
     <div id="addView">
     <div class="filter">
     <span class="columnNameText"><spring:message code="customized.view.advanced.filtering"/>:</span>
     <div class="customizedViewItem">
-          <input id="columnName" class="inText select-type" type="text" value="" placeholder="Select column"/>
+          <input id="columnName" class="inText select-type" type="text" value="" placeholder=<spring:message code="customized.view.column.tip.message"/> />
           <input id="columnType" type="hidden" value="" />
           <input id="searchColumn" type="hidden" value="" />
           <input id="realTable" type="hidden" value="" />
     </div>
     <div class="customizedViewItem marginLeft searchCondition">
           <input id="searchCondition" class="inText select-type" type="text"  readonly="readonly"
-               value=""  placeholder="Select criteria"/>
+               value=""  placeholder=<spring:message code="customized.view.criteria.tip.message"/> />
     </div>
     <div class="customizedViewItem marginLeft value">
-          <input id="value" class="inText valueInput" type="text" value=""/>
+          <input id="value" class="inText valueInput" type="text" value="" placeholder=<spring:message code="customized.view.value.tip.message"/> />
           <input id="datepic" class="inText datepic" type="text"  readonly="readonly"
-               value="" placeholder="Select date"/>
+               value="" placeholder=placeholder=<spring:message code="customized.view.date.tip.message"/> />
     </div>
     <div class="addToFilter marginLeft" >
           <input id="addToFilter" type="button" value=<spring:message code="customized.view.add.to.filter"/> class="addToFilter-button" />
@@ -99,7 +99,7 @@
         <div class="columnData valueTitle valueInColumn">
             <input class="inText eidtValueInput" type="text" >
             <input id="datepic" class="inText editDatepic" type="text"  readonly="readonly"
-               value="" placeholder="Select date"/>
+               value="" />
             <p>${customizedViewItem.value}</p>
         </div>
         <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_delete_normal.png"> --%></a></p></div>
@@ -125,7 +125,7 @@
         <div class="columnData valueTitle valueInColumn">
             <input class="inText eidtValueInput" type="text" >
             <input id="datepic" class="inText editDatepic" type="text"  readonly="readonly"
-               value="" placeholder="Select date"/>
+               value="" />
             <p></p>
         </div>
         <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"></a></p></div>
@@ -147,6 +147,7 @@
  </div>
  </div>
  <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
+ <script type="text/javascript" src="js/common/validation.js"></script>
  <script type="text/javascript" src="js/customized/customizedView/createCustomizedView.js"></script>
  <script type="text/javascript" src="js/common/validate.js"></script>
  </body>

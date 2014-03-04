@@ -67,6 +67,16 @@
 	        	<span class="middle" ><spring:message code="search" /> </span>
 	        	<span class="right"></span>
 	        </a>
+	        <div id="customizedViewButton">
+                <a id="customizedView" ><spring:message code="customizedView"/></a>
+                <ul id="viewUlTemplate">
+                    <li><a id="" class="existCustomizedView" ></a></li>
+                </ul>
+                <ul id="viewUl">
+                    <li><a id="createView" ><spring:message code="createView"/></a></li>
+                    <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
+                </ul>
+            </div>
 	    </div>
     	</div>
     </div>

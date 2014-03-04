@@ -1,13 +1,10 @@
 package com.augmentum.ams.service.customized.impl;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +16,6 @@ import com.augmentum.ams.web.vo.customized.CustomizedViewVo;
 
 @Service("customizedViewService")
 public class CustomizedViewServiceImpl implements CustomizedViewService {
-
-    private Logger logger = Logger.getLogger(CustomizedViewServiceImpl.class);
 
     @Autowired
     private CustomizedViewDao customizedViewDao;
@@ -76,15 +71,7 @@ public class CustomizedViewServiceImpl implements CustomizedViewService {
     @Override
     public List<CustomizedView> findCustomizedViewByUser(String creatorId) {
 
-        List<CustomizedView> customizedViews = new ArrayList<CustomizedView>();
-        try {
-            customizedViews = customizedViewDao.findCustomizedViewsByUser(creatorId);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // TODO if customizedViews = null
-        return customizedViews;
+        return customizedViewDao.findCustomizedViewsByUser(creatorId);
     }
 
     @Override
@@ -98,8 +85,13 @@ public class CustomizedViewServiceImpl implements CustomizedViewService {
             object.put("viewName", customizedViews.get(i).getViewName());
             array.add(object);
         }
-
         return array;
+    }
+
+    @Override
+    public List<CustomizedView> findByUserAndCategoryType(String creatorId, String categoryType) {
+
+        return customizedViewDao.findByUserAndCategoryType(creatorId, categoryType);
     }
 
 }
