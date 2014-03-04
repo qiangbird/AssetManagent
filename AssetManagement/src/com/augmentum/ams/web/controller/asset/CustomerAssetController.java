@@ -40,7 +40,6 @@ import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
-import com.augmentum.ams.web.vo.asset.ProjectVo;
 import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -69,32 +68,37 @@ public class CustomerAssetController extends BaseController {
             SearchCondition searchCondition, String customerCode,
             HttpSession session) {
 
-        logger.info("listAssetsAsCustomerCode method start!");
-
         ModelAndView modelAndView = new ModelAndView();
         Customer customer = customerService.getCustomerByCode(customerCode);
-        String[] customerIds = {customer.getId()};
-
-        if (null == searchCondition) {
-            searchCondition = new SearchCondition();
-        }
         
-        Page<Asset> assetPage = customerAssetService
-                .findCustomerAssetsBySearchCondition(searchCondition, customerIds);
-        String clientTimeOffset = (String) session.getAttribute("timeOffset");
-        List<AssetListVo> list = FormatEntityListToEntityVoList
-                .formatAssetListToAssetVoList(assetPage.getResult(),
-                        clientTimeOffset);
-        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
-                .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
-                userCustomColumnList, null);
-        modelAndView.addObject("fieldsData", array);
-        modelAndView.addObject("count", assetPage.getRecordCount());
-        modelAndView.addObject("totalPage", assetPage.getTotalPage());
-        modelAndView.addObject("searchCondition", searchCondition);
+        if (null == customerCode) {
+            modelAndView.addObject("fieldsData", null);
+            modelAndView.addObject("count", 0);
+            modelAndView.addObject("totalPage", 0);
+        } else {
+            
+            String[] customerIds = {customer.getId()};
+            
+            if (null == searchCondition) {
+                searchCondition = new SearchCondition();
+            }
+            
+            Page<Asset> assetPage = customerAssetService
+                    .findCustomerAssetsBySearchCondition(searchCondition, customerIds);
+            String clientTimeOffset = (String) session.getAttribute("timeOffset");
+            List<AssetListVo> list = FormatEntityListToEntityVoList
+                    .formatAssetListToAssetVoList(assetPage.getResult(),
+                            clientTimeOffset);
+            List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+                    .findUserCustomColumns("asset", getUserIdByShiro());
+            JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
+                    userCustomColumnList, null);
+            modelAndView.addObject("fieldsData", array);
+            modelAndView.addObject("count", assetPage.getRecordCount());
+            modelAndView.addObject("totalPage", assetPage.getTotalPage());
+            modelAndView.addObject("searchCondition", searchCondition);
+        }
 
-        logger.info("listAssetsAsCustomerCode method end!");
         return modelAndView;
     }
 
@@ -104,19 +108,17 @@ public class CustomerAssetController extends BaseController {
             HttpServletRequest request, String status, String type)
             throws BusinessException {
 
-        logger.info("listCustomerAsset method start!");
-
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("customerCode", customerCode);
         Customer customer = customerService.getCustomerByCode(customerCode);
-        List<ProjectVo> projectList = remoteCustomerService
-                .getProjectByCustomerCode(customerCode, request);
+        
+        if (null == customer) {
+            customer = remoteCustomerService.getCustomerByCodefromIAP(request, customerCode);
+        }
         request.setAttribute("customer", customer);
-        request.setAttribute("projectList", projectList);
         request.setAttribute("status", status);
         request.setAttribute("type", type);
 
-        logger.info("listCustomerAsset method start!");
         return "asset/customerAssetList";
     }
 
@@ -169,6 +171,7 @@ public class CustomerAssetController extends BaseController {
         return "asset/customerAssetList";
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/findAllCustomersAssets")
     public ModelAndView findAllCustomersAssets(SearchCondition searchCondition,
             HttpSession session, HttpServletRequest request) {
@@ -179,28 +182,12 @@ public class CustomerAssetController extends BaseController {
             searchCondition = new SearchCondition();
         }
 
-        // TODO: change to get customer list from session
-        UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession()
-                .getAttribute("userVo");
-
-        List<CustomerVo> list = null;
-        try {
-            list = remoteCustomerService.getCustomerByEmployeeId(
-                    userVo.getEmployeeId(), request);
-        } catch (BusinessException e) {
-            logger.error("get customerVo failed from IAP", e);
-        }
-
-        List<Customer> customers = customerAssetService
-                .findVisibleCustomerList(userVo, list);
+        List<Customer> customers = (List<Customer>)session.getAttribute("customerList");
         
-        Set<Customer> set = new HashSet<Customer>(customers);
-        List<Customer> customerList = new ArrayList<Customer>(set);
-        
-        String[] customerIds = new String[customerList.size()];
+        String[] customerIds = new String[customers.size()];
         
         for (int i = 0; i < customerIds.length; i++) {
-            customerIds[i] = customerList.get(i).getId();
+            customerIds[i] = customers.get(i).getId();
         }
 
         Page<Asset> page = customerAssetService

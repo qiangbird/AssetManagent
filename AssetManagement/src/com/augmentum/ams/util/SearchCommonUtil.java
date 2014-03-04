@@ -305,14 +305,33 @@ public class SearchCommonUtil {
         for (OperationLog operationLog : result) {
             JSONArray array = new JSONArray();
             array.add(operationLog.getId());
-            array.add(operationLog.getOperatorName());
-            array.add(operationLog.getOperatorID());
-            array.add(operationLog.getOperation());
-            array.add(operationLog.getOperationObject());
-            array.add(operationLog.getOperationObjectID());
-            array.add(UTCTimeUtil.utcToLocalTime(operationLog.getUpdatedTime(),
-                    clientTimeOffset, "yyyy-MM-dd HH:mm:ss"));
-
+            
+            for (UserCustomColumn userCustomerColumn : userCustomColumnList) {
+                
+                String fieldName = userCustomerColumn.getCustomizedColumn().getSortName();
+                String value = "";
+                
+                try {
+                    
+                    if ("createdTime".equals(fieldName)) {
+                        value = UTCTimeUtil.utcToLocalTime(operationLog.getCreatedTime(),
+                                clientTimeOffset,
+                                SystemConstants.TIME_SECOND_PATTERN);
+                    } else {
+                        value = BeanUtils.getProperty(operationLog, fieldName);
+                    }
+                } catch (IllegalAccessException e) {
+                    throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                            "IllegalAccessException when get property from transferLog");
+                } catch (InvocationTargetException e) {
+                    throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                            "InvocationTargetException when get property from transferLog");
+                } catch (NoSuchMethodException e) {
+                    throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                            "NoSuchMethodException when get property from transferLog");
+                }
+                array.add(value);
+            }
             arrays.add(array);
         }
         return arrays;

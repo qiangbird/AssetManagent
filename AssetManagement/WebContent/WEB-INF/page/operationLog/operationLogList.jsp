@@ -41,7 +41,7 @@
 				<span class="existedFlag"></span>
 				<div class="filterBox">
 					<div class="single_condition">
-						<div class="condition_title"><spring:message code="search" /></div>
+						<div class="condition_title"><spring:message code="SearchBy" /></div>
 						<div class="condition_optional" id="searchFields">
 							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="CheckedAllFields" /></label></p>
 							<p><input type="checkBox" name="field" value="operatorName"/><label><spring:message code="operationLog.operatorName" /></label></p>

@@ -60,7 +60,6 @@ var dataListInfo = {
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {
-        	console.log(data);
             $.ajax({
                 type : "POST",
                 contentType : "application/json",

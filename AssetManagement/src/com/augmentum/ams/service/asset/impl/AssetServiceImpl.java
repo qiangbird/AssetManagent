@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.augmentum.ams.aop.OperationLogAnnotation;
 import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
@@ -147,6 +148,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     @Override
+    @OperationLogAnnotation(operateDescribe="Delete Asset", operateObject="Asset", operateObjectId="%")
     public void deleteAssetById(String id) {
         assetDao.delete(assetDao.getAssetById(id));
     }

@@ -57,17 +57,22 @@ public class OperationLogServiceImpl implements OperationLogService {
         
         // create filter based on advanced search condition, it used for further
         // filtering query result
-        BooleanQuery filterQuery = new BooleanQuery();
+        BooleanQuery filterQuery = null;
 
         Query timeQuery = CommonSearchUtil.searchByTimeRangeQuery(
                 "createdTime", searchCondition.getFromTime(),
                 searchCondition.getToTime());
         
         if (null != timeQuery) {
+            filterQuery = new BooleanQuery();
             filterQuery.add(timeQuery, Occur.MUST);
         }
 
-        QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
+        QueryWrapperFilter filter = null;
+        
+        if (null != filterQuery) {
+            filter = new QueryWrapperFilter(filterQuery);
+        }
 
         // add entity associate
         Criteria criteria = session.createCriteria(OperationLog.class);

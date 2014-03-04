@@ -87,6 +87,7 @@ td {
 #location_table td input {
 	height: 30px;
 	width: 220px;
+	font-family: arial;
 }
 
 #location_table td select {
@@ -164,6 +165,7 @@ div.operation_assets_list ul {
 }
 
 .submit-button:HOVER {
+	cursor: pointer;
 	background:
 		url("../../image/customize/customizedView/BTN_Create_Hover_80x30.png")
 		no-repeat;
@@ -174,6 +176,7 @@ div.operation_assets_list ul {
 }
 
 .reset-button:hover {
+	cursor: pointer;
 	background: url("../../image/common/Cancel_Hover.png") no-repeat;
 }
 
@@ -181,6 +184,8 @@ div.operation_assets_list ul {
 	margin: 20px;
 	font-family: arial;
     font-size: 14px;
+    margin-left: 30px;
+	margin-top: 15px;
 }
 
 .editLocationIcon {
@@ -209,9 +214,6 @@ div.operation_assets_list ul {
 	border: solid 1px red !important;
 }
 
-#location_table td{
-	text-align:left;
-}
 .dataList-div-checkbox,.dataList-div-checkbox-all{
 	display:none;
 }

@@ -11,18 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-/**
- * Test for LocationService
- * @author Jay.He
- *
- */
 
-import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.dao.asset.LocationDao;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.service.asset.LocationService;
-import com.augmentum.ams.service.search.SearchAssetService;
-import com.augmentum.ams.web.vo.system.Page;
-import com.augmentum.ams.web.vo.system.SearchCondition;
 @RunWith(value = SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "txManager")
@@ -32,6 +24,8 @@ public class LocationServiceTest {
     
 	@Autowired
 	private LocationService locationService;
+	@Autowired
+	private LocationDao locationDao;
 	
 	/**
 	 * 
@@ -62,7 +56,8 @@ public class LocationServiceTest {
 		Assert.assertTrue(locationService.getLocationBySiteAndRoom(site,room)!=null);
 	}
 //	/**
-//	 * 
+@SuppressWarnings("unchecked")
+    //	 * 
 //	 * @author Jay.He
 //	 * @time Dec 9, 2013 10:51:28 AM
 //	 */
@@ -129,15 +124,16 @@ public class LocationServiceTest {
 //    }
 //	}
 //	
-//	@Test 
-//	public void createIndexForLocationTest() throws ParseException{
-//	    List<Location> list = locationService.getAllLocation();
-//        Class<Location>[] clazzes = new Class[list.size()];
-//        for (int i = 0; i < list.size(); i++) {
-//            Location location = list.get(i);
-//            Class clazz =  location.getClass();
-//            clazzes[i] = clazz;
-//        }
-//	    locationService.createIndexForLocation(clazzes);
-//	}
+	@Test 
+	public void createIndexForLocationTest() throws ParseException{
+	    String hql = "FROM Location";
+	    List<Location> list = (List<Location>)locationDao.getHibernateTemplate().find(hql);
+        Class<Location>[] clazzes = new Class[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            Location location = list.get(i);
+            Class clazz =  location.getClass();
+            clazzes[i] = clazz;
+        }
+	    locationService.createIndexForLocation(clazzes);
+	}
 }

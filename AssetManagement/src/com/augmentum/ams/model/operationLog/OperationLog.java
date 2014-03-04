@@ -6,12 +6,14 @@ import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 
 /**
  * @author Rudy.Gao
@@ -31,7 +33,8 @@ public class OperationLog extends BaseModel {
 
     /** The operator ID(userId), for example YT00000 */
     @Column(name = "operator_id", length = 32, nullable = false)
-    @Field(name = "operatorID", index = Index.TOKENIZED, store = Store.YES)
+    @Field(name = "operatorID", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String operatorID;
 
     /**

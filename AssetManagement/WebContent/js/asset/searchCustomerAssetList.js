@@ -208,7 +208,6 @@ $(document).ready(function() {
 	        modal: true,
 	        position: "center",
 	        resizable: false,
-	        title: i18nProp('managerAssign_dialog_title'),
 	        bgiframe: true,
 	        
 	        close: closeDialog()
@@ -236,6 +235,12 @@ $(document).ready(function() {
 			}else{
 				$("#ids").val(getActivedAssetIds());
 				$("#dialog").dialog("open");
+				
+				$(".dropDownList").remove();
+				$("#customer").DropDownList({
+				       multiple : false,
+				       header : false
+				  });
 			}
 		}else{
 			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
@@ -541,8 +546,15 @@ $("#projectName").focus(function() {
     }
 });
 
+$("#projectName").blur(function() {
+    if ($(this).val() == "") {
+        $(this).attr("placeholder", placeholder_project);
+    }
+});
+
 //select all employee below customer
 $("#userName").focus(function(){
+	$(this).attr("placeholder", "");
 	customerCode = $("#customer").val();
 	userCode = "";
       $.ajax({
@@ -573,6 +585,13 @@ $("#userName").focus(function(){
           }
       });
 });
+
+$("#userName").blur(function() {
+    if ($(this).val() == "") {
+        $(this).attr("placeholder", placeholder_user);
+    }
+});
+
 
 //confirm assign assets
 $("#confirm_assign").click(function() {

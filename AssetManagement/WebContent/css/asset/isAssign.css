@@ -122,6 +122,12 @@
     color: #FFFFFF;
 }
 
+/* ================================================================================ */
+#dialog {
+	margin-top: 30px;
+	margin-left: 26px;
+}
+
 #cancel_assign {
 	width: 80px;
     height: 30px;
@@ -129,9 +135,9 @@
 	margin-left: 5px;
 	cursor: pointer;
 	font-family: Arial;
-	font-size: 18px;
+	font-size: 14px;
 	position: absolute;
-	top: 142px;
+	top: 158px;
 	left: 263px;
 }
 
@@ -150,7 +156,7 @@
 
 #confirm_assign {
 	left: 143px;
-	top: 15px;
+	top: 30px;
 }
 
 #dialog div input[type="text"] {
@@ -160,15 +166,10 @@
 	font-size: 14px;
 }
 
-#dialog div span {
-	color: #FF0000;
-	position: absolute;
-	left: 60px;
-	top: 10px;
-}
 
 #label_CustomerName {
 	margin-left: 40px;
+	margin-bottom: 22px;
 }
 
 #label_ProjectName {
@@ -177,4 +178,26 @@
 
 #label_UserName {
 	margin-left: 73px;
+}
+
+#customer {
+	width: 250px;
+	height: 33px;
+	line-height: 30px;
+}
+
+.dropDownList .dropDownList_text {
+	line-height: 31px;
+	width: 250px;
+	margin-left: 5px;
+	text-align: left;
+}
+
+.dropDownList .dropDownList_icon {
+	float: left;
+	margin-left: 5px;
+}
+
+#label_ConfirmAssign {
+	cursor: pointer;
 }
