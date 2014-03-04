@@ -70,8 +70,10 @@ public class CustomerAssetController extends BaseController {
         ModelAndView modelAndView = new ModelAndView();
         Customer customer = customerService.getCustomerByCode(customerCode);
 
-        if (null == customerCode) {
-            modelAndView.addObject("fieldsData", null);
+        if (null == customer) {
+            JSONArray array = new JSONArray();
+
+            modelAndView.addObject("fieldsData", array);
             modelAndView.addObject("count", 0);
             modelAndView.addObject("totalPage", 0);
         } else {
@@ -179,27 +181,47 @@ public class CustomerAssetController extends BaseController {
 
         List<Customer> customers = (List<Customer>) session.getAttribute("customerList");
 
-        String[] customerIds = new String[customers.size()];
+        List<String> customerIdList = new ArrayList<String>();
 
-        for (int i = 0; i < customerIds.length; i++) {
-            customerIds[i] = customers.get(i).getId();
+        for (int i = 0; i < customers.size(); i++) {
+
+            String customerCode = customers.get(i).getCustomerCode();
+            Customer localCustomer = customerService.getCustomerByCode(customerCode);
+
+            if (null != localCustomer) {
+
+                customerIdList.add(localCustomer.getId());
+            }
         }
 
-        Page<Asset> page = customerAssetService.findCustomerAssetsBySearchCondition(
-                searchCondition, customerIds);
+        String[] customerIds = new String[customerIdList.size()];
 
-        String clientTimeOffset = (String) session.getAttribute("timeOffset");
-        List<AssetListVo> assetVoList = FormatEntityListToEntityVoList
-                .formatAssetListToAssetVoList(page.getResult(), clientTimeOffset);
-        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
-                .findUserCustomColumns("asset", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(assetVoList,
-                userCustomColumnList, "");
+        for (int i = 0; i < customerIdList.size(); i++) {
+            customerIds[i] = customerIdList.get(i);
+        }
 
-        modelAndView.addObject("fieldsData", array);
-        modelAndView.addObject("count", page.getRecordCount());
-        modelAndView.addObject("totalPage", page.getTotalPage());
-        modelAndView.addObject("searchCondition", searchCondition);
+        if (0 == customerIds.length) {
+            modelAndView.addObject("fieldsData", new JSONArray());
+            modelAndView.addObject("count", 0);
+            modelAndView.addObject("totalPage", 0);
+        } else {
+
+            Page<Asset> page = customerAssetService.findCustomerAssetsBySearchCondition(
+                    searchCondition, customerIds);
+
+            String clientTimeOffset = (String) session.getAttribute("timeOffset");
+            List<AssetListVo> assetVoList = FormatEntityListToEntityVoList
+                    .formatAssetListToAssetVoList(page.getResult(), clientTimeOffset);
+            List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+                    .findUserCustomColumns("asset", getUserIdByShiro());
+            JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(assetVoList,
+                    userCustomColumnList, "");
+
+            modelAndView.addObject("fieldsData", array);
+            modelAndView.addObject("count", page.getRecordCount());
+            modelAndView.addObject("totalPage", page.getTotalPage());
+            modelAndView.addObject("searchCondition", searchCondition);
+        }
 
         return modelAndView;
     }
