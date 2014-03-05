@@ -100,4 +100,10 @@ public interface LocationService {
      * @return
      */
     Map<String, Location> findAllLocationsFromIAP();
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    List<String> findAllSite();
 }

@@ -266,3 +266,19 @@ tr {
 	font-weight: bold;
 	text-decoration: underline;
 }
+
+.button_returnToIT {
+	background: url("../../image/common/button_bg_return_normal.png") no-repeat;
+	cursor: pointer;
+	height: 30px;
+	width: 105px;
+	font-weight: bold;
+	font-size: 14px;
+	color: #FFFFFF;
+	margin: 3px 0px -6px 7px;
+	border: 0px;
+}
+
+.button_returnToIT:hover {
+	background: url("../../image/common/button_bg_return_hover.png") no-repeat;
+}

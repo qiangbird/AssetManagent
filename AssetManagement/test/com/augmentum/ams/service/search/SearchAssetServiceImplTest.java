@@ -12,6 +12,7 @@ import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.service.BaseCaseTest;
@@ -31,6 +32,9 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
     @Autowired
     private AssetService assetService;
     
+    @Autowired
+    private BaseHibernateDao<Asset> baseHibernateDao;
+    
     @SuppressWarnings("unchecked")
     @Test
     public void testCreateIndex() {
@@ -41,7 +45,13 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
             Class clazz =  asset.getClass();
             clazzes[i] = clazz;
         }
-        searchAssetService.createIndex(clazzes);
+        
+        try {
+            baseHibernateDao.createIndex(clazzes);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     @Test

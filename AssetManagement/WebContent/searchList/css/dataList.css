@@ -104,7 +104,7 @@ body,button,input,select,option{
 	font:12px/16px arial;
 }
 .dataList-div-fields a{
-	font:normal 16px/24px arial;
+	font:normal 14px/24px arial;
 	display: inline-block;
 }
 .dataList-div-data{
@@ -341,30 +341,30 @@ body,button,input,select,option{
 .dataList-a-field-save{
 	text-align: center;
 	margin-top: 10px;
-    color: #88BC69;
+    color: #FFFFFF !important;
     width: 60px;
     height: 24px;
     font:normal 14px/24px arial;
-    background-image: url(../images/BTN_Save_60x24.png);
+    background-image: url(../images/button_bg_save_normal.png);
 }
 .dataList-a-field-save:hover{
-    color: #FFF;
-    background-image: url(../images/BTN_Save_Hover_60x24.png);
+    background-image: url(../images/button_bg_save_hover.png);
 }
+
 .dataList-a-field-cancel{
 	text-align: center;
 	margin-top: 10px;
-    color: #808080;
+    color: #555555 !important;
     margin-left: 10px;
     width: 60px;
     font:normal 14px/24px arial;
     height: 24px;
-    background-image: url(../images/BTN_Cancel_60x24.png);
+    background-image: url(../images/button_bg_cancel_normal.png);
 }
 .dataList-a-field-cancel:hover{
-    color: #FFF;
-    background-image: url(../images/BTN_Cancel_Hover_60x24.png);
+    background-image: url(../images/button_bg_cancel_hover.png);
 }
+
 .dataList-div-go{
 	margin-left: 20px;
 }

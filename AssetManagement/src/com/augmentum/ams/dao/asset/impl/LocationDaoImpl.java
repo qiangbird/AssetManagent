@@ -54,4 +54,9 @@ public class LocationDaoImpl extends BaseDaoImpl<Location> implements LocationDa
         return list;
     }
 
+    @Override
+    public List<Location> findAllLocation() {
+        String hql = "FROM Location WHERE isExpired = false GROUP BY site ORDER BY site";
+        return find(hql);
+    }
 }

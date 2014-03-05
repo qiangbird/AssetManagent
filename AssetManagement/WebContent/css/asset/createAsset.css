@@ -879,3 +879,6 @@ p .dropDownList .dropDownList_icon {
 	line-height: 30px;
 }
 
+.ui-menu .ui-menu-item a {
+	line-height: 30px !important; 
+}

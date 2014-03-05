@@ -36,7 +36,6 @@ import com.augmentum.ams.exception.ValidatorException;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.model.asset.DeviceSubtype;
-import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.PurchaseItem;
 import com.augmentum.ams.model.customized.PropertyTemplate;
 import com.augmentum.ams.model.user.User;
@@ -62,7 +61,6 @@ import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 import com.augmentum.ams.web.vo.asset.AssignAssetCondition;
-import com.augmentum.ams.web.vo.asset.SiteVo;
 import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
@@ -139,19 +137,11 @@ public class AssetController extends BaseController {
         logger.info("getCommonInfoForAsset method start!");
 
         ModelAndView modelAndView = new ModelAndView();
-        List<SiteVo> siteList = remoteSiteService.getSiteFromIAP(request);
-        // get site and location room
-        List<String> sitesList = new ArrayList<String>();
-        List<Location> locationList = new ArrayList<Location>();
-        for (SiteVo siteVo : siteList) {
-            sitesList.add(siteVo.getSiteNameEn().replace("Augmentum, ", ""));
-        }
-        locationList = locationService.getAllLocation(sitesList.get(0));
+        List<String> sitesList = locationService.findAllSite();
         List<String> list = remoteEntityService.getAllEntityFromIAP(request);
         List<DeviceSubtype> deviceSubtypeList = deviceSubtypeService.getAllDeviceSubtype();
 
         modelAndView.addObject("siteList", sitesList);
-        modelAndView.addObject("locationList", locationList);
         modelAndView.addObject("allEntity", list);
         modelAndView.addObject("assetStatus", AssetUtil.getAssetStatus());
         modelAndView.addObject("assetType", AssetUtil.getAssetTypes());

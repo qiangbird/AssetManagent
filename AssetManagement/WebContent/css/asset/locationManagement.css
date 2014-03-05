@@ -193,7 +193,11 @@ div.operation_assets_list ul {
 	width: 30px;
 	height: 30px;
 	margin: 0 auto;
-	background: url("../../image/common/Edit.png") no-repeat;
+	background: url("../../image/common/icon_edit_normal.png") no-repeat;
+}
+
+.editLocationIcon:hover {
+	background: url("../../image/common/icon_edit_hover.png") no-repeat;
 }
 
 .deleteLocationIcon {
@@ -204,7 +208,11 @@ div.operation_assets_list ul {
 	width: 30px;
 	height: 30px;
 	margin: 0 auto;
-	background: url("../../image/common/Delete.png") no-repeat;
+	background: url("../../image/common/icon_delete_normal.png") no-repeat;
+}
+
+.deleteLocationIcon:hover {
+	background: url("../../image/common/icon_delete_hover.png") no-repeat;
 }
 
 .dataList-div-body .row .Operation {
@@ -228,4 +236,8 @@ div.operation_assets_list ul {
 
 #searchCondition {
     width: 940px;
+}
+
+.tip-green {
+	z-index: 99999999 !important;
 }

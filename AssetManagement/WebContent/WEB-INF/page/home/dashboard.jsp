@@ -309,7 +309,7 @@
 						<th style="width: 98px;"><spring:message code="keeper"/></th>
 					</tr>
 				</table>
-				<input class="confirmButton" id="idleAsset" type="button" value="<spring:message code="returnToIT"/>"/>
+				<input class="button_returnToIT" id="idleAsset" type="button" value="<spring:message code="returnToIT"/>"/>
 			</div>
 		</div>
 	</shiro:hasAnyRoles>

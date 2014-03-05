@@ -79,10 +79,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
             <input type="hidden" name="id" id="location_id" value="${location.id }"/>
             </div>
             <div>
-                <tr><td><spring:message code="location.site" /></td><td><input type="text" name="site" id="site" value="${location.site }"/><td/></tr>
+                <tr>
+                	<td><spring:message code="location.site" /></td>
+                	<td><input type="text" name="site" id="site" value="${location.site }"/><td/></tr>
             </div>
             <div>
-                <tr><td><spring:message code="location.room" /></td><td><input type="text" name="room" id="room" value="${location.room }" /></td></tr>
+                <tr>
+                	<td><spring:message code="location.room" /></td>
+                	<td><input type="text" name="room" id="room" value="${location.room }" /></td></tr>
             </div>
         </div>
         
@@ -126,5 +130,4 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 <link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
-<script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 </html>

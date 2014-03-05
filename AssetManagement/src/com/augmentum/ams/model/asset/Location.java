@@ -34,7 +34,6 @@ public class Location extends BaseModel implements Serializable{
      */
     @Column(name = "site", nullable = false, length = 32)
     @Field(name = "site", index = Index.TOKENIZED, store = Store.YES)
-    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String site;
 
     /**
@@ -42,8 +41,9 @@ public class Location extends BaseModel implements Serializable{
      */
     @Column(name = "room", nullable = false, length = 32)
     @Field(name = "room", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
     private String room;
-
+    
     public String getSite() {
         return site;
     }
@@ -59,5 +59,4 @@ public class Location extends BaseModel implements Serializable{
     public void setRoom(String room) {
         this.room = room;
     }
-
 }

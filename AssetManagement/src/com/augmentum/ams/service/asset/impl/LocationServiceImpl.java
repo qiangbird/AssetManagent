@@ -1,9 +1,12 @@
 package com.augmentum.ams.service.asset.impl;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.search.BooleanQuery;
@@ -138,4 +141,18 @@ public class LocationServiceImpl implements LocationService {
         return localLocations;
     }
 
+    @Override
+    public List<String> findAllSite() {
+        
+        List<Location> list = locationDao.findAllLocation();
+        Set<String> siteSet = new LinkedHashSet<String>();
+        
+        for (Location location : list) {
+            siteSet.add(location.getSite().replace("Augmentum", "").trim());
+        }
+        
+        List<String> locationList = new ArrayList<String>(siteSet);
+        return locationList;
+    }
+    
 }

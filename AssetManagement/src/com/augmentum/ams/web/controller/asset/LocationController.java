@@ -26,7 +26,6 @@ import com.augmentum.ams.service.asset.LocationService;
 import com.augmentum.ams.service.remote.RemoteSiteService;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
-import com.augmentum.ams.web.vo.asset.SiteVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -122,11 +121,8 @@ public class LocationController extends BaseController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public ModelAndView editLocation(@PathVariable String id) {
 
-        logger.info("editLocation method start!");
-
         Location location = locationService.getLocationById(id);
 
-        logger.info("editLocation method end!");
         return new ModelAndView("/location/editLocation", "location", location);
     }
 
@@ -134,14 +130,11 @@ public class LocationController extends BaseController {
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public ModelAndView updateLocation(@PathVariable String id, Location location1) {
 
-        logger.info("updateLocation method start!");
-
         Location location = locationService.getLocationById(id);
         location.setRoom(location1.getRoom());
         location.setSite(location1.getSite());
         locationService.updateLcoation(location);
 
-        logger.info("updateLocation method end!");
         return new ModelAndView("redirect:/location/list#" + id);
 
     }
@@ -149,23 +142,14 @@ public class LocationController extends BaseController {
     @RequestMapping("/getLocationSites")
     public ModelAndView getLocationSites(HttpServletRequest request) {
 
-        logger.info("getLocationSites method start!");
-
         ModelAndView modelAndView = new ModelAndView();
-        List<SiteVo> siteList = null;
-        try {
-            siteList = remoteSiteService.getSiteFromIAP(request);
-        } catch (BusinessException e) {
-            logger.error("Cannot get site information from IAP", e);
-        }
+        List<String> siteList = locationService.findAllSite();
         modelAndView.addObject("siteList", siteList);
 
-        logger.info("getLocationSites method end!");
         return modelAndView;
     }
     @RequestMapping("getLocationRoom")
     public ModelAndView getLocationRoomBySite(HttpServletRequest request, String currentSite){
-        logger.info("getLocationRoomBySite method start!");
 
         ModelAndView modelAndView = new ModelAndView();
         List<Location> locationList = null;
@@ -180,7 +164,18 @@ public class LocationController extends BaseController {
         }
         modelAndView.addObject("locationRoomList", locationRoomList);
 
-        logger.info("getLocationRoomBySite method end!");
+        return modelAndView;
+    }
+    
+    @RequestMapping("checkLocation")
+    public ModelAndView checkRepeatedLocation(String id, String site, String room) {
+        
+        ModelAndView modelAndView = new ModelAndView();
+        Location oldLocation = locationService.getLocationById(id);
+        Location newLocation = locationService.getLocationBySiteAndRoom(site, room);
+        
+        modelAndView.addObject("oldLocation", oldLocation);
+        modelAndView.addObject("newLocation", newLocation);
         return modelAndView;
     }
 }

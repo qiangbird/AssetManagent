@@ -25,7 +25,7 @@ public interface LocationDao extends BaseDao<Location>{
 	 * @time Nov 7, 2013 3:52:53 PM
 	 * @return
 	 */
-	public Location getLocationBySiteAndRoom(String site,String room);
+	public Location getLocationBySiteAndRoom(String site, String room);
 	/**
 	 * 
 	 * @description Get location by id
@@ -41,5 +41,11 @@ public interface LocationDao extends BaseDao<Location>{
 	 * @return
 	 */
     List<SiteCacheVo> findLocationSiteAndRoom();
-	
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @return
+     */
+    List<Location> findAllLocation();
+    
 }

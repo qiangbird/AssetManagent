@@ -1,5 +1,6 @@
 var dataList;
 var criteria = {};
+var actionFlag;
 
 $(document).ready(function() {
     
@@ -47,65 +48,79 @@ $(document).ready(function() {
      });
      
      
-
  	sites = [];
- 	$("#dialog").dialog({
-         autoOpen:false,
-         closeOnEscape: true,
-         draggable: false,
-         height: 220,
-         width: 400,
-         show: "blind",
-         hide: "blind",
-         modal: true,
-         position: "center",
-         resizable: false,
-         title: i18nProp("Location_Management"),
-         bgiframe: true
-     });
  	
  	$("#addButton").click(function(){
  		$("#site").removeClass("site-error");
  		$("#room").removeClass("site-error");
+ 		actionFlag = 'create';
+ 		
+ 		$("#dialog").dialog({
+ 	         autoOpen:false,
+ 	         closeOnEscape: true,
+ 	         draggable: false,
+ 	         height: 220,
+ 	         width: 400,
+ 	         modal: true,
+ 	         position: "center",
+ 	         resizable: false,
+ 	         bgiframe: true,
+ 	         title: i18nProp("location_create_dialog_title", "")
+ 	     });
  		$("#dialog").dialog("open");
+ 		
  		$("#location_id").val("");
  		$("#site").val("");
  		$("#room").val("");
  	});
  	
- 	$("#sites").DropDownList({
- 	    multiple : false,
- 	    header : false,
- 	    noneSelectedText : 'Select site',
- 	});
- 	
  	$("#site").click(function(){
  		$("#site").removeClass("site-error");
+ 		$("#site").poshytip("destroy");
+ 		
  		  $.ajax({
  			    type : 'GET',
  			    contentType : 'application/json',
  			    url : 'location/getLocationSites',
  			    dataType : 'json',
  			    success : function(data) {
- 			    	console.log(data.siteList);
  			    	length = data.siteList.length;
  			    	for(var i = 0;i< length; i++){
- 			    		sites[i] = data.siteList[i].siteNameEn.replace(",","");
+ 			    		sites[i] = "Augmentum " + data.siteList[i];
  			    	}
  			    	$("#site").autocomplete({
  			            minLength : 0,
  			            source : sites
- 			            });
+ 			        });
  			     }
  			  });
  	});
  	$("#room").click(function(){
  		$("#room").removeClass("site-error");
+ 		$("#room").poshytip("destroy");
  	});
- 	//edit group
+ 	
+ 	//edit location
  	$(".dataList").delegate(".editLocationIcon","click",function(){
  		$("#site").removeClass("site-error");
  		$("#room").removeClass("site-error");
+ 		$("#site").poshytip("destroy");
+ 		$("#room").poshytip("destroy");
+ 		actionFlag = 'update';
+ 		
+ 		$("#dialog").dialog({
+ 	         autoOpen:false,
+ 	         closeOnEscape: true,
+ 	         draggable: false,
+ 	         height: 220,
+ 	         width: 400,
+ 	         modal: true,
+ 	         position: "center",
+ 	         resizable: false,
+ 	         bgiframe: true,
+ 	         title: i18nProp("location_edit_dialog_title", "")
+ 	     });
+ 		
  		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
  		$.ajax({
  		    type : 'GET',
@@ -114,13 +129,15 @@ $(document).ready(function() {
  		    dataType : 'json',
  		    success : function(data) {
  				$("#dialog").dialog("open");
+ 				
  				$("#location_id").val(data.location.id);
  				$("#site").val(data.location.site);
  				$("#room").val(data.location.room);
  		     }
  		  });
  	});
-     //delete group
+ 	
+     //delete location
  	$(".dataList").delegate(".deleteLocationIcon","click",function(){
  		var pk = $(this).parents(".row").find(".dataList-div-checkbox").attr("pk");
  		
@@ -144,33 +161,33 @@ $(document).ready(function() {
 		});
  	});
      	
-     	//submit
-     	$("#submitLocation").click(function(){
-     	    flag = 0;
-     		inputSite = $("#site").val();
-     		inputRoom = $("#room").val();
-     		if(inputSite.trim()==""){
-     			$("#site").addClass("site-error");
-     			flag = 1;
-     		}
-     		if(inputRoom.trim()==""){
-     			$("#room").addClass("site-error");
-     			flag = 2;
-     		}
-     		if(flag==0){
-     		if(checkInArr(sites,$("#site").val())){
-     			$("#dialog").submit();
-     		}else{
-     			if(sites==""){
-     				$("#dialog").submit();
-     			}else{
-     			$("#site").addClass("site-error");
-     			return;
-     			}
-     		}
-     		}
-     		
-     	});
+ 	//submit
+ 	$("#submitLocation").click(function(){
+ 	    flag = 0;
+ 		inputSite = $("#site").val();
+ 		inputRoom = $("#room").val();
+ 		if(inputSite.trim() == ""){
+ 			$("#site").addClass("site-error");
+			$("#site").poshytip({
+				className: 'tip-green',
+				allowTipHover: true,
+				content: i18nProp("location_site_validate_empty", "")
+			});
+ 			flag = 1;
+ 		}
+ 		if(inputRoom.trim() == ""){
+ 			$("#room").addClass("site-error");
+			$("#room").poshytip({
+				className: 'tip-green',
+				allowTipHover: true,
+				content: i18nProp("location_room_validate_empty", "")
+			});
+ 			flag = 2;
+ 		}
+ 		if(flag==0){
+ 			checkLocationAndSubmit();
+ 		}
+ 	});
 });
 
 // init dataList information for search list
@@ -185,22 +202,6 @@ var dataListInfo = {
     hasCheckbox : true,
     pageItemSize : 5,
     url : 'location/searchLocation',
-    updateShowField : {
-        url : 'searchCommon/column/updateColumns',
-        callback : function(data) {
-            $.ajax({
-                type : "POST",
-                contentType : "application/json",
-                url : "searchCommon/column/getColumns?category=location",
-                dataType : "json",
-                success : function(data) {
-                    dataList.opts.columns = data.columns;
-                    dataList.setShow(data.showFields);
-                    dataList.search();
-                }
-            });
-        }
-    },
     updateShowSize : {
         url : 'searchCommon/pageSize/updatePageSize',
         callback : function() {
@@ -248,10 +249,60 @@ function getIndexInArr(Arr, ele) {
 
 //common method
 function checkInArr(Arr, ele) {
-	    for ( var i = 0; i < Arr.length; i++) {
-	        if (ele == Arr[i]) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
+    for ( var i = 0; i < Arr.length; i++) {
+        if (ele == Arr[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// check if repeated location 
+function checkLocationAndSubmit() {
+	var id = $("#location_id").val();
+	var site = $("#site").val();
+	var room = $("#room").val();
+	
+	if(!checkInArr(sites, $("#site").val()) && actionFlag == 'update'){
+	   $("#site").addClass("site-error");
+	   $("#site").poshytip({
+		   	className: 'tip-green',
+		   	allowTipHover: true,
+			content: i18nProp("location_site_validate_invalid", "")
+	   });
+  	} else {
+  		
+  		$.ajax({
+  			type : 'GET',
+  			contentType : 'application/json',
+  			url : 'location/checkLocation',
+  			dataType : 'json',
+  			data: {
+  				id: id,
+  				site: site,
+  				room: room
+  			},
+  			success : function(data) {
+  				
+  				if (data.newLocation == null) {
+  					$("#dialog").submit();
+  				} else {
+  					if (data.oldLocation != null) {
+  						
+  						if (data.oldLocation.site == site
+  								&& data.oldLocation.room == room) {
+  							$("#dialog").submit();
+  						}
+  					} 
+					$("#room").addClass("site-error");
+					$("#room").poshytip({
+						className: 'tip-green',
+						allowTipHover: true,
+						content: i18nProp("location_room_validate_repeated", "")
+					});
+					return;
+  				}
+  			}
+  		});
+  	}
+}
