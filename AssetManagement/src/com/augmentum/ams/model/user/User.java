@@ -21,6 +21,7 @@ import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Fields;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
@@ -63,6 +64,7 @@ public class User extends BaseModel implements Serializable{
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false) }, inverseJoinColumns = { @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false) })
+	@IndexedEmbedded(depth = 1)
 	private List<Role> roles = new ArrayList<Role>();
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

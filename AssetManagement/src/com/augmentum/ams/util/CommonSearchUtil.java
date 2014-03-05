@@ -23,6 +23,7 @@ import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 import common.Logger;
 
@@ -78,6 +79,10 @@ public class CommonSearchUtil {
 
                 searchFields = SearchFieldConstants.INCONSISTENT_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.INCONSISTENT_SENTENCE_FIELDS;
+            } else if (clazz == User.class) {
+                
+                searchFields = SearchFieldConstants.USER_ROLE_FIELDS;
+                sentenceSearchFields = SearchFieldConstants.USER_ROLE_FIELDS;
             }
         } else {
             sentenceSearchFields = searchFields;

@@ -18,9 +18,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.augmentum.ams.constants.IAPConstans;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ParameterException;
+import com.augmentum.ams.model.user.User;
+import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
+import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
+import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("userController")
@@ -32,6 +38,8 @@ public class UserController extends BaseController{
 	
 	@Autowired
 	private RemoteEmployeeService remoteEmployeeService;
+	@Autowired
+	private UserCustomColumnsService userCustomColumnsService;
 	
 	@RequestMapping("/roleList")
 	public String roleList() throws ParameterException {
@@ -116,5 +124,27 @@ public class UserController extends BaseController{
         modelAndView.addObject("employeeInfo", employeeInfo);
         return modelAndView;
     }
+	
+	@RequestMapping(value = "findUserRoleList", method = RequestMethod.GET)
+	public ModelAndView findUserBySearchCondition(SearchCondition searchCondition) {
+	    
+	    if (null == searchCondition) {
+            searchCondition = new SearchCondition();
+        }
+	    
+        Page<User> page = userService.findUserBySearchCondition(searchCondition);
+
+        List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
+                .findUserCustomColumns("user role", getUserIdByShiro());
+        JSONArray array = SearchCommonUtil.formatUserRoleToJSONArray(page.getResult(), userCustomColumnList);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("fieldsData", array);
+        modelAndView.addObject("count", page.getRecordCount());
+        modelAndView.addObject("totalPage", page.getTotalPage());
+        modelAndView.addObject("searchCondition", searchCondition);
+
+        return modelAndView;
+	}
 	
 }

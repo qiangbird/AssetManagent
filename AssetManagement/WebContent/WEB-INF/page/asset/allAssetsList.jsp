@@ -42,7 +42,6 @@
 	</div>
 
 	<div id="bodyMinHight">
-	<!-- <div id ="messageBar"></div> -->
 	<input type="hidden" id="tips" value="${requestScope.tips }">
     <div class="content">
     	<div class="dataList">

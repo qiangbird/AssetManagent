@@ -31,6 +31,7 @@ import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
 import com.augmentum.ams.service.asset.TransferLogService;
+import com.augmentum.ams.service.customized.CustomizedViewItemService;
 import com.augmentum.ams.util.CommonSearchUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.system.Page;
@@ -48,6 +49,8 @@ public class TransferLogServiceImpl implements TransferLogService {
     private TransferLogDao transferLogDao;
     @Autowired
     private AssetService assetService;
+    @Autowired
+    private CustomizedViewItemService customizedViewItemService;
 
     @Override
     public Page<TransferLog> findTransferLogBySearchCondition(
@@ -67,18 +70,32 @@ public class TransferLogServiceImpl implements TransferLogService {
         // create filter based on advanced search condition, it used for further
         // filtering query result
         BooleanQuery filterQuery = null;
-
-        Query timeQuery = CommonSearchUtil.searchByTimeRangeQuery(
-                "time", searchCondition.getFromTime(),
-                searchCondition.getToTime());
         
-        if (null != timeQuery) {
+        if (null != searchCondition.getCustomizedViewId()
+                && !"".equals(searchCondition.getCustomizedViewId())) {
+            BooleanQuery customizedViewItemQuery = customizedViewItemService
+                    .getCustomizedViewItemQuery(qb, searchCondition
+                            .getCustomizedViewId());
+
             if (null == filterQuery) {
                 filterQuery = new BooleanQuery();
             }
-            filterQuery.add(timeQuery, Occur.MUST);
+            filterQuery.add(customizedViewItemQuery, Occur.MUST);
+        } else {
+            
+            Query timeQuery = CommonSearchUtil.searchByTimeRangeQuery(
+                    "time", searchCondition.getFromTime(),
+                    searchCondition.getToTime());
+            
+            if (null != timeQuery) {
+                if (null == filterQuery) {
+                    filterQuery = new BooleanQuery();
+                }
+                filterQuery.add(timeQuery, Occur.MUST);
+            }
+            
         }
-        
+
         if (StringUtils.isNotBlank(id)) {
             if (null == filterQuery) {
                 filterQuery = new BooleanQuery();

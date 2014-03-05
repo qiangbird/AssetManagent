@@ -261,6 +261,7 @@
 
 .removeElement {
 	width: 15.3%;
+	margin-left: 78px;
 }
 .removeElement span {
 	width: 15.3%;
@@ -314,6 +315,7 @@
 
 .itInRow, .adminInRow {
 	position: relative;
+	margin-left: 78px;
 }
 /* 
 .ui-dialog .ui-dialog-content {

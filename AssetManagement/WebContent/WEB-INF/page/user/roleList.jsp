@@ -15,6 +15,13 @@
 <link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
 <link rel="stylesheet" href="css/user/roleList.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="css/base/base.css">
+<link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
+<link rel="stylesheet" type="text/css" href="searchList/css/dataList.css">
+<link rel="stylesheet" type="text/css" href="css/common/commonList.css">
+<link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
+<link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body>
@@ -27,6 +34,37 @@
    <span><spring:message code="navigator.roleList"></spring:message></span>
  </div>
 <div id="bodyMinHight">
+	<div class="content">
+    	<div class="dataList">
+    		<div id="searchCondition">
+				<input type="hidden" id="keyword_content" value="">
+				<div id="searchInputTipDiv" class="inputTipDiv"><spring:message code="keyword" /></div>
+				<input id="keyword" class="input_txt" name="" type="text" value="">
+				<div class="filterDiv filterDiv_common">
+					<button class="filterBtn filter_no_dropDown">
+					</button>
+					<span class="existedFlag"></span>
+				     <div class="filterBox">
+					     <div class="single_condition">
+							<div class="condition_title"><label><spring:message code="user.role"/></label></div>
+							<div class="condition_optional" id="userRole">
+								<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+								<p><input id="role_it" type="checkBox" name="field" value="it" /><label><spring:message code="user.IT"/></label></p>
+								<p><input id="role_systemAdmin" type="checkBox" name="field" value="system_admin" /><label><spring:message code="user.system.admin"/></label></p>
+		            		</div>
+			        	</div>
+			        	<a class="reset" href="javascript:void(0);"><spring:message code="reset"/></a>
+			        </div>
+			   </div>
+			   <a id="searchButton" class="a_common_button green_button_thirty">
+	        	  <span class="left"></span>
+	        	  <span class="middle" ><spring:message code="search" /></span>
+	        	  <span class="right"></span>
+        	  </a>
+		   </div>
+		</div>
+	</div>
+<hr color="red" width="100%">
  <div class="roleListContent">
      <div class="roleAddContent">
         <div id="autoText">
@@ -86,11 +124,17 @@
 	  <jsp:include page="userInfoTips.jsp" />
 </div>
 </div>
+<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
+
 <script type="text/javascript" src="js/common/validation.js"></script>
 <script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
-<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
+<script type="text/javascript" src="js/common/common.js"></script>
 <script type="text/javascript" src="js/user/userInfoTips.js"></script>
+<script type="text/javascript" src="js/search/searchCommon.js"></script>
+<script type="text/javascript" src="searchList/js/DataList.js"></script>
 <script type="text/javascript" src="js/user/roleList.js"></script>
 <script type="text/javascript" src="js/common/autocomplete.js"></script>
+<script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
+
 </body>
 </html>

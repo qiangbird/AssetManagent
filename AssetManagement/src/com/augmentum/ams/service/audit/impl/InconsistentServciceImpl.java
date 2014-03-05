@@ -146,7 +146,7 @@ public class InconsistentServciceImpl implements InconsistentService {
         if (null != searchCondition.getCustomizedViewId()
                 && !"".equals(searchCondition.getCustomizedViewId())) {
             BooleanQuery customizedViewItemQuery = customizedViewItemService
-                    .getCustomizedViewItemQuery(searchCondition
+                    .getCustomizedViewItemQuery(qb, searchCondition
                             .getCustomizedViewId());
 
             filterQuery.add(customizedViewItemQuery, Occur.MUST);

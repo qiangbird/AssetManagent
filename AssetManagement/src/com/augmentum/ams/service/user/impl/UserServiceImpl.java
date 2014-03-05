@@ -9,12 +9,25 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.QueryWrapperFilter;
+import org.apache.lucene.search.TermQuery;
+import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.search.FullTextQuery;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.user.UserDao;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.enumeration.RoleEnum;
@@ -23,8 +36,11 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.user.RoleService;
 import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
+import com.augmentum.ams.util.CommonSearchUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Service("userService")
@@ -42,6 +58,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SpecialRoleService specialRoleService;
+    
+    @Autowired
+    protected SessionFactory sessionFactory;
+    
+    @Autowired
+    private BaseHibernateDao<User> baseHibernateDao;
 
     /*
      * (non-Javadoc)
@@ -266,5 +288,62 @@ public class UserServiceImpl implements UserService {
             employees.put(user.getUserName(), user);
         }
         return employees;
+    }
+
+    @Override
+    public Page<User> findUserBySearchCondition(SearchCondition searchCondition) {
+        
+        Session session = sessionFactory.openSession();
+        FullTextSession fullTextSession = Search.getFullTextSession(session);
+        QueryBuilder qb = fullTextSession.getSearchFactory()
+                .buildQueryBuilder().forEntity(User.class).get();
+
+        // create ordinary query, it contains search by keyword
+        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
+                User.class, qb, searchCondition.getKeyWord(),
+                searchCondition.getSearchFields());
+        
+        BooleanQuery filterQuery = new BooleanQuery();;
+        
+        if (!searchCondition.getIsITRole() && !searchCondition.getIsSystemAdminRole()) {
+            
+            BooleanQuery defaultFilterQuery = new BooleanQuery();
+            defaultFilterQuery.add(new TermQuery(new Term("roles.role_name", "it")), Occur.SHOULD);
+            defaultFilterQuery.add(new TermQuery(new Term("roles.role_name", "system_admin")), Occur.SHOULD);
+            
+            filterQuery.add(defaultFilterQuery, Occur.MUST);
+        }
+
+        if (searchCondition.getIsITRole()) {
+            
+            filterQuery.add(new TermQuery(new Term("roles.role_name", "it")), Occur.MUST);
+        }
+        
+        if (searchCondition.getIsSystemAdminRole()) {
+            filterQuery.add(new TermQuery(new Term("roles.role_name", "system_admin")), Occur.MUST);
+        }
+        
+        QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
+
+        // add entity associate
+        Criteria criteria = session.createCriteria(User.class)
+                .setFetchMode("roles", FetchMode.JOIN);
+
+        Page<User> page = new Page<User>();
+
+        // set page parameters, sort column, sort sign, page size, current page
+        // num
+        page.setPageSize(searchCondition.getPageSize());
+        page.setCurrentPage(searchCondition.getPageNum());
+        page.setSortOrder(searchCondition.getSortSign());
+        page.setSortColumn(CommonSearchUtil.transferSortName(searchCondition
+                .getSortName()));
+
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
+                keyWordQuery, User.class).setCriteriaQuery(criteria);
+
+        page = baseHibernateDao.findByIndex(fullTextQuery, filter, page);
+        fullTextSession.close();
+        return page;
     }
 }

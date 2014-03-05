@@ -45,5 +45,7 @@ public class SearchFieldConstants {
             "asset.project.projectName", "asset.customer.customerName",
             "asset.ownerShip", "asset.memo", "asset.vendor", "asset.entity",
             "asset.assetName" };
+    
+    public static final String[] USER_ROLE_FIELDS = {"userName", "userName_forSort", "userId"};
 
 }

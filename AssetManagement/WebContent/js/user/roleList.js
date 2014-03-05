@@ -6,6 +6,10 @@ var employeeInfo = new Array();
 var createOperation = "create";
 var updateOperation = "update";
 var employees = new Array();
+
+var dataList;
+var criteria = {};
+
 $(document).ready(function() {
 	getUserRoloInfo();
 	var params = {
@@ -23,6 +27,44 @@ $(document).ready(function() {
         dataType: "json",
         type: "POST"
     });
+	
+	
+	// categoryFlag = 13, it means category is 'user role'
+	initCriteria(13);
+	findDataListInfo("user role");
+	
+	$(".filterDiv input[type='checkBox']").each(function(){
+    	if ($(this).val() != "all") {
+    		$(this).attr("content", $(this).siblings("label").html());
+    	}
+    });
+    
+    $(".filterDiv input[type='text']").each(function(){
+    	$(this).attr("content", $(this).val());
+    });
+    
+    $(".filterDiv").filterBox({});
+    
+    $("#searchButton").click(function() {
+        setCriteria();
+        criteria.pageNum = 1;
+        dataList.criteria = criteria;
+        dataList.search();
+    });
+    
+    $("#keyword").keydown(function() {
+        if(event.keyCode == 13) {
+            setCriteria();
+            criteria.pageNum = 1;
+            dataList.criteria = criteria;
+            dataList.search();
+        }
+    });
+    
+    removePlaceholderForKeyWord();
+    
+	
+	
 	$(".rowHead").find(".columnElement:last").css("background","#71B3D6");
 	
 	$(".roleAddContent").delegate(".roleCheckBoxOff, .roleCheckBoxOn", "click", function(){
@@ -326,4 +368,65 @@ function checkRole(role, classId, valueId, originalValueId){
 		last.find(valueId).val("false");
 		last.find(originalValueId).val("false");
 	}
+}
+
+var dataListInfo = {
+	    columns : [],
+	    criteria : criteria,
+	    minHeight : 150,
+	    pageSizes : [10, 20, 30, 50],
+	    hasCheckbox : false,
+	    pageItemSize : 5,
+	    url : 'user/findUserRoleList',
+	    updateShowField : {
+	        url : 'searchCommon/column/updateColumns',
+	        callback : function(data) {
+	            $.ajax({
+	                type : "POST",
+	                contentType : "application/json",
+	                url : "searchCommon/column/getColumns?category=user role",
+	                dataType : "json",
+	                success : function(data) {
+	                    dataList.opts.columns = data.columns;
+	                    dataList.setShow(data.showFields);
+	                    dataList.search();
+	                }
+	            });
+	        }
+	    },
+	    updateShowSize : {
+	        url : 'searchCommon/pageSize/updatePageSize',
+	        callback : function() {
+	        }
+	    }
+	};
+
+	// call dataList
+	function searchList() {
+	    dataList = $(".dataList").DataList(dataListInfo);
+	    dataList.criteria = setCriteria();
+	    dataList.search();
+	}
+
+
+function setCriteria() {
+	
+	criteria.keyWord = $("#keyword").val();
+	
+	var isITRole = false;
+	var isSystemAdminRole = false;
+	
+	$("#userRole").find(":checked").each(function() {
+		if ("it" == $(this).val()) {
+			isITRole = true;
+		}
+		
+		if ("system_admin" == $(this).val()) {
+			isSystemAdminRole = true;
+		}
+	});
+    criteria.isITRole = isITRole;
+    criteria.isSystemAdminRole = isSystemAdminRole;
+    
+    return criteria;
 }

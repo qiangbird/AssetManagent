@@ -37,6 +37,10 @@ public class SearchCondition {
     
     private Boolean isGetAllRecords;
     
+    private Boolean isITRole;
+    
+    private Boolean isSystemAdminRole;
+    
     public String getCustomizedViewId() {
         return customizedViewId;
     }
@@ -171,4 +175,20 @@ public class SearchCondition {
 	public void setIsGetAllRecords(Boolean isGetAllRecords) {
 		this.isGetAllRecords = isGetAllRecords;
 	}
+
+    public Boolean getIsITRole() {
+        return isITRole;
+    }
+
+    public void setIsITRole(Boolean isITRole) {
+        this.isITRole = isITRole;
+    }
+
+    public Boolean getIsSystemAdminRole() {
+        return isSystemAdminRole;
+    }
+
+    public void setIsSystemAdminRole(Boolean isSystemAdminRole) {
+        this.isSystemAdminRole = isSystemAdminRole;
+    }
 }

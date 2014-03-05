@@ -9,9 +9,11 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
 import org.apache.lucene.search.WildcardQuery;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -183,7 +185,7 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
     }
 
     @Override
-    public BooleanQuery getCustomizedViewItemQuery(String customizedViewId) throws BaseException {
+    public BooleanQuery getCustomizedViewItemQuery(QueryBuilder qb, String customizedViewId) throws BaseException {
 
         BooleanQuery booleanQuery = new BooleanQuery();
         List<CustomizedViewItem> customizedViewItem = findByCustomizedViewId(customizedViewId);
@@ -191,14 +193,14 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
         // judge the size of customizedViewItem of the customizedView
         if (0 < customizedViewItem.size()) {
             // more than one customizedViewItems
-            booleanQuery = checkCustomizedViewOperator(booleanQuery, customizedViewId,
+            booleanQuery = checkCustomizedViewOperator(qb, booleanQuery, customizedViewId,
                     customizedViewItem);
         }
 
         return booleanQuery;
     }
 
-    private BooleanQuery checkCustomizedViewOperator(BooleanQuery booleanQuery,
+    private BooleanQuery checkCustomizedViewOperator(QueryBuilder qb, BooleanQuery booleanQuery,
             String customizedViewId, List<CustomizedViewItem> customizedViewItem)
             throws BaseException {
 
@@ -207,26 +209,26 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
 
         // operator is 'and'
         if (SystemConstants.OPERATOR_AND.equals(customizedView.getOperators())) {
-            booleanQuery = searchWithOperator(customizedViewItem, Occur.MUST);
+            booleanQuery = searchWithOperator(customizedViewItem, Occur.MUST, qb);
             return booleanQuery;
         }
         // operator is 'or'
         if (SystemConstants.OPERATOR_OR.equals(customizedView.getOperators())) {
-            booleanQuery = searchWithOperator(customizedViewItem, Occur.SHOULD);
+            booleanQuery = searchWithOperator(customizedViewItem, Occur.SHOULD, qb);
             return booleanQuery;
         }
 
         return booleanQuery;
     }
 
-    private BooleanQuery searchWithOperator(List<CustomizedViewItem> customizedViewItem, Occur occur) {
+    private BooleanQuery searchWithOperator(List<CustomizedViewItem> customizedViewItem, Occur occur, QueryBuilder qb) {
 
         BooleanQuery booleanQuery = new BooleanQuery();
 
         for (int i = 0; i < customizedViewItem.size(); i++) {
             String searchCondition = customizedViewItem.get(i).getSearchCondition();
             String columnType = customizedViewItem.get(i).getColumnType();
-            String value = customizedViewItem.get(i).getValue();
+            String value = customizedViewItem.get(i).getValue().trim().toLowerCase();
             String column = customizedViewItem.get(i).getSearchColumn();
 
             // boolean type
@@ -258,7 +260,7 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
                 if (columnType.equals(ColumnTypeEnum.DATE_TYPE.getColumnType())) {
                     value = UTCTimeUtil.formatFilterTime(value);
                 }
-                generateTermQuery(booleanQuery, column, searchCondition, value, occur);
+                generateTermQuery(qb, booleanQuery, column, searchCondition, value, occur);
                 continue;
             }
 
@@ -272,7 +274,7 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
         return booleanQuery;
     }
 
-    private void generateTermQuery(BooleanQuery booleanQuery, String column,
+    private void generateTermQuery(QueryBuilder qb, BooleanQuery booleanQuery, String column,
             String searchCondition, String value, Occur occur) {
 
         if (SystemConstants.IS_NOT.equals(searchCondition)) {
@@ -281,7 +283,17 @@ public class CustomizedViewItemServiceImpl implements CustomizedViewItemService 
             booleanQueryIn.add(new TermQuery(new Term(column, value)), Occur.MUST_NOT);
             booleanQuery.add(booleanQueryIn, occur);
         } else {
-            booleanQuery.add(new TermQuery(new Term(column, value)), occur);
+            
+            if (-1 == value.indexOf(" ")) {
+                
+                booleanQuery.add(new TermQuery(new Term(column, value)), occur);
+            } else {
+
+                Query query = qb.phrase().onField(column).sentence(value).createQuery();
+                booleanQuery.add(query, Occur.SHOULD);
+
+            }
+            
         }
     }
 

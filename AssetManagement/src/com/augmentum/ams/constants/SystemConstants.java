@@ -43,6 +43,7 @@ public class SystemConstants {
     public static final String SPLIT_COMMA = ",";
     public static final String SPLIT_UNDERLINE = "_";
     public static final String SPLIT_SHARP = "#";
+    public static final String SPLIT_SPACE = " ";
     
     // ownerShip
     public static final String OWNERSHIP_AUGMENTUM = "Augmentum";

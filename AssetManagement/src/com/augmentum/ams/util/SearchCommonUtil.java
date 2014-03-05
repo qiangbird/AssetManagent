@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,8 @@ import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.todo.ToDo;
+import com.augmentum.ams.model.user.Role;
+import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.web.vo.asset.AssetListVo;
 
@@ -305,16 +308,18 @@ public class SearchCommonUtil {
         for (OperationLog operationLog : result) {
             JSONArray array = new JSONArray();
             array.add(operationLog.getId());
-            
+
             for (UserCustomColumn userCustomerColumn : userCustomColumnList) {
-                
-                String fieldName = userCustomerColumn.getCustomizedColumn().getSortName();
+
+                String fieldName = userCustomerColumn.getCustomizedColumn()
+                        .getSortName();
                 String value = "";
-                
+
                 try {
-                    
+
                     if ("createdTime".equals(fieldName)) {
-                        value = UTCTimeUtil.utcToLocalTime(operationLog.getCreatedTime(),
+                        value = UTCTimeUtil.utcToLocalTime(
+                                operationLog.getCreatedTime(),
                                 clientTimeOffset,
                                 SystemConstants.TIME_SECOND_PATTERN);
                     } else {
@@ -347,12 +352,13 @@ public class SearchCommonUtil {
 
             JSONArray array = new JSONArray();
             array.add(inconsistent.getId());
-            
+
             if (null == inconsistent.getAsset()) {
-                
+
                 for (UserCustomColumn column : userCustomColumnList) {
-                    String columnName = column.getCustomizedColumn().getSortName();
-                    
+                    String columnName = column.getCustomizedColumn()
+                            .getSortName();
+
                     if (columnName.equals("asset.barCode")) {
                         array.add(inconsistent.getBarCode());
                     } else {
@@ -360,16 +366,17 @@ public class SearchCommonUtil {
                     }
                 }
             } else {
-                
+
                 for (UserCustomColumn column : userCustomColumnList) {
-                    
-                    String columnName = column.getCustomizedColumn().getSortName();
+
+                    String columnName = column.getCustomizedColumn()
+                            .getSortName();
                     String value = "";
                     try {
-                        
-                        Object obj = BeanUtils
-                                .getProperty(inconsistent, columnName);
-                        
+
+                        Object obj = BeanUtils.getProperty(inconsistent,
+                                columnName);
+
                         if (null == obj) {
                             value = "";
                         } else {
@@ -383,18 +390,24 @@ public class SearchCommonUtil {
                                 value = BeanUtils.getProperty(inconsistent,
                                         "asset.user.userName");
                             } else if ("asset.location".equals(columnName)) {
-                                value = BeanUtils.getProperty(inconsistent, "asset.location.site") 
-                                        + BeanUtils.getProperty(inconsistent, "asset.location.room");
+                                value = BeanUtils.getProperty(inconsistent,
+                                        "asset.location.site")
+                                        + BeanUtils.getProperty(inconsistent,
+                                                "asset.location.room");
                             } else if ("asset.checkInTime".equals(columnName)
                                     || "asset.checkOutTime".equals(columnName)
                                     || "asset.warrantyTime".equals(columnName)) {
-                                
-                                Date temp = UTCTimeUtil.formatStringToDate(obj.toString(), 
+
+                                Date temp = UTCTimeUtil.formatStringToDate(
+                                        obj.toString(),
                                         SystemConstants.TIME_SECOND_PATTERN);
-                                Date localDate = UTCTimeUtil.utcToLocalTime(temp, clientTimeOffset);
-                                
-                                value = UTCTimeUtil.formatDateToString(localDate, SystemConstants.DATE_DAY_PATTERN);
-                                
+                                Date localDate = UTCTimeUtil.utcToLocalTime(
+                                        temp, clientTimeOffset);
+
+                                value = UTCTimeUtil.formatDateToString(
+                                        localDate,
+                                        SystemConstants.DATE_DAY_PATTERN);
+
                             } else if ("asset.fixed".equals(columnName)) {
                                 if (Boolean.TRUE.equals(obj)) {
                                     value = "Yes";
@@ -406,17 +419,100 @@ public class SearchCommonUtil {
                             }
                         }
                     } catch (IllegalAccessException e) {
-                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
                                 "IllegalAccessException when get property from todo asset");
                     } catch (InvocationTargetException e) {
-                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
                                 "InvocationTargetException when get property from todo asset");
                     } catch (NoSuchMethodException e) {
-                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
                                 "NoSuchMethodException when get property from todo asset");
                     }
                     array.add(value);
                 }
+            }
+            arrays.add(array);
+        }
+        return arrays;
+    }
+
+    public static JSONArray formatUserRoleToJSONArray(List<User> users,
+            List<UserCustomColumn> userCustomColumnList) {
+        JSONArray arrays = new JSONArray();
+
+        for (User user : users) {
+
+            JSONArray array = new JSONArray();
+            array.add(user.getId());
+
+            List<String> roleNames = new ArrayList<String>();
+
+            for (Role role : user.getRoles()) {
+                roleNames.add(role.getRoleName());
+            }
+
+            for (UserCustomColumn column : userCustomColumnList) {
+
+                String fieldName = column.getCustomizedColumn().getSortName();
+                String value = "";
+
+                if ("role.it".equals(fieldName)) {
+
+                    if (roleNames.contains("IT")) {
+                        value = "<div class='columnData operateCheckbox itInRow'>"
+                                + "<a id='itInRow' class='roleCheckBoxInRowOn'></a>"
+                                + "<a class='underLine'></a>"
+                                + "<input type='hidden' id='itInRowValue' value=''>"
+                                + "<input type='hidden' id=''itInRowOriginalValue' value='true'>"
+                                + "</div>";
+                    } else {
+                        value = "<div class='columnData operateCheckbox itInRow'>"
+                                + "<a id='itInRow' class='roleCheckBoxInRowOff'></a>"
+                                + "<a class='underLine'></a>"
+                                + "<input type='hidden' id='itInRowValue' value=''>"
+                                + "<input type='hidden' id=''itInRowOriginalValue' value='false'>"
+                                + "</div>";
+                    }
+                } else if ("role.systemAdmin".equals(fieldName)) {
+
+                    if (roleNames.contains("SYSTEM_ADMIN")) {
+                        value = "<div class='columnData operateCheckbox adminInRow'>"
+                                + "<a id='adminInRow' class='roleCheckBoxInRowOn'></a>"
+                                + "<a class='underLine'></a>"
+                                + "<input type='hidden' id='adminInRowValue' value=''>"
+                                + "<input type='hidden' id='adminInRowriginalValue' value='true'>"
+                                + "</div>";
+                    } else {
+                        value = "<div class='columnData operateCheckbox adminInRow'>"
+                                + "<a id='adminInRow' class='roleCheckBoxInRowOff'></a>"
+                                + "<a class='underLine'></a>"
+                                + "<input type='hidden' id='adminInRowValue' value=''>"
+                                + "<input type='hidden' id='adminInRowriginalValue' value='false'>"
+                                + "</div>";
+                    }
+                } else if ("delete".equals(fieldName)) {
+                    value = "<div class='columnData removeElement'><span class='deleteLink'></span></div>";
+                } else {
+                    try {
+                        value = BeanUtils.getProperty(user, fieldName);
+                    } catch (IllegalAccessException e) {
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
+                                "IllegalAccessException when get property from userRole");
+                    } catch (InvocationTargetException e) {
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
+                                "InvocationTargetException when get property from userRole");
+                    } catch (NoSuchMethodException e) {
+                        throw new SystemException(e,
+                                ErrorCodeUtil.SYSTEM_ERROR,
+                                "NoSuchMethodException when get property from userRole");
+                    }
+                }
+                array.add(value);
             }
             arrays.add(array);
         }

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.user.User;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 public interface UserService {
@@ -92,4 +94,11 @@ public interface UserService {
      * @return
      */
     Map<String, User> findAllUsersFromLocal();
+    
+    /**
+     * @author Geoffrey.Zhao
+     * @param searchCondition
+     * @return
+     */
+    Page<User> findUserBySearchCondition(SearchCondition searchCondition);
 }

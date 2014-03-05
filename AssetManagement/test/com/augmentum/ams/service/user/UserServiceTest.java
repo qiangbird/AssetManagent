@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.user.UserDao;
 import com.augmentum.ams.exception.BusinessException;
-import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.BaseCaseTest;
+import com.augmentum.ams.web.vo.system.Page;
+import com.augmentum.ams.web.vo.system.SearchCondition;
 
 public class UserServiceTest extends BaseCaseTest{
 
@@ -19,7 +20,7 @@ public class UserServiceTest extends BaseCaseTest{
     @Autowired
     private UserDao userDao;
     @Autowired
-    private BaseHibernateDao baseHibernateDao;
+    private BaseHibernateDao<User> baseHibernateDao;
     
     @Test
     public void testFindUserRole() throws BusinessException {
@@ -39,10 +40,12 @@ public class UserServiceTest extends BaseCaseTest{
         }
     }
     
+    @SuppressWarnings("unchecked")
     @Test
     public void createIndex() {
-    	List<User> list = userDao.findAll(User.class);
-    	Class<Location>[] clazzes = new Class[list.size()];
+        String hql = "FROM User";
+        List<User> list = (List<User>)userDao.getHibernateTemplate().find(hql);
+    	Class<User>[] clazzes = new Class[list.size()];
         for (int i = 0; i < list.size(); i++) {
             User user = list.get(i);
             Class clazz =  user.getClass();
@@ -54,5 +57,17 @@ public class UserServiceTest extends BaseCaseTest{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+    }
+    
+    @Test
+    public void testFindUserBySearchCondition() {
+        SearchCondition searchCondition = new SearchCondition();
+        
+//        searchCondition.setKeyWord("berton wu");
+        searchCondition.setIsITRole(false);
+        searchCondition.setIsSystemAdminRole(false);
+        
+        Page<User> page = userService.findUserBySearchCondition(searchCondition);
+        logger.info(page.getResult().size());
     }
 }

@@ -12,7 +12,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.wltea.analyzer.lucene.IKAnalyzer;
+
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 
 /**
  * @author Rudy.Gao
@@ -20,6 +30,8 @@ import com.augmentum.ams.model.base.BaseModel;
  */
 @Entity
 @Table(name = "role")
+@Indexed(index = "role")
+@Analyzer(impl = IKAnalyzer.class)
 public class Role extends BaseModel {
 
 	private static final long serialVersionUID = 4757756304505582829L;
@@ -28,6 +40,8 @@ public class Role extends BaseModel {
 	 * The role name of an user
 	 */
 	@Column(name = "role_name", nullable = false, unique = true, length = 75)
+	@Field(name = "role_name", index = Index.UN_TOKENIZED, store = Store.YES)
+    @FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String roleName;
 
 	@ManyToMany(targetEntity = Authority.class, fetch = FetchType.LAZY)
@@ -35,6 +49,7 @@ public class Role extends BaseModel {
 	private List<Authority> authorities = new ArrayList<Authority>();
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", targetEntity = User.class)
+	@ContainedIn
 	private List<User> users = new ArrayList<User>();
 
 	@Transient

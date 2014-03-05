@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.operationLog.OperationLogDao;
 import com.augmentum.ams.model.operationLog.OperationLog;
+import com.augmentum.ams.service.customized.CustomizedViewItemService;
 import com.augmentum.ams.service.operationLog.OperationLogService;
 import com.augmentum.ams.util.CommonSearchUtil;
 import com.augmentum.ams.web.vo.system.Page;
@@ -33,6 +34,8 @@ public class OperationLogServiceImpl implements OperationLogService {
     private OperationLogDao operationLogDao;
     @Autowired
     private BaseHibernateDao<OperationLog> baseHibernateDao;
+    @Autowired
+    private CustomizedViewItemService customizedViewItemService;
 
     @Override
     public void save(OperationLog operationLog) {
@@ -58,14 +61,27 @@ public class OperationLogServiceImpl implements OperationLogService {
         // create filter based on advanced search condition, it used for further
         // filtering query result
         BooleanQuery filterQuery = null;
-
-        Query timeQuery = CommonSearchUtil.searchByTimeRangeQuery(
-                "createdTime", searchCondition.getFromTime(),
-                searchCondition.getToTime());
         
-        if (null != timeQuery) {
-            filterQuery = new BooleanQuery();
-            filterQuery.add(timeQuery, Occur.MUST);
+        if (null != searchCondition.getCustomizedViewId()
+                && !"".equals(searchCondition.getCustomizedViewId())) {
+            BooleanQuery customizedViewItemQuery = customizedViewItemService
+                    .getCustomizedViewItemQuery(qb, searchCondition
+                            .getCustomizedViewId());
+
+            if (null == filterQuery) {
+                filterQuery = new BooleanQuery();
+            }
+            filterQuery.add(customizedViewItemQuery, Occur.MUST);
+        } else {
+            
+            Query timeQuery = CommonSearchUtil.searchByTimeRangeQuery(
+                    "createdTime", searchCondition.getFromTime(),
+                    searchCondition.getToTime());
+            
+            if (null != timeQuery) {
+                filterQuery = new BooleanQuery();
+                filterQuery.add(timeQuery, Occur.MUST);
+            }
         }
 
         QueryWrapperFilter filter = null;

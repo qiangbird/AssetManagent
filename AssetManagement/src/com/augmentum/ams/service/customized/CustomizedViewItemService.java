@@ -3,6 +3,7 @@ package com.augmentum.ams.service.customized;
 import java.util.List;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.customized.CustomizedViewItem;
@@ -64,7 +65,7 @@ public interface CustomizedViewItemService {
      * @return
      * @throws BaseException 
      */
-    BooleanQuery getCustomizedViewItemQuery(String customizedViewId) throws BaseException;
+    BooleanQuery getCustomizedViewItemQuery(QueryBuilder qb, String customizedViewId) throws BaseException;
 
     
 }
