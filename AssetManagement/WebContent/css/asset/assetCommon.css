@@ -18,14 +18,14 @@ onmouseout: expression(onmouseout=function (){this.style.borderColor=''this.styl
 }
 
 #software_manager_visible{
-height: 20px;
-margin-top: 30px;
-margin-left: 10px;
+	height: 20px;
+	margin-top: 30px;
+	margin-left: 10px;
 }
 #manager_visible{
-position: relative;
-top: -10px;
-left: 10px;
+	top: -10px; 
+	left: 15px;
+	display: block;
 }
 p lable{
 	font-family: Arial;
@@ -63,7 +63,7 @@ p lable{
     font-size: 14px;
     float: left;
     margin-left: 137px;
-    margin-top: -6px;
+    margin-top: -3px;
 }
 
 .requiredFalse {
@@ -111,3 +111,51 @@ p lable{
 .showAsSelect {
 	margin-top: 25px;
 }
+
+#minHeight{
+    clear: both;
+    position: relative;
+    margin-top: 30px;
+    height: 30px;
+}
+
+#minHeight label{
+    width: 125px;
+    position: absolute;
+    left: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.batchCheckBoxOn, .batchCheckBoxOff {
+    float: left;
+    width: 100px;
+    height: 18px;
+    display: block;
+    padding-left: 22px;
+}
+.visibleCheckBoxOff, .visibleCheckBoxOn {
+	float: left;
+	width: 14px;
+	height: 15px;
+	display: block;
+	margin-top: 2px;
+	margin-right: 13px;
+}
+
+.batchCheckBoxOn, .visibleCheckBoxOn {
+    background: url("../../image/user/ICN_Checkbox_Active_14x15.png") no-repeat  left;
+}
+
+.batchCheckBoxOff, .visibleCheckBoxOff {
+    background: url("../../image/user/ICN_Checkbox_14x15.png") no-repeat  left;
+}
+
+#batchCreate{
+    position: relative;
+    top: -10px;
+    left: 420px;
+}
+

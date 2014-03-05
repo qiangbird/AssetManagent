@@ -8,8 +8,24 @@ var realTables = [];
 var searchColumns = [];
 var isEditting = false;
 
+var allAssetPage = "allAssetPage";
+var customerAssetPage = "customerAssetPage";
+var transferLogPage = "transferLogPage";
+var operationLogPage ="operationLogPage";
+
 $(document).ready(function() {
     chooseColumn();
+    
+    var prePage = $("#prePage").val();
+    if(allAssetPage == prePage){
+    	$(".allAssetPage").show();
+    }else if(customerAssetPage == prePage){
+    	$(".customerAssetPage").show();
+    }else if(transferLogPage == prePage){
+    	$(".transferLogPage").show();
+    }else if(operationLogPage == prePage){
+    	$(".operationLogPage").show();
+    }
     
     $("#columnName, #viewName").blur(function(){
 		//delete the tips when input data exists

@@ -33,7 +33,7 @@ public class CustomizedViewController extends BaseController {
     private CustomizedViewItemService customizedViewItemService;
 
     @RequestMapping(value = "/goToNewCustomizedView")
-    public ModelAndView goToNewCustomizedView(String categoryType) {
+    public ModelAndView goToNewCustomizedView(String categoryType, String prePage) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customized/customizedView/createCustomizedView");
@@ -42,6 +42,7 @@ public class CustomizedViewController extends BaseController {
 
         customizedView.setCategoryType(categoryType);
         modelAndView.addObject("customizedView", customizedView);
+        modelAndView.addObject("prePage", prePage);
 
         return modelAndView;
     }
@@ -50,7 +51,12 @@ public class CustomizedViewController extends BaseController {
     public ModelAndView saveCustomizedViewAndItem(CustomizedViewVo customizedViewVo)
             throws ParameterException, BusinessException {
 
-        RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
+        String categoryType = customizedViewVo.getCategoryType();
+        String prePage = customizedViewVo.getPrePage();
+
+        String newURL = "findCustomizedViewByUserForManagement?categoryType=" + categoryType
+                + "&prePage=" + prePage;
+        RedirectView redirectView = new RedirectView(newURL);
         ModelAndView modelAndView = new ModelAndView(redirectView);
 
         customizedViewVo.setCreatorId(getUserIdByShiro());
@@ -77,7 +83,12 @@ public class CustomizedViewController extends BaseController {
     public ModelAndView updateCustomizedViewAndItem(CustomizedViewVo customizedViewVo)
             throws BaseException {
 
-        RedirectView redirectView = new RedirectView("findCustomizedViewByUserForManagement");
+        String categoryType = customizedViewVo.getCategoryType();
+        String prePage = customizedViewVo.getPrePage();
+
+        String newURL = "findCustomizedViewByUserForManagement?categoryType=" + categoryType
+                + "&prePage=" + prePage;
+        RedirectView redirectView = new RedirectView(newURL);
         ModelAndView modelAndView = new ModelAndView(redirectView);
 
         customizedViewItemService.updateCustomizedViewItem(customizedViewVo);
@@ -85,16 +96,21 @@ public class CustomizedViewController extends BaseController {
     }
 
     @RequestMapping(value = "/findCustomizedViewByUserForManagement")
-    public ModelAndView findCustomizedViewByUserForManagement() {
+    public ModelAndView findCustomizedViewByUserForManagement(String categoryType, String prePage) {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customized/customizedView/customizedViewList");
         String creatorId = getUserIdByShiro();
 
-        List<CustomizedView> customizedViews = customizedViewService
-                .findCustomizedViewByUser(creatorId);
+        List<CustomizedView> customizedViews = customizedViewService.findByUserAndCategoryType(
+                creatorId, categoryType);
+
+        CustomizedView customizedView = new CustomizedView();
+        customizedView.setCategoryType(categoryType);
 
         modelAndView.addObject("customizedViews", customizedViews);
+        modelAndView.addObject("customizedView", customizedView);
+        modelAndView.addObject("prePage", prePage);
 
         return modelAndView;
     }
@@ -112,7 +128,8 @@ public class CustomizedViewController extends BaseController {
     }
 
     @RequestMapping(value = "/getCustomizedViewDetail")
-    public ModelAndView getCustomizedViewDetail(String customizedViewId) throws BaseException {
+    public ModelAndView getCustomizedViewDetail(String customizedViewId, String prePage)
+            throws BaseException {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("customized/customizedView/createCustomizedView");
@@ -123,6 +140,7 @@ public class CustomizedViewController extends BaseController {
                 .findByCustomizedViewId(customizedViewId);
         modelAndView.addObject("customizedView", customizedView);
         modelAndView.addObject("customizedViewItems", customizedViewItems);
+        modelAndView.addObject("prePage", prePage);
 
         return modelAndView;
     }

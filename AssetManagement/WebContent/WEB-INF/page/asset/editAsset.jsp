@@ -25,14 +25,13 @@ String basePath = request.getScheme() + "://"
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <span><spring:message code="edit.asset" /></span>
+    </div>
 	<div id="bodyMinHight">
 	<div id="main">
-		<div class="home">
-			<span class="root-back"><a href="#">
-			<spring:message code="navigator.home" /></a></span>
-			<span class="catelog-in-line">></span>
-			<span class="breadCrum"><spring:message code="edit.asset" /></span>
-		</div>
 		<div id="createAssetContent">
 			<div class="commons ng-binding">
 				<spring:message code="asset.common.property" />
@@ -137,16 +136,16 @@ String basePath = request.getScheme() + "://"
 								readonly="readonly" />
 						</p>
                         <shiro:hasRole name="IT">
-                        <p>
+                        <div id="minHeight">
                             <label><spring:message code="navigator.fixed.assets" /></label>
-                            <form:input path="fixed" id="fixed" type="hidden" value=""/>
-                        </p>
+                            <form:input path="fixed" id="fixed" type="hidden" value="false"/>
                             <div class="radioBoxes">
                                 <div class="fixedCheckBox"><a class="radioCheckOn" id="false"></a><span class="requiredFalse">
                                 <spring:message code="customized.property.false" /></span></div>
                                 <div class="fixedCheckBox"><a class="radioCheckOff" id="true"></a><span class="requiredTrue">
                                 <spring:message code="customized.property.true" /></span></div>
                             </div>
+                        </div>
                         </shiro:hasRole>
 					</div>
 
@@ -560,7 +559,7 @@ String basePath = request.getScheme() + "://"
 						<input type="button" value="<spring:message code="save" />" 
 						class="submit-button" id="submitForm" />
 						<input type="button" value='<spring:message code="cancel" />'
-							class="cancel-button" onclick="window.history.back();" />
+							id="cancelCopy" onclick="window.history.back();" />
 					</div>
 					<div id="showError"></div>
 				</div>

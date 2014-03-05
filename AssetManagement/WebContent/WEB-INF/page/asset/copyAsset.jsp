@@ -29,24 +29,22 @@ String basePath = request.getScheme() + "://"
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
+	<div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <span>
+        <c:choose>
+            <c:when test="${flag==''||flag==null}">
+            <spring:message code="copy.asset" />
+            </c:when>
+            <c:when test="${flag!=''}">
+            <spring:message code="create.asset" />
+            </c:when>
+            </c:choose>
+       </span>
+    </div>
 	<div id="bodyMinHight">
 	<div id="main">
-		<div class="home">
-			<span class="root-back">
-			 <a href="#"><spring:message code="navigator.home" /></a>
-			</span> <span class="catelog-in-line">></span> 
-			<span class="breadCrum">
-		    <c:choose>
-			<c:when test="${flag==''||flag==null}">
-			<spring:message code="copy.asset" />
-			</c:when>
-			<c:when test="${flag!=''}">
-			<spring:message code="create.asset" />
-			</c:when>
-			</c:choose>
-			
-			</span>
-		</div>
 		<div id="createAssetContent">
 			<div class="commons ng-binding">
 				<spring:message code="asset.common.property" />
@@ -149,16 +147,16 @@ String basePath = request.getScheme() + "://"
 								readonly="readonly" />
 						</p>
 						<shiro:hasRole name="IT">
-                        <p>
+                        <div id="minHeight">
                             <label><spring:message code="navigator.fixed.assets" /></label>
-                            <form:input path="fixed" id="fixed" type="hidden" value=""/>
-                        </p>
+                            <form:input path="fixed" id="fixed" type="hidden" value="false"/>
                             <div class="radioBoxes">
                                 <div class="fixedCheckBox"><a class="radioCheckOn" id="false"></a><span class="requiredFalse">
                                 <spring:message code="customized.property.false" /></span></div>
                                 <div class="fixedCheckBox"><a class="radioCheckOff" id="true"></a><span class="requiredTrue">
                                 <spring:message code="customized.property.true" /></span></div>
                             </div>
+                        </div>
                         </shiro:hasRole>
 
 					</div>
@@ -351,10 +349,10 @@ String basePath = request.getScheme() + "://"
                        </p>             
                                     
                        <div id="software_manager_visible">
-                         <form:checkbox path="software.managerVisible"/>
-                         <label id="manager_visible">Visible for Manager</label>
-                       </div>
-                         </p>
+                         <form:input id="visible" path="software.managerVisible" style="display: none;"/>
+                                <a class="visibleCheckBoxOff" ></a>
+                                <label id="manager_visible"><spring:message code="asset.software.visible.for.manager" /></label>
+                            </div>
                         </div>
                     </div>
                     <div class="clear"></div>
@@ -379,17 +377,13 @@ String basePath = request.getScheme() + "://"
 				</div>
                     <div class="clear"></div>
 				<div class="asset-batch-create">
-					<span id="batchCreatCkBox">
-					 <input type="checkbox" id="batchCreate" name="batchCreate">
-					 <form:hidden path="batchNumber"/>
-					 </span>
-						<label class="bath-create-asset">
-						<spring:message code="batch.create" />
-						</label>
-					<label class="form-control l-text"> 
-					<input id="showBatch" type="text" name="batchCount" 
-					class="showBatchNormal" value="1" required></label>
-				</div>
+                    <a class="batchCheckBoxOff" id="batchCreate"></a>
+                    <input type="hidden" id="batchNumber"/>
+                    <label class="bath-create-asset"><spring:message code="batch.create" /></label>
+                    <label class="form-control l-text"> 
+                    <input id="showBatch" type="text" name="batchCount" 
+                    class="showBatchNormal" value="1" required></label>
+                </div>
 
 				<div id="bodyShadow"></div>
 				<div class="operation">

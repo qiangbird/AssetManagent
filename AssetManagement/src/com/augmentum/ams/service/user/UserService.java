@@ -45,7 +45,7 @@ public interface UserService {
      * @return User
      */
     User getUserByUserId(String userId);
-    
+
     /**
      * @author Geoffrey.Zhao
      * @param userId
@@ -57,12 +57,12 @@ public interface UserService {
      * @author Grylls.Xu
      * @time Oct 16, 2013 7:48:27 PM
      * @description When get user info from iap we should change it to user obj.
-     * And user object has roles, it will be put into shiro.
+     *              And user object has roles, it will be put into shiro.
      * @param userVo
      * @return
      */
     User validateEmployee(UserVo userVo);
-    
+
     /**
      * 
      * @description TODO
@@ -72,11 +72,11 @@ public interface UserService {
      * @return
      */
     User getUserByName(String username);
-    
+
     void saveUser(User user);
-    
+
     void saveUserAsUserVo(UserVo userVo);
-    
+
     /**
      * 
      * @author Jay.He
@@ -89,7 +89,7 @@ public interface UserService {
     /**
      * 
      * @author John.li
-     * @time Dec 17, 2014 
+     * @time Dec 17, 2014
      * @param userVo
      * @return
      */

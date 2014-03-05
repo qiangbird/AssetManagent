@@ -9,7 +9,16 @@ $(document).ready(function(){
 	
 	$("#createView").click(function(){
 		var categoryType = $("#categoryType").val();
-		window.location.href = "customizedView/goToNewCustomizedView?categoryType=" + categoryType;
+		var prePage = $("#currentPage").val();
+		window.location.href = "customizedView/goToNewCustomizedView?categoryType=" + categoryType + 
+			"&prePage=" + prePage;
+	});
+	
+	$("#manageView").click(function(){
+		var categoryType = $("#categoryType").val();
+		var prePage = $("#currentPage").val();
+		window.location.href = "customizedView/findCustomizedViewByUserForManagement?categoryType=" + categoryType + 
+			"&prePage=" + prePage;
 	});
 });
 

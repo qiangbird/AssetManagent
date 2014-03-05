@@ -15,6 +15,8 @@ public class CustomizedViewVo {
 
     private String categoryType;
 
+    private String prePage;
+
     private String creatorName;
 
     private String[] columns;
@@ -34,6 +36,14 @@ public class CustomizedViewVo {
     private String[] searchColumns;
 
     private String[] realTables;
+
+    public String getPrePage() {
+        return prePage;
+    }
+
+    public void setPrePage(String prePage) {
+        this.prePage = prePage;
+    }
 
     public String getCategoryType() {
         return categoryType;

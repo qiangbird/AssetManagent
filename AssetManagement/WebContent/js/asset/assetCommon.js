@@ -113,23 +113,40 @@
 		});
 	
   //Batch create
-   $("#batchCreate").click(
-		   function() {
-		  $("#showBatch").removeClass().addClass("showBatchHovered");
-		   if ($("#batchCreate").is(":checked")) {
+   $(".batchCheckBoxOff").click(function(){
+	   if("batchCheckBoxOff" == $(this).attr("class")){
+			$(this).removeClass("batchCheckBoxOff");
+			$(this).addClass("batchCheckBoxOn");
+		}else{
+			$(this).removeClass("batchCheckBoxOn");
+			$(this).addClass("batchCheckBoxOff");
+		}
+	   $("#showBatch").removeClass().addClass("showBatchHovered");
+	   if ("batchCheckBoxOn" == $("#batchCreate").attr("class")) {
 		   $("#showBatch").removeClass().addClass("showBatchNormal");
-		   
-		   batchNumber = $("#batchNumber").val()
+		   batchNumber = $("#batchNumber").val();
 		   if( batchNumber != ""){
 			   $("#showBatch").val(batchNumber);
 		   }
-		   
 		   $("#showBatch").show();
-		   } else {
-		       $("#showBatch").removeClass().addClass("showBatchNormal");
-		   $("#showBatch").val("1").hide();
-		   }
-		   });
+	   } else {
+	       $("#showBatch").removeClass().addClass("showBatchNormal");
+	       $("#showBatch").val("1").hide();
+	   }
+   });
+   $(".visibleCheckBoxOff").click(function(){
+	   if("visibleCheckBoxOff" == $(this).attr("class")){
+			$(this).removeClass("visibleCheckBoxOff");
+			$(this).addClass("visibleCheckBoxOn");
+			
+			$("#visible").attr("value",true);
+		}else{
+			$(this).removeClass("visibleCheckBoxOn");
+			$(this).addClass("visibleCheckBoxOff");
+			
+			$("#visible").attr("value",false);
+		}
+   });
 	$("#showBatch").blur(function() {
 	    if ($(this).val() == ""|| !numberCheck($(this).val().trim())) {
 	$("#showBatch").removeClass("showBatchNormal showBatchHovered").addClass("showBatchError");
@@ -169,7 +186,7 @@
    		     
    		        $("#selectedLocation").autocomplete({
    		            source : data.locationRoomList
-   		        })
+   		        });
    		        
    		    }
    });

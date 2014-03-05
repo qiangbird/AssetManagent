@@ -1,7 +1,26 @@
+var allAssetPage = "allAssetPage";
+var customerAssetPage = "customerAssetPage";
+var transferLogPage = "transferLogPage";
+var operationLogPage ="operationLogPage";
+
 $(document).ready(function() {
+	
+	var prePage = $("#prePage").val();
+    if(allAssetPage == prePage){
+    	$(".allAssetPage").show();
+    }else if(customerAssetPage == prePage){
+    	$(".customerAssetPage").show();
+    }else if(transferLogPage == prePage){
+    	$(".transferLogPage").show();
+    }else if(operationLogPage == prePage){
+    	$(".operationLogPage").show();
+    }
+    
    $(".eidtLink").click(function() {
 	   var id = $(this).parents(".filterInfo").find("#id").val();
-	   var href = "customizedView/getCustomizedViewDetail?customizedViewId=" + id;
+	   var prePage = $("#prePage").val();
+	   var href = "customizedView/getCustomizedViewDetail?customizedViewId=" + id
+	   			+ "&prePage=" + prePage;
 	   window.location.href =  href;
    });
    
@@ -27,7 +46,10 @@ $(document).ready(function() {
    });
    
    $("#newView").click(function() {
-	   var href = "customizedView/goToNewCustomizedView";
+	   var categoryType = $("#categoryType").val();
+	   var prePage = $("#prePage").val();
+	   var href = "customizedView/goToNewCustomizedView?categoryType=" + categoryType
+	   		+ "&prePage=" + prePage;
 	   window.location.href =  href;
    });
    

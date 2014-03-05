@@ -23,27 +23,24 @@ String basePath = request.getScheme() + "://"
 </head>
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
+    <div id="blank">
+       <a href="home"><spring:message code="navigator.home"></spring:message></a>
+       <b>&gt;</b>
+       <span><spring:message code="view.asset"></spring:message></span>
+    </div>
     <div id="bodyMinHight">
     <div id="main">
-        <div class="home">
-            <span class="root-back"><a href="#"><spring:message code="navigator.home" /></a></span>
-            <span class="catelog-in-line">></span>
-            <span class="breadCrum"><spring:message code="view.asset" /></span>
-        </div>
         <div id="operation">
         <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT,MANAGER,SPECIAL_ROLE">
         <c:if test="${uuid==null }">
             <%-- <a id="editBtn"><spring:message code="edit" /></a> --%>
             <button id="editBtn" value=<spring:message code="edit" />><spring:message code="edit" /></button>
             <shiro:hasAnyRoles name="SYSTEM_ADMIN,IT">
-<%--             <a id="copyBtn"><spring:message code="copy" /></a>
-            <a id="deleteBtn"><spring:message code="delete" /></a> --%>
             <button id="copyBtn" value=<spring:message code="copy" />><spring:message code="copy" /></button>
             <button id="deleteBtn" value=<spring:message code="delete" />><spring:message code="delete" /></button>
             </shiro:hasAnyRoles>
         </c:if>
         </shiro:hasAnyRoles>
-            <%-- <a id="cancelBtn"><spring:message code="cancel" /></a> --%>
             <button id="cancelBtn" value=<spring:message code="cancel" />><spring:message code="cancel" /></button>
         </div>
 

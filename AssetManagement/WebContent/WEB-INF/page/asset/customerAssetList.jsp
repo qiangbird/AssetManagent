@@ -27,6 +27,7 @@
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
     <input id="categoryType" type="hidden" value="asset">
+    <input id="currentPage" type="hidden" value="customerAssetPage">
     <div id="blank">
    		<a href="home"><spring:message code="navigator.home"></spring:message></a>
    		<b>&gt;</b>
@@ -119,7 +120,7 @@
                 </ul>
                 <ul id="viewUl">
                     <li><a id="createView" ><spring:message code="createView"/></a></li>
-                    <li id="viewLine"><a href="customizedView/findCustomizedViewByUserForManagement"><spring:message code="manageView"/></a></li>
+                    <li id="viewLine"><a id="manageView" ><spring:message code="manageView"/></a></li>
                 </ul>
             </div>
              <div class="operation_assets_list">

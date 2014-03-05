@@ -20,11 +20,20 @@
 <div id="blank">
    <a href="home"><spring:message code="navigator.home"></spring:message></a>
    <b>&gt;</b>
+   <a class="allAssetPage" href="asset/allAssets"><spring:message code="navigator.asset.list"></spring:message></a>
+   <b class="allAssetPage">&gt;</b>
+   <a class="customerAssetPage" href="customerAsset/listAllCustomerAssets"><spring:message code="navigator.customser.assets"></spring:message></a>
+   <b class="customerAssetPage">&gt;</b>
+   <a class="transferLogPage" href="transferLog/list"><spring:message code="navigator.transfer.log"></spring:message></a>
+   <b class="transferLogPage">&gt;</b>
+   <a class="operationLogPage" href="operationLog/list"><spring:message code="navigator.operation.log"></spring:message></a>
+   <b class="operationLogPage">&gt;</b>
    <span><spring:message code="createView"/></span>
 </div>
 
 <form name="newView" action="customizedView/newCustomizedView" method="post">
 	<input type="hidden" id="categoryType" name="categoryType" value="${customizedView.categoryType}">
+	<input type="hidden" id="prePage" name="prePage" value="${prePage}">
 	<input type="hidden" name="customizedViewId" value="${customizedView.id}">
 	<input type="hidden" name="viewName" id="formViewName">
 	<input type="hidden" name="columns" id="formColumns">

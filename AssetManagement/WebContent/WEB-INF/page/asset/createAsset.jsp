@@ -28,13 +28,13 @@ String basePath = request.getScheme() + "://"
 </head>
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
+    <div id="blank">
+	   <a href="home"><spring:message code="navigator.home"></spring:message></a>
+	   <b>&gt;</b>
+	   <span><spring:message code="create.asset"></spring:message></span>
+	</div>
     <div id="bodyMinHight">
     <div id="main">
-        <div class="home">
-            <span class="root-back"><a href="#"><spring:message code="navigator.home" /></a></span>
-            <span class="catelog-in-line">></span> 
-            <span class="breadCrum"><spring:message code="create.asset" /></span>
-        </div>
         <div id="createAssetContent">
             <div class="commons ng-binding">
             <spring:message code="asset.common.property" />
@@ -132,16 +132,16 @@ String basePath = request.getScheme() + "://"
                                 readonly="readonly" />
                         </p>
                         <shiro:hasRole name="IT">
-                        <p>
+                        <div id="minHeight">
                             <label><spring:message code="navigator.fixed.assets" /></label>
                             <form:input path="fixed" id="fixed" type="hidden" value="false"/>
-                        </p>
                             <div class="radioBoxes">
 			                    <div class="fixedCheckBox"><a class="radioCheckOn" id="false"></a><span class="requiredFalse">
 			                    <spring:message code="customized.property.false" /></span></div>
 			                    <div class="fixedCheckBox"><a class="radioCheckOff" id="true"></a><span class="requiredTrue">
 			                    <spring:message code="customized.property.true" /></span></div>
 			                </div>
+                        </div>
                         </shiro:hasRole>
                     </div>
 
@@ -259,8 +259,8 @@ String basePath = request.getScheme() + "://"
                                 </p>
                             </div>
                         </div>
-                    </div>
                     <div class="clear"></div>
+                    </div>
 
 
                     <div id="monitorDetails" class="type-details" style="display: none">
@@ -284,8 +284,8 @@ String basePath = request.getScheme() + "://"
                                 </span>
                             </p>
                         </div>
-                    </div>
                         <div class="clear"></div>
+                    </div>
 
                     <div id="deviceDetails" class="type-details" style="display: none">
                         <div class="commons">
@@ -308,8 +308,8 @@ String basePath = request.getScheme() + "://"
                                     class="l-text" />
                             </p>
                         </div>
-                    </div>
                         <div class="clear"></div>
+                    </div>
 
                     <div id="softwareDetails" class="type-details"
                         style="display: none">
@@ -336,25 +336,13 @@ String basePath = request.getScheme() + "://"
                                     class="l-text" />
                             </p>
                              <div id="software_manager_visible">
-                             <form:checkbox path="software.managerVisible"/>
-                                <label id="manager_visible">Visible for Manager</label>
+                             <form:input id="visible" path="software.managerVisible" style="display: none;"/>
+                                <a class="visibleCheckBoxOff" ></a>
+                                <label id="manager_visible"><spring:message code="asset.software.visible.for.manager" /></label>
                             </div>
-                            <%-- <p>
-                                <span>*</span>
-                                <label><spring:message code="asset.software.max.user.num" /></label>
-                                <form:input path="software.maxUseNum" id="maxUseNum"
-                                    class="l-text" />
-                            </p>
-                            <p>
-                                <label><spring:message code="asset.software.expired.time" /></label>
-
-                                <form:input path="softwareExpiredTime" id="softwareExpiredTime"
-                                    class="l-date" />
-                            </p> --%>
-
                         </div>
-                    </div>
                         <div class="clear"></div>
+                    </div>
 
                     <div id="otherAssetsDetails" class="type-details"
                         style="display: none">
@@ -370,17 +358,14 @@ String basePath = request.getScheme() + "://"
                                 </span>
                             </p>
                         </div>
-                        <div class="clear"></div>
                         <div class="asset-input-right asset-input-panel"></div>
+                        <div class="clear"></div>
                     </div>
-
                 </div>
-
+                <div class="clear"></div>
                 <div class="asset-batch-create">
-                    <span id="batchCreatCkBox"> 
-                    <input type="checkbox" id="batchCreate" name="batchCreate">
+                    <a class="batchCheckBoxOff" id="batchCreate"></a>
                     <input type="hidden" id="batchNumber"/>
-                    </span> 
                     <label class="bath-create-asset"><spring:message code="batch.create" /></label>
                     <label class="form-control l-text"> 
                     <input id="showBatch" type="text" name="batchCount" 
