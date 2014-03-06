@@ -35,6 +35,20 @@
  </div>
 <div id="bodyMinHight">
     <div class="content">
+	    <div class="roleAddContent">
+	        <div id="autoText">
+	            <input id="employeeName" name="employeeName" type="text" value="" />
+	        </div>
+	        <div id="checkboxOperate">
+	            <input type="hidden" id="itValue" value="false" >
+	            <input type="hidden" id="adminValue" value="false" />
+	            <a id="it" class="roleCheckBoxOff" ><span><spring:message code="user.IT" /></span></a>
+	            <a id="admin" class="roleCheckBoxOff" ><span><spring:message code="user.system.admin" /></span></a>
+	        </div>
+	        <div class="addOperateButton">
+	            <input type="button" value=<spring:message code="add" />  id="addButton"></input>
+	        </div>
+	      </div>
         <div class="dataList">
             <div id="searchCondition">
                 <input type="hidden" id="keyword_content" value="">
@@ -63,66 +77,11 @@
               </a>
            </div>
         </div>
+    <div class="saveOperateButton">
+        <input type="button" value=<spring:message code="save" />  id="saveButton"></input>
+        <input type="button" value=<spring:message code="cancel" />  id="cancelButton"></input> 
     </div>
-<hr color="red" width="100%">
- <div class="roleListContent">
-     <div class="roleAddContent">
-        <div id="autoText">
-            <input id="employeeName" name="employeeName" type="text" value="" />
-        </div>
-        <div id="checkboxOperate">
-            <input type="hidden" id="itValue" value="false" >
-            <input type="hidden" id="adminValue" value="false" />
-            <a id="it" class="roleCheckBoxOff" ><span><spring:message code="user.IT" /></span></a>
-            <a id="admin" class="roleCheckBoxOff" ><span><spring:message code="user.system.admin" /></span></a>
-        </div>
-        <div class="addOperateButton">
-            <input type="button" value=<spring:message code="add" />  id="addButton"></input>
-            <input type="button" value=<spring:message code="reset" />  id="resetButton"></input> 
-        </div>
-      </div>
-      <div class="employeeRoleInfoTemplate">
-         <div class="employeeRoleInfo" >
-             <input type="hidden" id ="isNew" value="" />
-             <div class="columnData sequenceElement"><span id="sequence"></span></div>
-             <div class="columnData employeeInfoElement"><span class="employeeIdInRow"></span></div>
-             <div class="columnData employeeInfoElement"><span class="employeeNameInRow"></span></div>
-             <div class="columnData operateCheckbox itInRow">
-                 <a id="itInRow" class="roleCheckBoxInRowOff" ></a>
-                 <a class="underLine"></a>
-                 <input type="hidden" id="itInRowValue" value="">
-                 <input type="hidden" id="itInRowOriginalValue" value="">
-             </div>
-             <div class="columnData operateCheckbox adminInRow">
-                 <a id="adminInRow" class="roleCheckBoxInRowOff" ></a>
-                 <a class="underLine"></a>
-                 <input type="hidden" id="adminInRowValue" value="">
-                 <input type="hidden" id="adminInRowriginalValue" value="">
-             </div>
-             <div class="columnData removeElement">
-                  <span class="deleteLink"></span>
-             </div>    
-         </div>
-      </div>
-      <div class="roleDispaly">
-          <div class="rowHead" >
-              <div id="showError"></div>
-              <div class="columnElement sequenceElement"><spring:message code="sequence" /></div>
-              <div class="columnElement employeeInfoElement"><spring:message code="user.employeeId" /></div>
-              <div class="columnElement employeeInfoElement"><spring:message code="user.employeeName" /></div>
-              <div class="columnElement operateElement"><spring:message code="user.IT" /></div>
-              <div class="columnElement operateElement"><spring:message code="user.system.admin" /></div>
-              <div class="columnElement operateElement"><spring:message code="remove" /></div>    
-           </div>
-      </div>
-      
-      <div class="saveOperateButton">
-            <input type="button" value=<spring:message code="save" />  id="saveButton"></input>
-            <input type="button" value=<spring:message code="cancel" />  id="cancelButton"></input> 
-        </div>
-      
-      <jsp:include page="userInfoTips.jsp" />
-</div>
+    </div>
 </div>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 

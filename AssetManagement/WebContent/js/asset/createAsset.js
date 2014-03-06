@@ -143,7 +143,6 @@ $("#assetUser").click(function() {
     url : 'user/getEmployeeDataSource',
     dataType : 'json',
     success : function(data) {
-        console.log(data);
         length = data.employeeInfo.length;
         employeeName = [];
         employeeValue = [];
@@ -196,39 +195,6 @@ $("#assetUser").click(function() {
     });
 });
 
-//// below is about location
-//$("#selectedLocation").click(function(){
-//	currentSite = $("#selectedSite").val();
-//	 $.ajax({
-//		    type : 'GET',
-//		    contentType : 'application/json',
-//		    url : 'location/getLocationRoom?currentSite='+currentSite.replace("_"," "),
-//		    dataType : 'json',
-//		    success : function(data) {
-//		        console.log(data);
-//		        length = data.locationRoomList.length;
-//		        $("#selectedLocation").autocomplete({
-//		            source : data.locationRoomList
-//		        })
-//		        
-//		    }
-//});
-//});
-
-//$("#selectedLocation").blur(
-//        function() {
-//        if ($(this).val().trim() == "") {
-//            TextMouseOutError(this);
-//        } else {
-//            if (!checkInArr(rooms,$(this).val())) {
-//            	console.log(rooms);
-//                TextMouseOutError(this);
-//            } else {
-//                TextMouseOutNormal(this);
-//            }
-//        }
-//        });
-
 $("#deviceSubtypeSelect").click(function() {
     $.ajax({
     type : 'GET',
@@ -236,9 +202,8 @@ $("#deviceSubtypeSelect").click(function() {
     url : 'deviceSubtype/getAllSubtypes',
     dataType : 'json',
     success : function(data) {
-        console.log(data.deviceSubtypeList);
         subtypeNames = [];
-        for (i = 0; i < data.deviceSubtypeList.length; i++) {
+        for ( var i = 0; i < data.deviceSubtypeList.length; i++) {
             subtypeNames[i] = data.deviceSubtypeList[i].subtypeName;
         }
         $("#deviceSubtypeSelect").autocomplete({
@@ -292,19 +257,19 @@ $("#memo").blur(function() {
     $(this).addClass("l-textarea").removeClass("l-textarea-hover");
         });
 
-$("#maxUseNum").blur(function() {
+/*$("#maxUseNum").blur(function() {
     if ($(this).val() == ""|| !numberCheck($(this).val().trim())) {
         TextMouseOutError(this);
     } else {
         TextMouseOutNormal(this);
     }
-});
+});*/
 
 $("#project").click(function() {
-    if ($("#customerName").val() == "") {
-    return;
-}
-$("#project").empty();
+   /* if ($("#customerName").val() == "") {
+        return;
+    }
+$("#project").empty();*/
 projectManagerEmployeeId = [];
 projectManagerName = [];
 var customerCode = "";
@@ -315,8 +280,6 @@ $.ajax({
     url : 'project/getProjectByCustomerCode?customerCode='+ customerCode,
     dataType : 'json',
     success : function(data) {
-        console.log(data);
-        console.log(data.projectList);
         length = data.projectList.length;
         projectName = [];
         projectCode = [];
@@ -358,7 +321,7 @@ $.ajax({
 
 });
 
-$(document).ready(function() {
+/*$(document).ready(function() {
 if ($("#project").val() == "") {
 $("#projectCode").val("");
 }
@@ -366,4 +329,4 @@ $("#assetUser").change(function() {
 $("#userId").val("");
     });
 
-})
+})*/

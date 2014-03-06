@@ -15,7 +15,7 @@
       i18n = 'zh_CN';
    }
    
-//change language
+/*//change language
    $("#goChinese").click(function() {
    $.ajax({
    type : 'GET',
@@ -40,7 +40,7 @@
        location.reload();
    }
        });
-   });
+   });*/
    
 //about datepicker
    $(".l-date").datepicker({

@@ -30,113 +30,102 @@ import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("userController")
-@RequestMapping(value="/user")
-public class UserController extends BaseController{
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private RemoteEmployeeService remoteEmployeeService;
-	@Autowired
-	private UserCustomColumnsService userCustomColumnsService;
-	
-	@RequestMapping("/roleList")
-	public String roleList() throws ParameterException {
-		return "user/roleList";
-	}
-	
-	@RequestMapping(value = "/getEmployeeDataSource")
-	public ModelAndView getEmployeeDataSource(HttpServletRequest request) throws BusinessException {
-		JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployees(request);
-		ModelAndView modelAndView = new ModelAndView(); 
-		modelAndView.addObject("employeeInfo", employeeInfo);
-     	return modelAndView;
-	}
-	
-	@RequestMapping (value = "/saveUserRole", method=RequestMethod.POST)
-	@ResponseBody
-	public String saveUserRole(String usersRoleInfo) throws BusinessException {
+@RequestMapping(value = "/user")
+public class UserController extends BaseController {
 
-		List<UserVo> userVos = new ArrayList<UserVo>();
-		JSONArray usersRoleInfoArray = JSONArray.fromObject(usersRoleInfo);
-		JSONObject userRole = null;
-		for(int i = 0; i < usersRoleInfoArray.size(); i++){
-			UserVo userVo = new UserVo();
-			userRole = JSONObject.fromObject(usersRoleInfoArray.get(i));
-			userVo.setEmployeeId(userRole.getString("employeeId"));
-			userVo.setEmployeeName(userRole.getString("employeeName"));
-			userVo.setITRole(userRole.getBoolean("itRole"));
-			userVo.setSystemAdminRole(userRole.getBoolean("systemAdminRole"));
-			userVo.setDelete(userRole.getBoolean("isDelete"));
-			userVos.add(userVo);
-		}
-		userService.saveUserRole(userVos);
-		return null;  
-	}
-	
-	@RequestMapping(value = "/getUserRoleInfo", method=RequestMethod.POST)
-	public ModelAndView getUserInfo() throws BusinessException {
-		List<UserVo> userVos = userService.findUserRole();
-		ModelAndView modelAndView = new ModelAndView(); 
-		JSONArray userRoleInfo = new JSONArray();
-		for(UserVo info : userVos) {
-			JSONObject userInfoObject = new JSONObject();
-			userInfoObject.put("employeeId", info.getEmployeeId());
-			userInfoObject.put("employeeName", info.getEmployeeName());
-			userInfoObject.put("itRole", info.isITRole());
-			userInfoObject.put("systemAdminRole", info.isSystemAdminRole());
-			userRoleInfo.add(userInfoObject);
-		}
-		modelAndView.addObject("userRoleInfo", userRoleInfo);
-     	return modelAndView;
-	}
-	
-	@RequestMapping(value = "/getUserInfoTips", method=RequestMethod.POST)
-	@ResponseBody
-	public JSONObject getUserInfoTips(String employeeName, HttpServletRequest request) throws Exception {
-		
-		JSONObject object = new JSONObject();
-		List<String> userNames = new ArrayList<String>();
-		userNames.add(employeeName);
-		
-		UserVo userVo = remoteEmployeeService.getRemoteUserByName(userNames,request).get(0);
-		object.put(IAPConstans.EMPLOYEE_EMPLOYEE_ID, userVo.getEmployeeId());
-		object.put(IAPConstans.EMPLOYEE_NAME, userVo.getEmployeeName());
-		object.put(IAPConstans.EMPLOYEE_POSITION, userVo.getPositionNameEn());
-		object.put(IAPConstans.EMPLOYEE_DEPARTMENT, userVo.getDepartmentNameEn());
-		object.put(IAPConstans.EMPLOYEE_MANAGERNAME, userVo.getManagerName());
-		return object;
-	}
-	
-	@RequestMapping("getEmployeeAsProject")
-	public ModelAndView getEmployeeAsProject(String projectCode, HttpServletRequest request) throws BusinessException {
-        JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployeeByProjectCode(projectCode,request);
-        ModelAndView modelAndView = new ModelAndView(); 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RemoteEmployeeService remoteEmployeeService;
+    @Autowired
+    private UserCustomColumnsService userCustomColumnsService;
+
+    @RequestMapping("/roleList")
+    public String roleList() throws ParameterException {
+        return "user/roleList";
+    }
+
+    @RequestMapping(value = "/getEmployeeDataSource")
+    public ModelAndView getEmployeeDataSource(HttpServletRequest request) throws BusinessException {
+        JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployees(request);
+        ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("employeeInfo", employeeInfo);
         return modelAndView;
     }
 
-	@RequestMapping("getEmployeeAsCustomer")
-    public ModelAndView getEmployeeAsCustomer(String customerCode, HttpServletRequest request) throws BusinessException {
-        JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployeeByCustomerCode(customerCode,request);
-        ModelAndView modelAndView = new ModelAndView(); 
+    @RequestMapping(value = "/saveUserRole", method = RequestMethod.POST)
+    @ResponseBody
+    public String saveUserRole(String usersRoleInfo) throws BusinessException {
+
+        List<UserVo> userVos = new ArrayList<UserVo>();
+        JSONArray usersRoleInfoArray = JSONArray.fromObject(usersRoleInfo);
+        JSONObject userRole = null;
+        for (int i = 0; i < usersRoleInfoArray.size(); i++) {
+            UserVo userVo = new UserVo();
+            userRole = JSONObject.fromObject(usersRoleInfoArray.get(i));
+            userVo.setEmployeeId(userRole.getString("employeeId"));
+            userVo.setEmployeeName(userRole.getString("employeeName"));
+            userVo.setITRole(userRole.getBoolean("itRole"));
+            userVo.setSystemAdminRole(userRole.getBoolean("systemAdminRole"));
+            userVo.setDelete(userRole.getBoolean("isDelete"));
+            userVos.add(userVo);
+        }
+        userService.saveUserRole(userVos);
+        return null;
+    }
+
+    @RequestMapping(value = "/getUserInfoTips", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject getUserInfoTips(String employeeName, HttpServletRequest request)
+            throws Exception {
+
+        JSONObject object = new JSONObject();
+        List<String> userNames = new ArrayList<String>();
+        userNames.add(employeeName);
+
+        UserVo userVo = remoteEmployeeService.getRemoteUserByName(userNames, request).get(0);
+        object.put(IAPConstans.EMPLOYEE_EMPLOYEE_ID, userVo.getEmployeeId());
+        object.put(IAPConstans.EMPLOYEE_NAME, userVo.getEmployeeName());
+        object.put(IAPConstans.EMPLOYEE_POSITION, userVo.getPositionNameEn());
+        object.put(IAPConstans.EMPLOYEE_DEPARTMENT, userVo.getDepartmentNameEn());
+        object.put(IAPConstans.EMPLOYEE_MANAGERNAME, userVo.getManagerName());
+        return object;
+    }
+
+    @RequestMapping("getEmployeeAsProject")
+    public ModelAndView getEmployeeAsProject(String projectCode, HttpServletRequest request)
+            throws BusinessException {
+        JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployeeByProjectCode(projectCode,
+                request);
+        ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("employeeInfo", employeeInfo);
         return modelAndView;
     }
-	
-	@RequestMapping(value = "findUserRoleList", method = RequestMethod.GET)
-	public ModelAndView findUserBySearchCondition(SearchCondition searchCondition) {
-	    
-	    if (null == searchCondition) {
+
+    @RequestMapping("getEmployeeAsCustomer")
+    public ModelAndView getEmployeeAsCustomer(String customerCode, HttpServletRequest request)
+            throws BusinessException {
+        JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployeeByCustomerCode(
+                customerCode, request);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("employeeInfo", employeeInfo);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "findUserRoleList", method = RequestMethod.GET)
+    public ModelAndView findUserBySearchCondition(SearchCondition searchCondition) {
+
+        if (null == searchCondition) {
             searchCondition = new SearchCondition();
         }
-	    
+
         Page<User> page = userService.findUserBySearchCondition(searchCondition);
 
         List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                 .findUserCustomColumns("user role", getUserIdByShiro());
-        JSONArray array = SearchCommonUtil.formatUserRoleToJSONArray(page.getResult(), userCustomColumnList);
+        JSONArray array = SearchCommonUtil.formatUserRoleToJSONArray(page.getResult(),
+                userCustomColumnList);
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("fieldsData", array);
@@ -145,6 +134,6 @@ public class UserController extends BaseController{
         modelAndView.addObject("searchCondition", searchCondition);
 
         return modelAndView;
-	}
-	
+    }
+
 }

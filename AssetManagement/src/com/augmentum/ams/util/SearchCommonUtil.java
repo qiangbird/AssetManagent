@@ -32,8 +32,7 @@ public class SearchCommonUtil {
 
     static Logger logger = Logger.getLogger(SearchCommonUtil.class);
 
-    private static String getAssetListVoValueByProperty(
-            AssetListVo assetListVo, String fieldName) {
+    private static String getAssetListVoValueByProperty(AssetListVo assetListVo, String fieldName) {
         PropertyDescriptor pd = null;
         Object obj = null;
         try {
@@ -64,8 +63,7 @@ public class SearchCommonUtil {
         }
     }
 
-    public static JSONArray formatAssetVoListTOJSONArray(
-            List<AssetListVo> assetVoList,
+    public static JSONArray formatAssetVoListTOJSONArray(List<AssetListVo> assetVoList,
             List<UserCustomColumn> userCustomColumnList, String uuid) {
         JSONArray arrays = new JSONArray();
 
@@ -74,28 +72,20 @@ public class SearchCommonUtil {
             array.add(assetListVo.getId());
 
             for (UserCustomColumn userCustomColumn : userCustomColumnList) {
-                String fieldName = userCustomColumn.getCustomizedColumn()
-                        .getSortName();
+                String fieldName = userCustomColumn.getCustomizedColumn().getSortName();
                 String value = "";
                 if ("assetId".equals(fieldName)) {
                     if (!StringUtils.isBlank(uuid)) {
-                        value = "<a href='asset/view/"
-                                + assetListVo.getId()
-                                + "?uuid="
-                                + uuid
+                        value = "<a href='asset/view/" + assetListVo.getId() + "?uuid=" + uuid
                                 + "' style='color: #418FB5'>"
-                                + getAssetListVoValueByProperty(assetListVo,
-                                        fieldName) + "</a>";
+                                + getAssetListVoValueByProperty(assetListVo, fieldName) + "</a>";
                     } else {
-                        value = "<a href='asset/view/"
-                                + assetListVo.getId()
+                        value = "<a href='asset/view/" + assetListVo.getId()
                                 + "' style='color: #418FB5'>"
-                                + getAssetListVoValueByProperty(assetListVo,
-                                        fieldName) + "</a>";
+                                + getAssetListVoValueByProperty(assetListVo, fieldName) + "</a>";
                     }
                 } else {
-                    value = getAssetListVoValueByProperty(assetListVo,
-                            fieldName);
+                    value = getAssetListVoValueByProperty(assetListVo, fieldName);
                 }
                 array.add(value);
             }
@@ -113,8 +103,7 @@ public class SearchCommonUtil {
      * @param userCustomColumnList
      * @return
      */
-    public static JSONArray formatLocationListTOJSONArray(
-            List<Location> locationList) {
+    public static JSONArray formatLocationListTOJSONArray(List<Location> locationList) {
         JSONArray arrays = new JSONArray();
 
         for (Location location : locationList) {
@@ -141,8 +130,7 @@ public class SearchCommonUtil {
      * @param userCustomColumnList
      * @return
      */
-    public static JSONArray formatGroupListTOJSONArray(
-            List<CustomerGroup> groupList) {
+    public static JSONArray formatGroupListTOJSONArray(List<CustomerGroup> groupList) {
         JSONArray arrays = new JSONArray();
 
         for (CustomerGroup customerGroup : groupList) {
@@ -176,8 +164,7 @@ public class SearchCommonUtil {
         return arrays;
     }
 
-    public static JSONArray formatTransferLogListTOJSONArray(
-            List<TransferLog> result,
+    public static JSONArray formatTransferLogListTOJSONArray(List<TransferLog> result,
             List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
 
         JSONArray arrays = new JSONArray();
@@ -188,33 +175,28 @@ public class SearchCommonUtil {
             array.add(transferLog.getId());
 
             for (UserCustomColumn userCustomColumn : userCustomColumnList) {
-                String fieldName = userCustomColumn.getCustomizedColumn()
-                        .getSortName();
+                String fieldName = userCustomColumn.getCustomizedColumn().getSortName();
                 String value = "";
 
                 if ("time".equals(fieldName)) {
-                    value = UTCTimeUtil.utcToLocalTime(transferLog.getTime(),
-                            clientTimeOffset,
+                    value = UTCTimeUtil.utcToLocalTime(transferLog.getTime(), clientTimeOffset,
                             SystemConstants.TIME_SECOND_PATTERN);
                 } else if ("asset.checkInTime".equals(fieldName)) {
                     if (null == transferLog.getAsset().getCheckInTime()) {
                         value = "";
                     } else {
-                        value = UTCTimeUtil.utcToLocalTime(transferLog
-                                .getAsset().getCheckInTime(), clientTimeOffset,
-                                SystemConstants.DATE_DAY_PATTERN);
+                        value = UTCTimeUtil.utcToLocalTime(transferLog.getAsset().getCheckInTime(),
+                                clientTimeOffset, SystemConstants.DATE_DAY_PATTERN);
                     }
                 } else {
 
                     try {
                         value = BeanUtils.getProperty(transferLog, fieldName);
                     } catch (IllegalAccessException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "IllegalAccessException when get property from transferlog");
                     } catch (InvocationTargetException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "InvocationTargetException when get property from transferlog");
                     } catch (NoSuchMethodException e) {
                         throw new SystemException(ErrorCodeUtil.SYSTEM_ERROR,
@@ -229,9 +211,8 @@ public class SearchCommonUtil {
         return arrays;
     }
 
-    public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(
-            List<ToDo> todoList, List<UserCustomColumn> userCustomColumnList,
-            String timeOffset) {
+    public static JSONArray formatReturnedAndReceivedAssetTOJSONArray(List<ToDo> todoList,
+            List<UserCustomColumn> userCustomColumnList, String timeOffset) {
         JSONArray arrays = new JSONArray();
 
         for (ToDo todo : todoList) {
@@ -251,32 +232,23 @@ public class SearchCommonUtil {
                         value = "";
                     } else {
                         if ("asset.customer".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo,
-                                    "asset.customer.customerName");
+                            value = BeanUtils.getProperty(todo, "asset.customer.customerName");
                         } else if ("asset.project".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo,
-                                    "asset.project.projectName");
+                            value = BeanUtils.getProperty(todo, "asset.project.projectName");
                         } else if ("asset.user".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo,
-                                    "asset.user.userName");
+                            value = BeanUtils.getProperty(todo, "asset.user.userName");
                         } else if ("assigner".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo,
-                                    "assigner.userName");
+                            value = BeanUtils.getProperty(todo, "assigner.userName");
                         } else if ("returner".equals(columnName)) {
-                            value = BeanUtils.getProperty(todo,
-                                    "returner.userName");
+                            value = BeanUtils.getProperty(todo, "returner.userName");
                         } else if ("returnedTime".equals(columnName)
                                 || "receivedTime".equals(columnName)) {
 
-                            if (SystemConstants.DATA_MAX_DATE_TOSTRING
-                                    .equals((String) obj)) {
+                            if (SystemConstants.DATA_MAX_DATE_TOSTRING.equals(obj)) {
                                 value = "";
                             } else {
-                                value = UTCTimeUtil
-                                        .formatUTCStringToLocalString(
-                                                (String) obj,
-                                                timeOffset,
-                                                SystemConstants.TIME_SECOND_PATTERN);
+                                value = UTCTimeUtil.formatUTCStringToLocalString((String) obj,
+                                        timeOffset, SystemConstants.TIME_SECOND_PATTERN);
                             }
                         } else {
                             value = (String) obj;
@@ -299,8 +271,7 @@ public class SearchCommonUtil {
         return arrays;
     }
 
-    public static JSONArray formatOperationLogListTOJSONArray(
-            List<OperationLog> result,
+    public static JSONArray formatOperationLogListTOJSONArray(List<OperationLog> result,
             List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
 
         JSONArray arrays = new JSONArray();
@@ -311,17 +282,14 @@ public class SearchCommonUtil {
 
             for (UserCustomColumn userCustomerColumn : userCustomColumnList) {
 
-                String fieldName = userCustomerColumn.getCustomizedColumn()
-                        .getSortName();
+                String fieldName = userCustomerColumn.getCustomizedColumn().getSortName();
                 String value = "";
 
                 try {
 
                     if ("createdTime".equals(fieldName)) {
-                        value = UTCTimeUtil.utcToLocalTime(
-                                operationLog.getCreatedTime(),
-                                clientTimeOffset,
-                                SystemConstants.TIME_SECOND_PATTERN);
+                        value = UTCTimeUtil.utcToLocalTime(operationLog.getCreatedTime(),
+                                clientTimeOffset, SystemConstants.TIME_SECOND_PATTERN);
                     } else {
                         value = BeanUtils.getProperty(operationLog, fieldName);
                     }
@@ -342,8 +310,7 @@ public class SearchCommonUtil {
         return arrays;
     }
 
-    public static JSONArray formatInconsistentListToJSONArray(
-            List<Inconsistent> inconsistents,
+    public static JSONArray formatInconsistentListToJSONArray(List<Inconsistent> inconsistents,
             List<UserCustomColumn> userCustomColumnList, String clientTimeOffset) {
 
         JSONArray arrays = new JSONArray();
@@ -356,8 +323,7 @@ public class SearchCommonUtil {
             if (null == inconsistent.getAsset()) {
 
                 for (UserCustomColumn column : userCustomColumnList) {
-                    String columnName = column.getCustomizedColumn()
-                            .getSortName();
+                    String columnName = column.getCustomizedColumn().getSortName();
 
                     if (columnName.equals("asset.barCode")) {
                         array.add(inconsistent.getBarCode());
@@ -369,13 +335,11 @@ public class SearchCommonUtil {
 
                 for (UserCustomColumn column : userCustomColumnList) {
 
-                    String columnName = column.getCustomizedColumn()
-                            .getSortName();
+                    String columnName = column.getCustomizedColumn().getSortName();
                     String value = "";
                     try {
 
-                        Object obj = BeanUtils.getProperty(inconsistent,
-                                columnName);
+                        Object obj = BeanUtils.getProperty(inconsistent, columnName);
 
                         if (null == obj) {
                             value = "";
@@ -387,25 +351,20 @@ public class SearchCommonUtil {
                                 value = BeanUtils.getProperty(inconsistent,
                                         "asset.project.projectName");
                             } else if ("asset.user".equals(columnName)) {
-                                value = BeanUtils.getProperty(inconsistent,
-                                        "asset.user.userName");
+                                value = BeanUtils.getProperty(inconsistent, "asset.user.userName");
                             } else if ("asset.location".equals(columnName)) {
-                                value = BeanUtils.getProperty(inconsistent,
-                                        "asset.location.site")
-                                        + BeanUtils.getProperty(inconsistent,
-                                                "asset.location.room");
+                                value = BeanUtils.getProperty(inconsistent, "asset.location.site")
+                                        + BeanUtils
+                                                .getProperty(inconsistent, "asset.location.room");
                             } else if ("asset.checkInTime".equals(columnName)
                                     || "asset.checkOutTime".equals(columnName)
                                     || "asset.warrantyTime".equals(columnName)) {
 
-                                Date temp = UTCTimeUtil.formatStringToDate(
-                                        obj.toString(),
+                                Date temp = UTCTimeUtil.formatStringToDate(obj.toString(),
                                         SystemConstants.TIME_SECOND_PATTERN);
-                                Date localDate = UTCTimeUtil.utcToLocalTime(
-                                        temp, clientTimeOffset);
+                                Date localDate = UTCTimeUtil.utcToLocalTime(temp, clientTimeOffset);
 
-                                value = UTCTimeUtil.formatDateToString(
-                                        localDate,
+                                value = UTCTimeUtil.formatDateToString(localDate,
                                         SystemConstants.DATE_DAY_PATTERN);
 
                             } else if ("asset.fixed".equals(columnName)) {
@@ -419,16 +378,13 @@ public class SearchCommonUtil {
                             }
                         }
                     } catch (IllegalAccessException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "IllegalAccessException when get property from todo asset");
                     } catch (InvocationTargetException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "InvocationTargetException when get property from todo asset");
                     } catch (NoSuchMethodException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "NoSuchMethodException when get property from todo asset");
                     }
                     array.add(value);
@@ -465,15 +421,15 @@ public class SearchCommonUtil {
                         value = "<div class='columnData operateCheckbox itInRow'>"
                                 + "<a id='itInRow' class='roleCheckBoxInRowOn'></a>"
                                 + "<a class='underLine'></a>"
-                                + "<input type='hidden' id='itInRowValue' value=''>"
-                                + "<input type='hidden' id=''itInRowOriginalValue' value='true'>"
+                                + "<input type='hidden' id='itInRowValue' value='true'>"
+                                + "<input type='hidden' id='itInRowOriginalValue' value='true'>"
                                 + "</div>";
                     } else {
                         value = "<div class='columnData operateCheckbox itInRow'>"
                                 + "<a id='itInRow' class='roleCheckBoxInRowOff'></a>"
                                 + "<a class='underLine'></a>"
-                                + "<input type='hidden' id='itInRowValue' value=''>"
-                                + "<input type='hidden' id=''itInRowOriginalValue' value='false'>"
+                                + "<input type='hidden' id='itInRowValue' value='false'>"
+                                + "<input type='hidden' id='itInRowOriginalValue' value='false'>"
                                 + "</div>";
                     }
                 } else if ("role.systemAdmin".equals(fieldName)) {
@@ -482,33 +438,31 @@ public class SearchCommonUtil {
                         value = "<div class='columnData operateCheckbox adminInRow'>"
                                 + "<a id='adminInRow' class='roleCheckBoxInRowOn'></a>"
                                 + "<a class='underLine'></a>"
-                                + "<input type='hidden' id='adminInRowValue' value=''>"
+                                + "<input type='hidden' id='adminInRowValue' value='true'>"
                                 + "<input type='hidden' id='adminInRowriginalValue' value='true'>"
                                 + "</div>";
                     } else {
                         value = "<div class='columnData operateCheckbox adminInRow'>"
                                 + "<a id='adminInRow' class='roleCheckBoxInRowOff'></a>"
                                 + "<a class='underLine'></a>"
-                                + "<input type='hidden' id='adminInRowValue' value=''>"
+                                + "<input type='hidden' id='adminInRowValue' value='false'>"
                                 + "<input type='hidden' id='adminInRowriginalValue' value='false'>"
                                 + "</div>";
                     }
                 } else if ("delete".equals(fieldName)) {
-                    value = "<div class='columnData removeElement'><span class='deleteLink'></span></div>";
+                    value = "<div class='columnData removeElement'><span class='deleteLink'></span></div>"
+                            + "<input class='isDelete' type='hidden' value='false'>";
                 } else {
                     try {
                         value = BeanUtils.getProperty(user, fieldName);
                     } catch (IllegalAccessException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "IllegalAccessException when get property from userRole");
                     } catch (InvocationTargetException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "InvocationTargetException when get property from userRole");
                     } catch (NoSuchMethodException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
+                        throw new SystemException(e, ErrorCodeUtil.SYSTEM_ERROR,
                                 "NoSuchMethodException when get property from userRole");
                     }
                 }

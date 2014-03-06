@@ -11,23 +11,8 @@ var dataList;
 var criteria = {};
 
 $(document).ready(function() {
-	getUserRoloInfo();
-	var params = {
-		    elementId : "employeeName"
-	};
-	jQuery.ajax({
-		contentType : 'application/json',  
-        url: "user/getEmployeeDataSource",
-        data: null,
-        success: function(data){
-        	params.dataSource= data.employeeInfo;
-        	employeeInfo = data.employeeInfo;
-        	autoComplete(params);  
-        },
-        dataType: "json",
-        type: "POST"
-    });
 	
+	getEmployeeDataSource();
 	
 	// categoryFlag = 13, it means category is 'user role'
 	initCriteria(13);
@@ -62,10 +47,6 @@ $(document).ready(function() {
     });
     
     removePlaceholderForKeyWord();
-    
-	
-	
-	$(".rowHead").find(".columnElement:last").css("background","#71B3D6");
 	
 	$(".roleAddContent").delegate(".roleCheckBoxOff, .roleCheckBoxOn", "click", function(){
 		var attrId = "it";
@@ -75,50 +56,42 @@ $(document).ready(function() {
 		if("roleCheckBoxOff" == $(this).attr("class")){
 			$(this).removeClass("roleCheckBoxOff");
 			$(this).addClass("roleCheckBoxOn");
-			setValueOfRole(this, "true", attrId, itValueId, adminValueId, null);
+			setValueOfRole(this, "true", attrId, itValueId, adminValueId);
 		}else{
 			$(this).removeClass("roleCheckBoxOn");
 			$(this).addClass("roleCheckBoxOff");
-			setValueOfRole(this, "false", attrId, itValueId, adminValueId, null);
+			setValueOfRole(this, "false", attrId, itValueId, adminValueId);
 		}
 	});
 	
-	$(".roleListContent").delegate(".roleCheckBoxInRowOff, .roleCheckBoxInRowOn, .deleteLink", "click", function(){
+	$(".dataList").delegate(".roleCheckBoxInRowOff, .roleCheckBoxInRowOn, .deleteLink", "click", function(){
 		var attrId = "itInRow";
-		var parent = $(this).parents(".employeeRoleInfo");
+		var parent = $(this).parents(".row");
 		var itValueId = parent.find(".itInRow").find("#itInRowValue");
 		var adminValueId = parent.find(".adminInRow").find("#adminInRowValue");
-		var index = $(this).parents(".employeeRoleInfo").index();
+		var index = $(this).parents(".row").index();
 		
 		// update role
 		if("roleCheckBoxInRowOff" == $(this).attr("class")){
 			$(this).removeClass("roleCheckBoxInRowOff");
 			$(this).addClass("roleCheckBoxInRowOn");
-			setValueOfRole(this, "true", attrId, itValueId, adminValueId, index);
+			setValueOfRole(this, "true", attrId, itValueId, adminValueId);
 			showUnderLineByCheckIsNew(this);
 		}else if("roleCheckBoxInRowOn" == $(this).attr("class")){
 			$(this).removeClass("roleCheckBoxInRowOn");
 			$(this).addClass("roleCheckBoxInRowOff");
-			setValueOfRole(this, "false", attrId, itValueId, adminValueId, index);
+			setValueOfRole(this, "false", attrId, itValueId, adminValueId);
 			showUnderLineByCheckIsNew(this);
 		}
 		//delete role
 		if("deleteLink" == $(this).attr("class")){
-			var object = this;
 	    	ShowMsg(i18nProp('message_confirm_rolelist_delete_role'),function(yes){
 			      if (yes) {
 						var flag = false;
-//						var currentEmployeeId = $(object).parents(".employeeRoleInfo").find(".employeeIdInRow").text();
 						flag = isAtLeastOneITAndAdmin();
 						if(true == flag){
-							var isNew = parent.find("#isNew").text();
-							if("true" == isNew){
-								parent.remove();
-								usersRoleInfo.splice(index - 1, 1);
-							}else{
-								parent.css("display", "none");
-								usersRoleInfo[index - 1].isDelete = "true";
-							}
+							parent.css("display", "none");
+							parent.find(".Romove .isDelete").val("true");
 						}else{
 							showMessageBarForMessage('none_IT_and_Admin');
 						}
@@ -133,15 +106,11 @@ $(document).ready(function() {
 		initAddProccess();
 	});
 	
-	$("#resetButton").click(function(){
-		clearInputBox();
-	});
-	
 	$("#saveButton").click(function(){
 		var hasITAndAdmin = isAtLeastOneITAndAdmin();
 		
 		if(hasITAndAdmin){
-			$("#div-loader").show();
+			getUserRoloInfo();
 			saveOperation(usersRoleInfo);
 		}else{
 			showMessageBarForMessage('none_IT_and_Admin');
@@ -149,7 +118,7 @@ $(document).ready(function() {
 	});
 	
 	$("#cancelButton").click(function(){
-		getUserRoloInfo();
+		dataList.search();
 	});
 	$("#bodyMinHight").delegate("#token-input-employeeName","blur",function(){
 		if("" != $(".employeeName").val()){
@@ -159,10 +128,28 @@ $(document).ready(function() {
 	
 });
 
-function isAtLeastOneITAndAdmin(currentEmployeeId){
-	var employeeRoleInfo = $(".roleDispaly").find(".employeeRoleInfo");
-	var ITNumber = employeeRoleInfo.find(".itInRow").find(".roleCheckBoxInRowOn").size();
-	var AdminNumber = employeeRoleInfo.find(".adminInRow").find(".roleCheckBoxInRowOn").size();
+function getEmployeeDataSource(){
+	var params = {
+			elementId : "employeeName"
+	};
+	jQuery.ajax({
+		contentType : 'application/json',  
+		url: "user/getEmployeeDataSource",
+		data: null,
+		success: function(data){
+			params.dataSource= data.employeeInfo;
+			employeeInfo = data.employeeInfo;
+			autoComplete(params);  
+		},
+		dataType: "json",
+		type: "POST"
+	});
+}
+
+function isAtLeastOneITAndAdmin(){
+	var row = $(".dataList").find(".row");
+	var ITNumber = row.find(".itInRow").find(".roleCheckBoxInRowOn").size();
+	var AdminNumber = row.find(".adminInRow").find(".roleCheckBoxInRowOn").size();
 	
 	if(0 < ITNumber && 0 < AdminNumber){
 		return true;
@@ -173,7 +160,7 @@ function isAtLeastOneITAndAdmin(currentEmployeeId){
 }
 
 function showUnderLineByCheckIsNew(object){
-	var parent = $(object).parents(".employeeRoleInfo");
+	var parent = $(object).parents(".row");
 	var underLine = $(object).parent(".operateCheckbox").find(".underLine");
 	var currentValue = $(object).parent(".operateCheckbox").find("input:first").val();
 	var originalValue = $(object).parent(".operateCheckbox").find("input:last").val();
@@ -185,23 +172,11 @@ function showUnderLineByCheckIsNew(object){
 	}
 }
 
-function clearInputBox(){
-	//delete the token by trigger the click event of the .token-input-delete-token-facebook
-	//only do that '$("#employeeName").val("");' is invalid
-	$("#autoText").find("ul").find(".token-input-delete-token-facebook").click();
-}
-
 function setValueOfRole(objec, value, attrId, itValueId, adminValueId,index){
 	if(attrId == $(objec).attr("id")){
 		itValueId.val(value);
-		if(null != index){
-			usersRoleInfo[index - 1].itRole = value;
-		}
 	}else{
 		adminValueId.val(value);
-		if(null != index){
-			usersRoleInfo[index - 1].systemAdminRole = value;
-		}
 	}
 }
 
@@ -230,7 +205,8 @@ function initAddProccess(){
 }
 
 function checkEmployees(listEmployees){
-	var isExist = false;
+	$("#div-loader").show();
+	getUserRoloInfo();
 	var itRole = $("#itValue").val();
 	var systemAdminRole = $("#adminValue").val();
 	var errorEmployeeNames = [];
@@ -240,6 +216,7 @@ function checkEmployees(listEmployees){
 			var employeeName = listEmployees[i].split("#")[0];
 			var employeeId = listEmployees[i].split("#")[1];
 			if(employeeName == "") {
+				$("#div-loader").hide();
 				$(".token-input-list-facebook").push($(".token-input-list-facebook")
 						.validateNull(employeeName,i18nProp('message_warn_user_is_null')));
 				return;
@@ -257,13 +234,13 @@ function checkEmployees(listEmployees){
 			// employee already exist
 			for(var j = 0; j< usersRoleInfo.length; j++) {
 				// employee already exist and has already been delete
-				if(employeeId == usersRoleInfo[j].employeeId && usersRoleInfo[j].isDelete != "true") {
+				if(employeeId == usersRoleInfo[j].employeeId && usersRoleInfo[j].isDelete == "false") {
 					$("#autoText li").each(function() {
 						var errorEmployeeName = $(this).find("p").text();
 						if(employeeName == errorEmployeeName) {
 							usersRoleInfo[j].isDelete = "true";
 							
-							$(".roleDispaly").find(".employeeRoleInfo").each(function(index){
+							$(".datalist").find(".row").each(function(index){
 								if(employeeName == $(this).find(".employeeNameInRow").text()){
 									$(this).hide();
 								}
@@ -277,26 +254,27 @@ function checkEmployees(listEmployees){
 			employee.employeeName = employeeName;
 			employee.itRole = itRole;
 			employee.systemAdminRole = systemAdminRole;
-			employee.isNew = "true";
+			employee.isDelete = "false";
 			employees.push(employee);
 			}
 		
 		if(0 < errorEmployeeNames.length){
 			var names = errorEmployeeNames.join(",");
 			employees.length = 0;
+			$("#div-loader").hide();
 			showMessageBarForOperationResultMessage(i18nProp('message_warn_role_illegal', names));
 			return;
 		}else{
 			if("false" == itRole && "false" == systemAdminRole) {
+				$("#div-loader").hide();
 				showMessageBarForMessage('message_warn_role_is_null');
 				return;
 			}
 			for(var m = 0; m < employees.length; m++){
 				usersRoleInfo.push(employees[m]);
 			}
-			displayUserRoleInfo(employees);
 			employees.length = 0;
-			clearInputBox();
+			saveOperation(usersRoleInfo);
 		}
 }
 
@@ -309,7 +287,7 @@ function saveOperation(usersRoleInfo){
 		},
 		success: function(){
 			$("#div-loader").hide();
-			getUserRoloInfo();
+			dataList.search();
 			showMessageBarForMessage("role_save_success");
 		},
 		dataType: 'json',
@@ -318,56 +296,16 @@ function saveOperation(usersRoleInfo){
 }
 
 function getUserRoloInfo(){
-	$.ajax({
-		contentType : 'application/json',  
-        url: "user/getUserRoleInfo",
-        success: function(data){
-        	usersRoleInfo.length = 0;
-        	usersRoleInfo = data.userRoleInfo;
-        	for(var i = 0; i < usersRoleInfo.length; i++){
-        		usersRoleInfo[i].isNew = "false";
-        	}
-        	$(".roleDispaly").find(".employeeRoleInfo").remove();
-        	displayUserRoleInfo(usersRoleInfo);
-        },
-        dataType: "json",
-        type: "POST"
-    });
-}
-
-function displayUserRoleInfo(usersRoleInfo){
-	if(null != usersRoleInfo){
-		for(var i = 0; i < usersRoleInfo.length; i++){
-				usersRoleInfo[i].isDelete = "false";
-				$(".roleDispaly").append($(".employeeRoleInfoTemplate").html());
-				var lastDivToAppend = $(".roleDispaly .employeeRoleInfo:last");
-				lastDivToAppend.css("display", "block");
-				var index = lastDivToAppend.index();
-				lastDivToAppend.find("#sequence").text(index);
-				lastDivToAppend.find("#isNew").text(usersRoleInfo[i].isNew);
-				lastDivToAppend.find(".employeeIdInRow").text(usersRoleInfo[i].employeeId);
-				lastDivToAppend.find(".employeeNameInRow").text(usersRoleInfo[i].employeeName);
-				checkRole(usersRoleInfo[i].itRole, "#itInRow", "#itInRowValue", "#itInRowOriginalValue");
-				checkRole(usersRoleInfo[i].systemAdminRole, "#adminInRow", "#adminInRowValue", "#adminInRowriginalValue");
-		}
-		tooltips(".employeeNameInRow");
-	}
-}
-
-function checkRole(role, classId, valueId, originalValueId){
-	var last = $(".roleDispaly .employeeRoleInfo:last");
-	var lastClassId = last.find(classId);
-	if(true == role || "true" == role){
-		lastClassId.removeClass("roleCheckBoxInRowOff");
-		lastClassId.addClass("roleCheckBoxInRowOn");
-		last.find(valueId).val("true");
-		last.find(originalValueId).val("true");
-	}else{
-		lastClassId.removeClass("roleCheckBoxInRowOn");
-		lastClassId.addClass("roleCheckBoxInRowOff");
-		last.find(valueId).val("false");
-		last.find(originalValueId).val("false");
-	}
+	usersRoleInfo.length = 0;
+	var employee = new Object();
+	$(".dataList-div-body").find(".row").each(function(index){
+		employee.employeeId = $(this).find(".Employee-ID").text();
+		employee.employeeName = $(this).find(".Employee-Name").text();
+		employee.itRole = $(this).find(".IT .itInRow #itInRowValue").val();
+		employee.systemAdminRole = $(this).find(".System-Admin .adminInRow #adminInRowValue").val();
+		employee.isDelete = $(this).find(".Remove .isDelete").val();
+		usersRoleInfo.push(employee);
+	});
 }
 
 var dataListInfo = {
