@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
@@ -17,6 +18,7 @@ import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 
 /**
  * @author Rudy.Gao
@@ -35,6 +37,7 @@ public class Machine extends BaseModel {
 	 */
 	@Column(name = "sub_type", length = 32, nullable = false)
 	@Field(name = "subtype", index = Index.UN_TOKENIZED, store = Store.YES)
+	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String subtype;
 
 	@Column(length = 512)
@@ -45,7 +48,8 @@ public class Machine extends BaseModel {
 	 * Address of MAC
 	 */
 	@Column(length = 128)
-	@Field(name = "address", index = Index.TOKENIZED, store = Store.YES)
+	@Field(name = "address", index = Index.UN_TOKENIZED, store = Store.YES)
+	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String address;
 
 	@Column(length = 512)

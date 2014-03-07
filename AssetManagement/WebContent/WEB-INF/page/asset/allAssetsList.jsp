@@ -27,17 +27,44 @@
 	<input id="categoryType" type="hidden" value="asset">
 	<input id="currentPage" type="hidden" value="allAssetPage">
 	<div id="blank">
-   		<a href="home"><spring:message code="navigator.home"></spring:message></a>
+   		<a href="home"><spring:message code="navigator.home"/></a>
    		<b>&gt;</b>
    		<c:choose>
    			<c:when test="${isFixedAsset}">
-		   		<span><spring:message code="navigator.fixed.assets"></spring:message></span>
+		   		<span><spring:message code="navigator.fixed.assets"/></span>
    			</c:when>
    			<c:when test="${requestScope.userUuid != null }">
-   				<span><spring:message code="navigator.my.assets"></spring:message></span>
+   				<span><spring:message code="navigator.my.assets"/></span>
    			</c:when>
    			<c:otherwise>
-	   			<span><spring:message code="navigator.all.assets"></spring:message></span>
+   				<c:choose>
+   					<c:when test="${type == '' }">
+			   			<span><spring:message code="navigator.all.assets"/></span>
+   					</c:when>
+   					<c:otherwise>
+   						<a href="asset/allAssets"><spring:message code="navigator.all.assets"/></a>
+   					</c:otherwise>
+   				</c:choose>
+				<c:if test="${type == 'machine' }">
+					<b>&gt;</b>
+					<span><spring:message code="navigator.machine"/></span>
+				</c:if>
+				<c:if test="${type == 'device' }">
+					<b>&gt;</b>
+					<span><spring:message code="navigator.device"/></span>
+				</c:if>
+				<c:if test="${type == 'monitor' }">
+					<b>&gt;</b>
+					<span><spring:message code="navigator.monitor"/></span>
+				</c:if>
+				<c:if test="${type == 'software' }">
+					<b>&gt;</b>
+					<span><spring:message code="navigator.software"/></span>
+				</c:if>
+				<c:if test="${type == 'otherassets' }">
+					<b>&gt;</b>
+					<span><spring:message code="navigator.other.assets"/></span>
+				</c:if>
    			</c:otherwise>
    		</c:choose>
 	</div>
@@ -68,17 +95,19 @@
 			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.bar.code"/></label></p>
 			        	</div>
 					</div>
-					<div class="single_condition">
-						<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
-						<div class="condition_optional" id="assetType">
-							<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
-							<p><input type="checkBox" name="field" value="machine" /><label><spring:message code="asset.machine"/></label></p>
-							<p><input type="checkBox" name="field" value="monitor" /><label><spring:message code="asset.monitor"/></label></p>
-							<p><input type="checkBox" name="field" value="device" /><label><spring:message code="asset.device"/></label></p>
-							<p><input type="checkBox" name="field" value="software" /><label><spring:message code="asset.software"/></label></p>
-							<p><input type="checkBox" name="field" value="otherassets" /><label><spring:message code="asset.otherAssets"/></label></p>
-			            </div>
-			        </div>
+					<c:if test="${type == '' }">
+						<div class="single_condition">
+							<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
+							<div class="condition_optional" id="assetType">
+								<p><input type="checkBox" name="field" class="checked_all" value="all"/><label><spring:message code="checkAll"/></label></p>
+								<p><input type="checkBox" name="field" value="machine" /><label><spring:message code="asset.machine"/></label></p>
+								<p><input type="checkBox" name="field" value="monitor" /><label><spring:message code="asset.monitor"/></label></p>
+								<p><input type="checkBox" name="field" value="device" /><label><spring:message code="asset.device"/></label></p>
+								<p><input type="checkBox" name="field" value="software" /><label><spring:message code="asset.software"/></label></p>
+								<p><input type="checkBox" name="field" value="otherassets" /><label><spring:message code="asset.otherAssets"/></label></p>
+				            </div>
+				        </div>
+					</c:if>
 	        		<div class="single_condition">
 						<div class="condition_title"><label><spring:message code="asset.status"/></label></div>
 						<div class="condition_optional" id="assetStatus">

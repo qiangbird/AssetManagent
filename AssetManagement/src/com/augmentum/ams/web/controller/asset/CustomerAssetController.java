@@ -38,9 +38,7 @@ import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
-import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
-import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
@@ -86,13 +84,15 @@ public class CustomerAssetController extends BaseController {
 
             Page<Asset> assetPage = customerAssetService.findCustomerAssetsBySearchCondition(
                     searchCondition, customerIds);
+            
             String clientTimeOffset = (String) session.getAttribute("timeOffset");
-            List<AssetListVo> list = FormatEntityListToEntityVoList.formatAssetListToAssetVoList(
-                    assetPage.getResult(), clientTimeOffset);
+            
             List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                     .findUserCustomColumns("asset", getUserIdByShiro());
-            JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
-                    userCustomColumnList, null);
+            
+            JSONArray array = SearchCommonUtil.formatAssetListToJSONArray(assetPage.getResult(),
+                    userCustomColumnList, null, clientTimeOffset);
+            
             modelAndView.addObject("fieldsData", array);
             modelAndView.addObject("count", assetPage.getRecordCount());
             modelAndView.addObject("totalPage", assetPage.getTotalPage());
@@ -210,12 +210,12 @@ public class CustomerAssetController extends BaseController {
                     searchCondition, customerIds);
 
             String clientTimeOffset = (String) session.getAttribute("timeOffset");
-            List<AssetListVo> assetVoList = FormatEntityListToEntityVoList
-                    .formatAssetListToAssetVoList(page.getResult(), clientTimeOffset);
+            
             List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
                     .findUserCustomColumns("asset", getUserIdByShiro());
-            JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(assetVoList,
-                    userCustomColumnList, "");
+            
+            JSONArray array = SearchCommonUtil.formatAssetListToJSONArray(page.getResult(),
+                    userCustomColumnList, "", clientTimeOffset);
 
             modelAndView.addObject("fieldsData", array);
             modelAndView.addObject("count", page.getRecordCount());

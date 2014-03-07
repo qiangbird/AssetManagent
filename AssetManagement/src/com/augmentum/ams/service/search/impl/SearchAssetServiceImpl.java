@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.asset.Asset;
+import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.service.customized.CustomizedViewItemService;
 import com.augmentum.ams.service.search.SearchAssetService;
 import com.augmentum.ams.util.CommonSearchUtil;
@@ -63,7 +64,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
     @SuppressWarnings("unchecked")
     @Override
     public Page<Asset> findAllAssetsBySearchCondition(
-            SearchCondition searchCondition) throws BaseException {
+            SearchCondition searchCondition, String type) throws BaseException {
 
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
@@ -71,8 +72,8 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 .buildQueryBuilder().forEntity(Asset.class).get();
 
         // create ordinary query, it contains search by keyword
-        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
-                Asset.class, qb, searchCondition.getKeyWord(),
+        BooleanQuery keyWordQuery = CommonSearchUtil.searchAssetByKeyWord(
+                type, qb, searchCondition.getKeyWord(),
                 searchCondition.getSearchFields());
 
         // create filter based on advanced search condition, it used for further
@@ -135,8 +136,7 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 if (null == filterQuery) {
                     filterQuery = new BooleanQuery();
                 }
-                filterQuery.add(CommonSearchUtil.addFilterQueryForAsset(
-                        searchCondition, "checkInTime", Asset.class), Occur.MUST);
+                filterQuery.add(booleanQuery, Occur.MUST);
             }
         }
 
@@ -152,6 +152,24 @@ public class SearchAssetServiceImpl implements SearchAssetService {
                 .setFetchMode("customer", FetchMode.JOIN)
                 .setFetchMode("project", FetchMode.JOIN)
                 .setFetchMode("location", FetchMode.JOIN);
+        
+        if (AssetTypeEnum.MACHINE.name().equalsIgnoreCase(type)) {
+            
+            criteria.setFetchMode("machine", FetchMode.JOIN);
+        } else if (AssetTypeEnum.MONITOR.name().equalsIgnoreCase(type)) {
+            
+            criteria.setFetchMode("monitor", FetchMode.JOIN);
+        } else if (AssetTypeEnum.DEVICE.name().equalsIgnoreCase(type)) {
+            
+            criteria.setFetchMode("device", FetchMode.JOIN)
+                    .setFetchMode("device.deviceSubtype", FetchMode.JOIN);
+        } else if (AssetTypeEnum.SOFTWARE.name().equalsIgnoreCase(type)) {
+            
+            criteria.setFetchMode("software", FetchMode.JOIN);
+        } else if (AssetTypeEnum.OTHERASSETS.name().equalsIgnoreCase(type)) {
+            
+            criteria.setFetchMode("otherAssets", FetchMode.JOIN);
+        }
 
         Page<Asset> page = new Page<Asset>();
 

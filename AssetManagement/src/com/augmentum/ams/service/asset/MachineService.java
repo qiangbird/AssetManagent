@@ -40,4 +40,5 @@ public interface MachineService {
      * @return
      */
     Machine getByAssetId(String assetId);
+    
 }

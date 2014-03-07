@@ -139,7 +139,7 @@ $(document).ready(function() {
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			ShowMsg(i18nProp('message_warn_asset_takeOver',line.substring(0, line.length - 1)));
 			return;
 		}
 	});
@@ -151,8 +151,7 @@ $(document).ready(function() {
 		line="";
 		$(".dataList-div-body .row .dataList-checkbox-active").each(function(i){
 			assetStatus = $(this).parent().find(".Status").text();
-			if(assetStatus == "RETURNED"||assetStatus =="ASSIGNING"||
-					assetStatus == "RETURNING_TO_IT"||assetStatus == "AVAILABLE"){
+			if(assetStatus != "IN_USE"){
 				flag = false;
 				line+=$(this).next().text()+",";
 				return;
@@ -189,7 +188,7 @@ $(document).ready(function() {
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			ShowMsg(i18nProp('message_warn_asset_return',line.substring(0, line.length - 1)));
 			return;
 		}
 		
@@ -243,7 +242,7 @@ $(document).ready(function() {
 				  });
 			}
 		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			ShowMsg(i18nProp('message_warn_asset_assign',line.substring(0, line.length - 1)));
 			return;
 		}
 	});
@@ -291,7 +290,7 @@ $(document).ready(function() {
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			ShowMsg(i18nProp('message_warn_asset_return',line.substring(0, line.length - 1)));
 			return;
 		}
 	});
@@ -339,7 +338,7 @@ $(document).ready(function() {
 				});
 			}
 		}else{
-			ShowMsg(i18nProp('status_error_prompt_message',line.substring(0, line.length - 1)));
+			ShowMsg(i18nProp('message_warn_asset_return',line.substring(0, line.length - 1)));
 			return;
 		}
 	});

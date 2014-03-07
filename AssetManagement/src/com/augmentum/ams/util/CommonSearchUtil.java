@@ -21,6 +21,7 @@ import com.augmentum.ams.model.asset.CustomerGroup;
 import com.augmentum.ams.model.asset.Location;
 import com.augmentum.ams.model.asset.TransferLog;
 import com.augmentum.ams.model.audit.Inconsistent;
+import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.User;
@@ -30,6 +31,109 @@ import common.Logger;
 public class CommonSearchUtil {
 
     static Logger logger = Logger.getLogger(CommonSearchUtil.class);
+
+    /**
+     * @author Geoffrey.Zhao
+     * @param assetType
+     * @param qb
+     * @param keyWord
+     * @param fields
+     * @return
+     */
+    public static BooleanQuery searchAssetByKeyWord(String assetType,
+            QueryBuilder qb, String keyWord, String fields) {
+
+        BooleanQuery keyWordQuery = new BooleanQuery();
+
+        String[] sentenceSearchFields = FormatUtil.splitString(fields,
+                SystemConstants.SPLIT_COMMA);
+        String[] searchFields = FormatUtil.splitString(fields,
+                SystemConstants.SPLIT_COMMA);
+
+        if (AssetTypeEnum.MACHINE.name().equalsIgnoreCase(assetType)) {
+
+            searchFields = SearchFieldConstants.MACHINE_FIELDS;
+            sentenceSearchFields = SearchFieldConstants.MACHINE_FIELDS;
+        } else if (AssetTypeEnum.MONITOR.name().equalsIgnoreCase(assetType)) {
+
+            searchFields = SearchFieldConstants.MONITOR_FIELDS;
+            sentenceSearchFields = SearchFieldConstants.MONITOR_FIELDS;
+        } else if (AssetTypeEnum.DEVICE.name().equalsIgnoreCase(assetType)) {
+
+            searchFields = SearchFieldConstants.DEVICE_FIELDS;
+            sentenceSearchFields = SearchFieldConstants.DEVICE_FIELDS;
+        } else if (AssetTypeEnum.SOFTWARE.name().equalsIgnoreCase(assetType)) {
+
+            searchFields = SearchFieldConstants.SOFTWARE_FIELDS;
+            sentenceSearchFields = SearchFieldConstants.SOFTWARE_FIELDS;
+        } else if (AssetTypeEnum.OTHERASSETS.name().equalsIgnoreCase(assetType)) {
+
+            searchFields = SearchFieldConstants.OTHERASSETS_FIELDS;
+            sentenceSearchFields = SearchFieldConstants.OTHERASSETS_FIELDS;
+        } else {
+
+            searchFields = SearchFieldConstants.ALL_ASSET_FIELDS;
+            sentenceSearchFields = SearchFieldConstants.ASSET_SENTENCE_FIELDS;
+        }
+
+        Occur[] clauses = new Occur[searchFields.length];
+
+        for (int i = 0; i < searchFields.length; i++) {
+            clauses[i] = Occur.SHOULD;
+        }
+
+        Query defaultQuery = new TermQuery(new Term("isExpired",
+                Boolean.FALSE.toString()));
+        keyWordQuery.add(defaultQuery, Occur.MUST);
+
+        // if keyword is null or "", search condition is "*", it will search all
+        // the value based on some one field
+        if (StringUtils.isNotBlank(keyWord)) {
+
+            // keyWord = FormatUtil.formatKeyword(keyWord);
+            keyWord = keyWord.trim().toLowerCase();
+
+            // judge if keyword contains space, if yes, search keyword as a
+            // sentence
+            if (-1 != keyWord.indexOf(" ")) {
+
+                BooleanQuery sentenceQuery = new BooleanQuery();
+
+                for (int i = 0; i < sentenceSearchFields.length; i++) {
+                    Query query = qb.phrase().onField(sentenceSearchFields[i])
+                            .sentence(keyWord).createQuery();
+                    sentenceQuery.add(query, Occur.SHOULD);
+                }
+
+                keyWordQuery.add(sentenceQuery, Occur.MUST);
+
+            }
+
+            BooleanQuery booleanQuery = new BooleanQuery();
+
+            // add normal multi fields query as searhFields
+            Query parseQuery = null;
+
+            try {
+                parseQuery = MultiFieldQueryParser.parse(Version.LUCENE_30,
+                        keyWord, searchFields, clauses, new IKAnalyzer());
+            } catch (ParseException e) {
+                logger.error("parse keyword error", e);
+            }
+            booleanQuery.add(parseQuery, Occur.SHOULD);
+
+            // add prefix query as serchFields
+            for (int i = 0; i < searchFields.length; i++) {
+
+                Query keyWordPrefixQuery = new PrefixQuery(new Term(
+                        searchFields[i], keyWord));
+                booleanQuery.add(keyWordPrefixQuery, Occur.SHOULD);
+            }
+            keyWordQuery.add(booleanQuery, Occur.MUST);
+        }
+
+        return keyWordQuery;
+    }
 
     /**
      * @author Geoffrey.Zhao
@@ -43,7 +147,8 @@ public class CommonSearchUtil {
     public static BooleanQuery searchByKeyWord(Class<?> clazz, QueryBuilder qb,
             String keyWord, String fields) {
 
-        String[] sentenceSearchFields = null;
+        String[] sentenceSearchFields = FormatUtil.splitString(fields,
+                SystemConstants.SPLIT_COMMA);
         String[] searchFields = FormatUtil.splitString(fields,
                 SystemConstants.SPLIT_COMMA);
 
@@ -51,11 +156,7 @@ public class CommonSearchUtil {
 
             // judge which one is the search entity: asset or location or group
             // or transfer_log etc.
-            if (clazz == Asset.class) {
-
-                searchFields = SearchFieldConstants.ALL_ASSET_FIELDS;
-                sentenceSearchFields = SearchFieldConstants.ASSET_SENTENCE_FIELDS;
-            } else if (clazz == TransferLog.class) {
+            if (clazz == TransferLog.class) {
 
                 searchFields = SearchFieldConstants.TRANSFER_LOG_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.TRANSFER_LOG_FIELDS;
@@ -80,12 +181,10 @@ public class CommonSearchUtil {
                 searchFields = SearchFieldConstants.INCONSISTENT_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.INCONSISTENT_SENTENCE_FIELDS;
             } else if (clazz == User.class) {
-                
+
                 searchFields = SearchFieldConstants.USER_ROLE_FIELDS;
                 sentenceSearchFields = SearchFieldConstants.USER_ROLE_FIELDS;
             }
-        } else {
-            sentenceSearchFields = searchFields;
         }
 
         Occur[] clauses = new Occur[searchFields.length];
@@ -264,10 +363,11 @@ public class CommonSearchUtil {
      * @author Geoffrey.Zhao
      * @param condition
      */
-    public static BooleanQuery addFilterQueryForAsset(SearchCondition searchCondition, String fileName, Class<?> clazz) {
-        
+    public static BooleanQuery addFilterQueryForAsset(
+            SearchCondition searchCondition, String fileName, Class<?> clazz) {
+
         BooleanQuery booleanQuery = null;
-        
+
         BooleanQuery statusQuery = CommonSearchUtil.searchByAssetStatus(
                 searchCondition.getAssetStatus(), clazz);
         BooleanQuery typeQuery = CommonSearchUtil.searchByAssetType(
@@ -277,7 +377,7 @@ public class CommonSearchUtil {
                 searchCondition.getToTime());
 
         if (null != statusQuery) {
-            
+
             if (null == booleanQuery) {
                 booleanQuery = new BooleanQuery();
             }
@@ -285,7 +385,7 @@ public class CommonSearchUtil {
         }
 
         if (null != typeQuery) {
-            
+
             if (null == booleanQuery) {
                 booleanQuery = new BooleanQuery();
             }
@@ -293,7 +393,7 @@ public class CommonSearchUtil {
         }
 
         if (null != checkInTimeQuery) {
-            
+
             if (null == booleanQuery) {
                 booleanQuery = new BooleanQuery();
             }

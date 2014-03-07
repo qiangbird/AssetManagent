@@ -20,7 +20,7 @@ public interface SearchAssetService {
      * @return
      * @throws BaseException 
      */
-    Page<Asset> findAllAssetsBySearchCondition(SearchCondition searchCondition) throws BaseException;
+    Page<Asset> findAllAssetsBySearchCondition(SearchCondition searchCondition, String type) throws BaseException;
 
     /**
      * @author Grylls.Xu

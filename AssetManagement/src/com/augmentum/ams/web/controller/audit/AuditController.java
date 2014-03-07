@@ -26,9 +26,7 @@ import com.augmentum.ams.service.audit.AuditService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
-import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.audit.AuditVo;
-import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -149,14 +147,15 @@ public class AuditController extends BaseController{
 		}
 		
 		Page<Asset> page = auditService.findAssetForInventory(searchCondition);
+		
 		String clientTimeOffset = (String) session.getAttribute("timeOffset");
-		List<AssetListVo> list = FormatEntityListToEntityVoList
-				.formatAssetListToAssetVoList(page.getResult(),
-						clientTimeOffset);
+		
 		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
 				.findUserCustomColumns("asset", getUserIdByShiro());
-		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
-				userCustomColumnList, null);
+		
+		JSONArray array = SearchCommonUtil.formatAssetListToJSONArray(page.getResult(),
+				userCustomColumnList, null, clientTimeOffset);
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("fieldsData", array);
 		modelAndView.addObject("count", page.getRecordCount());

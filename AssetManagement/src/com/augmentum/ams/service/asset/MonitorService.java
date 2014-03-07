@@ -36,4 +36,5 @@ public interface MonitorService {
 	 * @return
 	 */
     Monitor getByAssetId(String id);
+    
 }

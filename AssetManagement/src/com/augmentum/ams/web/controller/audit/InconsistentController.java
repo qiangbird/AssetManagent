@@ -16,16 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.model.user.UserCustomColumn;
 import com.augmentum.ams.service.audit.InconsistentService;
 import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
-import com.augmentum.ams.web.vo.asset.AssetListVo;
 import com.augmentum.ams.web.vo.audit.AuditVo;
-import com.augmentum.ams.web.vo.convert.FormatEntityListToEntityVoList;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -72,31 +69,6 @@ public class InconsistentController extends BaseController {
 		return jsonObject;
 	}
 
-	@RequestMapping(value = "/viewInconsistentAsset", method = RequestMethod.GET)
-	public ModelAndView findAllAssetsBySearchCondition(
-			SearchCondition searchCondition, HttpSession session)
-			throws BaseException {
-
-		if (null == searchCondition) {
-			searchCondition = new SearchCondition();
-		}
-		Page<Asset> page = inconsistentService
-				.findAssetForInconsistent(searchCondition);
-		String clientTimeOffset = (String) session.getAttribute("timeOffset");
-		List<AssetListVo> list = FormatEntityListToEntityVoList
-				.formatAssetListToAssetVoList(page.getResult(),
-						clientTimeOffset);
-		List<UserCustomColumn> userCustomColumnList = userCustomColumnsService
-				.findUserCustomColumns("asset", getUserIdByShiro());
-		JSONArray array = SearchCommonUtil.formatAssetVoListTOJSONArray(list,
-				userCustomColumnList, null);
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("fieldsData", array);
-		modelAndView.addObject("count", page.getRecordCount());
-		modelAndView.addObject("totalPage", page.getTotalPage());
-		return modelAndView;
-	}
-	
 	@RequestMapping(value = "/findInconsistentList", method = RequestMethod.GET)
 	public ModelAndView findInconsistentBySearchCondition(SearchCondition searchCondition,
 	        HttpSession session, String auditFileId) throws BaseException {

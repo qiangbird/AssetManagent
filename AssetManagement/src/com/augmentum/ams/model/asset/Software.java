@@ -15,12 +15,14 @@ import javax.persistence.TemporalType;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.FieldBridge;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.augmentum.ams.model.base.BaseModel;
+import com.augmentum.ams.model.base.ConvertStringToLowerCase;
 
 /**
  * @author Rudy.Gao
@@ -39,6 +41,7 @@ public class Software extends BaseModel {
 	 */
 	@Column(length = 32)
 	@Field(name = "version", index = Index.UN_TOKENIZED, store = Store.YES)
+	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String version;
 
 	/**
@@ -46,6 +49,7 @@ public class Software extends BaseModel {
 	 */
 	@Column(length = 256, name = "license_key")
 	@Field(name = "licenseKey", index = Index.UN_TOKENIZED, store = Store.YES)
+	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String licenseKey;
 
 	@Temporal(TemporalType.TIMESTAMP)

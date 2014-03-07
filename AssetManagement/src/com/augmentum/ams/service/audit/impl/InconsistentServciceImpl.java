@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.sf.json.JSONArray;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
@@ -25,7 +24,6 @@ import com.augmentum.ams.dao.audit.AuditFileDao;
 import com.augmentum.ams.dao.audit.InconsistentDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.audit.AuditFile;
 import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.service.audit.InconsistentService;
@@ -51,8 +49,6 @@ public class InconsistentServciceImpl implements InconsistentService {
 
     @Autowired
     private BaseHibernateDao<Inconsistent> baseHibernateDao;
-
-    private Logger logger = Logger.getLogger(InconsistentServciceImpl.class);
 
     @Override
     public int getInconsistentAssetsCount(String auditFileName) {
@@ -107,16 +103,6 @@ public class InconsistentServciceImpl implements InconsistentService {
             arrays.add(array);
         }
         return arrays;
-    }
-
-    // TODO refine search code
-    // ------------------------------------------------------------------------
-    @Override
-    public Page<Asset> findAssetForInconsistent(SearchCondition searchCondition)
-            throws BaseException {
-
-        Page<Asset> page = new Page<Asset>();
-        return page;
     }
 
     @Override

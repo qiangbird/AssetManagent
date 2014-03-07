@@ -109,8 +109,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 .buildQueryBuilder().forEntity(Asset.class).get();
 
         // create ordinary query, it contains search by keyword
-        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
-                Asset.class, qb, searchCondition.getKeyWord(),
+        BooleanQuery keyWordQuery = CommonSearchUtil.searchAssetByKeyWord("", qb, searchCondition.getKeyWord(),
                 searchCondition.getSearchFields());
 
         // create filter based on advanced search condition, it used for further
@@ -135,8 +134,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                     searchCondition, "checkInTime", Asset.class);
             if (null != booleanQuery) {
                 
-                filterQuery.add(CommonSearchUtil.addFilterQueryForAsset(
-                        searchCondition, "checkInTime", Asset.class), Occur.MUST);
+                filterQuery.add(booleanQuery, Occur.MUST);
             }
         }
 

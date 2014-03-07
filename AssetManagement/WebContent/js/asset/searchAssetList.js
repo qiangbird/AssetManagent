@@ -11,9 +11,29 @@ $(document).ready(function() {
 	placeholder_project = $("#projectName").attr("placeholder");
 	placeholder_user = $("#userName").attr("placeholder");
 
+	var type = $("#type").val();
+	var status = $("#status").val();
+	
 	// categoryFlag = 1, it means category is 'asset'
-	initCriteria(1);
-	findDataListInfo("asset");
+	if (type == "") {
+		initCriteria(1);
+		findDataListInfo("asset");
+	} else if (type == "machine") {
+		initCriteria(2);
+		findDataListInfo("machine");
+	} else if (type == "device") {
+		initCriteria(4);
+		findDataListInfo("device");
+	} else if (type == "monitor") {
+		initCriteria(3);
+		findDataListInfo("monitor");
+	} else if (type == "software") {
+		initCriteria(6);
+		findDataListInfo("software");
+	} else if (type == "otherassets") {
+		initCriteria(5);
+		findDataListInfo("otherassets");
+	}
     
     $(".filterDiv input[type='checkBox']").each(function(){
     	if ($(this).val() != "all") {
@@ -36,7 +56,6 @@ $(document).ready(function() {
     });
     
     // update filterbox style for dashboard link and search as condition  ------ start
-    var type = $("#type").val();
     $("#assetType p input").each(function(){
     	var value = $(this).val();
     	if (value == type) {
@@ -45,7 +64,6 @@ $(document).ready(function() {
     	}
     });
     
-    var status = $("#status").val();
     $("#assetStatus p input").each(function(){
     	var value = $(this).val();
     	if (value == status) {
@@ -304,14 +322,14 @@ var dataListInfo = {
     pageSizes : [10, 20, 30, 50],
     hasCheckbox : true,
     pageItemSize : 5,
-    url : 'asset/allAssetsList?uuid='+$("#userUuid").val(),
+    url : getURLForAssetList($("#type").val()),
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
         callback : function(data) {
             $.ajax({
                 type : "POST",
                 contentType : "application/json",
-                url : "searchCommon/column/getColumns?category=asset",
+                url : getURLForUserCustomColumn($("#type").val()),
                 dataType : "json",
                 success : function(data) {
                     dataList.opts.columns = data.columns;
@@ -647,10 +665,26 @@ function setParamsForAddToAudit() {
 	return params;
 }
 
-
 function clearHideSearchCondition() {
     $("#status").val("");
-    $("#type").val("");
     $("#isFixedAsset").val("");
     $("#isWarrantyExpired").val("");
+}
+
+function getURLForAssetList(type) {
+	
+	var url = "asset/allAssetsList?uuid=" + $("#userUuid").val();
+	if (type != "") {
+		url = "asset/allAssetsList/" + type;
+	} 
+	return url;
+}
+
+function getURLForUserCustomColumn(type) {
+	
+	var url = "searchCommon/column/getColumns?category=asset";
+	if (type != "") {
+		url = "searchCommon/column/getColumns?category=" + type;
+	} 
+	return url;
 }

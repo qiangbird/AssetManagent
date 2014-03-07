@@ -10,12 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.augmentum.ams.dao.audit.InconsistentDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
-import com.augmentum.ams.exception.BaseException;
-import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.audit.Inconsistent;
 import com.augmentum.ams.service.BaseCaseTest;
-import com.augmentum.ams.web.vo.system.Page;
-import com.augmentum.ams.web.vo.system.SearchCondition;
 
 public class InconsistentServiceTest extends BaseCaseTest {
 
@@ -27,18 +23,6 @@ public class InconsistentServiceTest extends BaseCaseTest {
 	private BaseHibernateDao<Inconsistent> baseHibernateDao;
 	
 	private Logger logger = Logger.getLogger(InconsistentService.class);
-	
-	@Test
-	public void findAssetForInconsistent() throws BaseException {
-		SearchCondition sc = new SearchCondition();
-		sc.setAuditFileName("2014-01-08_01");
-		sc.setPageSize(100);
-		Page<Asset> page = inconsistentService.findAssetForInconsistent(sc);
-		logger.info(page.getAllRecords().size());
-		for (Asset asset : page.getResult()) {
-			logger.info(asset.getAssetId());
-		}
-	}
 	
 	@Test
 	public void testFindInconsistentAssets() {

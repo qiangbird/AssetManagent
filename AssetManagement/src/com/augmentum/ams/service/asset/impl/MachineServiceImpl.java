@@ -3,7 +3,7 @@ package com.augmentum.ams.service.asset.impl;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -19,6 +19,8 @@ public class MachineServiceImpl implements MachineService {
 
     @Autowired
     private MachineDao machineDao;
+    @Autowired
+    protected SessionFactory sessionFactory;
 
     /*
      * (non-Javadoc)
@@ -27,7 +29,6 @@ public class MachineServiceImpl implements MachineService {
      * com.augmentum.ams.service.asset.MachineService#findMachines(java.lang
      * .String, java.lang.String)
      */
-    @SuppressWarnings("unused")
     @Override
     public List<Machine> findMachines(String conditions, String keyword) {
         Session session = machineDao.getHibernateTemplate().getSessionFactory().openSession();

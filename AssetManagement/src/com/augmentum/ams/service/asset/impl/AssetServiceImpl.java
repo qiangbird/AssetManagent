@@ -151,6 +151,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     @OperationLogAnnotation(operateDescribe="Delete Asset", operateObject="Asset", operateObjectId="%")
     public void deleteAssetById(String id) {
         assetDao.delete(assetDao.getAssetById(id));
+        
     }
 
     @Override
@@ -634,7 +635,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     public void addAssetsToAuditForSearchResult(SearchCondition condition) throws ExceptionHelper {
 
         logger.info("enter addAssetsToAuditForSearchResult service successfully");
-        Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition);
+        Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition, "");
         if (null == page || null == page.getAllRecords()) {
             logger.error("there is no asset when add assets to audit for search result");
             throw new ExceptionHelper(ErrorCodeUtil.ASSET_ADD_TO_AUDIT_FAILED);
@@ -739,7 +740,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     public String exportAssetsForAll(SearchCondition condition, HttpServletRequest request)
             throws ExcelException, SQLException {
 
-        Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition);
+        Page<Asset> page = searchAssetService.findAllAssetsBySearchCondition(condition, "");
         if (null == page || null == page.getAllRecords() || 0 == page.getAllRecords().size()) {
             throw new ExcelException(ErrorCodeUtil.ASSET_EXPORT_FAILED,
                     "There is no asset when export assets for search result");
@@ -751,7 +752,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                     assetIdArr[i] = page.getAllRecords().get(i).getId();
                 } else {
                     throw new ExcelException(ErrorCodeUtil.ASSET_EXPORT_FAILED,
-                            "The i'th asset is not exist when export assets for search result");
+                            "The asset is not exist when export assets for search result");
                 }
             }
             List<ExportVo> exportVos = assetDao.findAssetsByIdsForExport(assetIdArr);

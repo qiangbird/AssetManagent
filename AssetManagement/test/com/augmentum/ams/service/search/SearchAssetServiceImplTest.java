@@ -66,7 +66,7 @@ public class SearchAssetServiceImplTest extends BaseCaseTest{
         sc.setPageNum(1);
 //        sc.setUserUuid("4028961242e5d4d70142e5d589880000");
         
-        page = searchAssetService.findAllAssetsBySearchCondition(sc);
+        page = searchAssetService.findAllAssetsBySearchCondition(sc, "");
         logger.info(page.getResult().size());
     }
     
