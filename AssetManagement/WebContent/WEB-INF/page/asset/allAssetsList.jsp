@@ -95,7 +95,7 @@
 			                <p><input type="checkBox" name="field" value="barCode"/><label><spring:message code="asset.bar.code"/></label></p>
 			        	</div>
 					</div>
-					<c:if test="${type == '' }">
+					<c:if test="${type == null }">
 						<div class="single_condition">
 							<div class="condition_title"><label><spring:message code="asset.type"/></label></div>
 							<div class="condition_optional" id="assetType">

@@ -15,6 +15,12 @@ $(document).ready(function() {
 	var status = $("#status").val();
 	
 	// categoryFlag = 1, it means category is 'asset'
+	// categoryFlag = 2, it means category is 'machine'
+	// categoryFlag = 3, it means category is 'monitor'
+	// categoryFlag = 4, it means category is 'device'
+	// categoryFlag = 5, it means category is 'otherassets'
+	// categoryFlag = 6, it means category is 'software'
+	
 	if (type == "") {
 		initCriteria(1);
 		findDataListInfo("asset");
@@ -297,7 +303,11 @@ $(document).ready(function() {
                 	 $("#condition_fromTime").val(criteria.fromTime);
                 	 $("#condition_toTime").val(criteria.toTime);
                 	 $("#condition_assetStatus").val(criteria.assetStatus);
-                	 $("#condition_assetType").val(criteria.assetType);
+                	 if (criteria.assetType == '') {
+                		 $("#condition_assetType").val($("#type").val());
+                	 } else {
+                		 $("#condition_assetType").val(criteria.assetType);
+                	 }
                 	 $("#condition_searchFields").val(criteria.searchFields);
                 	 
                 	 $('#exportForm').ajaxSubmit(
@@ -661,7 +671,11 @@ function setParamsForAddToAudit() {
 			 params += key + "=" + criteria[key] + "&";
 		}
 	}
-	params = params.substring(0, params.length - 1);
+	if (criteria.assetType == '') {
+		params += "assetType=" + $("#type").val();
+	} else {
+		params = params.substring(0, params.length - 1);
+	}
 	return params;
 }
 

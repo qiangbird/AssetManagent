@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.TermQuery;
 import org.hibernate.Criteria;
@@ -185,8 +184,8 @@ public class AuditServiceImpl implements AuditService {
                 .buildQueryBuilder().forEntity(Asset.class).get();
 
         // create ordinary query, it contains search by keyword
-        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
-                Asset.class, qb, searchCondition.getKeyWord(),
+        BooleanQuery keyWordQuery = CommonSearchUtil.searchAssetByKeyWord(
+                "", qb, searchCondition.getKeyWord(),
                 searchCondition.getSearchFields());
 
         // create filter based on advanced search condition, it used for further
@@ -206,19 +205,12 @@ public class AuditServiceImpl implements AuditService {
 
             filterQuery.add(customizedViewItemQuery, Occur.MUST);
         } else {
-            BooleanQuery statusQuery = CommonSearchUtil.searchByAssetStatus(
-                    searchCondition.getAssetStatus(), Asset.class);
-            BooleanQuery typeQuery = CommonSearchUtil.searchByAssetType(
-                    searchCondition.getAssetType(), Asset.class);
-            Query checkInTimeQuery = CommonSearchUtil.searchByTimeRangeQuery(
-                    "checkInTime", searchCondition.getFromTime(),
-                    searchCondition.getToTime());
-
-            filterQuery.add(statusQuery, Occur.MUST);
-            filterQuery.add(typeQuery, Occur.MUST);
-
-            if (null != checkInTimeQuery) {
-                filterQuery.add(checkInTimeQuery, Occur.MUST);
+            BooleanQuery booleanQuery = CommonSearchUtil.addFilterQueryForAsset(
+                    searchCondition, "checkInTime", Asset.class);
+            
+            if (null != booleanQuery) {
+                
+                filterQuery.add(booleanQuery, Occur.MUST);
             }
         }
 

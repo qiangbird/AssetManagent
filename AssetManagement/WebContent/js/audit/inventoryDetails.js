@@ -99,7 +99,7 @@ function showIncons(auditFileId){
     		$(".dataTables_scrollBody").css("overflow-x","hidden");
     	},
     	
-    	"sAjaxSource":"inconsistent/findInconsistentAssets?auditFileName="+auditFileName
+    	"sAjaxSource":"inconsistent/findInconsistentAssets?auditFileName="+$("#fileName").val()
     });
 /*    $("#iconsView").bind("click", function(){
     	$("#viewMoreDetails").dialog('open');
