@@ -205,23 +205,6 @@ public class UTCTimeUtil {
         return calendar.getTime();
     }
     
-    public static String formatMaxUTCTimeForSearch(String localDate) {
-        
-        if (StringUtils.isBlank(localDate)) {
-            return "";
-        }
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(formatStringToDate(localDate,
-                SystemConstants.TIME_SECOND_PATTERN));
-        
-        int zoneOffset = calendar.get(Calendar.ZONE_OFFSET);
-        int dstOffset = calendar.get(Calendar.DST_OFFSET);
-        calendar.add(Calendar.MILLISECOND, -(zoneOffset + dstOffset));
-        Date date = calendar.getTime();
-        
-        return formatDateToString(date, SystemConstants.FILTER_TIME_PATTERN);
-    }
-    
     // transfer fromTime to string 'yyyyMMddHHmmss', it's lucene date index
     // type.
     // used for search condition

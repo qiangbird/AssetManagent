@@ -183,11 +183,13 @@ public class AssetController extends BaseController {
 
         voToAsset(request, assetVo, asset);
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
+        
+        User creater = (User)request.getSession().getAttribute("currentUser");
 
-        if (null == batchCreate) {
+        if ("false".equals(batchCreate)) {
             asset.setAssetId(assetVo.getAssetId());
             try {
-                assetService.saveAssetAsType(assetVo, asset, "save");
+                assetService.saveAssetAsType(assetVo, asset, "save", creater);
             } catch (Exception e) {
                 logger.error("Save asset error", e);
             }
@@ -200,7 +202,7 @@ public class AssetController extends BaseController {
                         assetVo.getAssetId(), batchNum);
                 for (int i = 0; i < batchNum; i++) {
                     asset.setAssetId(batchIdList.get(i));
-                    assetService.saveAssetAsType(assetVo, asset, "save");
+                    assetService.saveAssetAsType(assetVo, asset, "save", creater);
                 }
             } catch (NumberFormatException e) {
                 // TODO
@@ -382,7 +384,7 @@ public class AssetController extends BaseController {
         voToAsset(request, assetVo, asset);
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
         try {
-            assetService.saveAssetAsType(assetVo, asset, "update");
+            assetService.saveAssetAsType(assetVo, asset, "update", null);
             if (null == oldAsset.getUser()) {
                 if (null != assetVo.getUser()) {
                     transferLogService.saveTransferLog(asset.getId(), "Assign");
@@ -581,7 +583,7 @@ public class AssetController extends BaseController {
 
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @ResponseBody
-    public void exportAssets(HttpServletRequest request,
+    public String exportAssets(HttpServletRequest request,
             HttpServletResponse response, String assetIds,
             SearchCondition condition) {
 
@@ -599,14 +601,19 @@ public class AssetController extends BaseController {
             } else {
                 outPutPath = assetService.exportAssetsByIds(assetIds, request);
             }
-            FileOperateUtil.download(request, response, outPutPath);
-
+            String serverPath = FileOperateUtil.getBasePath()
+                    + SystemConstants.CONFIG_TEMPLATES_PATH;
+            String downloadFileName = outPutPath.replaceAll(serverPath, "");
+            return downloadFileName;
         } catch (ExcelException e) {
             logger.error(e.getMessage());
+            return null;
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            return null;
         } catch (Exception e) {
             logger.error(e.getMessage());
+            return null;
         }
     }
 

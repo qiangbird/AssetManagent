@@ -2,9 +2,7 @@ package com.augmentum.ams.web.controller.asset;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.exception.ExcelException;
 import com.augmentum.ams.model.asset.Asset;
@@ -38,10 +37,8 @@ import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
-import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
-import com.augmentum.ams.web.vo.user.UserVo;
 
 @Controller("customerAssetController")
 @RequestMapping(value = "/customerAsset")
@@ -97,6 +94,7 @@ public class CustomerAssetController extends BaseController {
             modelAndView.addObject("count", assetPage.getRecordCount());
             modelAndView.addObject("totalPage", assetPage.getTotalPage());
             modelAndView.addObject("searchCondition", searchCondition);
+            
         }
         return modelAndView;
     }
@@ -226,35 +224,27 @@ public class CustomerAssetController extends BaseController {
         return modelAndView;
     }
 
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/export", method = RequestMethod.GET)
     @ResponseBody
-    public void exportAssets(HttpServletRequest request, HttpServletResponse response,
+    public String exportAssets(HttpServletRequest request, HttpServletResponse response,
             String assetIds, String customerCode, SearchCondition condition) {
 
-        String[] customerIds = {};
+        String[] customerIds = null;
 
         if (StringUtils.isNotBlank(customerCode)) {
 
             Customer customer = customerService.getCustomerByCode(customerCode);
+            
+            if (null != customer) {
+                customerIds = new String[1];
+            }
             customerIds[0] = customer.getId();
         } else {
 
-            // TODO: change to get customer list from session
-            UserVo userVo = (UserVo) SecurityUtils.getSubject().getSession().getAttribute("userVo");
-
-            List<CustomerVo> list = null;
-            try {
-                list = remoteCustomerService.getCustomerByEmployeeId(userVo.getEmployeeId(),
-                        request);
-            } catch (BusinessException e) {
-                logger.error("get customerVo failed from IAP", e);
-            }
-
-            List<Customer> customers = customerAssetService.findVisibleCustomerList(userVo, list);
-
-            Set<Customer> set = new HashSet<Customer>(customers);
-            List<Customer> customerList = new ArrayList<Customer>(set);
-
+            List<Customer> customerList = (List<Customer>)request.getSession().getAttribute("customerList");
+            customerIds = new String[customerList.size()];
+            
             for (int i = 0; i < customerList.size(); i++) {
                 customerIds[i] = customerList.get(i).getId();
             }
@@ -274,14 +264,20 @@ public class CustomerAssetController extends BaseController {
             } else {
                 outPutPath = assetService.exportAssetsByIds(assetIds, request);
             }
-            FileOperateUtil.download(request, response, outPutPath);
+            String serverPath = FileOperateUtil.getBasePath()
+                    + SystemConstants.CONFIG_TEMPLATES_PATH;
+            String downloadFileName = outPutPath.replaceAll(serverPath, "");
+            return downloadFileName;
 
         } catch (ExcelException e) {
             logger.error(e.getMessage());
+            return null;
         } catch (SQLException e) {
             logger.error(e.getMessage());
+            return null;
         } catch (Exception e) {
             logger.error(e.getMessage());
+            return null;
         }
     }
 

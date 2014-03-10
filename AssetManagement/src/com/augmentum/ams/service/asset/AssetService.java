@@ -31,7 +31,7 @@ public interface AssetService {
      * @description TODO
      * @param asset
      */
-    void saveAsset(Asset asset);
+    void saveAsset(Asset asset, User creater);
 
     /**
      * 
@@ -84,7 +84,7 @@ public interface AssetService {
      * @param asset
      * @param operation
      */
-    void saveAssetAsType(AssetVo assetVo, Asset asset, String operation);
+    void saveAssetAsType(AssetVo assetVo, Asset asset, String operation, User creater);
 
     /**
      * 

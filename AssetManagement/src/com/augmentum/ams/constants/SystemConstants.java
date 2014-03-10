@@ -3,9 +3,6 @@
  */
 package com.augmentum.ams.constants;
 
-import java.util.Date;
-
-import com.augmentum.ams.util.UTCTimeUtil;
 
 /**
  * @author Grylls.Xu
@@ -22,9 +19,7 @@ public class SystemConstants {
     public static final String DATE_YEAR_PATTERN = "yyyy";
 
     // max and min time for data in DB
-    public static final String DATA_MAX_DATE = "9999-12-31 23:59:59";
-    public static final String DATA_MAX_DATE_TOSTRING = "9999-12-31 23:59:59.0";
-    public static final Date DB_MAX_DATE = UTCTimeUtil.formatStringToDate(DATA_MAX_DATE, SystemConstants.TIME_SECOND_PATTERN);
+    public static final String MAX_DATE_INDEX = "99991231235959";
     
     // max and min time for search range time
     public static final String SEARCH_MIN_DATE = "10010101000000";

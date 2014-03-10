@@ -491,19 +491,7 @@ public class AssetImportParserServiceImpl implements AssetImportParserService {
 
             software.setVersion(currentRowCells[22].getContents());
             software.setLicenseKey(currentRowCells[23].getContents());
-            // TODO check whether the right time format
-            software.setSoftwareExpiredTime(UTCTimeUtil.formatStringToDate(currentRowCells[24]
-                    .getContents()));
 
-            boolean isNum = currentRowCells[25].getContents().matches("[0-9]+");
-
-            if (isNum) {
-                software.setMaxUseNum(Integer.valueOf(currentRowCells[25].getContents()));
-            } else {
-                importVo.setErrorRecorde(Boolean.TRUE);
-                logger.info("Error record: 'MaxUseNum': " + currentRowCells[25].getContents()
-                        + "  of software is not a number!");
-            }
             software.setAdditionalInfo(currentRowCells[26].getContents());
 
             if (importVo.isErrorRecorde()
@@ -661,8 +649,6 @@ public class AssetImportParserServiceImpl implements AssetImportParserService {
 
         assetTemplateParser.fillOneCell(column++, row, software.getVersion(), sheet);
         assetTemplateParser.fillOneCell(column++, row, software.getLicenseKey(), sheet);
-        assetTemplateParser.fillOneCell(column++, row, software.getSoftwareExpiredTime(), sheet);
-        assetTemplateParser.fillOneCell(column++, row, maxUseNum, sheet);
         assetTemplateParser.fillOneCell(column, row, software.getAdditionalInfo(), sheet);
 
         return sheet;

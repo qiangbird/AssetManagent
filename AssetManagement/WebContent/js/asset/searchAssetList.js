@@ -274,7 +274,7 @@ $(document).ready(function() {
      $("#exportIcon").click(function(){
     	 var tipMessage = "";
     	 var assetIds = getActivedAssetIds();
-         
+    	 
          if (assetIds != "") {
         	 
              tipMessage = i18nProp('message_confirm_asset_export', $('.row .dataList-checkbox-active').size().toString());
@@ -282,12 +282,14 @@ $(document).ready(function() {
                  if (yes) {
                 	 $("#div-loader").show();
                 	 $("#assetIds").val(assetIds);
-                	 $('#exportForm').ajaxSubmit(
-                		 function(){
-                			 showMessageBarForMessage("exoprt_assets_success");
+                	 
+                	 $('#exportForm').ajaxSubmit({
+                		 success: function(data){
+                			 location.href="asset/download?fileName=" + data;
                 			 $("#div-loader").hide();
+                    		 showMessageBarForMessage("exoprt_assets_success");
                 		 }
-                	 );
+                	 });
                  }else{
                      return;
                  }
@@ -310,12 +312,13 @@ $(document).ready(function() {
                 	 }
                 	 $("#condition_searchFields").val(criteria.searchFields);
                 	 
-                	 $('#exportForm').ajaxSubmit(
-                    		 function(){
-                    			 showMessageBarForMessage("exoprt_assets_success");
-                    			 $("#div-loader").hide();
-                    		 }
-                    	 );
+                	 $('#exportForm').ajaxSubmit({
+                		 success: function(data){
+                			 location.href="asset/download?fileName=" + data;
+                			 $("#div-loader").hide();
+                    		 showMessageBarForMessage("exoprt_assets_success");
+                		 }
+                	 });
                  }else{
                      return;
                  }
@@ -542,7 +545,7 @@ $("#userName").blur(function() {
 if(null!=$("#tips").val()&&$("#tips").val()!=""){
 //	showMessageBar($("#tips").val());
 //	showMessageBarForMessage($("#tips").val());
-	showMessageBarForOperationResultMessage(aaa);
+//	showMessageBarForOperationResultMessage(aaa);
 
 }
 

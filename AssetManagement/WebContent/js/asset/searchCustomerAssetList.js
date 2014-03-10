@@ -352,8 +352,16 @@ $(document).ready(function() {
             tipMessage = i18nProp('message_confirm_asset_export', $('.row .dataList-checkbox-active').size().toString());
             ShowMsg(tipMessage, function(yes){
                 if (yes) {
+                 $("#div-loader").show();
                	 $("#assetIds").val(assetIds);
-               	 $('#exportForm').submit();
+               	 
+               	$('#exportForm').ajaxSubmit({
+	           		 success: function(data){
+	           			 location.href="asset/download?fileName=" + data;
+	           			 $("#div-loader").hide();
+	               		 showMessageBarForMessage("exoprt_assets_success");
+	           		 }
+	           	 });
                 }else{
                     return;
                 }
@@ -362,6 +370,7 @@ $(document).ready(function() {
        	 tipMessage = i18nProp('message_confirm_asset_export', $(".dataList .dataList-div-perPage span:nth-child(3)").html().toString());
             ShowMsg(tipMessage, function(yes){
                 if (yes) {
+                 $("#div-loader").show();
                	 $("#assetIds").val(null);
                	 
                	 $("#condition_keyWord").val(criteria.keyWord);
@@ -371,7 +380,13 @@ $(document).ready(function() {
 	           	 $("#condition_assetType").val(criteria.assetType);
 	           	 $("#condition_searchFields").val(criteria.searchFields);
            	 
-               	 $('#exportForm').submit();
+	           	$('#exportForm').ajaxSubmit({
+	           		 success: function(data){
+	           			 location.href="asset/download?fileName=" + data;
+	           			 $("#div-loader").hide();
+	               		 showMessageBarForMessage("exoprt_assets_success");
+	           		 }
+	           	 });
                 }else{
                     return;
                 }

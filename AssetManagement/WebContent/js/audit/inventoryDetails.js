@@ -21,7 +21,7 @@ function showDataListDialog() {
 		position : ['center',60],
 		height:620,
 		close: function() {
-			location = location;
+			window.location.reload();
 		}
 	});
 	

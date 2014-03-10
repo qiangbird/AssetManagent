@@ -140,8 +140,6 @@ public class AssetTemplateParser extends ExcelParser {
 
         fillOneCell(column++, row, asset.getSoftwareVersion(), sheet);
         fillOneCell(column++, row, asset.getSoftwareLicenseKey(), sheet);
-        fillOneCell(column++, row, asset.getSoftwareExpiredTime(), sheet);
-        fillOneCell(column++, row, asset.getSoftwareMaxUseNum(), sheet);
         fillOneCell(column, row, asset.getSoftwareAdditionalInfo(), sheet);
 
         return sheet;

@@ -91,8 +91,11 @@ public class AssetServiceTest {
     @Autowired
     private UserDao userDao;
     
+    private User user = userDao.getUserByUserId("T00245");
+    
     @Test
     public void testSaveAsset() {
+        
         Asset asset = this.initAsset();
         
         Software software = this.initSofrware();
@@ -110,7 +113,7 @@ public class AssetServiceTest {
         locationDao.save(location);
         asset.setSoftware(software);
         asset.setLocation(location);
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
         
         machine.setAsset(asset);
         monitor.setAsset(asset);
@@ -235,8 +238,6 @@ public class AssetServiceTest {
         Software software = new Software();
         software.setVersion("version");
         software.setLicenseKey("licenseKey");
-        software.setSoftwareExpiredTime(new Date());
-        software.setMaxUseNum(10);
         software.setCreatedTime(new Date());
         return software;
     }
@@ -256,7 +257,7 @@ public class AssetServiceTest {
     	asset.setFixed(false);
     	asset.setStatus(StatusEnum.AVAILABLE.toString());
     	asset.setType(AssetTypeEnum.DEVICE.toString());
-    	assetService.saveAsset(asset);
+    	assetService.saveAsset(asset, user);
     }
     
     /**
@@ -273,7 +274,7 @@ public class AssetServiceTest {
         asset.setFixed(false);
         asset.setStatus(StatusEnum.AVAILABLE.toString());
         asset.setType(AssetTypeEnum.DEVICE.toString());
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
        asset.setAssetName("MyAssetTest");
        asset.setBarCode("wawawa");
        assetService.updateAsset(asset);
@@ -294,7 +295,7 @@ public class AssetServiceTest {
         asset.setFixed(false);
         asset.setStatus(StatusEnum.AVAILABLE.toString());
         asset.setType(AssetTypeEnum.DEVICE.toString());
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
         Assert.assertNotNull(assetService.getAsset(asset.getId()));
     }
     /**
@@ -311,7 +312,7 @@ public class AssetServiceTest {
         asset.setFixed(false);
         asset.setStatus(StatusEnum.AVAILABLE.toString());
         asset.setType(AssetTypeEnum.DEVICE.toString());
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
         assetService.deleteAssetById(asset.getId());
         Asset asset2 = assetService.getAsset(asset.getId());
         Assert.assertNull(asset2);
@@ -332,7 +333,7 @@ public class AssetServiceTest {
         asset.setFixed(false);
         asset.setStatus(StatusEnum.AVAILABLE.toString());
         asset.setType(AssetTypeEnum.DEVICE.toString());
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
     	List<Asset> list=assetService.findAllAssets();
     	Assert.assertTrue(list.size()>0);
     	logger.info(list.size());
@@ -352,7 +353,7 @@ public class AssetServiceTest {
         asset.setFixed(false);
         asset.setStatus(StatusEnum.AVAILABLE.toString());
         asset.setType(AssetTypeEnum.DEVICE.toString());
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
         int allCount = assetService.getAllAssetCount();
         Assert.assertTrue(allCount>0);
         logger.info(allCount);
@@ -376,7 +377,7 @@ public class AssetServiceTest {
         Machine machine = new Machine();
         machine.setAddress("AssetSaveTest1");
         assetVo.setMachine(machine);
-        assetService.saveAssetAsType(assetVo,asset,"save");
+        assetService.saveAssetAsType(assetVo,asset,"save", user);
     }
     /**
      * 
@@ -411,7 +412,7 @@ public class AssetServiceTest {
         customer.setCustomerName("Augmentum");
         customerService.saveCustomer(customer);
         asset.setCustomer(customer);
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
         Asset asset1 = assetService.getAsset(asset.getId());
         List<PropertyTemplate> list = null;
         try {
@@ -437,7 +438,7 @@ public class AssetServiceTest {
         customer.setCustomerCode("11111111");
         customerService.saveCustomer(customer);
         asset.setCustomer(customer);
-        assetService.saveAsset(asset);
+        assetService.saveAsset(asset, user);
         Customer customer1 = customerService.getCustomerByCode("11111111");
         List<Asset> list = assetService.findAssetsByCustomerId(customer1.getId());
         System.out.println(list.size());

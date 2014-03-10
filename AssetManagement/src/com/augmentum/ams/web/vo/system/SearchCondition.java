@@ -191,4 +191,5 @@ public class SearchCondition {
     public void setIsSystemAdminRole(Boolean isSystemAdminRole) {
         this.isSystemAdminRole = isSystemAdminRole;
     }
+
 }

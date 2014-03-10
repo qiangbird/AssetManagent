@@ -26,6 +26,7 @@ import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.audit.AuditDao;
 import com.augmentum.ams.dao.audit.AuditFileDao;
+import com.augmentum.ams.dao.operationLog.OperationLogDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
 import com.augmentum.ams.excel.AssetTemplateParser;
 import com.augmentum.ams.exception.BusinessException;
@@ -50,6 +51,7 @@ import com.augmentum.ams.model.enumeration.AssetTypeEnum;
 import com.augmentum.ams.model.enumeration.RoleEnum;
 import com.augmentum.ams.model.enumeration.StatusEnum;
 import com.augmentum.ams.model.enumeration.TransientStatusEnum;
+import com.augmentum.ams.model.operationLog.OperationLog;
 import com.augmentum.ams.model.todo.ToDo;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.AssetService;
@@ -129,12 +131,26 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     private PurchaseItemService purchaseItemService;
     @Autowired
     private SearchAssetService searchAssetService;
+    @Autowired
+    private OperationLogDao operationLogDao;
 
     private static Logger logger = Logger.getLogger(AssetServiceImpl.class);
 
     @Override
-    public void saveAsset(Asset asset) {
+    public void saveAsset(Asset asset, User creater) {
         assetDao.save(asset);
+        
+        Asset tempAsset = assetDao.getByAssetId(asset.getAssetId());
+        
+        OperationLog operationLog = new OperationLog();
+        
+        operationLog.setOperation("create asset");
+        operationLog.setOperationObject("Asset");
+        operationLog.setOperatorID(creater.getUserId());
+        operationLog.setOperatorName(creater.getUserName());
+        operationLog.setOperationObjectID(tempAsset.getId());
+        
+        operationLogDao.save(operationLog);
     }
 
     @Override
@@ -165,7 +181,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     @Override
-    public void saveAssetAsType(AssetVo assetVo, Asset asset, String operation) {
+    public void saveAssetAsType(AssetVo assetVo, Asset asset, String operation, User user) {
 
         String assetType = assetVo.getType().trim();
 
@@ -174,10 +190,10 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             if (AssetTypeEnum.SOFTWARE.toString().equals(assetType)) {
                 softwareService.saveSoftware(assetVo.getSoftware());
                 asset.setSoftware(assetVo.getSoftware());
-                saveAsset(asset);
+                saveAsset(asset, user);
             } else {
 
-                saveAsset(asset);
+                saveAsset(asset, user);
 
                 if (AssetTypeEnum.MACHINE.toString().equals(assetType)) {
                     assetVo.getMachine().setAsset(asset);
@@ -234,7 +250,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 Software soft = softwareService.findById(assetVo.getSoftware().getId());
                 Software newSoft = assetVo.getSoftware();
                 soft.setVersion(newSoft.getVersion());
-                soft.setMaxUseNum(newSoft.getMaxUseNum());
                 soft.setAdditionalInfo(newSoft.getAdditionalInfo());
                 soft.setLicenseKey(newSoft.getLicenseKey());
                 soft.setManagerVisible(newSoft.isManagerVisible());
@@ -512,7 +527,6 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                         ToDo todo = new ToDo();
                         todo.setAsset(asset);
                         todo.setReceivedTime(date);
-                        todo.setReturnedTime(SystemConstants.DB_MAX_DATE);
                         todo.setAssigner(assigner);
                         todoDao.save(todo);
 

@@ -234,5 +234,5 @@
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="js/common/messageBarCommon.js"></script>
-<script type="text/javascript" src="<%=basePath%>js/common/jquery.form.js"></script>
+<script type="text/javascript" src="js/common/jquery.form.js"></script>
 </html>

@@ -124,10 +124,7 @@
 	   $("#showBatch").removeClass().addClass("showBatchHovered");
 	   if ("batchCheckBoxOn" == $("#batchCreate").attr("class")) {
 		   $("#showBatch").removeClass().addClass("showBatchNormal");
-		   batchNumber = $("#batchNumber").val();
-		   if( batchNumber != ""){
-			   $("#showBatch").val(batchNumber);
-		   }
+		   $("#isBatchCreate").val(true);
 		   $("#showBatch").show();
 	   } else {
 	       $("#showBatch").removeClass().addClass("showBatchNormal");

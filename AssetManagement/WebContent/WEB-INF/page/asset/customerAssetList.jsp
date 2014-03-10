@@ -23,6 +23,7 @@
 <link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="css/asset/isAssign.css" />
+<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 </head>
 <body>
     <jsp:include page="../common/header.jsp"></jsp:include>
@@ -141,7 +142,7 @@
             </div> 
             
             <shiro:hasRole name="MANAGER">
-	        <form name="exportForm" id="exportForm" action="asset/export">
+	        <form name="exportForm" id="exportForm" action="customerAsset/export">
 	        	<input type="hidden" name="assetIds" id="assetIds" value=""/>
 	        	
 	        	<input type="hidden" name="assetStatus" id="condition_assetStatus" value="" />
@@ -150,6 +151,7 @@
 	        	<input type="hidden" name="searchFields" id="condition_searchFields" value="" />
 	        	<input type="hidden" name="fromTime" id="condition_fromTime" value="" />
 	        	<input type="hidden" name="toTime" id="condition_toTime" value="" />
+	        	<input type="hidden" name="customerCode" value="${customer.customerCode }">
 	        	
 	        </form>
 	        <a id="exportIcon" ></a>
@@ -215,5 +217,5 @@
 <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="js/common/json2.js"></script>
-<link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
+<script type="text/javascript" src="js/common/jquery.form.js"></script>
 </html>

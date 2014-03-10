@@ -1,7 +1,6 @@
 package com.augmentum.ams.model.asset;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.ContainedIn;
@@ -52,18 +49,6 @@ public class Software extends BaseModel {
 	@FieldBridge(impl = ConvertStringToLowerCase.class)
 	private String licenseKey;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "software_expired_time")
-	@Field(name = "softwareExpiredTime", index = Index.UN_TOKENIZED, store = Store.YES)
-	private Date softwareExpiredTime;
-
-	/**
-	 * The max use number of software
-	 */
-	@Column(name = "max_use_num")
-	@Field(name = "maxUseNum", index = Index.UN_TOKENIZED, store = Store.YES)
-	private int maxUseNum;
-	
 	@Column(name = "additional_info")
 	@Field(name = "additionalInfo", index = Index.TOKENIZED, store = Store.YES)
 	private String additionalInfo;
@@ -96,22 +81,6 @@ public class Software extends BaseModel {
 
 	public void setLicenseKey(String licenseKey) {
 		this.licenseKey = licenseKey;
-	}
-
-	public Date getSoftwareExpiredTime() {
-		return softwareExpiredTime;
-	}
-
-	public void setSoftwareExpiredTime(Date softwareExpiredTime) {
-		this.softwareExpiredTime = softwareExpiredTime;
-	}
-
-	public int getMaxUseNum() {
-		return maxUseNum;
-	}
-
-	public void setMaxUseNum(int maxUseNum) {
-		this.maxUseNum = maxUseNum;
 	}
 
 	public List<Asset> getAssets() {

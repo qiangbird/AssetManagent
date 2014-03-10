@@ -236,16 +236,9 @@ public class SearchCommonUtil {
                         } else if ("returnedTime".equals(columnName)
                                 || "receivedTime".equals(columnName)) {
 
-                            if (SystemConstants.DATA_MAX_DATE_TOSTRING
-                                    .equals(obj)) {
-                                value = "";
-                            } else {
-                                value = UTCTimeUtil
-                                        .formatUTCStringToLocalString(
-                                                (String) obj,
-                                                timeOffset,
-                                                SystemConstants.TIME_SECOND_PATTERN);
-                            }
+                            value = UTCTimeUtil.formatUTCStringToLocalString(
+                                    (String) obj, timeOffset,
+                                    SystemConstants.TIME_SECOND_PATTERN);
                         } else {
                             value = (String) obj;
                         }

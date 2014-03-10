@@ -35,7 +35,7 @@ var dataListInfo = {
 	    }
 };
 
-var fileName = $("#auditFileName").val();
+var fileName = $("#fileName").val();
 
 $(document).ready(function() {
 	
@@ -85,34 +85,40 @@ $(document).ready(function() {
 
 	 // add place holder event for keyword
 	 removePlaceholderForKeyWord();
-	
+	 
 	var flag = $("#flag").val();
 	if(flag == "audited"){
+		$("#flag").val("audited");
 		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink");
 		showInventoryAsset("audited");
 	}
 	else if(flag == "unaudited"){
+		$("#flag").val("unaudited");
 		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink");
 		showInventoryAsset("unaudited");
 	}
 	else if(flag == "inconsistent"){
+		$("#flag").val("inconsistent");
 		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink");
-		showInventoryAsset("inconsistent");
+		showInconsistent("inconsistent");
 	}
 	
 	$("#auditLink").click(function(){
+		$("#flag").val("audited");
 		changeLinkBgcolor("#auditLink", "#unAuditLink", "#inconsistentLink");
 		showFilterbox();
 		showInventoryAsset("audited");
 	});
-	
+
 	$("#unAuditLink").click(function(){
+		$("#flag").val("unaudited");
 		changeLinkBgcolor("#unAuditLink", "#auditLink", "#inconsistentLink");
 		showFilterbox();
 		showInventoryAsset("unaudited");
 	});
-	
+
 	$("#inconsistentLink").click(function(){
+		$("#flag").val("inconsistent");
 		changeLinkBgcolor("#inconsistentLink", "#auditLink", "#unAuditLink");
 		showFilterbox();
 		showInconsistent("inconsistent");
@@ -132,7 +138,7 @@ function showInventoryAsset(flag) {
 	    	$(".dataList > div:gt(0)").remove();
 	    	dataListInfo.columns = data.columns;
 	    	
-	    	initTable(flag, fileName);
+	    	initTable(flag);
             dataList.setShow(data.showFields);
             dataList.search();
             
@@ -164,7 +170,7 @@ function showInconsistent(flag) {
 	    	$(".dataList > div:gt(0)").remove();
 	    	dataListInfo.columns = data.columns;
 	    	
-	    	initTable(flag, fileName);
+	    	initTable(flag);
             dataList.setShow(data.showFields);
             dataList.search();
             
@@ -185,13 +191,19 @@ function showInconsistent(flag) {
 	});
 }
 
-function initTable(flag, fileName) {
+function initTable(flag) {
+	if (flag == "inconsistent") {
+		categoryFlag = 12;
+	} else {
+		categoryFlag = 1;
+	}
+	
 	$.ajax({
         type : 'GET',
         contentType : 'application/json',
         dataType : 'json',
         data : {
-            categoryFlag:1
+            categoryFlag:categoryFlag
         },
         url : 'searchCommon/pageSize/getPageSize',
         error : function() {
@@ -206,25 +218,11 @@ function initTable(flag, fileName) {
     criteria.sortName = 'updatedTime';
     criteria.sortSign = 'desc';
     criteria.auditFlag = flag;
-    criteria.auditFileName = fileName;
+    criteria.auditFileName = $("#fileName").val();
     
     dataListInfo.criteria = criteria;
     dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
     dataListInfo.url = getURLForInventoryAsset(flag);
-    
-    dataList = $(".dataList").DataList(dataListInfo);
-}
-
-function initTableForBarcode(fileName){
-	criteria.pageSize = 10;
-	criteria.pageNum = 1;
-    criteria.sortName = 'barcode';
-    criteria.sortSign = 'desc';
-    criteria.auditFileName = fileName;
-    
-    dataListInfo.criteria = criteria;
-    dataListInfo.language = $("#locale").val().substring(0, 2).toUpperCase();
-    dataListInfo.url = 'inconsistent/viewInconsistentBarcode';
     
     dataList = $(".dataList").DataList(dataListInfo);
 }

@@ -26,7 +26,6 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.base.BaseHibernateDao;
 import com.augmentum.ams.dao.todo.ToDoDao;
@@ -278,7 +277,6 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 todo.setAsset(asset);
                 todo.setReturnedTime(date);
                 todo.setReturner(returner);
-                todo.setReceivedTime(SystemConstants.DB_MAX_DATE);
                 todoDao.save(todo);
             } 
             assetService.updateAsset(asset);

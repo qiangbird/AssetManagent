@@ -365,7 +365,7 @@ String basePath = request.getScheme() + "://"
                 <div class="clear"></div>
                 <div class="asset-batch-create">
                     <a class="batchCheckBoxOff" id="batchCreate"></a>
-                    <input type="hidden" id="batchNumber"/>
+                    <input type="hidden" id="isBatchCreate" name="batchCreate" value="false"/>
                     <label class="bath-create-asset"><spring:message code="batch.create" /></label>
                     <label class="form-control l-text"> 
                     <input id="showBatch" type="text" name="batchCount" 

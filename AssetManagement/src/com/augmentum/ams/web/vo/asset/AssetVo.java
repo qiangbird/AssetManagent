@@ -88,8 +88,6 @@ public class AssetVo {
 
     private String keeper;
 
-    private String softwareExpiredTime;
-
     private String purchaseItemId;
 
     private String batchNumber;
@@ -346,14 +344,6 @@ public class AssetVo {
 
     public void setSite(String site) {
         this.site = site;
-    }
-
-    public String getSoftwareExpiredTime() {
-        return softwareExpiredTime;
-    }
-
-    public void setSoftwareExpiredTime(String softwareExpiredTime) {
-        this.softwareExpiredTime = softwareExpiredTime;
     }
 
     public String getPurchaseItemId() {

@@ -30,7 +30,6 @@ import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.todo.ToDoService;
 import com.augmentum.ams.util.CommonSearchUtil;
 import com.augmentum.ams.util.FormatUtil;
-import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 
@@ -103,8 +102,7 @@ public class ToDoServiceImpl implements ToDoService {
         // else todo list is received assets
         if (null == user) {
 
-            filterQuery.add(new TermQuery(new Term("receivedTime",
-                    UTCTimeUtil.formatMaxUTCTimeForSearch(SystemConstants.DATA_MAX_DATE))),
+            filterQuery.add(new TermQuery(new Term("receivedTime", SystemConstants.MAX_DATE_INDEX)),
                             Occur.MUST);
             searchCondition.setSortName("returnedTime");
             
@@ -117,8 +115,7 @@ public class ToDoServiceImpl implements ToDoService {
             }
         } else {
 
-            filterQuery.add(new TermQuery(new Term("returnedTime",
-                    UTCTimeUtil.formatMaxUTCTimeForSearch(SystemConstants.DATA_MAX_DATE))),
+            filterQuery.add(new TermQuery(new Term("returnedTime", SystemConstants.MAX_DATE_INDEX)),
                             Occur.MUST);
             searchCondition.setSortName("receivedTime");
 

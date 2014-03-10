@@ -22,6 +22,7 @@ import org.hibernate.search.annotations.Resolution;
 import org.hibernate.search.annotations.Store;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
+import com.augmentum.ams.constants.SystemConstants;
 import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.base.BaseModel;
 import com.augmentum.ams.model.user.User;
@@ -36,78 +37,78 @@ import com.augmentum.ams.model.user.User;
 @Analyzer(impl = IKAnalyzer.class)
 public class ToDo extends BaseModel {
 
-	private static final long serialVersionUID = -8600070952058905093L;
-	
-	@Column(name = "task")
-	@Field(name = "task", index = Index.TOKENIZED, store = Store.YES)
-	private String task;
+    private static final long serialVersionUID = -8600070952058905093L;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "received_time")
-	@Field(name = "receivedTime", index = Index.UN_TOKENIZED, store = Store.YES)
-	@DateBridge(resolution = Resolution.SECOND)
-	private Date receivedTime;
+    @Column(name = "task")
+    @Field(name = "task", index = Index.TOKENIZED, store = Store.YES)
+    private String task;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "returned_time")
-	@Field(name = "returnedTime", index = Index.UN_TOKENIZED, store = Store.YES)
-	@DateBridge(resolution = Resolution.SECOND)
-	private Date returnedTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "received_time")
+    @Field(name = "receivedTime", index = Index.UN_TOKENIZED, store = Store.YES, indexNullAs = SystemConstants.MAX_DATE_INDEX)
+    @DateBridge(resolution = Resolution.SECOND)
+    private Date receivedTime;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "assigner_id")
-	@IndexedEmbedded(depth = 1)
-	private User assigner;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "returned_time")
+    @Field(name = "returnedTime", index = Index.UN_TOKENIZED, store = Store.YES, indexNullAs = SystemConstants.MAX_DATE_INDEX)
+    @DateBridge(resolution = Resolution.SECOND)
+    private Date returnedTime;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "returner_id")
-	@IndexedEmbedded(depth = 1)
-	private User returner;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assigner_id")
+    @IndexedEmbedded(depth = 1)
+    private User assigner;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "asset_id")
-	@IndexedEmbedded(depth = 2)
-	private Asset asset;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "returner_id")
+    @IndexedEmbedded(depth = 1)
+    private User returner;
 
-	public Date getReceivedTime() {
-		return receivedTime;
-	}
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "asset_id")
+    @IndexedEmbedded(depth = 2)
+    private Asset asset;
 
-	public void setReceivedTime(Date receivedTime) {
-		this.receivedTime = receivedTime;
-	}
+    public Date getReceivedTime() {
+        return receivedTime;
+    }
 
-	public Date getReturnedTime() {
-		return returnedTime;
-	}
+    public void setReceivedTime(Date receivedTime) {
+        this.receivedTime = receivedTime;
+    }
 
-	public void setReturnedTime(Date returnedTime) {
-		this.returnedTime = returnedTime;
-	}
+    public Date getReturnedTime() {
+        return returnedTime;
+    }
 
-	public User getAssigner() {
-		return assigner;
-	}
+    public void setReturnedTime(Date returnedTime) {
+        this.returnedTime = returnedTime;
+    }
 
-	public void setAssigner(User assigner) {
-		this.assigner = assigner;
-	}
+    public User getAssigner() {
+        return assigner;
+    }
 
-	public User getReturner() {
-		return returner;
-	}
+    public void setAssigner(User assigner) {
+        this.assigner = assigner;
+    }
 
-	public void setReturner(User returner) {
-		this.returner = returner;
-	}
+    public User getReturner() {
+        return returner;
+    }
 
-	public Asset getAsset() {
-		return asset;
-	}
+    public void setReturner(User returner) {
+        this.returner = returner;
+    }
 
-	public void setAsset(Asset asset) {
-		this.asset = asset;
-	}
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
 
     public String getTask() {
         return task;
@@ -116,5 +117,5 @@ public class ToDo extends BaseModel {
     public void setTask(String task) {
         this.task = task;
     }
-	
+
 }

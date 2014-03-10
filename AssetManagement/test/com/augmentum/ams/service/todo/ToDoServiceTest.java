@@ -66,7 +66,6 @@ public class ToDoServiceTest extends BaseCaseTest {
         try {
             baseHibernateDao.createIndex(clazzes);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

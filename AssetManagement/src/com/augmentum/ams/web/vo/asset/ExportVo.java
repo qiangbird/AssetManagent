@@ -68,10 +68,6 @@ public class ExportVo {
     
     private String softwareLicenseKey;
     
-    private Date softwareExpiredTime;
-    
-    private Integer softwareMaxUseNum;
-    
     private String softwareAdditionalInfo;
     
     private String otherAssetDetail;
@@ -330,22 +326,6 @@ public class ExportVo {
 
     public void setSoftwareLicenseKey(String softwareLicenseKey) {
         this.softwareLicenseKey = softwareLicenseKey;
-    }
-
-    public Date getSoftwareExpiredTime() {
-        return softwareExpiredTime;
-    }
-
-    public void setSoftwareExpiredTime(Date softwareExpiredTime) {
-        this.softwareExpiredTime = softwareExpiredTime;
-    }
-
-    public Integer getSoftwareMaxUseNum() {
-        return softwareMaxUseNum;
-    }
-
-    public void setSoftwareMaxUseNum(Integer softwareMaxUseNum) {
-        this.softwareMaxUseNum = softwareMaxUseNum;
     }
 
     public String getSoftwareAdditionalInfo() {
