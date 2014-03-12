@@ -95,4 +95,6 @@ public class SystemConstants {
     
     // Ownership
     public static final String AUGMENTUM = "Augmentum";
+    
+    public static final String OPERATION_PLACEHOLDER = "---";
 }

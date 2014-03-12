@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
+import com.augmentum.ams.dao.asset.AssetDao;
 import com.augmentum.ams.dao.asset.DeviceDao;
 import com.augmentum.ams.dao.asset.DeviceSubtypeDao;
 import com.augmentum.ams.dao.asset.LocationDao;
@@ -90,8 +91,10 @@ public class AssetServiceTest {
     private BaseDao baseDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private AssetDao assetDao;
     
-    private User user = userDao.getUserByUserId("T00245");
+    private User user = null;
     
     @Test
     public void testSaveAsset() {
@@ -268,17 +271,24 @@ public class AssetServiceTest {
      */
     @Test
     public void updateAssetTest(){
-        Asset asset=new Asset();
-        asset.setAssetId("gfdgdfgfdg");
-        asset.setAssetName("aaa");
-        asset.setFixed(false);
-        asset.setStatus(StatusEnum.AVAILABLE.toString());
-        asset.setType(AssetTypeEnum.DEVICE.toString());
-        assetService.saveAsset(asset, user);
-       asset.setAssetName("MyAssetTest");
-       asset.setBarCode("wawawa");
-       assetService.updateAsset(asset);
-       Assert.assertEquals(assetService.getAsset(asset.getId()).getAssetName(),"MyAssetTest");
+//        Asset asset=new Asset();
+//        asset.setAssetId("gfdgdfgfdg");
+//        asset.setAssetName("aaa");
+//        asset.setFixed(false);
+//        asset.setStatus(StatusEnum.AVAILABLE.toString());
+//        asset.setType(AssetTypeEnum.DEVICE.toString());
+//        assetService.saveAsset(asset, user);
+//       asset.setAssetName("MyAssetTest");
+//       asset.setBarCode("wawawa");
+//       assetService.updateAsset(asset);
+//       Assert.assertEquals(assetService.getAsset(asset.getId()).getAssetName(),"MyAssetTest");
+        Asset asset = assetDao.getByAssetId("Asset201300001");
+        asset.setAssetName("operationLog5");
+        
+        User user = userDao.getUserByUserId("T04301");
+        asset.setUser(user);
+        assetService.updateAsset(asset, user, "8,0");
+//        assetDao.update(asset);
     }
     
     /**
@@ -377,7 +387,7 @@ public class AssetServiceTest {
         Machine machine = new Machine();
         machine.setAddress("AssetSaveTest1");
         assetVo.setMachine(machine);
-        assetService.saveAssetAsType(assetVo,asset,"save", user);
+        assetService.saveAssetAsType(assetVo,asset,"save", user, "8,0");
     }
     /**
      * 

@@ -36,7 +36,6 @@ import com.augmentum.ams.service.asset.CustomerAssetService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.user.AuthorityService;
-import com.augmentum.ams.service.user.RoleService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
 import com.augmentum.ams.web.vo.user.UserVo;
@@ -49,9 +48,6 @@ public class AmsRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private RoleService roleService;
 
     @Autowired
     private AuthorityService authorityService;

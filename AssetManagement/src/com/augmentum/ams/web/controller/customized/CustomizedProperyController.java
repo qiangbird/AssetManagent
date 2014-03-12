@@ -34,9 +34,17 @@ public class CustomizedProperyController {
             String selfDefinedIds, String selfDefinedValues) throws ParseException {
         ModelAndView modelAndView = new ModelAndView();
 
-        String selfIds[] = selfDefinedIds.substring(0, selfDefinedIds.lastIndexOf(",")).split(",");
-        String selfValues[] = selfDefinedValues.substring(0, selfDefinedValues.lastIndexOf(","))
-                .split(",");
+        String selfIds[] = {};
+        String selfValues[] = {};
+        
+        if (-1 != selfDefinedIds.indexOf(",")) {
+            selfIds = selfDefinedIds.substring(0, selfDefinedIds.lastIndexOf(",")).split(",");
+        }
+        
+        if (-1 != selfDefinedValues.indexOf(",")) {
+            selfValues = selfDefinedValues.substring(0, selfDefinedValues.lastIndexOf(","))
+                    .split(",");
+        }
 
         for (int i = 0; i < selfIds.length; i++) {
             CustomizedProperty originalCustomizedProperty = customizedPropertyService

@@ -47,7 +47,7 @@ public class AssetVo {
     @NotBlank(message = ErrorCodeUtil.ASSET_OWNERSHIP_INVALID)
     private String ownerShip;
 
-    private boolean fixed;
+    private Boolean fixed;
     @NotBlank(message = ErrorCodeUtil.ASSET_STATUS_INVALID)
     private String status;
 

@@ -79,6 +79,7 @@ import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FileOperateUtil;
 import com.augmentum.ams.util.FormatUtil;
+import com.augmentum.ams.util.OperationRecordUtil;
 import com.augmentum.ams.util.RoleLevelUtil;
 import com.augmentum.ams.util.UTCTimeUtil;
 import com.augmentum.ams.web.vo.asset.AssetVo;
@@ -140,7 +141,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     public void saveAsset(Asset asset, User creater) {
         assetDao.save(asset);
         
-        Asset tempAsset = assetDao.getByAssetId(asset.getAssetId());
+        Asset oldAsset = assetDao.getByAssetId(asset.getAssetId());
         
         OperationLog operationLog = new OperationLog();
         
@@ -148,16 +149,16 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
         operationLog.setOperationObject("Asset");
         operationLog.setOperatorID(creater.getUserId());
         operationLog.setOperatorName(creater.getUserName());
-        operationLog.setOperationObjectID(tempAsset.getId());
+        operationLog.setOperationObjectID(oldAsset.getId());
         
         operationLogDao.save(operationLog);
     }
 
     @Override
-    public void updateAsset(Asset asset) {
+    public void updateAsset(Asset asset, User operator, String timeOffset) {
         assetDao.update(asset);
     }
-
+    
     @Override
     public Asset getAsset(String id) {
         return assetDao.getAssetById(id);
@@ -181,12 +182,12 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     @Override
-    public void saveAssetAsType(AssetVo assetVo, Asset asset, String operation, User user) {
+    public void saveAssetAsType(AssetVo assetVo, Asset asset, String operation, User user, String timeOffset) {
 
         String assetType = assetVo.getType().trim();
 
         if (operation.equals(SystemConstants.SAVE)) {
-            // TODO need save operation log
+
             if (AssetTypeEnum.SOFTWARE.toString().equals(assetType)) {
                 softwareService.saveSoftware(assetVo.getSoftware());
                 asset.setSoftware(assetVo.getSoftware());
@@ -245,7 +246,9 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 }
             }
         } else {
-            // TODO need update operation log
+            Asset oldAsset = assetDao.getByAssetId(assetVo.getAssetId());
+            String operationValue = OperationRecordUtil.compareAssetProperty(oldAsset, assetVo, timeOffset);
+            
             if (AssetTypeEnum.SOFTWARE.toString().equals(assetType)) {
                 Software soft = softwareService.findById(assetVo.getSoftware().getId());
                 Software newSoft = assetVo.getSoftware();
@@ -255,11 +258,11 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                 soft.setManagerVisible(newSoft.isManagerVisible());
                 softwareService.updateSoftware(soft);
                 asset.setSoftware(soft);
-                updateAsset(asset);
-
+                updateAsset(asset, user, timeOffset);
+                
             } else {
 
-                updateAsset(asset);
+                updateAsset(asset, user, timeOffset);
 
                 if (AssetTypeEnum.MACHINE.toString().equals(assetType)) {
                     Machine machine = machineService.getMachineById(assetVo.getMachine().getId());
@@ -303,7 +306,8 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
                     otherAssetsService.updateOtherAssets(otherAssets);
                 }
             }
-
+            
+            saveOperationLog(operationValue, asset, user);
         }
 
     }
@@ -842,6 +846,17 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             jsonArray.add(obj);
         }
         return jsonArray;
+    }
+    
+    private void saveOperationLog(String str, Asset asset, User user) {
+        
+        OperationLog operationLog = new OperationLog();
+        operationLog.setOperation(str);
+        operationLog.setOperationObject("Asset");
+        operationLog.setOperationObjectID(asset.getId());
+        operationLog.setOperatorID(user.getUserId());
+        operationLog.setOperatorName(user.getUserName());
+        operationLogDao.save(operationLog);
     }
 
 }

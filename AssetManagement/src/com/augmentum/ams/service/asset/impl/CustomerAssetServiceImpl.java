@@ -259,7 +259,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
     }
 
     @Override
-    public void returnCustomerAsset(User returner, String status, String ids) {
+    public void returnCustomerAsset(User returner, String status, String ids, String timeOffset) {
         String assetId[] = ids.split(",");
         Date date = UTCTimeUtil.localDateToUTC();
         for (String id : assetId) {
@@ -279,13 +279,13 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 todo.setReturner(returner);
                 todoDao.save(todo);
             } 
-            assetService.updateAsset(asset);
+            assetService.updateAsset(asset, returner, timeOffset);
         }
     }
 
     @Override
     public void takeOverCustomerAsset(String assetsId, String userCode,
-            HttpServletRequest request) {
+            HttpServletRequest request, User operator) {
         String ids[] = assetsId.split(",");
         for (String id : ids) {
             Asset asset = assetService.getAsset(id);
@@ -303,7 +303,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
                 user = userService.getUserByUserId(userCode);
             }
             asset.setUser(user);
-            assetService.updateAsset(asset);
+            assetService.updateAsset(asset, operator, (String)request.getSession().getAttribute("timeOffset"));
         }
     }
 
@@ -338,7 +338,7 @@ public class CustomerAssetServiceImpl implements CustomerAssetService {
             asset.setProject(project);
             asset.setUser(user);
             asset.setStatus(StatusEnum.IN_USE.toString());
-            assetService.updateAsset(asset);
+            assetService.updateAsset(asset, user, (String)request.getSession().getAttribute("timeOffset"));
         }
     }
 

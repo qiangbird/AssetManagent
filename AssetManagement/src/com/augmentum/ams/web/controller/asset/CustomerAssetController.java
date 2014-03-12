@@ -134,10 +134,12 @@ public class CustomerAssetController extends BaseController {
     @RequestMapping(value = "changeStatus/{status}", method = RequestMethod.PUT)
     @ResponseBody
     public String returnToOperation(@PathVariable String status, String assetsId,
-            String customerCode, String operation) {
+            String customerCode, String operation, HttpSession session) {
 
         User returner = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
-        customerAssetService.returnCustomerAsset(returner, status, assetsId);
+        String timeOffset = (String)session.getAttribute("timeOffset");
+        
+        customerAssetService.returnCustomerAsset(returner, status, assetsId, timeOffset);
         transferLogService.saveTransferLog(assetsId, operation);
 
         return null;
@@ -148,9 +150,8 @@ public class CustomerAssetController extends BaseController {
     public String takeOver(String assetsId, String customerCode, String userCode,
             HttpServletRequest request) {
 
-        logger.info("takeOver method in CustomerAssetController start!");
-
-        customerAssetService.takeOverCustomerAsset(assetsId, userCode, request);
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        customerAssetService.takeOverCustomerAsset(assetsId, userCode, request, user);
         transferLogService.saveTransferLog(assetsId, "TakeOver");
 
         logger.info("takeOver method in CustomerAssetController end!");

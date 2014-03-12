@@ -143,9 +143,14 @@ public class AssetDaoImpl extends BaseDaoImpl<Asset> implements AssetDao {
 	@Override
 	public Asset getByAssetId(String assetId) {
 
-		String hql = "from Asset where assetId = ?";
+		DetachedCriteria criteria = DetachedCriteria.forClass(Asset.class);
+		criteria.setFetchMode("user", FetchMode.JOIN)
+		        .setFetchMode("customer", FetchMode.JOIN)
+		        .setFetchMode("project", FetchMode.JOIN)
+		        .setFetchMode("location", FetchMode.JOIN)
+		        .add(Restrictions.eq("assetId", assetId));
 
-		return super.getUnique(hql, assetId);
+		return findByCriteria(criteria).get(0);
 	}
 
 	// TODO move to util class

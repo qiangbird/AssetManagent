@@ -184,12 +184,13 @@ public class AssetController extends BaseController {
         voToAsset(request, assetVo, asset);
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
         
-        User creater = (User)request.getSession().getAttribute("currentUser");
+        User creater = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        String timeOffset = (String)request.getSession().getAttribute("timeOffset");
 
         if ("false".equals(batchCreate)) {
             asset.setAssetId(assetVo.getAssetId());
             try {
-                assetService.saveAssetAsType(assetVo, asset, "save", creater);
+                assetService.saveAssetAsType(assetVo, asset, "save", creater, timeOffset);
             } catch (Exception e) {
                 logger.error("Save asset error", e);
             }
@@ -202,7 +203,7 @@ public class AssetController extends BaseController {
                         assetVo.getAssetId(), batchNum);
                 for (int i = 0; i < batchNum; i++) {
                     asset.setAssetId(batchIdList.get(i));
-                    assetService.saveAssetAsType(assetVo, asset, "save", creater);
+                    assetService.saveAssetAsType(assetVo, asset, "save", creater, timeOffset);
                 }
             } catch (NumberFormatException e) {
                 // TODO
@@ -368,8 +369,9 @@ public class AssetController extends BaseController {
             BindingResult bindingResult, HttpServletRequest request)
             throws UnsupportedEncodingException {
 
-        logger.info("updateAsset method start!");
-
+        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("currentUser");
+        String timeOffset = (String)request.getSession().getAttribute("timeOffset");
+        
         if (bindingResult.hasFieldErrors()) {
             String error_message = AssetUtil.getErrorMessage(bindingResult);
             String error_field = AssetUtil.getErrorField(bindingResult);
@@ -384,7 +386,7 @@ public class AssetController extends BaseController {
         voToAsset(request, assetVo, asset);
         AssetUtil.setKeeperForAssetVo(assetVo, asset);
         try {
-            assetService.saveAssetAsType(assetVo, asset, "update", null);
+            assetService.saveAssetAsType(assetVo, asset, "update", user, timeOffset);
             if (null == oldAsset.getUser()) {
                 if (null != assetVo.getUser()) {
                     transferLogService.saveTransferLog(asset.getId(), "Assign");
@@ -460,7 +462,7 @@ public class AssetController extends BaseController {
     public ModelAndView returnAssetsToCustomer(String assetIds) {
 
         ModelAndView modelAndView = new ModelAndView();
-
+        
         try {
             assetService.returnAssetsToCustomer(assetIds);
         } catch (ExceptionHelper e) {

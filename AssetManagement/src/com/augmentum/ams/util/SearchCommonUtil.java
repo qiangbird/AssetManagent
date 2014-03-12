@@ -174,20 +174,7 @@ public class SearchCommonUtil {
                     }
                 } else {
 
-                    try {
-                        value = BeanUtils.getProperty(transferLog, fieldName);
-                    } catch (IllegalAccessException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
-                                "IllegalAccessException when get property from transferlog");
-                    } catch (InvocationTargetException e) {
-                        throw new SystemException(e,
-                                ErrorCodeUtil.SYSTEM_ERROR,
-                                "InvocationTargetException when get property from transferlog");
-                    } catch (NoSuchMethodException e) {
-                        throw new SystemException(ErrorCodeUtil.SYSTEM_ERROR,
-                                "NoSuchMethodException when get property from transferlog");
-                    }
+                    value = getBeanProperty(transferLog, fieldName);
                 }
 
                 array.add(value);

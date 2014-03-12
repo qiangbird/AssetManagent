@@ -31,7 +31,14 @@
    		<b>&gt;</b>
    		<c:choose>
    			<c:when test="${isFixedAsset}">
+   				<a href="asset/allAssets"><spring:message code="navigator.all.assets"/></a>
+   				<b>&gt;</b>
 		   		<span><spring:message code="navigator.fixed.assets"/></span>
+   			</c:when>
+   			<c:when test="${isWarrantyExpired}">
+   				<a href="asset/allAssets"><spring:message code="navigator.all.assets"/></a>
+   				<b>&gt;</b>
+		   		<span><spring:message code="panel.warrantyExpiredAssets"/></span>
    			</c:when>
    			<c:when test="${requestScope.userUuid != null }">
    				<span><spring:message code="navigator.my.assets"/></span>

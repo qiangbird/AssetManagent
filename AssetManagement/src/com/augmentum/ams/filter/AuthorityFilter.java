@@ -27,11 +27,9 @@ public class AuthorityFilter extends AuthorizationFilter {
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object arg2) throws Exception {
-        System.out.println("AuthorityFilter isAccessAllowed method");
 
         Subject subject = super.getSubject(servletRequest, servletResponse);
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        System.out.println(request.getRequestURI());
         Object loginUser = subject.getSession().getAttribute("userVo");
         if (loginUser == null) {
             Assertion assertion = (Assertion) request.getSession().getAttribute(CONST_CAS_ASSERTION);

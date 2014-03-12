@@ -308,7 +308,7 @@ public class BaseDaoImpl<T extends BaseModel> implements BaseDao<T> {
         Date utcTime = UTCTimeUtil.localDateToUTC();
         model.setUpdatedTime(utcTime);
         try {
-            hibernateTemplate.update(model);
+            hibernateTemplate.merge(model);
         } catch (DataAccessException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

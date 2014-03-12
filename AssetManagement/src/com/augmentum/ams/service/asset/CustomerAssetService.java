@@ -61,7 +61,7 @@ public interface CustomerAssetService {
      * @param status
      * @param ids
      */
-    void returnCustomerAsset(User returner, String status, String ids);
+    void returnCustomerAsset(User returner, String status, String ids, String timeOffset);
 
     /**
      * 
@@ -73,7 +73,7 @@ public interface CustomerAssetService {
      * @param request
      */
     void takeOverCustomerAsset(String assetsId, String userCode,
-            HttpServletRequest request);
+            HttpServletRequest request, User operator);
 
     /**
      * @description TODO

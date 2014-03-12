@@ -158,7 +158,7 @@ public class Asset extends BaseModel {
     @ContainedIn
     private OtherAssets otherAssets;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     @IndexedEmbedded(depth = 1)
     private Location location;
@@ -167,17 +167,17 @@ public class Asset extends BaseModel {
     @Field(name = "entity", index = Index.TOKENIZED, store = Store.YES)
     private String entity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "project_id")
     @IndexedEmbedded(depth = 1)
     private Project project;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     @IndexedEmbedded(depth = 1)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @IndexedEmbedded(depth = 1)
     private User user;

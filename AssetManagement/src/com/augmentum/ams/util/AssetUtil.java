@@ -45,7 +45,7 @@ public class AssetUtil {
             logger.error("Asset to assetVo error!", e);
         }
     }
-
+    
     public static void setKeeperForAssetVo(AssetVo assetVo, Asset asset) {
         // save keeper and Remove duplicate
         String[] keeper = assetVo.getKeeper().split(";");

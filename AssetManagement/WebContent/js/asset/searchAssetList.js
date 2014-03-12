@@ -54,7 +54,6 @@ $(document).ready(function() {
     $(".filterDiv").filterBox({});
     
     $("#searchButton").click(function() {
-    	clearHideSearchCondition();
         setCriteria();
         criteria.pageNum = 1;
         dataList.criteria = criteria;
@@ -70,6 +69,8 @@ $(document).ready(function() {
     	}
     });
     
+    $("input:checked").siblings("span").addClass("span_checked");
+    
     $("#assetStatus p input").each(function(){
     	var value = $(this).val();
     	if (value == status) {
@@ -79,10 +80,11 @@ $(document).ready(function() {
     });
     // ------------------------------------------------------------------------- end 
     
+    $("input:checked").siblings("span").addClass("span_checked");
+    
     // add keypress event for search feature
     $("#keyword").keydown(function() {
         if(event.keyCode == 13) {
-        	clearHideSearchCondition();
             setCriteria();
             criteria.pageNum = 1;
             dataList.criteria = criteria;
@@ -680,12 +682,6 @@ function setParamsForAddToAudit() {
 		params = params.substring(0, params.length - 1);
 	}
 	return params;
-}
-
-function clearHideSearchCondition() {
-    $("#status").val("");
-    $("#isFixedAsset").val("");
-    $("#isWarrantyExpired").val("");
 }
 
 function getURLForAssetList(type) {

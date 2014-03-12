@@ -18,9 +18,7 @@
 	   url : 'customer/getCustomerInfo',
 	   dataType : 'json',
 	   success : function(data) {
-	      console.log(data.customerList);
 	      length = data.customerList.length;
-	      console.log(length);
 	      custName=[];
 	      for ( var i = 0; i < length; i++) {
 	    	  custName[i] = data.customerList[i].customerName;
@@ -63,13 +61,11 @@
        url : 'project/getProjectByCustomer?customerName='+ $(this).text().trim(),
        dataType : 'json',
        success : function(data) {
-          console.log(data);
           length = data.projectList.length;
           projectNames = [];
           for ( var i = 0; i < length; i++) {
              projectNames[i] = data.projectList[i].projectCode;
           }
-          console.log(projectNames);
        },
        error : function() {
           alert("error");
@@ -90,7 +86,6 @@
        url : 'user/getEmployeeDataSource',
        dataType : 'json',
        success : function(data) {
-          console.log(data);
           length = data.employeeInfo.length;
           employeeName = [];
           employeeValue = [];
@@ -145,7 +140,6 @@ $("#selectedLocation").blur(
         TextMouseOutError(this);
     } else {
         if (!checkInArr(rooms,$(this).val())) {
-        	console.log(rooms);
             TextMouseOutError(this);
         } else {
             TextMouseOutNormal(this);
@@ -161,7 +155,6 @@ $("#selectedLocation").blur(
        url : 'deviceSubtype/getAllSubtypes',
        dataType : 'json',
        success : function(data) {
-          console.log(data.deviceSubtypeList);
           subtypeNames = [];
           for (i = 0; i < data.deviceSubtypeList.length; i++) {
              subtypeNames[i] = data.deviceSubtypeList[i].subtypeName;
@@ -287,7 +280,6 @@ $("#selectedLocation").blur(
 		}
       }
 
-      console.log(flag);
       if (flag != 0) {
          return false;
       } else {
@@ -327,11 +319,9 @@ $("#selectedLocation").blur(
   	    		'selfDefinedValues' : values
              },
   	         success : function(data) {
-  	            console.log(data);
   	         }
   	      });
   		
-//         $("#assetFrom").submit();
   		 $("#assetEditFrom").ajaxSubmit(
   			   {
   			       type : 'post',
@@ -339,15 +329,10 @@ $("#selectedLocation").blur(
   			       data : $("#assetEditFrom")
   			               .formSerialize(),
   			       success : function(data) {
-  			    	   console.log(data==null);
-  			    	   console.log(data=="");
-  			    	   console.log(data.error==undefined);
   			    	   if(data.error != undefined){
-  			    	   var errorCode = data.error.toString();
-  			    	    console.log(errorCode);
-  			    	   console.log(typeof(errorCode));
-  			           showMessageBarForMessage(errorCode);
-  			           return false;
+	  			    	   var errorCode = data.error.toString();
+	  			           showMessageBarForMessage(errorCode);
+	  			           return false;
   			    	   }else{
   			    		   window.location.href="asset/allAssets";
   			    	   }
