@@ -1,53 +1,10 @@
 ﻿$(document).ready(function(){
-	//below is about front page validation
-	$("#assetName,#ownership,#customerName,#assetUser,#maxUseNum,#selectedLocation").delegate(this,"blur",function(){
-		//delete the tips when input data exists
-		if( "" != $(this).val()){
-		$(this).clearValidationMessage();
-		}
-	});
-	 window.entityType = "Asset";
-	
-   var localeCode = $("#localeCode").val();
-   if (localeCode == 'en') {
-      i18n = 'en_US';
-   } else {
-      i18n = 'zh_CN';
-   }
-   
-/*//change language
-   $("#goChinese").click(function() {
-   $.ajax({
-   type : 'GET',
-   contentType : 'application/json',
-   url : 'changeLanguage?newlanguage=zh',
-   dataType : 'json',
-   success : function(data) {
-       console.log(data);
-       location.reload();
-   }
-       });
-   });
-
-   $("#goEnglish").click(function() {
-   $.ajax({
-   type : 'GET',
-   contentType : 'application/json',
-   url : 'changeLanguage?newlanguage=en',
-   dataType : 'json',
-   success : function(data) {
-       console.log(data);
-       location.reload();
-   }
-       });
-   });*/
-   
 //about datepicker
-   $(".l-date").datepicker({
+   $("#checkedInTime, #checkedOutTime, #assetWarranty, .l-date").datepicker({
 	      changeMonth : true,
 	      changeYear : true,
 	      dateFormat : "yy-mm-dd"
-		   });
+	});
    
    $(".showAsSelfDefine").find(".asset-input-panel").each(function(){
 	  $(this).find(".selfPropertyName").each(function(){
@@ -99,19 +56,6 @@
 	       });
 	   });
    
-   //Compare check-in and check-out time
-   $("#checkedOutTime").change(function() {
-		if ($("#checkedInTime").val() != "") {
-		   checkIn = $("#checkedInTime").val();
-		   checkOut = $(this).val();
-		   if (!dateCompare(checkOut, checkIn)) {
-		       $("#checkedOutTime").addClass("l-date-error").removeClass("l-date");
-		   } else {
-		       $(this).removeClass("l-date-error").addClass("l-date");
-		          }
-		     }
-		});
-	
   //Batch create
    $(".batchCheckBoxOff").click(function(){
 	   if("batchCheckBoxOff" == $(this).attr("class")){
@@ -151,272 +95,517 @@
 	    $("#showBatch").removeClass().addClass("showBatchNormal");
 	}
 	});
-
-   //show as type
-   currentType = $("#assetType").val();
-   if (currentType.trim() == 'MACHINE') {
-       $("#machineDetails").show().siblings().hide();
-    } else if (currentType.trim() == 'MONITOR') {
-       $("#monitorDetails").show().siblings().hide();
-    } else if (currentType.trim() == 'DEVICE') {
-       $("#deviceDetails").show().siblings().hide();
-    } else if (currentType.trim() == 'SOFTWARE') {
-       $("#softwareDetails").show().siblings().hide();
-    } else if (currentType.trim() == "OTHERASSETS") {
-       $("#otherAssetsDetails").show().siblings().hide();
-    }
-// below is about location
-   $("#selectedLocation").click(function(){
-   	currentSite = "Augmentum "+$("#selectedSite").val();
-   	 $.ajax({
-   		    type : 'GET',
-   		    contentType : 'application/json',
-   		    url : 'location/getLocationRoom?currentSite='+currentSite,
-   		    dataType : 'json',
-   		    success : function(data) {
-   		        console.log(data);
-   		        rooms = [];
-   		        length = data.locationRoomList.length;
-   		        for ( var i = 0; i < length; i++) {
-   		        	rooms[i] = data.locationRoomList[i];
-    	        }
-   		     
-   		        $("#selectedLocation").autocomplete({
-   		            source : data.locationRoomList
-   		        });
-   		        
-   		    }
-   });
-   });
-   //submit and validate
- $("#submitForm").click(function() {
-	 
-	 
-	 if ("success" == validateAssetForm()) {
-	       	disableButton();
-	           var routinePath = null;
-	           var rotationFormVo = getRotationFormVo(rotationType);
-
-	           if ("Rotation" === rotationType){
-	               routinePath = "rotationRequest/rotation";
-	           } else if ("Assignment" === rotationType) {
-	               routinePath = "rotationRequest/assignment";
-	           } else if ("Rotation Out" === rotationType) {
-	               routinePath = "rotationRequest/rotationOut";
-	           }
-	           
-	           $.ajax({
-	               url : path + routinePath,
-	               dataType : 'json',
-	               data : rotationFormVo,
-	               type : 'POST',
-	               success : function(data){
-	                  window.location.href = path;
-	                  enableButton();
-	               },
-	               error : function(data){
-	                  var j = data.responseJSON.error;
-	                  var placeholderMessage = data.responseJSON.placeholderMessage;
-	                  
-	                  //Garrett modified.
-	                  if(j.errorCode != undefined && j.errorCode != ""){
-	                      $("#errorCode").val(j.errorCode);
-	                      var params = new Array();
-	                      if(placeholderMessage != undefined && placeholderMessage != ""){
-	                          params = placeholderMessage.split(",");
-	                      }
-	                      switchLanguage(j.errorCode,params);
-	                  } else{
-	                      window.location.href = $("#basePath").val()+"serverError";
-	                  }
-	                  
-	                  enableButton();
-	              }, 
-	              complete : function(){
-	           	   enableButton();
-	              }
-	           });
-	       }
-	 
- $("#selectedLocation").blur(
-    function() {
-    if ($(this).val().trim() == "") {
-        TextMouseOutError(this);
-    } else {
-        if (!checkInArr(rooms,$(this).val())) {
-        	console.log(rooms);
-            TextMouseOutError(this);
-        } else {
-            TextMouseOutNormal(this);
-        }
-    }
-    });
-	 
-  var name = $("#assetName").val();
-  var type = $("#assetType").val();
-  var ownership = $("#ownership").val();
-  var customerName = $("#customerName").val();
-  var room = $("#selectedLocation").val();
-  var selectedSite = $("#selectedSite").val();
-  var selectedStatus = $("#selectedStatus").val();
-  var selectedEntity = $("#selectedEntity").val();
-  var machineType = $("#machineType").val();
-//  var maxUseNum = $("#maxUseNum").val();
-  var user = $("#assetUser").val();
-  var checkedInTime = $("#checkedInTime").val();
-  var checkedOutTime = $("#checkedOutTime").val();
-  var flag = 0;
-  if (type == "") {
-     $("#assetType").addClass("l-select-error");
-     flag = 1;
-  } else if (type == "machine"&& machineType == "") {
-     $("#machineType").addClass("l-select-error");
-     flag = 1;
-  } /*else if (type == "software") {
-     if (maxUseNum == ""|| !numberCheck(maxUseNum)||maxUseNum=="0") {
-        $("#maxUseNum").addClass("l-select-error");
-        flag = 1;
-     }
-  }*/
-  if (name == "") {
-     $("#assetName").addClass("l-text-error");
-     $("#assetName").unbind("click");
-     flag = 3;
-  }
-  if (ownership == "") {
-      $("#ownership").addClass("l-select-error");
-      flag = 6;
-   }else{
-	   try{
-   if(!checkInArr(custName, ownership)){
-	   $("#ownership").addClass("l-select-error");
-	   flag = 6;
-   }
-	   }catch (e) {
-		flag = 0;
-	}
-   }
-  if (customerName == "") {
-     $("#customerName").addClass("l-select-error");
-     flag = 7;
-  }
-  if (selectedSite == "") {
-     $("#selectedSite").addClass("l-select-error");
-     flag = 8;
-  }
-  if (selectedStatus == "") {
-     $("#selectedStatus").addClass("l-select-error");
-     flag = 9;
-  } else {
-	    if (selectedStatus == "IN_USE"&& $("#assetUser").val() == "") {
-	        $("#assetUser").addClass("l-text-error");
-	        flag = 9;
-	    }
-	}
-  if (selectedEntity == "") {
-     $("#selectedEntity").addClass("l-select-error");
-     flag = 13;
-  }
-  if (!(($("#showBatch").is(":visible") && numberCheck($(
-        "#showBatch").val().trim())) || ($("#showBatch").is(":hidden")))) {
-	  $("#showBatch").addClass("showBatchError");
-     flag = 16;
-  }
-  if ($("#assetUser").val() != "") {
-	 try{
-	    console.log(employeeName);
-     if (!checkInArr(employeeName, $("#assetUser").val())) {
-    	$("#assetUser").addClass("l-text-error");
-        flag = 17;
-     }
-	   } 
-  	catch(err) 
-  	   { 
-  		//because you did not click user, so employeeName will be undefined, this means user is unchange
-  		if(flag==0){
-  	   flag=0;
-  		}
-  	   } 
-  }
-  
- //relationship about status and user
-  if(selectedStatus=="IN_USE"&&user==""){
-	$("#assetUser").addClass("input-text-error");
-    flag = 18;
-  }
-  if("" != checkedInTime && "" != checkedOutTime){
-	  if(dateCompare(checkedInTime, checkedOutTime)){
-		  flag = 19;
-	  }
-  }
-  if(selectedStatus=="AVAILABLE"&&user!=""){
-	  $("#assetUser").empty();
-  }
-  if(user!=""&&selectedStatus!="IN_USE"){
-	  $("#selectedStatus").val("IN_USE");
-  }
-  
-  if (room == ""){
-	  $("#selectedLocation").addClass("l-text-error");
-	     flag = 20;
-  }else{
-	  try{
-		  if(!checkInArr(rooms, room)){
-			  $("#selectedLocation").addClass("l-text-error");
-	    	     flag = 20;
-		  }
-	  }catch (e) {
-		  if(flag==0){
-		  flag = 0;
-		  }
-	}
-  }
-// flag = 0;
-  if (flag == 0) {
-	  if($("#assetUser").val()==""){
-		  $("#selectedStatus").val("AVAILABLE");
-	  }
-	  $("#assetFrom").ajaxSubmit(
-			   {
-			       type : 'post',
-			       url : $("#action").val(),
-			       data : $("#assetFrom")
-			               .formSerialize(),
-			       success : function(data) {
-			    	   console.log(data==null);
-			    	   console.log(data=="");
-			    	   console.log(data.error==undefined);
-			    	   if(data.error != undefined){
-			    	   var errorCode = data.error.toString();
-			    	    console.log(errorCode);
-			    	   console.log(typeof(errorCode));
-			           showMessageBarForMessage(errorCode);
-			           return false;
-			    	   }else{
-			    		   if($("#showBatch").val()!=1){
-			    		   window.location.href="asset/allAssets?tips=Batch create "+$("#showBatch").val()+" items asset success!";
-			    		   }else{
-			    			   window.location.href="asset/allAssets?tips=Create asset "+$("#assetId").val()+" success!";
-			    		   }
-			    		   
-			    		   
-			    	   }
-			       }
-			       });
-	  
-	      }
-  
-   });
-   
-
-$("#assetName,#seriesNo,#barCode,#poNo,#manufacturer,#monitorVendor," +
-   		"#maxUseNum,#assetUser").click(function() {
-		TextMouseEnter(this);
-		});
-$("#seriesNo,#barCode,#poNo,#manufacturer,#monitorVendor").blur(function() {
-			TextMouseOutNormal(this);
-		});
+	
+	$("#assetName").blur(function(){
+		assetNameValidation();
+	});
+	$("#main").delegate("#assetType input:first", "blur", function(){
+		assetTypeValidation();
+	});
+	$("#main").delegate("#ownership input:first", "blur", function(){
+		owershipValidation();
+	});
+	$("#main").delegate("#customerCode input:first", "blur", function(){
+		usedByValidation();
+	});
+	$("#main").delegate("#selectedStatus input:first", "blur", function(){
+		assetStatusValidation();
+	});
+	//Compare check-in and check-out time
+	$("#checkedOutTime").change(function() {
+		checkInAndOutValidation();
+	});
+	$("#main").delegate("#selectedEntity input:first", "blur", function(){
+		entityValidation();
+	});
+	$("#main").delegate("#selectedSite input:first", "blur", function(){
+		siteValidation();
+	});
+	$("#main").delegate("#selectedLocation input:first", "blur", function(){
+		roomValidation();
+	});
+	$("#main").delegate("#userId input:first", "blur", function(){
+		userValidation();
+	});
+	$("#main").delegate("#machineType input:first", "blur", function(){
+		machineTypeValidation();
+	});
+	
+	$("#submitForm").click(function() {
+		if(!successValidation()){
+			return;
+		}
+		var assetVo = setAssetVo();
+		
+		  $.ajax({
+				   type : 'POST',
+				   url : 'asset/saveAsset',
+				   data : assetVo,
+				   success : function(data) {
+				    	if(data.error != undefined){
+					    	var errorCode = data.error.toString();
+					        showMessageBarForMessage(errorCode);
+					        return false;
+				    	}else{
+				    		window.location.href = "asset/allAssets";
+				    	}
+				    }
+			});
+	});
 });
+
+//show as type
+function assetTypesBindEvent(){
+	var assetTypeMs  = $("#assetType").data("assetType");
+	$(assetTypeMs).on('selectionchange', function(event, combo, selection){
+        var assetType = assetTypeMs.getValue().join();
+        showSpecifyTypeView(assetType);
+    });
+}
+
+function showSpecifyTypeView(type){
+	var assetType;
+	if(undefined == type){
+		assetType = $("#assetType").val();
+	}else{
+		assetType = type;
+	}
+	
+	if (assetType.trim() == 'MACHINE') {
+        $("#machineDetails").show().siblings().hide();
+     } else if (assetType.trim() == 'MONITOR') {
+        $("#monitorDetails").show().siblings().hide();
+     } else if (assetType.trim() == 'DEVICE') {
+        $("#deviceDetails").show().siblings().hide();
+     } else if (assetType.trim() == 'SOFTWARE') {
+        $("#softwareDetails").show().siblings().hide();
+     } else if (assetType.trim() == "OTHERASSETS") {
+        $("#otherAssetsDetails").show().siblings().hide();
+     }
+}
+
+function assetNameValidation(){
+	var assetName = $("#assetName").val();
+	return validateValueIsEmpty($("#assetName"), assetName, "AssetName is null!");
+}
+
+function assetTypeValidation(){
+	var assetType = $("#assetType").data("assetType").getValue().join();	
+	return validateValueIsEmpty($("#assetType"), assetType, "Asset type is null or not a right owership!");
+}
+
+function owershipValidation(){
+	var ownership = $("#ownership").data("ownership").getValue().join();	
+	return validateValueIsEmpty($("#ownership"), ownership, "Ownership is null or not a right owership!");
+}
+
+function usedByValidation(){
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();	
+	return validateValueIsEmpty($("#customerCode"), customerCode, "Customer is null or not a right customer!");
+}
+
+function assetStatusValidation(){
+	var status = $("#selectedStatus").data("selectedStatus").getValue().join();	
+	
+	if (validateValueIsEmpty($("#selectedStatus"), status, "Status is null or not a right status!")) {
+		if(status=="AVAILABLE"){
+			$("#userId").data("userId").clear();
+		}
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function checkInAndOutValidation(){
+	var checkIn = $("#checkedInTime").val();
+	var checkOut = $("#checkedOutTime").val();
+	
+	if (checkIn != "") {
+		if (!dateCompare(checkIn, checkOut)) {
+			addErrorStyle($("#checkedOutTime"), "The checkOutTime must be greater than the checkInTime");
+			return false;
+		} else {
+			removeErrorStyle($("#checkedOutTime"));
+			return true;
+		}
+	}else{
+		return true;
+	}
+}
+
+function entityValidation(){
+	var selectedEntity = $("#selectedEntity").data("selectedEntity").getValue().join();	
+	return validateValueIsEmpty($("#selectedEntity"), selectedEntity, "Entity is null or not a right entity!");
+}
+
+function siteValidation(){
+	var selectedSite = $("#selectedSite").data("selectedSite").getValue().join();	
+	return validateValueIsEmpty($("#selectedSite"), selectedSite, "Entity is null or not a right entity!");
+}
+
+function roomValidation(){
+	var selectedLocation = $("#selectedLocation").data("selectedLocation").getValue().join();	
+	return validateValueIsEmpty($("#selectedLocation"), selectedLocation, "Room is null or not a right room!");
+}
+
+function userValidation(){
+	var userId = $("#userId").data("userId").getValue().join();	
+	var selectedStatus = $("#selectedStatus").data("selectedStatus").getValue().join();	
+	
+	if("" != userId){
+		var arrayValue = new Array();
+		arrayValue.push("IN_USE");
+		
+		$("#selectedStatus").data("selectedStatus").clear();
+		$("#selectedStatus").data("selectedStatus").setValue(arrayValue);
+		return true;
+	} else if("IN_USE" == selectedStatus){
+		return validateValueIsEmpty($("#userId"), userId, "User is null or not exist!");
+	} else {
+		return true;
+	}
+}
+
+function machineTypeValidation(){
+	var assetType = $("#assetType").data("assetType").getValue().join();	
+	var machineType = $("#machineType").data("machineType").getValue().join();	
+	
+	if (assetType == "MACHINE" && "" == machineType) {
+		addErrorStyle($("#machineType"), "Machine subtype is null or not a right type!");
+		return false;
+	}else{
+		removeErrorStyle($("#machineType"));
+		return true;
+	}
+}
+
+function successValidation(){
+	assetNameValidation();
+	assetTypeValidation();
+	machineTypeValidation();
+	owershipValidation();
+	usedByValidation();
+	assetStatusValidation();
+	checkInAndOutValidation();
+	entityValidation();
+	siteValidation();
+	roomValidation();
+	userValidation();
+	machineTypeValidation();
+	
+	if(assetNameValidation() && assetTypeValidation() && machineTypeValidation() && owershipValidation() &&
+			usedByValidation() && assetStatusValidation() && checkInAndOutValidation() && entityValidation() &&
+			siteValidation() && roomValidation() && userValidation() && machineTypeValidation()){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+function setAssetVo(){
+	var assetVo = {};
+	
+	assetVo.batchCreate = $("#isBatchCreate").val();
+	assetVo.batchCount = $("#showBatch").val();
+	assetVo.assetId = $("#assetId").val();
+	assetVo.assetName = $("#assetName").val();
+	assetVo.type = $("#assetType").data("assetType").getValue().join();
+	assetVo.barCode = $("#barCode").val();
+	assetVo.seriesNo = $("#seriesNo").val();
+	assetVo.poNo = $("#poNo").val();
+	assetVo.ownerShip = $("#ownership").data("ownership").getValue().join();
+	assetVo.customerCode = $("#customerCode").data("customerCode").getValue().join();
+	assetVo.customerName = $("#customerName").val();
+	assetVo.projectCode = $("#projectCode").data("projectCode").getValue().join();
+	assetVo.projectName = $("#projectName").val();
+	assetVo.status = $("#selectedStatus").data("selectedStatus").getValue().join();
+	assetVo.checkedInTime = $("#checkedInTime").val();
+	assetVo.checkedOutTime = $("#checkedOutTime").val();
+	assetVo.keeper = $("#keeperSelect").val();
+	assetVo.fixed = $("#fixed").val();
+	assetVo.photoPath = $("#photoPath").val();
+	assetVo.entity = $("#selectedEntity").data("selectedEntity").getValue().join();
+	assetVo.site = $("#selectedSite").data("selectedSite").getValue().join();
+	assetVo.location = $("#selectedLocation").data("selectedLocation").getValue().join();
+	assetVo.userId = $("#userId").data("userId").getValue().join();
+	assetVo.userName = $("#userName").val();
+	assetVo.manufacturer = $("#manufacturer").val();
+	assetVo.warrantyTime = $("#assetWarranty").val();
+	assetVo.vendor = $("#monitorVendor").val();
+	assetVo.memo = $("#memo").val();
+	assetVo.machineId = $("#machineId").val();
+	assetVo.machineSubtype = $("#machineType").data("machineType").getValue().join();
+	assetVo.machineSpecification = $("#specification").val();
+	assetVo.machineConfiguration = $("#machineConfiguration").val();
+	assetVo.machineAddress = $("#machineAddress").val();
+	assetVo.monitorId = $("#monitorId").val();
+	assetVo.monitorSize = $("#size").val();
+	assetVo.monitorDetail = $("#details").val();
+	assetVo.deviceId = $("#deviceId").val();
+	assetVo.deviceSubtypeName = $("#deviceSubtypeSelect").data("deviceSubtypeSelect").getValue().join();
+	assetVo.deviceConfiguration = $("#configuration").val();
+	assetVo.softwarecId = $("#softwareId").val();
+	assetVo.softwareVersion = $("#version").val();
+	assetVo.softwareAdditionalInfo = $("#additionalInfo").val();
+	assetVo.softwareLicenseKey = $("#licenseKey").val();
+	assetVo.softwareManagerVisible = $("#visible").val();
+	assetVo.otherAssetsId = $("#otherAssetsId").val();
+	assetVo.otherAssetsDetail = $("#otherAssetsDetails").val();
+	
+	return assetVo;
+}
+
+function getCommonInfoForAsset(){
+	$.ajax({
+		    type : 'GET',
+		    contentType : 'application/json',
+		    url : 'asset/createAsset',
+		    dataType : 'json',
+		    success : function(data) {
+		    	setCommonInfoForAsset(data);
+		    }
+	});
+}
+
+function siteBindEvent(){
+	var siteMs = $("#selectedSite").data("selectedSite");
+	$(siteMs).on('selectionchange', function(event, combo, selection) {
+		siteValidation();
+		
+		var site = siteMs.getValue().join();
+		var currentSite = "Augmentum " + site;
+		getLocations(currentSite);
+	});
+}
+
+function getLocations(currentSite){
+ 	 $.ajax({
+ 		    type : 'GET',
+ 		    contentType : 'application/json',
+ 		    url : 'location/getLocationRoom?currentSite='+currentSite,
+ 		    dataType : 'json',
+ 		    success : function(data) {
+ 		    	var rooms = [];
+  		        length = data.locationRoomList.length;
+  		        
+  		        for ( var i = 0; i < length; i++) {
+  		        	rooms[i] = data.locationRoomList[i];
+   	        }
+ 		    	var locationMs = initDropDownList($("#selectedLocation"), rooms, false, $("#room").val(), 300);
+ 		    	$("#selectedLocation").data("selectedLocation",locationMs);
+ 		    	
+ 		    	roomBindEvent();
+ 		    }
+ });
+}
+
+function roomBindEvent(){
+	var selectedLocationMs = $("#selectedLocation").data("selectedLocation");
+	$(selectedLocationMs).on('selectionchange', function(event, combo, selection) {
+		roomValidation();
+	});
+}
+
+function entityBindEvent(){
+	var allEntityMs = $("#selectedEntity").data("selectedEntity");
+	$(allEntityMs).on('selectionchange', function(event, combo, selection) {
+		entityValidation();
+	});
+}
+
+function statusBindEvent(){
+	var assetStatusMs = $("#selectedStatus").data("selectedStatus");
+	$(assetStatusMs).on('selectionchange', function(event, combo, selection) {
+		assetStatusValidation();
+	});
+}
+
+function machineTypeBindEvent(){
+	var machineTypeMs = $("#machineType").data("machineType");
+	$(machineTypeMs).on('selectionchange', function(event, combo, selection) {
+		machineTypeValidation();
+	});
+}
+
+function getUsers(){
+    $.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'user/getEmployeeDataSource',
+        dataType : 'json',
+        success : function(data) {
+        	var employeeMs = initDropDownMap($("#userId"), data.employeeLabel, false, "label", "value", $("#userIdDefaultValue").val());
+    		$("#userId").data("userId",employeeMs);
+    		
+    		employeeBindEvent();
+        },
+        });
+}
+
+function employeeBindEvent(){
+	var employeeMs = $("#userId").data("userId");
+	$(employeeMs).on('selectionchange', function(event, combo, selection){
+		var selectedItems = $("#userId").data("userId").getSelectedItems();
+		
+		if(0 < selectedItems.length){
+			var userName = selectedItems[0].label;
+			$("#userName").val(userName);
+		}else{
+			$("#userName").val("");
+		}
+		
+		userValidation();
+    });
+}
+
+function getCustomers(){
+    $.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'customer/getCustomerInfo',
+        dataType : 'json',
+        success : function(data) {
+        	var ownerShipMS = initDropDownMap($("#ownership"), data.customerList, false, "label", "label", $("#ownership").val());
+        	$("#ownership").data("ownership",ownerShipMS);
+        	
+            var customerMs = initDropDownMap($("#customerCode"), data.customerList, false, "label", "value", $("#customerCodeDefaultValue").val());
+            $("#customerCode").data("customerCode",customerMs);
+            
+            ownerShipBindEvent();
+            customerBindEvent();
+         }
+      });
+}
+
+function ownerShipBindEvent(){
+	var ownerShipMS = $("#ownership").data("ownership");
+	$(ownerShipMS).on('selectionchange', function(event, combo, selection){
+		owershipValidation();
+    });
+}
+
+function customerBindEvent(){
+	var customerMs = $("#customerCode").data("customerCode");
+	$(customerMs).on('selectionchange', function(event, combo, selection){
+		var selectedItems = $("#customerCode").data("customerCode").getSelectedItems();
+		
+		if(0 < selectedItems.length){
+			var customerName = selectedItems[0].label;
+			$("#customerName").val(customerName);
+		}else{
+			$("#customerName").val("");
+		}
+		
+		usedByValidation();
+		
+		var customerCode = $("#customerCode").data("customerCode").getValue().join();
+		
+		if("" == customerCode){
+			return;
+		}else{
+			getProjectsByCustomer(customerCode);
+		}
+    });
+}
+
+function getProjectsByCustomer(customerCode){
+    $.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'project/getProjectByCustomerCode',
+        data : {
+        	customerCode:customerCode
+        },
+        dataType : 'json',
+        success : function(data) {
+        	var projectMs = initDropDownMap($("#projectCode"), data.projectList, false, "label", "value");
+        	$("#projectCode").data("projectCode",projectMs);
+        	
+        	var projectManagerNames = [];
+        	projectManagerNames = data.projectManager.del();
+        	setValueOfKeeper(projectManagerNames.join("; "));
+        	
+        	projectBindEvent(data);
+        },
+        error : function() {
+        	showMessageBarForOperationResultMessage("error");
+        }
+    });
+}
+
+function projectBindEvent(data){
+	var projectMs = $("#projectCode").data("projectCode");
+	$(projectMs).on('selectionchange', function(event, combo, selection){
+        var projectCode = projectMs.getValue().join();
+        var selectedItems = $("#projectCode").data("projectCode").getSelectedItems();
+        
+        if(0 < selectedItems.length){
+        	var projectName = selectedItems[0].label;
+    		$("#projectName").val(projectName);
+        }else{
+        	$("#projectName").val("");
+        }
+        
+        
+        var projectCodes = [];
+        
+        for(var i = 0; i < data.projectList.length; i++){
+        	projectCodes.push(data.projectList[i]);
+        }
+        
+        var index = getIndexInArr(projectCodes,projectCode);
+        var projectManager = data.projectManager[index];
+        
+        setValueOfKeeper(projectManager);
+    });
+}
+
+function setValueOfKeeper(projectManagerNames){
+	// 00900 means Augmentum
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();
+	if (customerCode == "00900") {
+        $("#keeperSelect").val("Ping Zhou");
+    } else {
+        $("#keeperSelect").val(projectManagerNames);
+    }
+}
+
+function validateValueIsEmpty($ele, value, msg) {
+	if (value.trim() == "" || undefined == value) {
+		addErrorStyle($ele, msg);
+		return false;
+	} else {
+		removeErrorStyle($ele);
+		return true;
+	}
+}
+
+function addErrorStyle($ele, msg) {
+	validation = "failed";
+	$ele.addClass("input-text-error");
+	$ele.poshytip({
+		content: msg,
+		className: 'tip-green',
+		allowTipHover: false
+	});
+}
+
+function removeErrorStyle($ele) {
+	$ele.removeClass("input-text-error");
+	$ele.poshytip("destroy");
+	validation = "success";
+}
+
+function checkFixed(){
+	if("true" == $("#fixed").val()){
+		$("#false").attr("class","radioCheckOff");
+		$("#true").attr("class","radioCheckOn");
+	}else{
+		$("#false").attr("class","radioCheckOn");
+		$("#true").attr("class","radioCheckOff");
+	}
+}
 
 //common method
 function checkInArr(Arr, ele) {
@@ -437,39 +626,17 @@ function getIndexInArr(Arr, ele) {
 	    return -1;
 	}
 //compare date
-function dateCompare(d1, d2) {
-    var da1 = d1.split("-");
-if ("" == d2) {
-    d2 = GetNowTime();
-}
-var da2 = d2.split("-");
-
-    var dy1 = da1[0];
-    var dy2 = da2[0];
-    var dm1 = da1[1];
-    var dm2 = da2[1];
-    var dd1 = da1[2];
-    var dd2 = da2[2];
-
-    if (dy1 > dy2) {
-        return true;
-    } else if (dy1 == dy2) {
-        if (dm1 > dm2) {
-            return true;
-        } else if (dm1 == dm2) {
-            if (dd1 > dd2) {
-                return true;
-            } else if (dd1 == dd2) {
-                return false;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    } else {
-        return false;
-    }
+function dateCompare(startTime, endTime) {
+	
+	 var startDate = new Date(startTime.replace(/-/g,"/"));  
+     var endDate = new Date(endTime.replace(/-/g,"/"));  
+     var m = (endDate.getTime()-startDate.getTime())/(1000*60*60);  
+     
+     if(0 <= m){
+    	 return true;
+     }else{
+    	 return false;
+     }
 }
 //number check
 function numberCheck(num) {
@@ -479,24 +646,4 @@ function numberCheck(num) {
     } else {
         return true;
     }
-}
-//common validate effect
-function TextMouseEnter(id) {
-    $(id).addClass("l-text-hover").removeClass("l-text l-text-error");
-}
-function TextMouseOutNormal(id) {
-    $(id).addClass("l-text").removeClass("l-text-hover l-text-error input-text-error");
-}
-function TextMouseOutError(id) {
-    $(id).addClass("l-text-error").removeClass("l-text-hover l-textr");
-}
-
-function DropdownMouseEnter(id) {
-    $(id).addClass("l-select-hover").removeClass("l-select-normal l-select-error");
-}
-function DropdownMouseOutNormal(id) {
-    $(id).addClass("l-select-normal").removeClass("l-select-hover l-select-error");
-}
-function DropdownMouseOutError(id) {
-    $(id).addClass("l-select-error").removeClass("l-select-normal l-select-hover");
 }

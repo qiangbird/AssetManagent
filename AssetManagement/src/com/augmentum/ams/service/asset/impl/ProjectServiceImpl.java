@@ -13,7 +13,6 @@ import com.augmentum.ams.model.asset.Asset;
 import com.augmentum.ams.model.asset.Project;
 import com.augmentum.ams.model.user.User;
 import com.augmentum.ams.service.asset.ProjectService;
-import com.augmentum.ams.util.CommonUtil;
 import com.augmentum.ams.web.vo.asset.AssetVo;
 
 @Service("projectService")
@@ -31,12 +30,6 @@ public class ProjectServiceImpl implements ProjectService {
     public List<User> getProjectManagerByProjectCodes(String projectCodes) {
         List<User> pmList = new ArrayList<User>();
         return pmList;
-    }
-
-    @Override
-    public User getProjectManagerByProjectCode(String projectCode) {
-
-        return null;
     }
 
     @Override
@@ -58,12 +51,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project getProjectForAsset(AssetVo assetVo, Asset asset) {
         Project project = null;
-        if (assetVo.getProject().getProjectCode() != ""&&assetVo.getProject().getProjectName()!="") {
+        if (assetVo.getProject().getProjectCode() != ""
+                && assetVo.getProject().getProjectName() != "") {
             project = getProjectByProjectCode(assetVo.getProject().getProjectCode());
+
             if (null == project) {
                 Project newProject = new Project();
                 newProject.setProjectCode(assetVo.getProject().getProjectCode());
-                newProject.setProjectName(CommonUtil.stringToUTF8(assetVo.getProject().getProjectName()));
+                newProject.setProjectName(assetVo.getProject().getProjectName());
                 newProject.setCustomer(asset.getCustomer());
                 saveProject(newProject);
                 project = getProjectByProjectCode(assetVo.getProject().getProjectCode());
@@ -74,11 +69,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Map<String, Project> findAllCustomersFromLocal() {
-        
+
         Map<String, Project> localProjects = new HashMap<String, Project>();
         List<Project> projects = projectDao.findAll(Project.class);
-        
-        for(Project project : projects){
+
+        for (Project project : projects) {
             localProjects.put(project.getProjectName(), project);
         }
         return localProjects;

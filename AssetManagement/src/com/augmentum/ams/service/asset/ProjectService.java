@@ -29,15 +29,6 @@ public interface ProjectService {
     /**
      * 
      * @author Jay.He
-     * @time Dec 9, 2013 2:12:42 PM
-     * @param projectCode
-     * @return
-     */
-    public User getProjectManagerByProjectCode(String projectCode);
-
-    /**
-     * 
-     * @author Jay.He
      * @time Dec 9, 2013 2:12:47 PM
      * @param customerCode
      * @return

@@ -1,5 +1,5 @@
 .input-text-error{
-	background: url("../../img/IPX_300x30_Error.png") no-repeat;
+	border: 1px solid red !important;
 }
 #main li{
 onmouseover: expression(onmouseover=function (){this.style.borderColor ='#cccccc';this.style.backgroundColor ='#23A5E3'});
@@ -63,7 +63,7 @@ p lable{
     font-size: 14px;
     float: left;
     margin-left: 137px;
-    margin-top: -3px;
+    margin-top: 12px;
 }
 
 .requiredFalse {
@@ -115,7 +115,6 @@ p lable{
 #minHeight{
     clear: both;
     position: relative;
-    margin-top: 30px;
     height: 30px;
 }
 
@@ -126,6 +125,12 @@ p lable{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.fixedCheckBox span{
+	color: #555555 !important;
+	position: relative !important;
+	top: 0px !important;
 }
 
 

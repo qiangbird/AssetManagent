@@ -616,17 +616,14 @@
 }
 
 .showAsSelfDefine {
-	position: relative;
 	display: block;
-	margin-bottom: 10px;
-	margin-bottom: 40px;
 }
 
 #sortableRight {
 	margin-left: auto;
 }
 
-#assetType,#customerName,#project,#ownership {
+#assetId, #assetType,#customerName,#project,#ownership {
 	background: rgb(245, 247, 240);
 	border: solid 1px #C7C2C5;
 }

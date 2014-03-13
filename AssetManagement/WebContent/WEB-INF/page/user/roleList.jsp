@@ -12,8 +12,6 @@
 <head>
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="css/common/autocomplete.css" type="text/css">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
-<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
 <link rel="stylesheet" href="css/user/roleList.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
@@ -86,7 +84,6 @@
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 
 <script type="text/javascript" src="js/common/validation.js"></script>
-<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
 <script type="text/javascript" src="js/common/common.js"></script>
 <script type="text/javascript" src="js/user/userInfoTips.js"></script>
 <script type="text/javascript" src="js/search/searchCommon.js"></script>

@@ -61,6 +61,7 @@ public class ExceptionAop {
             BaseException baseException = (BaseException) e;
             logger.error("Error code: " + ((BaseException) e).getErrorCode()
                     + ",\t Error message: " + baseException.getErrorMessage() + "\n"
+                    + "Origianl exception: " + baseException.getException().getStackTrace() + "\n"
                     + baseException);
             logger.error(e.getMessage(), e);
         } else {

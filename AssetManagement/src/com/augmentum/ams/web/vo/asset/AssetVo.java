@@ -91,7 +91,27 @@ public class AssetVo {
     private String purchaseItemId;
 
     private String batchNumber;
-    
+
+    private String batchCreate;
+
+    private String batchCount;
+
+    public String getBatchCreate() {
+        return batchCreate;
+    }
+
+    public void setBatchCreate(String batchCreate) {
+        this.batchCreate = batchCreate;
+    }
+
+    public String getBatchCount() {
+        return batchCount;
+    }
+
+    public void setBatchCount(String batchCount) {
+        this.batchCount = batchCount;
+    }
+
     public String getBatchNumber() {
         return batchNumber;
     }

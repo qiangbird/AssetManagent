@@ -74,7 +74,6 @@ import com.augmentum.ams.service.user.SpecialRoleService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.AssetStatusOperateUtil;
 import com.augmentum.ams.util.AssetUtil;
-import com.augmentum.ams.util.CommonUtil;
 import com.augmentum.ams.util.ErrorCodeUtil;
 import com.augmentum.ams.util.ExceptionHelper;
 import com.augmentum.ams.util.FileOperateUtil;
@@ -165,7 +164,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
     }
 
     @Override
-    @OperationLogAnnotation(operateDescribe="Delete Asset", operateObject="Asset", operateObjectId="%")
+    @OperationLogAnnotation(operateDescribe = "Delete Asset", operateObject = "Asset", operateObjectId = "%")
     public void deleteAssetById(String id) {
         assetDao.delete(assetDao.getAssetById(id));
         
@@ -400,7 +399,7 @@ public class AssetServiceImpl extends SearchAssetServiceImpl implements AssetSer
             asset.setSeriesNo(assetVo.getSeriesNo());
             asset.setPoNo(assetVo.getPoNo());
             asset.setPhotoPath(assetVo.getPhotoPath());
-            asset.setEntity(CommonUtil.stringToUTF8(assetVo.getEntity()));
+            asset.setEntity(assetVo.getEntity());
             asset.setManufacturer(assetVo.getManufacturer());
             asset.setCheckInTime(UTCTimeUtil.localDateToUTC(assetVo.getCheckInTime()));
             asset.setCheckOutTime(UTCTimeUtil.localDateToUTC(assetVo.getCheckOutTime()));

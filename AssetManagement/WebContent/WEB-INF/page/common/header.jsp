@@ -12,11 +12,12 @@
 <head>
 <base href="<%=basePath%>">
 
-<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.8.18.custom.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/jquery-ui-1.10.3.custom.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/tip-green/tip-green.css">
-<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css" >
 <link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
+<link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/magicsuggest-1.3.1.css" />
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 
 <title>Asset Page</title>
@@ -121,7 +122,7 @@
             <a><spring:message code="navigator.operation" /></a>
             <ul class="operationUl">
                 <li><a href="auditFile/inventoryList"><spring:message code="navigator.check.inventory" /></a></li>
-                <li><a href="asset/createAsset"><spring:message code="navigator.create.asset" /></a></li>
+                <li><a href="asset/gotoCreateAsset"><spring:message code="navigator.create.asset" /></a></li>
                 <li><a href="asset/import"><spring:message code="navigator.import.asset" /></a></li>
             </ul>
         </div>
@@ -135,10 +136,12 @@
  	</div>
  	<div id ="messageBar"></div>
  	<div id="div-loader"></div>
-    <script type="text/javascript" src="<%=basePath%>js/common/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript" src="<%=basePath%>js/common/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="<%=basePath%>js/common/jquery-ui.js"></script>
+    <script type="text/javascript" src="<%=basePath%>js/common/magicsuggest-1.3.1.js" ></script>
+    <script type="text/javascript" src="<%=basePath%>js/common/commonEdit.js" ></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/autocomplete.js"></script>
-	<script type="text/javascript" src="<%=basePath%>jquery.poshytip/js/jquery.poshytip.js"></script>
+	<script type="text/javascript" src="<%=basePath%>jquery.poshytip/js/poshytip.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/jquery.i18n.properties-1.0.9.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/uuid.js"></script>
 	<script type="text/javascript" src="<%=basePath%>js/common/header.js"></script>

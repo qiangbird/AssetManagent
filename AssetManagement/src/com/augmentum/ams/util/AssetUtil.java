@@ -1,9 +1,7 @@
 package com.augmentum.ams.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
@@ -47,18 +45,7 @@ public class AssetUtil {
     }
     
     public static void setKeeperForAssetVo(AssetVo assetVo, Asset asset) {
-        // save keeper and Remove duplicate
-        String[] keeper = assetVo.getKeeper().split(";");
-        Set<String> keeperSet = new HashSet<String>();
-        for (int i = 0; i < keeper.length; i++) {
-            keeperSet.add(keeper[i]);
-        }
-        StringBuffer keeprs = new StringBuffer();
-        for (String str : keeperSet) {
-            keeprs.append(str).append(";");
-        }
-        asset.setKeeper(keeprs.toString());
-
+        asset.setKeeper(assetVo.getKeeper());
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -129,11 +116,11 @@ public class AssetUtil {
         }
         return processTypes;
     }
-    
-    public static String getErrorMessage(BindingResult bindingResult){
+
+    public static String getErrorMessage(BindingResult bindingResult) {
         List<FieldError> errors = bindingResult.getFieldErrors();
         StringBuffer sb = new StringBuffer();
-        
+
         for (FieldError error : errors) {
             String errorCode = error.getDefaultMessage();
             sb.append(errorCode).append(",");
@@ -142,10 +129,10 @@ public class AssetUtil {
         return sb.toString();
     }
 
-    public static String getErrorField(BindingResult bindingResult){
+    public static String getErrorField(BindingResult bindingResult) {
         List<FieldError> errors = bindingResult.getFieldErrors();
         StringBuffer sb = new StringBuffer();
-        
+
         for (FieldError error : errors) {
             String errorCode = error.getField();
             sb.append(errorCode).append(",");

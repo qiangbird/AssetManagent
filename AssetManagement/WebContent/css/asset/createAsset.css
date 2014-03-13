@@ -24,6 +24,8 @@
 	color: #555555;
 	margin-left: auto;
 	margin-right: auto;
+	font-family: arial;
+    font-size: 14px;
 }
 
 #picPosition {
@@ -86,6 +88,10 @@
 	position: relative;
 	left: 460px;
 	margin-top: 60px;
+	-webkit-box-shadow: inset 0 0 0px !important;
+	border: 0px !important;
+	border-radius: 0PX !important;
+	-webkit-border-radius: 0px !important;
 }
 
 .asset-input-info {
@@ -124,16 +130,17 @@ html .ui-autocomplete {
 	float: right;
 	width: 440px;
 	margin-right: auto;
-	margin-top: -35px;
+	margin-top: 19px;
 }
 
-.asset-input-panel p {
+.row {
 	position: relative;
-	margin-bottom: -10px;
+	margin-top: 10px;
 	height: 30px;
+	clear: both;
 }
 
-.asset-input-panel p .select-panel {
+.row .select-panel {
 	height: 30px;
 	width: 300px;
 	cursor: pointer;
@@ -142,7 +149,7 @@ html .ui-autocomplete {
 	right: 0;
 }
 
-.asset-input-panel p .message-div {
+.row .message-div {
 	height: 30px;
 	width: 300px;
 	line-height: 30px;
@@ -151,24 +158,18 @@ html .ui-autocomplete {
 	background: url("../../image/IPX_300x30_Empty.png") no-repeat;
 }
 
-.asset-input-panel p.p-textarea {
+.row.p-textarea {
 	height: 70px;
 }
 
-.asset-input-panel p div span {
+.row span {
 	color: #FF0000;
 	position: absolute;
-	top: 10px;
+	top: 18px;
 	left: 0; 
 }
 
-.asset-input-panel p span {
-	color: #FF0000;
-	position: absolute;
-	top: 15px;
-	left: -2;
-}
-.asset-input-panel p label {
+.row label {
 	width: 125px;
 	position: absolute;
 	top: 15px;
@@ -178,7 +179,7 @@ html .ui-autocomplete {
 	text-overflow: ellipsis;
 }
 
-.asset-input-panel p input {
+.row input {
 	display: block;
 	height: 20px;
 	width: 300px;
@@ -190,9 +191,14 @@ html .ui-autocomplete {
 	height: 30px;
 	font-size: 14px;
 	color: #555555;
+	border: 1px solid #cccccc;
+    border-radius: 3PX;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.25);
+    -webkit-border-radius: 3px;
 }
 
-.asset-input-panel p .p-textarea-span {
+.row .p-textarea-span {
 	position: absolute;
 	top: 0;
 	left: 130px;
@@ -202,7 +208,7 @@ html .ui-autocomplete {
 	padding: 10px;
 }
 
-.asset-input-panel p textarea {
+.row textarea {
 	height: 70px;
 	width: 300px;
 	border: 2;
@@ -210,13 +216,10 @@ html .ui-autocomplete {
 	color: #555555;
 	font-family: Arial;
 	overflow: auto;
-	/* background: url("../../image/asset/create/IPX_300x70_Normal.png")
-		no-repeat; */
 }
 
 .l-text {
-	background: url("../../image/asset/create/IPX_300x30_Normal.png")
-		no-repeat;
+	
 }
 .l-text-hover {
     background: url("../../image/asset/create/IPX_300x30_Hover.png")
@@ -226,8 +229,6 @@ html .ui-autocomplete {
 	background: url("../../image/asset/create/IPX_300x30_Error.png")
         no-repeat;
 }
-
-
 
 #projectSelect {
 	background:
@@ -256,24 +257,20 @@ html .ui-autocomplete {
 	cursor: pointer;
 }
 
-.asset-input-panel p input.l-select {
+.row input.l-select {
 	padding-right: 30px;
 	width: 300px;
 }
 
-.l-date {
-	background:
-		url("../../image/asset/create/IPX_300x30_Calendar_Normal.png")
-		no-repeat;
+.checkIn, .checkOut, #assetWarranty, .l-date {
+	background: #fff url("../../image/customize/customizedView/ICN_Calendar_26x26.png") right center no-repeat;
 }
 
 .l-date-error {
-	background:
-		url("../../image/asset/create/IPX_300x30_Calendar_Error.png")
-		no-repeat;
+	border: 1px solid red;
 }
 
-.asset-input-left p .bar-code-mess {
+.asset-input-left div .bar-code-mess {
 	position: absolute;
 	top: 17px;
 	left: 165px;
@@ -296,7 +293,7 @@ html .ui-autocomplete {
         no-repeat;
 }
 
-.asset-input-panel p input.l-checkbox {
+.row input.l-checkbox {
 	opacity: 0;
 	filter: alpha(opacity =           0);
 	width: 15px;
@@ -304,13 +301,6 @@ html .ui-autocomplete {
 	position: absolute;
 	top: 7px;
 	left: 0;
-}
-
-#main input {
-	outline: none;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
 }
 
 #main span.checkbox-panel {
@@ -399,7 +389,7 @@ html .ui-autocomplete {
 .operation {
 	height: 30px;
 	width: 960px;
-	margin: auto;
+	margin-top: 30px;
 	clear: both;
 }
 
@@ -479,7 +469,7 @@ html .ui-autocomplete {
 	color: #FFFFFF;
 }
 
-.asset-input-info ul li p {
+.asset-input-info ul li div {
 	width: 262px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -487,7 +477,7 @@ html .ui-autocomplete {
 	height: 25px;
 }
 
-.asset-input-panel p .image-span {
+.row .image-span {
 	display: block;
 	position: absolute;
 	top: 5px;
@@ -851,18 +841,14 @@ margin-left: 130px;
 	left: 140px;
 }
 
-#assetType,#selectedStatus,#selectedEntity{
-	display: none;
-}
 
-
-p .dropDownList .dropDownList_text {
+div .dropDownList .dropDownList_text {
 	padding-left: 10px;
 	margin-top: -10px;
 	color: #555555;
 }
 
-p .dropDownList .dropDownList_icon {
+div .dropDownList .dropDownList_icon {
 	margin-top: -10px;
 	margin-left: 278px;
 }
@@ -881,3 +867,37 @@ p .dropDownList .dropDownList_icon {
 .ui-menu .ui-menu-item a {
 	line-height: 30px !important; 
 }
+
+.ms-sel-ctn{
+	overflow: hidden !important;
+}
+
+.ms-ctn{
+	float: right !important;
+	margin-top: 10px !important;
+	height: 28px !important;
+	width: 298px !important;
+	font-size: 14px !important;
+}
+
+.ms-ctn input{
+	height: auto !important;
+	padding: 4px 6px !important;
+	left: 0px !important;
+	top: 0px !important;
+	width: 100px !important;
+}
+
+.ms-ctn span{
+	position: relative !important;
+	top: 0px !important;
+}
+
+.ms-sel-ctn .ms-sel-text{
+	margin-left: 3 !important;
+}
+
+.ms-ctn .ms-trigger{
+	margin-top: 0px !important;
+}
+

@@ -1,403 +1,175 @@
 ﻿$(document).ready(function() {
-	if("true" == $("#fixed").val()){
-		$("#false").attr("class","radioCheckOff");
-		$("#true").attr("class","radioCheckOn");
-	}else{
-		$("#false").attr("class","radioCheckOn");
-		$("#true").attr("class","radioCheckOff");
-	}
-   $("#selectedStatus").DropDownList({
-       multiple : false,
-       header : false
-  });
-   $("#ownership").click(
-   function() {
-      $.ajax({
-	   type : 'GET',
-	   contentType : 'application/json',
-	   url : 'customer/getCustomerInfo',
-	   dataType : 'json',
-	   success : function(data) {
-	      length = data.customerList.length;
-	      custName=[];
-	      for ( var i = 0; i < length; i++) {
-	    	  custName[i] = data.customerList[i].customerName;
-		      }
-	      $("#ownership").autocomplete(
-              {
-                 source : custName
-              });
-	   }
+	initDataForEdit();
+	checkFixed();
+	
+	$("#editSubmitForm").click(function() {
+		doEditSubmit();
 	});
-   });
-   
-   $("#selectedEntity").DropDownList({
-       multiple : false,
-       header : false,
-       noneSelectedText: 'Select entity'
-  });
-   $("#selectedSite").DropDownList({
-       multiple : false,
-       header : false
-  });
-   $("#machineType").DropDownList({
-	    multiple : false,
-	    header : false,
-	    noneSelectedText : 'Select machine type',
-	});
-   $(".showAsSelfDefine").delegate(".l-select","click",function(){
-	   $(this).datepicker("option", "dateFormat", "ISO 8601 - yy-mm-dd" );
-	 });
-   var userArray = new Array();
-
-   $(".showElementItems").click(
-   function() {
-      $("#customerName").val($(this).text().trim());
-      DropdownMouseOutNormal("#customerName");
-      // get the project
-      $.ajax({
-       type : 'GET',
-       contentType : 'application/json',
-       url : 'project/getProjectByCustomer?customerName='+ $(this).text().trim(),
-       dataType : 'json',
-       success : function(data) {
-          length = data.projectList.length;
-          projectNames = [];
-          for ( var i = 0; i < length; i++) {
-             projectNames[i] = data.projectList[i].projectCode;
-          }
-       },
-       error : function() {
-          alert("error");
-       }
-    });
-
-      $(".showElement").hide();
-      if (customerNameStatus) {
-         customerNameStatus = false;
-      }
-      checkCustomerNameAndAssetType();
-   });
-
-   $("#assetUser").click(function() {
-      $.ajax({
-       type : 'GET',
-       contentType : 'application/json',
-       url : 'user/getEmployeeDataSource',
-       dataType : 'json',
-       success : function(data) {
-          length = data.employeeInfo.length;
-          employeeName = [];
-          employeeValue = [];
-          for ( var i = 0; i < length; i++) {
-             employeeName[i] = data.employeeInfo[i].label;
-             employeeValue[i] = data.employeeInfo[i].value;
-          }
-          userArray = employeeName;
-          $("#assetUser").autocomplete(
-          {
-             minLength: 0,
-             source : employeeName,
-             select : function() {
-                 $("#assetUser").change(
-                  function() {
-                      if ($(this).val().trim() == "") {
-                      TextMouseOutError(this);
-                      }else{
-                       if (!checkInArr(userArray, $("#assetUser").val())) {
-                           TextMouseOutError(this);
-                       }else{
-                           TextMouseOutNormal(this);
-                       }
-                      }
-                  }); 
-                 $("#assetUser").blur(
-                  function() {
-                	  TextMouseOutNormal(this);
-                      if ($(this).val().trim() == ""&&$("#selectedStatus").val()=="IN_USE") {
-                      TextMouseOutError(this);
-                      }else{
-                       if (!checkInArr(userArray, $("#assetUser").val())) {
-                           TextMouseOutError(this);
-                       }else{
-                           TextMouseOutNormal(this);
-                       }
-                      }
-                  }); 
-                 $("#assetUser").focus(function(){
-                     TextMouseOutNormal(this);
-                 });
-              }
-          });
-          
-       }
-  });
 });
-   
-$("#selectedLocation").blur(
-    function() {
-    if ($(this).val().trim() == "") {
-        TextMouseOutError(this);
-    } else {
-        if (!checkInArr(rooms,$(this).val())) {
-            TextMouseOutError(this);
-        } else {
-            TextMouseOutNormal(this);
-        }
-    }
-    });
 
-   $("#deviceSubtypeSelect").click(
-   function() {
-      $.ajax({
-       type : 'GET',
-       contentType : 'application/json',
-       url : 'deviceSubtype/getAllSubtypes',
-       dataType : 'json',
-       success : function(data) {
-          subtypeNames = [];
-          for (i = 0; i < data.deviceSubtypeList.length; i++) {
-             subtypeNames[i] = data.deviceSubtypeList[i].subtypeName;
-          }
-          $("#deviceSubtypeSelect").autocomplete({
-             source : subtypeNames
-          });
-       },
-       error : function() {
-          alert("error");
-       }
-    });
-   });
+function initDataForEdit(){
+	$("#div-loader").show();
+	getCommonInfoForAsset();
+	getUsers();
+	$("#div-loader").hide();
+}
 
-   $("#submitForm").click(function() {
-      var name = $("#assetName").val();
-      var type = $("#assetType").val();
-      var ownership = $("#ownership").val();
-      var customerName = $("#customerName").val();
-      var room = $("#selectedLocation").val();
-      var selectedStatus = $("#selectedStatus").val();
-      var selectedEntity = $("#selectedEntity").val();
-      var machineType = $("#machineType").val();
-      var maxUseNum = $("#maxUseNum").val();
-      var user = $("#assetUser").val();
-      var checkedInTime = $("#checkedInTime").val();
-      var checkedOutTime = $("#checkedOutTime").val();
-      var flag = 0;
-
-      if (type == "") {
-         $("#assetType").addClass("l-select-error");
-         flag = 1;
-      } else if (type == "machine"&& machineType == "") {
-         $("#machineType").addClass("l-select-error");
-         flag = 1;
-      } else if (type == "software") {
-         if (maxUseNum == ""|| !numberCheck(maxUseNum)) {
-            $("#maxUseNum").addClass("l-select-error");
-            flag = 1;
-         }
-      }
-      if (name == "") {
-         $("#assetName").css("background","url(img/IPX_300x30_Error.png) no-repeat");
-         $("#assetName").unbind("click");
-         flag = 3;
-      }
-//      if (ownership == "") {
-//          $("#ownership").addClass("l-select-error");
-//          flag = 6;
-//       }else{
-//       if(!checkInArr(custName, ownership)){
-//    	   $("#ownership").addClass("l-select-error");
-//    	   flag = 6;
-//       }
-//       }
-      if (customerName == "") {
-         $("#customerName").addClass("l-select-error");
-         flag = 7;
-      }
-//      if (selectedLocation == "") {
-//         $("#selectedLocation").addClass("l-select-error");
-//         flag = 8;
-//      }
-      if (selectedStatus == "") {
-         $("#selectedStatus").addClass("l-select-error");
-         flag = 9;
-      } else {
-	    if (selectedStatus == "IN_USE"&& $("#assetUser").val() == "") {
-	        $("#assetUser").addClass("l-text-error");
-	        flag = 9;
-	    }
+function doEditSubmit(){
+	if(!doEditValidation()){
+		return;
 	}
-      if (selectedEntity == "") {
-         $("#selectedEntity").addClass("l-select-error");
-         flag = 13;
-      }
-      if ($("#assetUser").val() != "") {
-    	  try 
-    	   { 
-    		  if (!checkInArr(employeeName, $("#assetUser").val())) {
-    			  $("#assetUser").addClass("input-text-error");   
-    			  flag = 17;
-    	          }
-    	   } 
-    	catch(err) 
-    	   { 
-    		//because you did not click user, so employeeName will be undefined, this means use is unchange
-    	   flag=0;
-    	   } 
-    	  
-      }
-      
-      //relationship about status and user
-      if(selectedStatus=="IN_USE"&&user==""){
-    	$("#assetUser").addClass("input-text-error");
-        flag = 18;
-      }
-      if("" != checkedInTime && "" != checkedOutTime){
-    	  if(dateCompare(checkedInTime, checkedOutTime)){
-    		  flag = 19;
-    	  }
-      }
-      if(selectedStatus=="AVAILABLE"&&user!=""){
-    	  $("#assetUser").empty();
-      }
-      if(user!=""&&selectedStatus!="IN_USE"){
-    	  $("#selectedStatus").val("IN_USE");
-      }
-      
-      if (room == ""){
-    	  $("#selectedLocation").addClass("l-text-error");
-    	     flag = 20;
-      }else{
-    	  try{
-    		  if(!checkInArr(rooms, room)){
-    			  $("#selectedLocation").addClass("l-text-error");
-    	    	     flag = 20;
-    		  }
-    	  }catch (e) {
-    		  if(flag==0){
-    		  flag = 0;
-    		  }
+	updateSelfDefinedProperties();
+	var assetVo = setAssetVoForEdit();
+	
+	$.ajax({
+		type : 'post',
+		url : 'asset/update',
+		data : assetVo,
+		success : function(data) {
+			if (data.error != undefined) {
+				var errorCode = data.error.toString();
+				showMessageBarForMessage(errorCode);
+				return false;
+			} else {
+				window.location.href = "asset/allAssets";
+			}
 		}
-      }
-
-      if (flag != 0) {
-         return false;
-      } else {
-  		currentPropertie = new Array();
-  		var selfDefinedNames = new Array();
-  		var selfDefinedIds = new Array();
-  		var selfDefinedValues = new Array();
-  	    names="";
-  		ids="";
-  		values="";
-  	//get self-defined names
-  		$.each($(".showAsSelfDefine p .selfPropertyName"), function(i, item){
-  			selfDefinedNames[i] = $(this).text();
-  			names+=$(this).text()+",";
-		});
-  		$.each($(".showAsSelfDefine p .selfId"), function(i, item){
- 	  	     selfDefinedIds[i] = $(this).val();
- 	  	  ids+=$(this).val()+",";
- 		});
-  		//get self-defined values
-  		$.each($(".showAsSelfDefine p .selfPropertyVlaue"), function(i, item){
-  			if($(this).val()!=""){
-	  	   selfDefinedValues[i] = $(this).val();
-	  	 values+=$(this).val()+",";
-  			};
-		});
-  		
-  		 $.ajax({
-  	         type : 'GET',
-  	         contentType : 'application/json',
-  	         url : 'customizedPropery/updateSelfDefinedProperties',
-  	         dataType : 'json',
-  	         data:{
-  	        	 'assetId':$("#id").val(),
-  	        	'selfDefinedNames' : names,
-  	    		'selfDefinedIds' : ids,
-  	    		'selfDefinedValues' : values
-             },
-  	         success : function(data) {
-  	         }
-  	      });
-  		
-  		 $("#assetEditFrom").ajaxSubmit(
-  			   {
-  			       type : 'post',
-  			       url : 'asset/update',
-  			       data : $("#assetEditFrom")
-  			               .formSerialize(),
-  			       success : function(data) {
-  			    	   if(data.error != undefined){
-	  			    	   var errorCode = data.error.toString();
-	  			           showMessageBarForMessage(errorCode);
-	  			           return false;
-  			    	   }else{
-  			    		   window.location.href="asset/allAssets";
-  			    	   }
-  			       }
-  			       });
-         return true;
-      }
-   });
-   $("#assetName,#seriesNo,#barCode,#poNo,#manufacturer,#monitorVendor,#maxUseNum,#assetUser").click(function() {
-	   TextMouseEnter(this);
-	   });
-   $("#seriesNo,#barCode,#poNo,#manufacturer,#monitorVendor").blur(function() {
-	   TextMouseOutNormal(this);
-	   });
-   $("#assetName").blur(function() {
-      if ($(this).val().trim() == "") {
-         TextMouseOutError(this);
-      } else {
-         TextMouseOutNormal(this);
-      }
-   });
-   
-   $("#ownership,#customerName").click(function() {
-	    DropdownMouseEnter(this);
 	});
-   
-   $("#ownership").blur(function() {
-	   if ($(this).val().trim() == "") {
-	       	DropdownMouseOutError(this);
-	       }else{
-	       	 if (!checkInArr(custName, $("#ownership").val())) {
-	         	   DropdownMouseOutError(this);
-	            }else{
-	              DropdownMouseOutNormal(this);
-	            }
-	       }
-   });
+	return true;
+}
 
-   $("#customerName").blur(function() {
-            if ($(this).val().trim() == "") {
-                DropdownMouseOutError(this);
-            }else{
-                 if (!checkInArr(custName, $("#customerName").val())) {
-                     DropdownMouseOutError(this);
-                 }else{
-                   DropdownMouseOutNormal(this);
-                 }
-            }
-         });
+function doEditValidation(){
+	assetNameValidation();
+	assetStatusValidation();
+	checkInAndOutValidation();
+	entityValidation();
+	siteValidation();
+	roomValidation();
+	userValidation();
+	
+	if(assetNameValidation() && assetStatusValidation() && checkInAndOutValidation() &&
+			entityValidation() && siteValidation() && roomValidation() && userValidation()){
+		return true;
+	}else{
+		return false;
+	}
+}
 
-   $("#maxUseNum").blur(
-         function() {
-            if ($(this).val() == ""|| !numberCheck($(this).val().trim())) {
-               TextMouseOutError(this);
-            } else {
-               TextMouseOutNormal(this);
-            }
-         });
-});
-$(document).ready(function() {
-   $("#assetUser").change(function(){
-	   $("#userId").val("");
-   });
-   $(".dropDownSelect").DropDownList({
-       multiple : false,
-       header : false
-  });
-})
+function setAssetVoForEdit(){
+	var assetVo = {};
+	
+	assetVo.id = $("#id").val();
+	assetVo.assetId = $("#assetId").val();
+	assetVo.assetName = $("#assetName").val();
+	assetVo.type = $("#assetType").val();
+	assetVo.barCode = $("#barCode").val();
+	assetVo.seriesNo = $("#seriesNo").val();
+	assetVo.poNo = $("#poNo").val();
+	assetVo.ownerShip = $("#ownership").val();
+	assetVo.customerCode = $("#customerCode").val();
+	assetVo.customerName = $("#customerName").val();
+	assetVo.projectCode = $("#projectCode").val();
+	assetVo.projectName = $("#projectName").val();
+	assetVo.status = $("#selectedStatus").data("selectedStatus").getValue().join();
+	assetVo.checkedInTime = $("#checkedInTime").val();
+	assetVo.checkedOutTime = $("#checkedOutTime").val();
+	assetVo.keeper = $("#keeperSelect").val();
+	assetVo.fixed = $("#fixed").val();
+	assetVo.photoPath = $("#photoPath").val();
+	assetVo.entity = $("#selectedEntity").data("selectedEntity").getValue().join();
+	assetVo.site = $("#selectedSite").data("selectedSite").getValue().join();
+	assetVo.location = $("#selectedLocation").data("selectedLocation").getValue().join();
+	assetVo.userId = $("#userId").data("userId").getValue().join();
+	assetVo.userName = $("#userName").val();
+	assetVo.manufacturer = $("#manufacturer").val();
+	assetVo.warrantyTime = $("#assetWarranty").val();
+	assetVo.vendor = $("#monitorVendor").val();
+	assetVo.memo = $("#memo").val();
+	assetVo.machineId = $("#machineId").val();
+	assetVo.machineSubtype = $("#machineType").data("machineType").getValue().join();
+	assetVo.machineSpecification = $("#specification").val();
+	assetVo.machineConfiguration = $("#machineConfiguration").val();
+	assetVo.machineAddress = $("#machineAddress").val();
+	assetVo.monitorId = $("#monitorId").val();
+	assetVo.monitorSize = $("#size").val();
+	assetVo.monitorDetail = $("#details").val();
+	assetVo.deviceId = $("#deviceId").val();
+	assetVo.deviceSubtypeName = $("#deviceSubtypeSelect").data("deviceSubtypeSelect").getValue().join();
+	assetVo.deviceConfiguration = $("#configuration").val();
+	assetVo.softwarecId = $("#softwareId").val();
+	assetVo.softwareVersion = $("#version").val();
+	assetVo.softwareAdditionalInfo = $("#additionalInfo").val();
+	assetVo.softwareLicenseKey = $("#licenseKey").val();
+	assetVo.softwareManagerVisible = $("#visible").val();
+	assetVo.otherAssetsId = $("#otherAssetsId").val();
+	assetVo.otherAssetsDetail = $("#otherAssetsDetails").val();
+	
+	return assetVo;
+}
+
+function updateSelfDefinedProperties(){
+	var selfDefinedNames = new Array();
+	var selfDefinedIds = new Array();
+	var selfDefinedValues = new Array();
+    var names="";
+	var ids="";
+	var values="";
+	
+	//get self-defined names
+	$.each($(".showAsSelfDefine div .selfPropertyName"), function(i, item){
+		selfDefinedNames[i] = $(this).text();
+		names+=$(this).text()+",";
+	});
+	$.each($(".showAsSelfDefine div .selfId"), function(i, item){
+  	     selfDefinedIds[i] = $(this).val();
+  	  ids+=$(this).val()+",";
+	});
+	//get self-defined values
+	$.each($(".showAsSelfDefine div .selfPropertyVlaue"), function(i, item){
+		if($(this).val()!=""){
+  	   selfDefinedValues[i] = $(this).val();
+  	 values+=$(this).val()+",";
+		};
+	});
+	
+	if("" == ids){
+		return;
+	}else{
+		$.ajax({
+			type : 'GET',
+			contentType : 'application/json',
+			url : 'customizedPropery/updateSelfDefinedProperties',
+			dataType : 'json',
+			data:{
+				'assetId':$("#id").val(),
+				'selfDefinedNames' : names,
+				'selfDefinedIds' : ids,
+				'selfDefinedValues' : values
+			},
+			success : function(data) {
+				console.log(data);
+			}
+		});
+	}
+}
+
+function setCommonInfoForAsset(data){
+	showSpecifyTypeView();
+	var siteMs = initDropDownList($("#selectedSite"), data.siteList, false, $("#selectedSite").val(), 300);
+	var allEntityMs = initDropDownList($("#selectedEntity"), data.allEntity, false, $("#selectedEntity").val(), 300);
+	var assetStatusMs = initDropDownList($("#selectedStatus"), data.assetStatus, false, $("#selectedStatus").val(), 300);
+	var machineTypeMs = initDropDownList($("#machineType"), data.machineTypes, false, $("#machineType").val(), 300);
+	var deviceSubtypeMs = initDropDownList($("#deviceSubtypeSelect"), data.deviceSubtypeList, false, $("#deviceSubtypeSelect").val(), 300);
+	
+	$("#selectedSite").data("selectedSite",siteMs);
+	$("#selectedEntity").data("selectedEntity",allEntityMs);
+	$("#selectedStatus").data("selectedStatus",assetStatusMs);
+	$("#machineType").data("machineType",machineTypeMs);
+	$("#deviceSubtypeSelect").data("deviceSubtypeSelect",deviceSubtypeMs);
+	
+	getLocations("Augmentum " + $("#selectedSite").data("selectedSite").getValue().join());
+	
+	siteBindEvent();
+	entityBindEvent();
+	statusBindEvent();
+}

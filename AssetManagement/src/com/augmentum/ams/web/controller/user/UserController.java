@@ -25,6 +25,7 @@ import com.augmentum.ams.service.search.UserCustomColumnsService;
 import com.augmentum.ams.service.user.UserService;
 import com.augmentum.ams.util.SearchCommonUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
+import com.augmentum.ams.web.vo.common.LabelAndValue;
 import com.augmentum.ams.web.vo.system.Page;
 import com.augmentum.ams.web.vo.system.SearchCondition;
 import com.augmentum.ams.web.vo.user.UserVo;
@@ -51,6 +52,25 @@ public class UserController extends BaseController {
         JSONArray employeeInfo = remoteEmployeeService.findRemoteEmployees(request);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("employeeInfo", employeeInfo);
+
+        List<LabelAndValue> labelAndValueList = new ArrayList<LabelAndValue>();
+        for (int i = 0; i < employeeInfo.size(); i++) {
+            JSONObject employeeJsonObject = JSONObject.fromObject(employeeInfo.get(i));
+            LabelAndValue labelAndValue = new LabelAndValue();
+            String employeeLabel = employeeJsonObject.getString("label");
+            String employeeValue = "";
+
+            if (0 < employeeJsonObject.getString("value").split("#").length) {
+                employeeValue = employeeJsonObject.getString("value").split("#")[1];
+            }
+
+            labelAndValue.setLabel(employeeLabel);
+            labelAndValue.setValue(employeeValue);
+
+            labelAndValueList.add(labelAndValue);
+        }
+        modelAndView.addObject("employeeLabel", labelAndValueList);
+
         return modelAndView;
     }
 
