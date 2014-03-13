@@ -77,23 +77,29 @@ function customerBindEvent(){
 	var customerCode = $("#customerCode").data("customerCode").getValue().join();
 	
 	if("" != customerCode){
+		setCustomerName();
 		findEmployeesByCustomerCode(customerCode);
 	}
 	var customerMs = $("#customerCode").data("customerCode");
 	$(customerMs).on('selectionchange', function(event, combo, selection){
 		var customerCode = $("#customerCode").data("customerCode").getValue().join();
-		var selectedItems = $("#customerCode").data("customerCode").getSelectedItems();
+		setCustomerName();
 		
-		if(0 < selectedItems.length){
-			var customerName = selectedItems[0].label;
-			$("#customerName").val(customerName);
-		}else{
-			$("#customerName").val("");
-		}
 		if(doCustomerValidation()){
 			findEmployeesByCustomerCode(customerCode);
 		}
     });
+}
+
+function setCustomerName(){
+	var selectedItems = $("#customerCode").data("customerCode").getSelectedItems();
+	
+	if(0 < selectedItems.length){
+		var customerName = selectedItems[0].label;
+		$("#customerName").val(customerName);
+	}else{
+		$("#customerName").val("");
+	}
 }
 
 function doCustomerValidation(){
@@ -125,7 +131,7 @@ function saveOperation(specialRoles){
 		},
 		success: function(){
 			$("#div-loader").hide();
-			findCustomersAndSpecialRoles();
+			findSpecialRoles();
 			showMessageBarForMessage("role_save_success");
 		},
 //		dataType: 'json',
@@ -144,7 +150,7 @@ function initAddProccess(){
 function checkEmployees(){
 	var employeeInput = $("#employeeName").val();
 	var customerName = $("#customerName").val();
-	var customerCode = $("#customerCode").data("customerCode").getValue.join();
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();
 	var listEmployees = employeeInput.split(",");
 	var errorEmployeeNames = [];
 	errorEmployeeNames.length = 0;

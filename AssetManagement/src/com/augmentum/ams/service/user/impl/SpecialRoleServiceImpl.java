@@ -87,6 +87,7 @@ public class SpecialRoleServiceImpl implements SpecialRoleService {
             SpecialRoleVo newSpecialRoleVo = new SpecialRoleVo();
             specialRoleObject = JSONObject.fromObject(specialRolesArray.get(i));
             newSpecialRoleVo.setCustomerCode(specialRoleObject.getString("customerCode"));
+            newSpecialRoleVo.setCustomerName(specialRoleObject.getString("customerName"));
             newSpecialRoleVo.setEmployeeId(specialRoleObject.getString("employeeId"));
             newSpecialRoleVo.setEmployeeName(specialRoleObject.getString("employeeName"));
             newSpecialRoleVo.setDelete(specialRoleObject.getBoolean("isDelete"));
