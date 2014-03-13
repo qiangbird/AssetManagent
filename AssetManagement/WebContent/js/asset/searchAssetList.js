@@ -340,7 +340,7 @@ var dataListInfo = {
     url : getURLForAssetList($("#type").val()),
     updateShowField : {
         url : 'searchCommon/column/updateColumns',
-        callback : function(data) {
+        callback : function() {
             $.ajax({
                 type : "POST",
                 contentType : "application/json",

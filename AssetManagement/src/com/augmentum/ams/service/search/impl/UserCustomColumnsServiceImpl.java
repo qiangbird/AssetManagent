@@ -63,7 +63,6 @@ public class UserCustomColumnsServiceImpl implements UserCustomColumnsService {
 		// temp will be used to update columns sequence
 		int temp = 1;
 		Date currentTime = UTCTimeUtil.localDateToUTC();
-		List<UserCustomColumn> userCustomColumns = new ArrayList<UserCustomColumn>();
 
 		for (Map.Entry<String, Boolean> entry : customizedColumnIds.entrySet()) {
 			String customizedColumnId = entry.getKey().toString();
@@ -76,9 +75,8 @@ public class UserCustomColumnsServiceImpl implements UserCustomColumnsService {
 				userCustomColumn.setShowDefault(showDefault);
 				userCustomColumn.setUpdatedTime(currentTime);
 			}
-			userCustomColumns.add(userCustomColumn);
+			userCustomColumnDao.update(userCustomColumn);
 		}
-		userCustomColumnDao.saveOrUpdateAll(userCustomColumns);
 
 		logger.info("update user custom columns end");
 	}

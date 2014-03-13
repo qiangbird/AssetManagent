@@ -1,7 +1,6 @@
 package com.augmentum.ams.service.asset;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -11,12 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 
-import com.augmentum.ams.model.asset.Asset;
-import com.augmentum.ams.model.asset.Location;
-import com.augmentum.ams.model.asset.Machine;
+import com.augmentum.ams.dao.asset.TransferLogDao;
 import com.augmentum.ams.model.asset.TransferLog;
-import com.augmentum.ams.model.user.User;
-import com.augmentum.ams.service.user.UserService;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContext.xml" })
@@ -26,9 +21,7 @@ public class TransferLogServiceTest {
     @Autowired
     private TransferLogService transferLogService;
     @Autowired
-    private AssetService assetService;
-    @Autowired
-    private UserService userService;
+    private TransferLogDao transferLogDao;
     
     @Test
     public void saveTransferLogService() {
@@ -46,9 +39,11 @@ public class TransferLogServiceTest {
     	*/
     }
     
+    @SuppressWarnings("unchecked")
     @Test 
 	public void createIndexForTransferLogTest() throws ParseException{
-	    List<TransferLog> list = transferLogService.findAllTransferLog();
+        String hql = "FROM TransferLog";
+        List<TransferLog> list = (List<TransferLog>)transferLogDao.getHibernateTemplate().find(hql);
         Class<TransferLog>[] clazzes = new Class[list.size()];
         for (int i = 0; i < list.size(); i++) {
         	TransferLog transferLog = list.get(i);

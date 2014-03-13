@@ -258,7 +258,6 @@
                         $.ajax({
                             type : 'POST',
                             url : $self.opts.updateShowField.url,
-                            dataType : 'json',
                             data : {
                                 'customization' : customization.toString(),
                                 'showDefault' : showDefault.toString()
@@ -447,16 +446,15 @@
             this.$head.add(this.$body).width(_width).css('margin-left',0);
             for(var i =0; i < this.opts.columns.length; i++){
                 // assign given sortName: assetId, userName, type, status, barCode, poNo, checkInTime, checkOutTime, warrantyTime
-                var sortNames = "assetId,userName_forSort,type,status,barCode,poNo,checkInTime,checkOutTime,warrantyTime,asset.assetId,user.userName," +
-                		"time,asset.barCode,asset.checkInTime";
+                var sortNames = "assetId,user,type,status,barCode,checkInTime,checkOutTime,warrantyTime,asset.assetId,asset.user," +
+                		"asset.type,asset.status,asset.barCode,asset.checkInTime,asset.checkOutTime,asset.warrantyTime,room,operatorID," +
+                		"operatorName,time,action,returnedTime,receivedTime,userId,userName";
                 var sort = '</span>';
                 var pointer = 'default';
                 if (sortNames.indexOf(this.opts.columns[i].sortName) != -1) {
                     sort = '</span><span class="dataList-span-sort ' + this.opts.columns[i].sortName + '-sort"></span>';
                     pointer = 'pointer';
                 }
-//                var sort = this.opts.columns[i].sortName ? '</span><span class="dataList-span-sort ' + this.opts.columns[i].sortName + '-sort"></span>' : '</span>';
-//                var pointer = this.opts.columns[i].sortName ? 'pointer' : 'default';
                 if(this.opts.columns[i].isMustShow || this.opts.columns[i].isShow){
                     heads.push('<div class="dataList-div-listLine w-2"></div>');
                     if(this.opts.columns[i].autoWidth){

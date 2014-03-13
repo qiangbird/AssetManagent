@@ -62,7 +62,17 @@ public class SearchCondition {
     }
 
     public void setSortName(String sortName) {
-        this.sortName = sortName;
+        
+        if ("user".equals(sortName)) {
+            
+            this.sortName = "user.userName_forSort";
+        } else if ("asset.user".equals(sortName)) {
+            
+            this.sortName = "asset.user.userName_forSort";
+        } else {
+            
+            this.sortName = sortName;
+        }
     }
 
     public String getSortSign() {

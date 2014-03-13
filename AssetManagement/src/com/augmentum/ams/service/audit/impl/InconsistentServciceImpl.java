@@ -163,8 +163,7 @@ public class InconsistentServciceImpl implements InconsistentService {
         page.setPageSize(searchCondition.getPageSize());
         page.setCurrentPage(searchCondition.getPageNum());
         page.setSortOrder(searchCondition.getSortSign());
-        page.setSortColumn(CommonSearchUtil.transferSortName(searchCondition
-                .getSortName()));
+        page.setSortColumn(searchCondition.getSortName());
 
         FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
                 keyWordQuery, Inconsistent.class).setCriteriaQuery(criteria);

@@ -348,19 +348,6 @@ public class CommonSearchUtil {
 
     /**
      * @author Geoffrey.Zhao
-     * @param sortName
-     * @return
-     */
-    public static String transferSortName(String sortName) {
-
-        if ("userName".equals(sortName) || "user.userName".equals(sortName)) {
-            sortName = "user.userName_forSort";
-        }
-        return sortName;
-    }
-
-    /**
-     * @author Geoffrey.Zhao
      * @param condition
      */
     public static BooleanQuery addFilterQueryForAsset(
