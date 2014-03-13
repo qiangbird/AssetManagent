@@ -55,6 +55,14 @@ public class SpecialRoleServiceImpl implements SpecialRoleService {
                     specialRole.setExpired(Boolean.TRUE);
                 }
             } else {
+                Customer customer = customerService.getCustomerByCode(srVo.getCustomerCode());
+
+                if (null == customer) {
+                    Customer newCustomer = new Customer();
+                    newCustomer.setCustomerCode(srVo.getCustomerCode());
+                    newCustomer.setCustomerName(srVo.getCustomerName());
+                    customerService.saveCustomer(newCustomer);
+                }
                 specialRole = new SpecialRole();
                 specialRole.setCustomerCode(srVo.getCustomerCode());
                 specialRole.setUserId(srVo.getEmployeeId());

@@ -1,6 +1,3 @@
-.input-text-error{
-	border: 1px solid red !important;
-}
 #main li{
 onmouseover: expression(onmouseover=function (){this.style.borderColor ='#cccccc';this.style.backgroundColor ='#23A5E3'});
 onmouseout: expression(onmouseout=function (){this.style.borderColor=''this.style.backgroundColor =''});

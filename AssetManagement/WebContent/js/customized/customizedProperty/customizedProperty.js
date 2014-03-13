@@ -8,7 +8,9 @@ var propertyItems = [];
 var properties = [];
 
 $(document).ready(function() {
+	
 	getCustomerAndAssetType();
+	
 	$("#cancel").click(function(){
 //		checkCustomerNameAndAssetType();
 		window.history.back();
@@ -438,93 +440,58 @@ function changeToDropDownList(position, itemsList, existInputSelectType){
 	}else{
 		inputSelectType = $(".properties").find("#" + position).find(".inputSelectType:last");
 	}
-    var parent = inputSelectType.parent("div");
-    parent.css("z-index", "10");
-    var list = itemsList;
- 
-    var panel = $("<div class='select-panel'>").appendTo(parent);
-    var messDiv = $("<div class='message-div'></div>").appendTo(panel);
-    var mhdowDiv = initShdowDiv(panel, list , 10);
-    closeOrOpenDiv(panel);
-    var lis = panel.find("li");
-    
-    lis.each(function(index) {
-    	$(this).click(function() {
-    		$(".type-details").css("display", "none");
-            var value = $(this).text();
-            inputSelectType.val(value);
-            $(".inputSelectType").addClass("select-type");
-        });
-    });
+    var inputSelectTypeMS = initDropDownList(inputSelectType, itemsList, false, undefined, 284);
+    inputSelectType.data("inputSelectType",inputSelectTypeMS);
 }
 
 function getCustomerAndAssetType(){
-	$.ajax( {  
-	    type : 'GET',  
-	    contentType : 'application/json',  
-	    url : 'self/getCustomerAndAssetType',  
-	    dataType : 'json',  
-	    success : function(data) { 
-	    	assetTypes = data.assetTypes;
-	    	customers = data.customers;
-	    	var customersLength = customers.length;
-	    	
-	    	for(var i = 0; i < customersLength; i++){
-	    		customerNames[i] = customers[i].customerName;
-	    		customerCodes[i] = customers[i].customerCode;
-	    	}
-		    var customerNameInput = $("#customerName");
-		    var assetTypesInput = $("#assetType");
-		    var customerNameParent = customerNameInput.parent("div");
-		    var assetTypesParent = assetTypesInput.parent("div");
-		    customerNameParent.css("z-index", "10");
-		    assetTypesParent.css("z-index", "10");
-		    var customerNamesList = customerNames;
-		    var assetTypesList = assetTypes;
-		    customerNameInput.val("");
-		    assetTypesInput.val("");
-		 
-		    var customerNamePanel = $("<div class='select-panel'>").appendTo(customerNameParent);
-		    var customerNameMessDiv = $("<div class='message-div'>" + "Column Name" + "</div>").appendTo(customerNamePanel);
-		    var customerNameShdowDiv = initShdowDiv(customerNamePanel, customerNamesList , 10);
-		    closeOrOpenDiv(customerNamePanel);
-		    
-		    var assetTypesPanel = $("<div class='select-panel'>").appendTo(assetTypesParent);
-		    var assetTypesMessDiv = $("<div class='message-div'>" + "Asset Type" + "</div>").appendTo(assetTypesPanel);
-		    var assetTypesShdowDiv = initShdowDiv(assetTypesPanel, assetTypesList , 10);
-		    closeOrOpenDiv(assetTypesPanel);
-		    var customerNameLis = customerNamePanel.find("li");
-		    var assetTypesLis = assetTypesPanel.find("li");
-		    
-		    customerNameLis.each(function(index) {
-		        $(this).click(function() {
-		            $(".type-details").css("display", "none");
-		            var value = $(this).text();
-		            var customerCode = customerCodes[index];
-		            $("#customerCode").val(customerCode);
-		            customerNameInput.val(value);
-		            checkCustomerNameAndAssetType();
-//		            $("#customerName").addClass("select-type");
-		        });
-		    });
-		    
-		    assetTypesLis.each(function(index) {
-		        $(this).click(function() {
-		            $(".type-details").css("display", "none");
-		            var value = $(this).text();
-		            assetTypesInput.val(value);
-		            checkCustomerNameAndAssetType();
-//		            $("#assetType").addClass("select-type");
-		        });
-		    });
-	    }
-	});
+	$.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'self/getCustomerAndAssetType',
+        dataType : 'json',
+        success : function(data) {
+        	var assetTypeMS = initDropDownList($("#assetType"), data.assetTypes, false, undefined, 286);
+        	$("#assetType").data("assetType",assetTypeMS);
+        	
+            var customerMs = initDropDownMap($("#customerCode"), data.customers, false, "label", "value");
+            $("#customerCode").data("customerCode",customerMs);
+            
+            assetTypeBindEvent();
+            customerBindEvent();
+         }
+      });
+}
+
+function assetTypeBindEvent(){
+	var assetTypeMS = $("#assetType").data("assetType");
+	$(assetTypeMS).on('selectionchange', function(event, combo, selection){
+		doAssetTypeValidation();
+		checkCustomerNameAndAssetType();
+    });
+}
+
+function customerBindEvent(){
+	var customerMs = $("#customerCode").data("customerCode");
+	$(customerMs).on('selectionchange', function(event, combo, selection){
+		var selectedItems = $("#customerCode").data("customerCode").getSelectedItems();
+		
+		if(0 < selectedItems.length){
+			var customerName = selectedItems[0].label;
+			$("#customerName").val(customerName);
+		}else{
+			$("#customerName").val("");
+		}
+		doCustomerNameValidation();
+		checkCustomerNameAndAssetType();
+    });
 }
 
 function checkCustomerNameAndAssetType(){
-	var assetType = $("#assetType").val();
-    var customerName = $("#customerName").val();
-    if("" != assetType && "" != customerName){
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();
+	var assetType = $("#assetType").data("assetType").getValue().join();
+	
+    if("" != customerCode && "" != assetType){
     	getPropertyTemplates(assetType);
     }
 }
@@ -533,20 +500,9 @@ function initSaveOperation(){
 	var createProperties = new Array();
 	deepCopyArray(createProperties,properties);
 	
-	var assetType = $("#assetType").val();
-    var customerName = $("#customerName").val();
-	
-	if("" == assetType && "" == customerName){
-		ShowMsg(i18nProp('message_warn_customerName_and_assetType_are_null', null));
-		return;
-	}else if("" == assetType){
-		ShowMsg(i18nProp('message_warn_assetType_is_null', null));
-		return;
-	}else if("" == customerName){
-		ShowMsg(i18nProp('message_warn_customerName_is_null', null));
+	if(!doValidation()){
 		return;
 	}
-
 	$(".properties").find(".sortable").children("li").each(function(index) {
 		var id = $(this).find("input:hidden[id='id']").val();
 		var position = $(this).parent("ul").attr("id");
@@ -564,9 +520,30 @@ function initSaveOperation(){
 	saveProperties(createProperties);
 }
 
+function doValidation(){
+	var assetTypeNotNull = doAssetTypeValidation();
+	var customerNameNotNull = doCustomerNameValidation();
+	
+    if(assetTypeNotNull && customerNameNotNull){
+    	return true;
+    }else{
+    	return false;
+    }
+}
+
+function doAssetTypeValidation(){
+	var assetType = $("#assetType").data("assetType").getValue().join();
+	return validateValueIsEmpty($("#assetType"), assetType, i18nProp('message_warn_assetType_is_null', null));
+}
+
+function doCustomerNameValidation(){
+	var customerName = $("#customerName").val();
+	return validateValueIsEmpty($("#customerCode"), customerName, i18nProp('message_warn_customerName_is_null', null));
+}
+
 function saveProperties(properties){
-	var customerCode = $("#customerCode").val();
-	var assetType = $("#assetType").val();
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();
+	var assetType = $("#assetType").data("assetType").getValue().join();
 	$("#div-loader").show();
 	$.ajax( {  
 	    type : 'POST',  
@@ -577,7 +554,6 @@ function saveProperties(properties){
 	    	"customerCode":customerCode,
 	    	"assetType":assetType
 	    	},
-	    dataType : 'json',  
 	    success : function() { 
 	    	$("#div-loader").hide();
 	    	getCustomerAndAssetType();
@@ -587,7 +563,8 @@ function saveProperties(properties){
 }
 
 function getPropertyTemplates(assetType){
-	var customerCode = $("#customerCode").val();
+	var assetType = $("#assetType").data("assetType").getValue().join();
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();
 	$.ajax( {  
 	    type : 'POST',  
 	    contentType : 'application/json',  
@@ -617,145 +594,6 @@ function getPropertyTemplates(assetType){
 	    	}
 	    }
 	});
-}
-
-//dropdown list plugin.
-function initShdowDiv(obj, list, z) {
-    if(list.length == 0) {
-        list = [""];
-    }
-    var len = list.length < 8 ? list.length : 8;
-    var divHeight = len*26;
-    var inputWidth = obj.width(); 
-    var width = inputWidth + 4;
-    var height = divHeight + 15;
-    var cWidth = inputWidth - 10;
-    var cHeight = height - 15;
-    
-    var d =$("<div class='shadow-div'>").css("width", width)
-               .css("height", height)
-               .css("position", "relative")
-               .css("top", "0")
-               .css("left", "-2px")
-               .css("display", "none")
-               .css("z-index", z)
-               .appendTo(obj); 
-     var t_l = $("<div>").css("width", "7px")
-                         .css("height", "5px")          
-                         .css("background", "url('img/BKG_Dropdown_T_L_7x5.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("top", "0")
-                         .css("left", "0")
-                         .appendTo(d);          
-     var t_c = $("<div>").css("width", cWidth)
-                         .css("height", "5px") 
-                         .css("position", "absolute")         
-                         .css("top", "0")
-                         .css("left", "7px")
-                         .css("background", "url('img/BKG_Dropdown_T_C_1x5.png') repeat-x")
-                         .appendTo(d);          
-     var t_r = $("<div>").css("width", "7px")
-                         .css("height", "5px")          
-                         .css("background", "url('img/BKG_Dropdown_T_R_7x5.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("top", "0")
-                         .css("right", "0")
-                         .appendTo(d);          
-     var c_l = $("<div>").css("width", "7px")
-                         .css("height", cHeight)          
-                         .css("background", "url('img/BKG_Dropdown_C_L_7x1.png') repeat-y")
-                         .css("position", "absolute")
-                         .css("top", "5px")
-                         .css("left", "0")
-                         .appendTo(d);          
-     var c_c = $("<div>").css("width", cWidth)
-                         .css("height", cHeight)
-                         .css("z-index", "5")
-                         .css("position", "absolute")
-                         .css("top", "5px")
-                         .css("left", "7px")
-                         .css("overflow-y", "auto")
-                         .css("overflow-x", "hidden")
-                         .css("background-color", "#FFFFFF")
-                         .appendTo(d);
-     var c_r = $("<div>").css("width", "7px")
-                         .css("height", cHeight)          
-                         .css("background", "url('img/BKG_Dropdown_C_R_7x1.png') repeat-y")
-                         .css("position", "absolute")
-                         .css("top", "5px")
-                         .css("right", "0")
-                         .appendTo(d);          
-     var b_l = $("<div>").css("width", "7px")
-                         .css("height", "10px")          
-                         .css("background", "url('img/BKG_Dropdown_B_L_7x10.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("bottom", "0")
-                         .css("left", "0")
-                         .appendTo(d);          
-     var b_c = $("<div>").css("width", cWidth)
-                         .css("height", "10px")          
-                         .css("background", "url('img/BKG_Dropdown_B_C_1x10.png') repeat-x")
-                         .css("position", "absolute")
-                         .css("bottom", "0")
-                         .css("left", "7px")
-                         .appendTo(d);          
-     var b_r = $("<div>").css("width", "7px")
-                         .css("height", "10px")          
-                         .css("background", "url('img/BKG_Dropdown_B_R_7x10.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("bottom", "0")
-                         .css("right", "0")
-                         .appendTo(d);
-     var ul = $("<ul>").css("width", cWidth)
-                       .css("height", cHeight)
-                       .css("margin", "0")
-                       .css("list-style", "none")
-                       .appendTo(c_c);
-     
-    for(index in list) {
-    	var flag=list[index].match("\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+");
-    	if(flag === null){
-    		$("<li><p>" + list[index] + "</p></li>").appendTo(ul);
-    	}else{
-    			$("<li id='"+list[index].split("++++++++++")[0]+"' title='Manager:"+list[index].split("++++++++++")[2]+"'><p>" + list[index].split("++++++++++")[1] + "</p></li>").appendTo(ul);
-    		}
-    	}
-    return d;
-    }
-
-function closeOrOpenDiv(panel) {
-    var messDiv = panel.find(".message-div");
-    var showDiv = panel.find(".shadow-div");
-    
-    messDiv.click(function() {
-        $(".active").css("display", "none");
-        $(".active").removeClass("active");
-        $(this).text("");
-        var display = showDiv.css("display");
-        if(display == "none") {
-           showDiv.addClass("active");
-           showDiv.css("display", "block");
-        } 
-        return false;
-    });
-    
-    $(document).click(function() {
-        $(".active").css("display", "none");
-        $(".active").removeClass("active");
-    });
-}  
-
-function inputBatchCreate(obj) {
-    obj.keyup(function() {
-        var v = $(this).val();
-        if(v != "" && numberCheck(v)) {
-            $(this).siblings(".image-span").css("background", "url('img/ICN_Correct_Active_25x20.png') no-repeat");
-        } else if(v == "") {
-            $(this).siblings(".image-span").css("background", "url('img/ICN_Warning_25x20.png') no-repeat");
-        } else {
-            $(this).siblings(".image-span").css("background", "url('img/ICN_Error_25x20.png') no-repeat");
-        }
-    });
 }
 
 function getType(o)

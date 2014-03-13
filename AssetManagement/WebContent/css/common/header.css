@@ -365,3 +365,42 @@ a {
     color: #555555;
     cursor: default;
 }
+
+.ui-datepicker {
+    width: 16em !important;
+}
+
+/*CSS of dropdownList*/ 
+.ms-sel-ctn{
+    overflow: hidden !important;
+}
+
+.ms-ctn{
+    height: 28px !important;
+    font-size: 14px !important;
+}
+
+.ms-ctn input{
+    height: auto !important;
+    padding: 4px 6px !important;
+    left: 0px !important;
+    top: 0px !important;
+    width: 100px !important;
+}
+
+.ms-ctn span{
+    position: relative !important;
+    top: 0px !important;
+}
+
+.ms-sel-ctn .ms-sel-text{
+    margin-left: 3 !important;
+}
+
+.ms-ctn .ms-trigger{
+    margin-top: 0px !important;
+}
+
+.input-text-error{
+    border: 1px solid red !important;
+}

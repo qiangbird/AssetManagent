@@ -19,8 +19,8 @@
 }
 
 #customerName {
-	background: url("../../../image/customize/customizedView/icon_arrow_down.png") 270px 15px no-repeat, 
-				url("../../../image/customize/customizedView/icon_arrow_top.png") 270px 5px no-repeat  #fff;
+/* 	background: url("../../../image/customize/customizedView/icon_arrow_down.png") 270px 15px no-repeat, 
+				url("../../../image/customize/customizedView/icon_arrow_top.png") 270px 5px no-repeat  #fff; */
 }
 
 .assetType {
@@ -32,8 +32,8 @@
 }
 
 #assetType {
-	background: url("../../../image/customize/customizedView/icon_arrow_down.png") 270px 15px no-repeat, 
-				url("../../../image/customize/customizedView/icon_arrow_top.png") 270px 5px no-repeat  #fff;
+/* 	background: url("../../../image/customize/customizedView/icon_arrow_down.png") 270px 15px no-repeat, 
+				url("../../../image/customize/customizedView/icon_arrow_top.png") 270px 5px no-repeat  #fff; */
 }
 .operateClass {
     margin-bottom: 10px;
@@ -94,7 +94,7 @@
 .shortLeftText {
 	font: 14px/1.5 Arial, Tahoma, Helvetica, "\5b8b\4f53", sans-serif;
 	float: left;
-	width: 25%;
+	width: 23%;
 	text-align: left;
 	margin-top: 5px;
 	vertical-align: top;
@@ -135,16 +135,16 @@
 }
 
 .inputSelect,.inputSelectType {
-	padding-right: 0px;
+/* 	padding-right: 0px;
 	height: 30px;
 	width: 68%;
 	vertical-align: top;
-	border-radius: 3px;
+	border-radius: 3px; */
 }
 
 .inputSelectType {
-	background: url("../../../image/customize/customizedView/icon_arrow_down.png") 270px 15px no-repeat, 
-				url("../../../image/customize/customizedView/icon_arrow_top.png") 270px 5px no-repeat  #fff;
+	/* background: url("../../../image/customize/customizedView/icon_arrow_down.png") 270px 15px no-repeat, 
+				url("../../../image/customize/customizedView/icon_arrow_top.png") 270px 5px no-repeat  #fff; */
 	display: none;
 }
 
@@ -373,6 +373,7 @@
 	vertical-align: top;
 	width:30px;
 	height:40px;
+	padding-left: 17px;
 }
 
 .editProperty {
@@ -672,4 +673,7 @@
 	display: none;
 }
 
-
+.ms-ctn {
+	float: right !important;
+	margin-top: 0px !important;
+}

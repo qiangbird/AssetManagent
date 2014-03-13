@@ -47,7 +47,7 @@
 	margin-left: 80px;
 }
 
-.inputSelect, .inputSelectType {
+/* .inputSelect, .inputSelectType {
 	border-color: #BFBFBF;
 	border-width: 1px;
 	border-style: solid;
@@ -62,7 +62,7 @@
 	width: 68%;
 	vertical-align: top;
 	border-radius: 3px;
-}
+} */
 
 .sequenceElement {
 	width: 10.7%;
@@ -127,4 +127,12 @@
 	height:25px;
 	margin: 0px;
 	font-size: 14px;
+}
+
+.ms-ctn{
+	float: right;
+}
+
+.roleAddContent {
+	width: 978px !important;
 }

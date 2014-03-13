@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BusinessException;
+import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.remote.RemoteEmployeeService;
 import com.augmentum.ams.service.user.SpecialRoleService;
-import com.augmentum.ams.util.CustomerUtil;
 import com.augmentum.ams.util.LogHelper;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.common.LabelAndValue;
 import com.augmentum.ams.web.vo.user.SpecialRoleVo;
 
 @Controller("specialRoleController")
@@ -36,6 +37,9 @@ public class SpecialRoleController extends BaseController {
 
     @Autowired
     private RemoteCustomerService remoteCustomerService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private RemoteEmployeeService remoteEmployeeService;
@@ -64,7 +68,7 @@ public class SpecialRoleController extends BaseController {
         ModelAndView modelAndView = new ModelAndView("user/specialRoleList");
         List<CustomerVo> customerInfo = remoteCustomerService.getCustomerByEmployeeId(employeeId,
                 httpServletRequest);
-        JSONArray customers = CustomerUtil.changeCustomerToJson(customerInfo);
+        List<LabelAndValue> customers = customerService.changeCustomerToLabelAndValue(customerInfo);
         List<String> customerCodes = new ArrayList<String>();
 
         for (CustomerVo customer : customerInfo) {

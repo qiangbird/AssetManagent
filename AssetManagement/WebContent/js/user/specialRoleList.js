@@ -1,4 +1,3 @@
-var customers = [];
 var customerNames = [];
 var customerCodes = [];
 var specialRoles = [];
@@ -38,10 +37,6 @@ $(document).ready(function() {
 		initAddProccess();
 	});
 	
-	$("#resetButton").click(function(){
-		clearInputBox();
-	});
-	
 	$("#saveButton").click(function(){
 		$("#div-loader").show();
 		saveOperation(specialRoles);
@@ -50,29 +45,13 @@ $(document).ready(function() {
 	$("#cancelButton").click(function(){
 		findSpecialRoles();
 	});
-	$("#bodyMinHight").delegate("#customerName, #token-input-employeeName","blur",function(){
+	$("#bodyMinHight").delegate("#token-input-employeeName","blur",function(){
 		if("" != $(".employeeName").val()){
 			$(".token-input-list-facebook").clearValidationMessage();
 		}
-		if("" != $("#customerName").val()){
-			$("#customerName").clearValidationMessage();
-		}
 	});
-	
-	$("#customerName").click(function() {
-	    for(var i = 0; i < customers.length; i++){
-	    		customerNames[i] = customers[i].customerName;
-	    		customerCodes[i] = customers[i].customerCode;
-	    }
-	    $("#customerName").autocomplete({
-	         source : customerNames,
-	         select : function(e,ui) {
-	                $("#customerCode").val(customerCodes[getIndexInArr(customerNames,ui.item.value)]);
-	                $("#project").val("");
-	                var customerCode = customerCodes[getIndexInArr(customerNames,ui.item.value)];
-	                findEmployeesByCustomerCode(customerCode);
-	         }
-	   });
+	$("#main").delegate("#customerCode input:first", "blur", function(){
+		doCustomerValidation();
 	});
 });
 
@@ -83,9 +62,43 @@ function findCustomers(){
 	    url : 'specialRole/findSpecialRoles',
 	    dataType : 'json',
 	    success : function(data) {
-	    	customers = data.customers;
+	    	var firstValue = "";
+	    	if(data.customers != undefined && data.customers.length > 0){
+	    		firstValue = data.customers[0].value;
+	    	}
+	    	var customerMs = initDropDownMap($("#customerCode"), data.customers, false, "label", "value", firstValue, 275);
+            $("#customerCode").data("customerCode",customerMs);
+            customerBindEvent();
 	    }
 	});
+}
+
+function customerBindEvent(){
+	var customerCode = $("#customerCode").data("customerCode").getValue().join();
+	
+	if("" != customerCode){
+		findEmployeesByCustomerCode(customerCode);
+	}
+	var customerMs = $("#customerCode").data("customerCode");
+	$(customerMs).on('selectionchange', function(event, combo, selection){
+		var customerCode = $("#customerCode").data("customerCode").getValue().join();
+		var selectedItems = $("#customerCode").data("customerCode").getSelectedItems();
+		
+		if(0 < selectedItems.length){
+			var customerName = selectedItems[0].label;
+			$("#customerName").val(customerName);
+		}else{
+			$("#customerName").val("");
+		}
+		if(doCustomerValidation()){
+			findEmployeesByCustomerCode(customerCode);
+		}
+    });
+}
+
+function doCustomerValidation(){
+	var customerName = $("#customerName").val();
+	return validateValueIsEmpty($("#customerCode"), customerName, i18nProp('message_warn_customer_is_null_or_not_exist'));
 }
 
 function getIndexInArr(Arr, ele) {
@@ -115,54 +128,23 @@ function saveOperation(specialRoles){
 			findCustomersAndSpecialRoles();
 			showMessageBarForMessage("role_save_success");
 		},
-		dataType: 'json',
+//		dataType: 'json',
 		type: 'POST'
 	});
 }
 
 function initAddProccess(){
-	if("success" == checkCustomer()){
+	if(doCustomerValidation){
 		checkEmployees();
 	}else{
 		return;
 	}
 }
 
-function checkCustomer(){
-	var validations = new Array();
-    var validation = "success";
-    var customerNameInput = $("#customerName").val();
-    var existCustomer = false;
-    
-    if("" == customerNameInput){
-    	$("#customerCode").val("");
-    }else{
-    	for(var i = 0; i < customers.length; i++){
-    		customerName = customers[i].customerName;
-    		if(customerName == customerNameInput){
-    			$("#customerCode").val(customers[i].customerCode);
-    			existCustomer = true;
-    			break;
-    		}
-    	}
-    }
-    if(false == existCustomer){
-    	$("#customerCode").val("");
-    }
-    var customerCode = $("#customerCode").val();
-    
-    validations.push($("#customerName")
-    		.validateNull(customerCode,i18nProp('message_warn_customer_is_null_or_not_exist')));
-    
-    validation = recordFailInfo(validations);
-    
-    return validation;
-}
-
 function checkEmployees(){
 	var employeeInput = $("#employeeName").val();
 	var customerName = $("#customerName").val();
-	var customerCode = $("#customerCode").val();
+	var customerCode = $("#customerCode").data("customerCode").getValue.join();
 	var listEmployees = employeeInput.split(",");
 	var errorEmployeeNames = [];
 	errorEmployeeNames.length = 0;
@@ -302,164 +284,4 @@ function autoComplete(params) {
 	    placeholder : params.placeholder,
 	    source :  params.dataSource
 	});
-}
-
-//dropdown list plugin.
-function initShdowDiv(obj, list, z) {
-    if(list.length == 0) {
-        list = [""];
-    }
-    var len = list.length < 8 ? list.length : 8;
-    var divHeight = len*26;
-    var inputWidth = obj.width(); 
-    var width = inputWidth + 4;
-    var height = divHeight + 15;
-    var cWidth = inputWidth - 10;
-    var cHeight = height - 15;
-    
-    var d =$("<div class='shadow-div'>").css("width", width)
-               .css("height", height)
-               .css("position", "relative")
-               .css("top", "0")
-               .css("left", "78px")
-               .css("display", "none")
-               .css("z-index", z)
-               .appendTo(obj); 
-     var t_l = $("<div>").css("width", "7px")
-                         .css("height", "5px")          
-                         .css("background", "url('img/BKG_Dropdown_T_L_7x5.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("top", "0")
-                         .css("left", "0")
-                         .appendTo(d);          
-     var t_c = $("<div>").css("width", cWidth)
-                         .css("height", "5px") 
-                         .css("position", "absolute")         
-                         .css("top", "0")
-                         .css("left", "7px")
-                         .css("background", "url('img/BKG_Dropdown_T_C_1x5.png') repeat-x")
-                         .appendTo(d);          
-     var t_r = $("<div>").css("width", "7px")
-                         .css("height", "5px")          
-                         .css("background", "url('img/BKG_Dropdown_T_R_7x5.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("top", "0")
-                         .css("right", "0")
-                         .appendTo(d);          
-     var c_l = $("<div>").css("width", "7px")
-                         .css("height", cHeight)          
-                         .css("background", "url('img/BKG_Dropdown_C_L_7x1.png') repeat-y")
-                         .css("position", "absolute")
-                         .css("top", "5px")
-                         .css("left", "0")
-                         .appendTo(d);          
-     var c_c = $("<div>").css("width", cWidth)
-                         .css("height", cHeight)
-                         .css("z-index", "5")
-                         .css("position", "absolute")
-                         .css("top", "5px")
-                         .css("left", "7px")
-                         .css("overflow-y", "auto")
-                         .css("overflow-x", "hidden")
-                         .css("background-color", "#FFFFFF")
-                         .appendTo(d);
-     var c_r = $("<div>").css("width", "7px")
-                         .css("height", cHeight)          
-                         .css("background", "url('img/BKG_Dropdown_C_R_7x1.png') repeat-y")
-                         .css("position", "absolute")
-                         .css("top", "5px")
-                         .css("right", "0")
-                         .appendTo(d);          
-     var b_l = $("<div>").css("width", "7px")
-                         .css("height", "10px")          
-                         .css("background", "url('img/BKG_Dropdown_B_L_7x10.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("bottom", "0")
-                         .css("left", "0")
-                         .appendTo(d);          
-     var b_c = $("<div>").css("width", cWidth)
-                         .css("height", "10px")          
-                         .css("background", "url('img/BKG_Dropdown_B_C_1x10.png') repeat-x")
-                         .css("position", "absolute")
-                         .css("bottom", "0")
-                         .css("left", "7px")
-                         .appendTo(d);          
-     var b_r = $("<div>").css("width", "7px")
-                         .css("height", "10px")          
-                         .css("background", "url('img/BKG_Dropdown_B_R_7x10.png') no-repeat")
-                         .css("position", "absolute")
-                         .css("bottom", "0")
-                         .css("right", "0")
-                         .appendTo(d);
-     var ul = $("<ul>").css("width", cWidth)
-                       .css("height", cHeight)
-                       .css("margin", "0")
-                       .css("list-style", "none")
-                       .appendTo(c_c);
-     
-    for(index in list) {
-    	var flag=list[index].match("\\+\\+\\+\\+\\+\\+\\+\\+\\+\\+");
-    	if(flag === null){
-    		$("<li><p>" + list[index] + "</p></li>").appendTo(ul);
-    	}else{
-    			$("<li id='"+list[index].split("++++++++++")[0]+"' title='Manager:"+list[index].split("++++++++++")[2]+"'><p>" + list[index].split("++++++++++")[1] + "</p></li>").appendTo(ul);
-    		}
-    	}
-    return d;
-    }
-
-function closeOrOpenDiv(panel) {
-    var messDiv = panel.find(".message-div");
-    var showDiv = panel.find(".shadow-div");
-    
-    messDiv.click(function() {
-        $(".active").css("display", "none");
-        $(".active").removeClass("active");
-        $(this).text("");
-        var display = showDiv.css("display");
-        if(display == "none") {
-           showDiv.addClass("active");
-           showDiv.css("display", "block");
-        } 
-        return false;
-    });
-    
-    $(document).click(function() {
-        $(".active").css("display", "none");
-        $(".active").removeClass("active");
-    });
-}  
-
-function inputBatchCreate(obj) {
-    obj.keyup(function() {
-        var v = $(this).val();
-        if(v != "" && numberCheck(v)) {
-            $(this).siblings(".image-span").css("background", "url('img/ICN_Correct_Active_25x20.png') no-repeat");
-        } else if(v == "") {
-            $(this).siblings(".image-span").css("background", "url('img/ICN_Warning_25x20.png') no-repeat");
-        } else {
-            $(this).siblings(".image-span").css("background", "url('img/ICN_Error_25x20.png') no-repeat");
-        }
-    });
-}
-
-function getType(o)
-{
-    var _t;
-    return ((_t = typeof(o)) == "object" ? o==null && "null" || Object.prototype.toString.call(o).slice(8,-1):_t).toLowerCase();
-}
-function deepCopyArray(destination,source)
-{
-    for(var p in source)
-    {
-        if(getType(source[p])=="array"||getType(source[p])=="object")
-        {
-            destination[p]=getType(source[p])=="array"?[]:{};
-            arguments.callee(destination[p],source[p]);
-        }
-        else
-        {
-            destination[p]=source[p];
-        }
-    }
 }

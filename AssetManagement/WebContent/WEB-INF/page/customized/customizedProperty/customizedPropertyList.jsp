@@ -11,7 +11,6 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
 <link rel="stylesheet" href="css/customize/customizedProperty/selfProperty.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
@@ -32,15 +31,15 @@
                 <span class="propertyRequired">*</span>
                  <span class="propertyText"><spring:message code="customer"></spring:message></span>
             </label>
-            <input id="customerName" class="inputSelect" type="text" value=""  />
-            <input name="customerCode" id="customerCode" class="inputSelect" type="hidden" value=""  />
+            <input id="customerCode" class="" type="text" value=""  />
+            <input id="customerName"  type="hidden" value=""  />
         </div>
         <div class="assetType">
             <label class="shortLeftText">
                 <span class="propertyRequired">*</span>
                  <span class="propertyText"><spring:message code="customized.property.assetType"></spring:message></span>
             </label>
-            <input name="assetType" id="assetType" class="inputSelect" type="text" value="" />
+            <input id="assetType" class="" type="text" value="" />
         </div>
     </div>
     </form>

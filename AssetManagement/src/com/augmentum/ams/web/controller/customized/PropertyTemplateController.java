@@ -23,9 +23,9 @@ import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.customized.PropertyTemplateService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.service.user.UserService;
-import com.augmentum.ams.util.CustomerUtil;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.common.LabelAndValue;
 import com.augmentum.ams.web.vo.customized.PropertyTemplateVo;
 
 @Controller("propertyTemplateController")
@@ -54,13 +54,16 @@ public class PropertyTemplateController extends BaseController {
             throws BusinessException {
 
         ModelAndView modelAndView = new ModelAndView();
+
         String employeeId = getUserIdByShiro();
         List<CustomerVo> customerInfo = remoteCustomerService.getCustomerByEmployeeId(employeeId,
                 httpServletRequest);
-        JSONArray customers = CustomerUtil.changeCustomerToJson(customerInfo);
+        List<LabelAndValue> labelAndValueCustomer = customerService
+                .changeCustomerToLabelAndValue(customerInfo);
 
         modelAndView.addObject("assetTypes", AssetTypeEnum.values());
-        modelAndView.addObject("customers", customers);
+        modelAndView.addObject("customers", labelAndValueCustomer);
+
         return modelAndView;
     }
 

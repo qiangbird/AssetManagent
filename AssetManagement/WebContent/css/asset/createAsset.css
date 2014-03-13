@@ -263,6 +263,7 @@ html .ui-autocomplete {
 }
 
 .checkIn, .checkOut, #assetWarranty, .l-date {
+	cursor: pointer;
 	background: #fff url("../../image/customize/customizedView/ICN_Calendar_26x26.png") right center no-repeat;
 }
 
@@ -868,36 +869,8 @@ div .dropDownList .dropDownList_icon {
 	line-height: 30px !important; 
 }
 
-.ms-sel-ctn{
-	overflow: hidden !important;
-}
-
-.ms-ctn{
-	float: right !important;
+.ms-ctn {
 	margin-top: 10px !important;
-	height: 28px !important;
 	width: 298px !important;
-	font-size: 14px !important;
+	float: right !important;
 }
-
-.ms-ctn input{
-	height: auto !important;
-	padding: 4px 6px !important;
-	left: 0px !important;
-	top: 0px !important;
-	width: 100px !important;
-}
-
-.ms-ctn span{
-	position: relative !important;
-	top: 0px !important;
-}
-
-.ms-sel-ctn .ms-sel-text{
-	margin-left: 3 !important;
-}
-
-.ms-ctn .ms-trigger{
-	margin-top: 0px !important;
-}
-

@@ -200,11 +200,11 @@ public class AssetVo {
         this.ownerShip = ownerShip;
     }
 
-    public boolean isFixed() {
+    public Boolean isFixed() {
         return fixed;
     }
 
-    public void setFixed(boolean fixed) {
+    public void setFixed(Boolean fixed) {
         this.fixed = fixed;
     }
 

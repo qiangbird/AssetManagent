@@ -12,8 +12,6 @@
 <head>
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="css/common/autocomplete.css" type="text/css">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
-<link rel="stylesheet" href="jquery.poshytip/css/tip-green.css" type="text/css">
 <link rel="stylesheet" href="css/user/roleList.css" type="text/css">
 <link rel="stylesheet" href="css/user/specialRoleList.css" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -35,8 +33,8 @@
                 <span class="propertyRequired">*</span>
                 <span class="propertyText"><spring:message code="customer" /></span>
             </label>
-            <input id="customerName" class="l-select inputSelect" type="text" value="" placeholder="Please choose the customer"/>
-            <input id="customerCode" type="hidden" value="" />
+            <input id="customerCode"  type="text" value="" placeholder="Please choose the customer"/>
+            <input id="customerName" type="hidden" value="" />
         </div>
         <div id="autoText">
         	<label class="shortLeftText">
@@ -47,7 +45,6 @@
         </div>
         <div class="addOperateButton">
             <input type="button" value=<spring:message code="add" />  id="addButton"></input>
-            <input type="button" value=<spring:message code="reset" />  id="resetButton"></input> 
         </div>
       </div>
 	  <div class="employeeRoleInfoTemplate">
@@ -88,9 +85,7 @@
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 
 <script type="text/javascript" src="js/common/validation.js"></script>
-<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
 <script type="text/javascript" src="js/common/autocomplete.js"></script>
-<!-- <script type="text/javascript" src="dropDownList/dropDownList.js"></script> -->
 <script type="text/javascript" src="js/user/specialRoleList.js"></script>
 </body>
 </html>

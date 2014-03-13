@@ -19,6 +19,8 @@ import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
 import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
+import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.common.LabelAndValue;
 
 @Service("customerService")
 public class CustomerServiceImpl implements CustomerService {
@@ -29,6 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerDao customerDao;
     @Autowired
     private RemoteCustomerService remoteCustomerService;
+
     /*
      * (non-Javadoc)
      * 
@@ -84,44 +87,60 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> getCustomerByGroup(String groupId) {
         DetachedCriteria criteria = DetachedCriteria.forClass(Customer.class);
         criteria.createAlias("customerGroup", "customerGroup")
-                    .add(Restrictions.eq("customerGroup.isExpired", Boolean.FALSE))
-                    .add(Restrictions.eq("customerGroup.id", groupId))
-                    .add(Restrictions.eq("isExpired", Boolean.FALSE));
+                .add(Restrictions.eq("customerGroup.isExpired", Boolean.FALSE))
+                .add(Restrictions.eq("customerGroup.id", groupId))
+                .add(Restrictions.eq("isExpired", Boolean.FALSE));
         return customerDao.findByCriteria(criteria);
     }
 
-	@Override
-	public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request) throws BusinessException {
-		List<Customer> list = new ArrayList<Customer>();
-		for(String code : codes){
-			Customer customer = getCustomerByCode(code);
-			if(null != customer){
-			list.add(getCustomerByCode(code));
-			}else{
-			Customer remoteCustomer = remoteCustomerService.getCustomerByCodefromIAP(request, code);
-			Customer customer1 = customerDao.save(remoteCustomer);
-			list.add(customer1);
-			}
-		}
-		return list;
-	}
+    @Override
+    public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request)
+            throws BusinessException {
+        List<Customer> list = new ArrayList<Customer>();
+        for (String code : codes) {
+            Customer customer = getCustomerByCode(code);
+            if (null != customer) {
+                list.add(getCustomerByCode(code));
+            } else {
+                Customer remoteCustomer = remoteCustomerService.getCustomerByCodefromIAP(request,
+                        code);
+                Customer customer1 = customerDao.save(remoteCustomer);
+                list.add(customer1);
+            }
+        }
+        return list;
+    }
 
-	@Override
-	public void updateCustomer(Customer customer) {
-		customerDao.update(customer);
-	}
+    @Override
+    public void updateCustomer(Customer customer) {
+        customerDao.update(customer);
+    }
 
     @Override
     public Map<String, Customer> findAllCustomersFromLocal() {
-        
+
         Map<String, Customer> localCustomers = new HashMap<String, Customer>();
-        List<Customer> customers =  customerDao.findAll(Customer.class);
-        
-        for(Customer customer : customers){
+        List<Customer> customers = customerDao.findAll(Customer.class);
+
+        for (Customer customer : customers) {
             localCustomers.put(customer.getCustomerName(), customer);
         }
-        
+
         return localCustomers;
+    }
+
+    @Override
+    public List<LabelAndValue> changeCustomerToLabelAndValue(List<CustomerVo> customerList) {
+
+        List<LabelAndValue> labelAndValueCustomer = new ArrayList<LabelAndValue>();
+
+        for (CustomerVo customerVo : customerList) {
+            LabelAndValue customer = new LabelAndValue();
+            customer.setLabel(customerVo.getCustomerName());
+            customer.setValue(customerVo.getCustomerCode());
+            labelAndValueCustomer.add(customer);
+        }
+        return labelAndValueCustomer;
     }
 
 }

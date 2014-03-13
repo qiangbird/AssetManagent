@@ -46,6 +46,7 @@ public class SpecialRoleDaoImpl extends BaseDaoImpl<SpecialRole> implements Spec
      */
     @Override
     public List<SpecialRole> findSpecialRolesByCustomerCodes(List<String> customerCodes) {
+
         logger.info(LogHelper.getLogInfo("Get special role by user id start, customerCodes size",
                 customerCodes.size()));
 

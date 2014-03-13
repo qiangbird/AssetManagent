@@ -1,8 +1,13 @@
-function initDropDownMap($selector, sourceMap, isMultiple, displayField, valueField, currentValue){
+function initDropDownMap($selector, sourceMap, isMultiple, displayField, valueField, currentValue, width){
     var temp;
+    var currentWidth = 300;
+    
+    if(width != undefined){
+    	currentWidth = width;
+    }
     if(isMultiple){
          temp = $selector.magicSuggest({
-             width: 300,
+             width: currentWidth,
              allowFreeEntries:false,
              maxDropHeight: 200,
              resultAsString: true,
@@ -11,7 +16,7 @@ function initDropDownMap($selector, sourceMap, isMultiple, displayField, valueFi
          });
     }else{
         temp = $selector.magicSuggest({
-             width: 300,
+             width: currentWidth,
              allowFreeEntries:false,
              maxSelection: 1,
              maxSelectionRenderer: function(v){
@@ -106,4 +111,72 @@ Array.prototype.del = function() {
 	} 
 	return c; 
 	}; 
+
+	function validateValueIsEmpty($ele, value, msg) {
+		if (value.trim() == "" || undefined == value) {
+			addErrorStyle($ele, msg);
+			return false;
+		} else {
+			removeErrorStyle($ele);
+			return true;
+		}
+	}
+
+	function addErrorStyle($ele, msg) {
+		validation = "failed";
+		$ele.addClass("input-text-error");
+		$ele.poshytip({
+			content: msg,
+			className: 'tip-green',
+			allowTipHover: false
+		});
+	}
+
+	function removeErrorStyle($ele) {
+		$ele.removeClass("input-text-error");
+		$ele.poshytip("destroy");
+		validation = "success";
+	}
+	
+	//common method
+	function checkInArr(Arr, ele) {
+		    for ( var i = 0; i < Arr.length; i++) {
+		        if (ele == Arr[i]) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+
+	function getIndexInArr(Arr, ele) {
+		    for ( var i = 0; i < Arr.length; i++) {
+		        if (ele == Arr[i]) {
+		            return i;
+		        }
+		    }
+		    return -1;
+		}
+	//compare date
+	function dateCompare(startTime, endTime) {
+		
+		 var startDate = new Date(startTime.replace(/-/g,"/"));  
+	     var endDate = new Date(endTime.replace(/-/g,"/"));  
+	     var m = (endDate.getTime()-startDate.getTime())/(1000*60*60);  
+	     
+	     if(0 <= m){
+	    	 return true;
+	     }else{
+	    	 return false;
+	     }
+	}
+	//number check
+	function numberCheck(num) {
+	    var n = /^([12]\d{4}|\d{0,4})$/; // 0~20000
+	    if (!n.test(num)) {
+	        return false;
+	    } else {
+	        return true;
+	    }
+	}
+
 

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.augmentum.ams.exception.BusinessException;
 import com.augmentum.ams.model.asset.Customer;
+import com.augmentum.ams.web.vo.asset.CustomerVo;
+import com.augmentum.ams.web.vo.common.LabelAndValue;
 
 public interface CustomerService {
 
@@ -40,7 +42,7 @@ public interface CustomerService {
      * @return
      */
     public Customer getCustomerByName(String customername);
-    
+
     /**
      * 
      * @description TODO
@@ -50,9 +52,10 @@ public interface CustomerService {
      * @return
      */
     public List<Customer> getCustomerByGroup(String groupId);
-    
-    public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request)  throws BusinessException;
-    
+
+    public List<Customer> getCustomerListByCodes(String[] codes, HttpServletRequest request)
+            throws BusinessException;
+
     public void updateCustomer(Customer customer);
 
     /**
@@ -60,5 +63,7 @@ public interface CustomerService {
      * @return
      */
     Map<String, Customer> findAllCustomersFromLocal();
+
+    List<LabelAndValue> changeCustomerToLabelAndValue(List<CustomerVo> customerList);
 
 }

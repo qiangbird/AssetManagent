@@ -1,6 +1,5 @@
 package com.augmentum.ams.web.controller.asset;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.augmentum.ams.exception.BusinessException;
+import com.augmentum.ams.service.asset.CustomerService;
 import com.augmentum.ams.service.remote.RemoteCustomerService;
 import com.augmentum.ams.web.controller.base.BaseController;
 import com.augmentum.ams.web.vo.asset.CustomerVo;
@@ -23,19 +23,18 @@ public class CustomerController extends BaseController {
     @Autowired
     private RemoteCustomerService remoteCustomerService;
 
+    @Autowired
+    private CustomerService customerService;
+
     @RequestMapping("/getCustomerInfo")
     public ModelAndView getCustomerInfo(HttpServletRequest request) throws BusinessException {
 
         ModelAndView modelAndView = new ModelAndView();
-        List<CustomerVo> customerList = remoteCustomerService.getAllCustomerFromIAP(request);
 
-        List<LabelAndValue> labelAndValueCustomer = new ArrayList<LabelAndValue>();
-        for (CustomerVo customerVo : customerList) {
-            LabelAndValue customer = new LabelAndValue();
-            customer.setLabel(customerVo.getCustomerName());
-            customer.setValue(customerVo.getCustomerCode());
-            labelAndValueCustomer.add(customer);
-        }
+        List<CustomerVo> customerList = remoteCustomerService.getAllCustomerFromIAP(request);
+        List<LabelAndValue> labelAndValueCustomer = customerService
+                .changeCustomerToLabelAndValue(customerList);
+
         modelAndView.addObject("customerList", labelAndValueCustomer);
 
         return modelAndView;
