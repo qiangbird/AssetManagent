@@ -260,9 +260,12 @@ function userValidation(){
 		$("#selectedStatus").data("selectedStatus").clear();
 		$("#selectedStatus").data("selectedStatus").setValue(arrayValue);
 		return true;
-	} else if("IN_USE" == selectedStatus){
-		return validateValueIsEmpty($("#userId"), userId, "User is null or not exist!");
 	} else {
+		var arrayValue = new Array();
+		arrayValue.push("AVAILABLE");
+		
+		$("#selectedStatus").data("selectedStatus").clear();
+		$("#selectedStatus").data("selectedStatus").setValue(arrayValue);
 		return true;
 	}
 }
@@ -519,8 +522,10 @@ function getProjectsByCustomer(customerCode){
         },
         dataType : 'json',
         success : function(data) {
-        	var projectMs = initDropDownMap($("#projectCode"), data.projectList, false, "label", "value");
-        	$("#projectCode").data("projectCode",projectMs);
+//        	var projectMs = initDropDownMap($("#projectCode"), data.projectList, false, "label", "value");
+//        	$("#projectCode").data("projectCode",projectMs);
+        	$("#projectCode").data("projectCode").clear();
+        	$("#projectCode").data("projectCode").setData(data.projectList);
         	
         	var projectManagerNames = [];
         	projectManagerNames = data.projectManager.del();

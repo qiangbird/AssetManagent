@@ -573,7 +573,6 @@ String basePath = request.getScheme() + "://"
         
         <!-- add front page validation -->
         <script type="text/javascript" src="js/common/validation.js"></script>
-        <script type="text/javascript" src="js/asset/assetValidation.js"></script>
         <script type="text/javascript" src="messageBar/js/messagebar.js"></script>
 </body>
 </html>

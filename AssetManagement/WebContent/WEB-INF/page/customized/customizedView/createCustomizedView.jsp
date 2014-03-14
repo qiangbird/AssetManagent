@@ -57,23 +57,21 @@
     <div class="filter">
     <span class="columnNameText"><spring:message code="customized.view.advanced.filtering"/>:</span>
     <div class="customizedViewItem">
-          <input id="columnName" class="inText select-type" type="text" value="" placeholder=<spring:message code="customized.view.column.tip.message"/> />
+          <input id="columnName"  type="text" value=""  />
           <input id="columnType" type="hidden" value="" />
           <input id="searchColumn" type="hidden" value="" />
           <input id="realTable" type="hidden" value="" />
     </div>
     <div class="customizedViewItem marginLeft searchCondition">
-          <input id="searchCondition" class="inText select-type" type="text"  readonly="readonly"
-               value=""  placeholder=<spring:message code="customized.view.criteria.tip.message"/> />
+          <input id="searchCondition"  class="inText valueInput" type="text"  value=""  />
     </div>
     <div class="customizedViewItem marginLeft value">
-          <input id="value" class="inText valueInput" type="text" value="" placeholder=<spring:message code="customized.view.value.tip.message"/> />
+          <input id="value" class="inText valueInput" type="text" value=""  />
           <input id="datepic" class="inText datepic" type="text"  readonly="readonly"
-               value="" placeholder=placeholder=<spring:message code="customized.view.date.tip.message"/> />
+               value=""  />
     </div>
     <div class="addToFilter marginLeft" >
           <input id="addToFilter" type="button" value=<spring:message code="customized.view.add.to.filter"/> class="addToFilter-button" />
-          <!-- <input id="updateToFilter" type="button" value=<spring:message code="update"/> class="addToFilter-button" /> -->
     </div>
     </div>
     <br>
@@ -84,37 +82,40 @@
     <div class="radioBoxes">
     	<span class="match-any"><spring:message code="customized.view.and"/></span><a class="radioCheckOff" name="or"></a>
     	<span class="match-all"><spring:message code="customized.view.or"/></span><a class="radioCheckOn" name="and"></a>
-    </div><br>
-    <div class="filterHead">
-      <div class="columnElement columnNameTitleHead" ><spring:message code="customized.view.column.name"/></div>
-      <div class="columnElement criteriaTitle" ><spring:message code="customized.view.criteria"/></div>
-      <div class="columnElement valueTitle" ><spring:message code="customized.view.value"/></div>
-      <div class="columnElement valueTitle" ><spring:message code="navigator.operation"/></div>
     </div>
-	<c:forEach items="${customizedViewItems}" var="customizedViewItem">
-      <div class="filterInfo">
-        <div class="columnData sequence itemIdInColumn"><p>
-        <input type="hidden" id="itemId" class='itemId' value="${customizedViewItem.id }" />
-        <input type="hidden" id="isDelete" class='isDelete' value="no" />
-        <input type="hidden" class='isEdit' value="no" /></p></div>
-        <div class="columnData columnNameTitle nameInColumn"><p>${customizedViewItem.columnName }</p></div>
-        <div class="columnData columnNameTitle typeInColumn"><p>${customizedViewItem.columnType }</p></div>
-        <div class="columnData columnNameTitle searchColumnInColumn"><p>${customizedViewItem.searchColumn }</p></div>
-        <div class="columnData columnNameTitle realTableInColumn"><p>${customizedViewItem.realTable }</p></div>
-        <div class="columnData criteriaTitle criteriaInColumn">
-	        <input class="inText select-type eidtCriteriaInput" type="text" readonly="readonly">
-	        <p>${customizedViewItem.searchCondition }</p>
+    <div>
+	    <div class="filterHead">
+	      <div class="columnElement columnNameTitleHead" ><spring:message code="customized.view.column.name"/></div>
+	      <div class="columnElement criteriaTitle" ><spring:message code="customized.view.criteria"/></div>
+	      <div class="columnElement valueTitle" ><spring:message code="customized.view.value"/></div>
+	      <div class="columnElement valueTitle" ><spring:message code="navigator.operation"/></div>
 	    </div>
-        <div class="columnData valueTitle valueInColumn">
-            <input class="inText eidtValueInput" type="text" >
-            <input id="datepic" class="inText editDatepic" type="text"  readonly="readonly"
-               value="" />
-            <p>${customizedViewItem.value}</p>
-        </div>
-        <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_delete_normal.png"> --%></a></p></div>
-        <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_edit_normal.png"> --%></a></p></div>
-      </div>
-    </c:forEach>
+	    
+		<c:forEach items="${customizedViewItems}" var="customizedViewItem">
+	      <div class="filterInfo">
+	        <div class="columnData sequence itemIdInColumn"><p>
+	        <input type="hidden" id="itemId" class='itemId' value="${customizedViewItem.id }" />
+	        <input type="hidden" id="isDelete" class='isDelete' value="no" />
+	        <input type="hidden" class='isEdit' value="no" /></p></div>
+	        <div class="columnData columnNameTitle nameInColumn"><p>${customizedViewItem.columnName }</p></div>
+	        <div class="columnData columnNameTitle typeInColumn"><p>${customizedViewItem.columnType }</p></div>
+	        <div class="columnData columnNameTitle searchColumnInColumn"><p>${customizedViewItem.searchColumn }</p></div>
+	        <div class="columnData columnNameTitle realTableInColumn"><p>${customizedViewItem.realTable }</p></div>
+	        <div class="columnData criteriaTitle criteriaInColumn">
+		        <input class="inText select-type eidtCriteriaInput" type="text" readonly="readonly">
+		        <p>${customizedViewItem.searchCondition }</p>
+		    </div>
+	        <div class="columnData valueTitle valueInColumn">
+	            <input class="inText eidtValueInput" type="text" >
+	            <input id="datepic" class="inText editDatepic" type="text"  readonly="readonly"
+	               value="" />
+	            <p>${customizedViewItem.value}</p>
+	        </div>
+	        <div class="columnData deleteButton"><p class="deletePosition"><a class="deleteLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_delete_normal.png"> --%></a></p></div>
+	        <div class="columnData editButton"><p class="editPosition"><a class="eidtLink"><%-- <img src="<%=basePath%>/image/customize/customizedView/icon_edit_normal.png"> --%></a></p></div>
+	      </div>
+	    </c:forEach>
+    </div>
   </div>
   
   <div id="filterInfoTemplate">

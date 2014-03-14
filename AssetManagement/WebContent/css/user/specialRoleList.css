@@ -133,6 +133,10 @@
 	float: right;
 }
 
+.ms-ctn input{
+    width: 100px !important;
+}
+
 .roleAddContent {
 	width: 978px !important;
 }

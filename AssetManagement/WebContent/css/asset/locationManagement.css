@@ -88,6 +88,9 @@ td {
 	height: 30px;
 	width: 220px;
 	font-family: arial;
+	font-size: 14px;
+	color: #555555;
+	-webkit-border-radius: 3px;
 }
 
 #location_table td select {
@@ -95,10 +98,9 @@ td {
 	width: 220px;
 }
 
-#location_table tr span { /* color: #FF0000; */
+#location_table tr span { 
 	position: absolute;
 	top: auto;
-	left: 80px;
 }
 
 .submit-button {

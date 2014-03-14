@@ -17,7 +17,7 @@ function setCommonInfoForAsset(data){
 	var assetTypeMs = initDropDownList($("#assetType"), data.assetType, false, "DEVICE", 300);
 	var machineTypeMs = initDropDownList($("#machineType"), data.machineTypes, false, undefined, 300);
 	var deviceSubtypeMs = initDropDownList($("#deviceSubtypeSelect"), data.deviceSubtypeList, false, undefined, 300);
-	var projectMs = initDropDownList($("#projectCode"), [], false, undefined, 300);
+	var projectMs = initDropDownMap($("#projectCode"), [], false, "label", "label");
 	
 	$("#selectedSite").data("selectedSite",siteMs);
 	$("#selectedEntity").data("selectedEntity",allEntityMs);

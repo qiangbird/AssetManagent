@@ -677,3 +677,7 @@
 	float: right !important;
 	margin-top: 0px !important;
 }
+
+.ms-ctn input{
+	width: 100px !important;
+}

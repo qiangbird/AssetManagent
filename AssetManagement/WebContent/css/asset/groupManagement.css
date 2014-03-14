@@ -363,3 +363,7 @@ border: solid 1px red !important;
 .token-input-list-facebook{
 	margin-top: 10px;
 }
+
+.token-input-dropdown-facebook{
+	z-index: 99999 !important;
+}

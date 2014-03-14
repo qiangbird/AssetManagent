@@ -91,7 +91,7 @@ String basename = request.getScheme() + "://"
                         </div>
                         <div class="row">
                             <label><spring:message code="project" /></label>
-                            <input id="projectCode"  readonly="readonly" placeholder="Please select Project" />
+                            <input id="projectCode"  maxlength="36" placeholder="Please select Project" />
                             <input type='hidden' id="projectName" value=""/> 
                         </div>
                         <div class="showProject"></div>
@@ -380,7 +380,6 @@ String basename = request.getScheme() + "://"
         
         <!-- add front page validation -->
         <script type="text/javascript" src="js/common/validation.js"></script>
-        <script type="text/javascript" src="js/asset/assetValidation.js"></script>
         
 </body>
 </html>

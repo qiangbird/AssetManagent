@@ -874,3 +874,7 @@ div .dropDownList .dropDownList_icon {
 	width: 298px !important;
 	float: right !important;
 }
+
+.ms-ctn input{
+    width: 100px !important;
+}

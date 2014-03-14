@@ -46,21 +46,20 @@
 
 .customizedViewItem {
 	float: left;
-	width: 150px;
+	width: 225px;
 	margin-left: 0px;
 	margin-bottom: 30px;
 	margin-top: -5px;
 }
 
 .marginLeft {
-	 margin-left: 18px;;
+	 margin-left: 10px;;
 }
 
 .addToFilter {
 	float: left;
 	width: auto;
 	margin-top: -6px;
-	margin-left: 145px;
 }
 
 .inTextForViewName {
@@ -77,8 +76,8 @@
 }
 
 .inText {
-	width: 150px;
-	height: 28px;
+	width: 225px;
+	height: 30px;
 	padding-left: 6px;
 	font: normal 14px/ 24px arial;
 	border-radius: 2px;
@@ -96,8 +95,8 @@
 .select-type {
     border-radius: 3px;
     box-shadow: inset 0 0 5px #BFBFBF;
-    background: url("../../../image/customize/customizedView/icon_arrow_down.png") 133px 15px no-repeat, 
-    			url("../../../image/customize/customizedView/icon_arrow_top.png") 133px 5px no-repeat;
+/*     background: url("../../../image/customize/customizedView/icon_arrow_down.png") 133px 15px no-repeat, 
+    			url("../../../image/customize/customizedView/icon_arrow_top.png") 133px 5px no-repeat; */
 }
 
 .datepic, .editDatepic {
@@ -233,7 +232,6 @@
 
 .columnData{
     float:left;
-    padding-top:3px;
     height: 26px;
 }
 
@@ -652,3 +650,10 @@
     box-shadow: inset 0 0 5px #BFBFBF;
 }
 
+.filterInfo .ms-ctn{
+    margin-left: 5px !important;
+}
+
+.ms-ctn input{
+	width: 50px !important;
+}

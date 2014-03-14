@@ -14,16 +14,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <title>Asset List</title>
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
-<link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
 <link rel="stylesheet" type="text/css" href="searchList/css/dataList.css">
 <link rel="stylesheet" type="text/css" href="css/common/commonList.css">
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
 <link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
-<link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="css/asset/locationManagement.css">
-<script type="text/javascript" src="js/common/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="js/common/jquery-ui-1.8.18.custom.min.js"></script>
 </head>
 <body>
 	<jsp:include page="../common/header.jsp"></jsp:include>
@@ -127,7 +123,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="filterBox/js/filterBox.js" ></script>
 <script type="text/javascript" src="js/common/selfDefineDialog.js"></script>
 <script type="text/javascript" src="js/location/location.js"></script>
-<script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="dropDownList/dropDownList.js"></script>
 <link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
 </html>

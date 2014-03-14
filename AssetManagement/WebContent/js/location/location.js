@@ -70,15 +70,17 @@ $(document).ready(function() {
  		$("#dialog").dialog("open");
  		
  		$("#location_id").val("");
- 		$("#site").val("");
+// 		$("#site").val("");
  		$("#room").val("");
+ 		
+ 		initSites();
  	});
  	
  	$("#site").click(function(){
  		$("#site").removeClass("site-error");
  		$("#site").poshytip("destroy");
  		
- 		  $.ajax({
+ 		  /*$.ajax({
  			    type : 'GET',
  			    contentType : 'application/json',
  			    url : 'location/getLocationSites',
@@ -92,8 +94,10 @@ $(document).ready(function() {
  			            minLength : 0,
  			            source : sites
  			        });
+ 			    	var siteMs = initDropDownList($("#site"), sites, false, undefined, 218, undefined, true);
+ 	 		    	$("#site").data("selectedLocation",siteMs);
  			     }
- 			  });
+ 			  });*/
  	});
  	$("#room").click(function(){
  		$("#room").removeClass("site-error");
@@ -131,7 +135,8 @@ $(document).ready(function() {
  				$("#dialog").dialog("open");
  				
  				$("#location_id").val(data.location.id);
- 				$("#site").val(data.location.site);
+// 				$("#site").val(data.location.site);
+ 				initSites(data.location.site);
  				$("#room").val(data.location.room);
  		     }
  		  });
@@ -164,7 +169,8 @@ $(document).ready(function() {
  	//submit
  	$("#submitLocation").click(function(){
  	    flag = 0;
- 		inputSite = $("#site").val();
+// 		inputSite = $("#site").val();
+ 	   inputSite = $("#site").data("site").getValue().join();
  		inputRoom = $("#room").val();
  		if(inputSite.trim() == ""){
  			$("#site").addClass("site-error");
@@ -212,6 +218,23 @@ var dataListInfo = {
     }
 };
 
+function initSites(currentValue){
+	$.ajax({
+		    type : 'GET',
+		    contentType : 'application/json',
+		    url : 'location/getLocationSites',
+		    dataType : 'json',
+		    success : function(data) {
+		    	length = data.siteList.length;
+		    	for(var i = 0;i< length; i++){
+		    		sites[i] = "Augmentum " + data.siteList[i];
+		    	}
+		    	var siteMs = initDropDownList($("#site"), sites, false, currentValue, 218, undefined, true, 100);
+		    	$("#site").data("site",siteMs);
+		     }
+		  });
+}
+
 // call dataList
 function searchList() {
     dataList = $(".dataList").DataList(dataListInfo);
@@ -237,7 +260,7 @@ function setCriteria() {
     return criteria;
 }
 
-// get value according to index sequence
+/*// get value according to index sequence
 function getIndexInArr(Arr, ele) {
     for ( var i = 0; i < Arr.length; i++) {
        if (ele == Arr[i]) {
@@ -255,15 +278,16 @@ function checkInArr(Arr, ele) {
         }
     }
     return false;
-}
+}*/
 
 // check if repeated location 
 function checkLocationAndSubmit() {
 	var id = $("#location_id").val();
-	var site = $("#site").val();
+//	var site = $("#site").val();
+	var site = $("#site").data("site").getValue().join();
 	var room = $("#room").val();
 	
-	if(!checkInArr(sites, $("#site").val()) && actionFlag == 'update'){
+	if(!checkInArr(sites, site) && actionFlag == 'update'){
 	   $("#site").addClass("site-error");
 	   $("#site").poshytip({
 		   	className: 'tip-green',
@@ -285,13 +309,18 @@ function checkLocationAndSubmit() {
   			success : function(data) {
   				
   				if (data.newLocation == null) {
-  					$("#dialog").submit();
+//  					$("#dialog").submit();
+  						var location = generateLocation(id, site, room);
+						submitForm(location);
   				} else {
   					if (data.oldLocation != null) {
   						
   						if (data.oldLocation.site == site
   								&& data.oldLocation.room == room) {
-  							$("#dialog").submit();
+  							var location = generateLocation(id, site, room);
+  							submitForm(location);
+  							
+//  							$("#dialog").submit();
   						}
   					} 
 					$("#room").addClass("site-error");
@@ -305,4 +334,26 @@ function checkLocationAndSubmit() {
   			}
   		});
   	}
+}
+
+function generateLocation(id, site, room){
+		var location = {};
+		
+		location.id = id;
+		location.site = site;
+		location.room = room;
+		
+		return location;
+}
+
+function submitForm(location){
+	$.ajax({
+			type : 'GET',
+			async: false,
+			url : 'location/save',
+			data: location,
+			success : function(data) {
+				window.location.href="location/listLocation";
+			}
+		});
 }

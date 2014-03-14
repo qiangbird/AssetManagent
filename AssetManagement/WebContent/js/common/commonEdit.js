@@ -41,30 +41,49 @@ function initDropDownMap($selector, sourceMap, isMultiple, displayField, valueFi
     }
     return temp;
 }
-function initDropDownList($selector, sourceList, isMultiple, currentValue, width){
+function initDropDownList($selector, sourceList, isMultiple, currentValue, width, freeEntries, isHideTrigger, height){
     var temp;
     var currentWidth = 458;
+    var free = false;
+    var allowHideTrigger = false;
+    var maxHeight = 200;
+    
     if(width != undefined){
     	currentWidth = width;
     }
+    
+    if(freeEntries != undefined){
+    	free = freeEntries;
+    }
+    
+    if(isHideTrigger != undefined){
+    	allowHideTrigger = isHideTrigger;
+    }
+    
+    if(height != undefined){
+    	maxHeight = height;
+    }
+    
     if(isMultiple){
          temp = $selector.magicSuggest({
              width: currentWidth,
-             allowFreeEntries:false,
-             maxDropHeight: 200,
+             allowFreeEntries:free,
+             maxDropHeight: maxHeight,
              resultAsString: true,
+             hideTrigger: allowHideTrigger,
              data: sourceList,
          });
     }else{
         temp = $selector.magicSuggest({
              width: currentWidth,
-             allowFreeEntries:false,
+             allowFreeEntries:free,
              maxSelection: 1,
              maxSelectionRenderer: function(v){
                  return "";
              },
-             maxDropHeight: 200,
+             maxDropHeight: maxHeight,
              resultAsString: true,
+             hideTrigger: allowHideTrigger,
              data: sourceList,
          });
     }

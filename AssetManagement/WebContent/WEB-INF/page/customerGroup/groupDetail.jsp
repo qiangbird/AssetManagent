@@ -9,9 +9,6 @@
 <base href="<%=basePath%>">
 <link rel="stylesheet" href="css/common/autocomplete.css"
 	type="text/css">
-<link rel="stylesheet" href="css/common/jquery-ui.css" type="text/css">
-<link rel="stylesheet" href="css/common/tip-green/tip-green.css"
-	type="text/css">
 <link rel="stylesheet" href="css/user/roleList.css" type="text/css">
 <link rel="stylesheet" href="css/asset/groupManagement.css"
 	type="text/css">
@@ -106,7 +103,5 @@
 	</div>
 <jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 <script type="text/javascript" src="js/customerGroup/groupCustomerManagement.js"></script>
-<script type="text/javascript" src="js/common/autocomplete.js"></script>
-<script type="text/javascript" src="jquery.poshytip/js/jquery.poshytip.js"></script>
 </body>
 </html>

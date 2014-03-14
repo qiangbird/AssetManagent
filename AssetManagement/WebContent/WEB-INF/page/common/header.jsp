@@ -18,6 +18,7 @@
 <link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css" >
 <link rel="stylesheet" type="text/css" href="<%=basePath%>messageBar/css/messagebar.css">
 <link rel="stylesheet" type="text/css" href="<%=basePath%>css/common/magicsuggest-1.3.1.css" />
+<link rel="stylesheet" type="text/css" href="css/common/autocomplete.css">
 <link rel="stylesheet" href="<%=basePath%>css/common/header.css" type="text/css">
 
 <title>Asset Page</title>

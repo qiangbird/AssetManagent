@@ -36,6 +36,7 @@ public class CustomerController extends BaseController {
                 .changeCustomerToLabelAndValue(customerList);
 
         modelAndView.addObject("customerList", labelAndValueCustomer);
+        modelAndView.addObject("customers", customerList);
 
         return modelAndView;
     }

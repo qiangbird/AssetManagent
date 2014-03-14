@@ -9,12 +9,12 @@ $(document).ready(function(){
 	       success : function(data) {
 	    	   console.log(data);
 	    	   customer = [];
-	    	   for(i=0;i<data.customerList.length;i++){
+	    	   for(i=0;i<data.customers.length;i++){
 	    		   customerName[i]=data.customerList[i].customerName;
 	    		   customerCode[i]=data.customerList[i].customerCode;
 	    		   customer.push({
-	    			   value:data.customerList[i].customerCode,
-	    			   label: data.customerList[i].customerName,
+	    			   value:data.customers[i].customerCode,
+	    			   label: data.customers[i].customerName,
 //	    			   value:data.customerList[i].customerName+ "#" +data.customerList[i].customerCodes
 	    		   });
 	    	   }
@@ -32,14 +32,14 @@ $(document).ready(function(){
 	    		 });
             }
             });
-	
+/*	
 	
 	$("#saveButton").click(function(){
 		alert($("#customerName").val());
 	});
 
 	
-	
+	*/
 	
 	
 	$("#addButton").click(function(){

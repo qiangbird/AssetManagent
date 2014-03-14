@@ -14,13 +14,11 @@
 <title>Customer Asset List</title>
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
-<link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
 <link rel="stylesheet" type="text/css" href="searchList/css/dataList.css">
 <link rel="stylesheet" type="text/css" href="css/common/commonList.css">
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
 <link rel="stylesheet" type="text/css" href="css/search/searchCommon.css">
 <link rel="stylesheet" type="text/css" href="css/asset/customerAsset.css">
-<link rel="stylesheet" type="text/css" href="css/common/jquery-ui-1.8.18.custom.css">
 <link rel="stylesheet" type="text/css" href="datepicker/css/datepicker.css">
 <link rel="stylesheet" type="text/css" href="css/asset/isAssign.css" />
 <link rel="stylesheet" type="text/css" href="dropDownList/themes/dropDownList.css" />
@@ -206,7 +204,6 @@
 	</div>
 	<jsp:include page="/WEB-INF/page/common/footer.jsp"></jsp:include>
 </body>
-<script type="text/javascript" src="js/common/jquery.i18n.properties-1.0.9.js"></script>
 <script type="text/javascript" src="js/asset/assetCommon.js"></script>
 <script type="text/javascript" src="js/common/common.js"></script>
 <script type="text/javascript" src="js/search/searchCommon.js"></script>

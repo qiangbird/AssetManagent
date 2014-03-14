@@ -81,16 +81,6 @@ function setCriteria() {
     criteria.searchFields = searchFields;
 }
 
-// get value according to index sequence
-function getIndexInArr(Arr, ele) {
-    for ( var i = 0; i < Arr.length; i++) {
-       if (ele == Arr[i]) {
-          return i;
-       }
-    }
-    return -1;
-}
-
 $(document).ready(function(){
 	$("#dialog").dialog({
         autoOpen:false,
@@ -114,12 +104,12 @@ $(document).ready(function(){
     	    url : 'customer/getCustomerInfo',
     	    dataType : 'json',
     	    success : function(data) {
-    	    	length = data.customerList.length;
+    	    	length = data.customers.length;
     	    	var customers = [];
         	    for ( var i = 0; i < length; i++) {
         	        customers.push({
-        	        	label:data.customerList[i].customerName,
-        	        	value:data.customerList[i].customerCode
+        	        	label:data.customers[i].customerName,
+        	        	value:data.customers[i].customerCode
         	        });
         	    }
         	   $("#customers").autoComplete({
@@ -130,7 +120,7 @@ $(document).ready(function(){
                     maxRows:10, 
                     minChars:1, 
                     searchDelay:100, 
-            		tokenDelimiter:',', 
+            		tokenDelimiter:','
                  });
     	    }
     	});
