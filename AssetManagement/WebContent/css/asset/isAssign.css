@@ -137,15 +137,8 @@
 	font-family: Arial;
 	font-size: 14px;
 	position: absolute;
-	top: 158px;
-	left: 263px;
-}
-
-#dialog div {
-	height: 40px;
-	width: 390px;
-	text-align: center;
-	line-height: 40px;
+	top: 155px;
+	left: 250px;
 }
 
 #dialog div label {
@@ -174,16 +167,29 @@
 
 #label_ProjectName {
 	margin-left: 58px;
+	margin-top: -15px;
 }
 
 #label_UserName {
 	margin-left: 73px;
+	margin-top: 5px;
 }
 
 #customer {
-	width: 250px;
+	width: 275px;
 	height: 33px;
 	line-height: 30px;
+}
+
+#projectCode {
+	float: right;
+	margin-top: -15px;
+	left: -79px;
+}
+#userId {
+	float: right;
+	margin-top: 5px;
+	left: -79px;
 }
 
 .dropDownList .dropDownList_text {
@@ -195,7 +201,7 @@
 
 .dropDownList .dropDownList_icon {
 	float: left;
-	margin-left: 5px;
+	margin-left: 11px;
 }
 
 #label_ConfirmAssign {

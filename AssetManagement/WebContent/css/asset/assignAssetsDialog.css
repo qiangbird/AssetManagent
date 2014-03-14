@@ -33,29 +33,10 @@
 	margin-left: 26px;
 }
 
-#dialog_assign div {
-	height: 40px;
-	width: 390px;
-	text-align: center;
-	line-height: 40px;
-}
-
 #dialog_assign div label {
 	text-align: center;
 	line-height: 35px;
 	vertical-align: middle;
-}
-
-#label_CustomerName {
-	margin-left: 40px;
-}
-
-#label_ProjectName {
-	margin-left: 58px;
-}
-
-#label_UserName {
-	margin-left: 73px;
 }
 
 #dialog_assign div input[type="text"] {
@@ -63,13 +44,6 @@
 	width: 250px;
 	font-family: Arial;
 	font-size: 14px;
-}
-
-#dialog_assign div span {
-	color: #FF0000;
-	position: absolute;
-	left: 60px;
-	top: 10px;
 }
 
 .assign_asset_button {
@@ -94,8 +68,12 @@
 	font-family: Arial;
 	font-size: 14px;
 	position: absolute;
-	top: 142px;
+	top: 125px;
 	left: 263px;
+}
+
+#cancel_assign:hover {
+	background: url("../../img/button/BTN_Cancel_Hover_80x30.png") no-repeat;
 }
 
 #tip_message {
@@ -119,4 +97,46 @@
 	position: absolute;
 	top: 111px;
 	left: 155px;
+}
+
+#label_CustomerName {
+	margin-top: -8px;
+}
+
+#label_ProjectName {
+	margin-left: 74px;
+	margin-top: 6px;
+}
+
+#label_UserName {
+	margin-left: 74px;
+	margin-top: 6px;
+}
+
+#customerCode {
+	margin-top: 17px;
+	width: 275px;
+	float: right;
+	top: -24px;
+	right: 50px;
+}
+
+#projectCode {
+	width: 275px;
+	left: 119px;
+	margin-top: -33px;
+}
+
+#userId {
+	width: 275px;
+	left: 119px;
+	margin-top: -33px;
+}
+
+#not_null_flag {
+	float: left;
+	margin-right: 10px;
+	margin-left: 60px;
+	margin-top: 3px;
+	color: red;
 }

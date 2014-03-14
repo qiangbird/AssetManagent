@@ -14,7 +14,6 @@
 <title>Asset List</title>
 <link rel="stylesheet" type="text/css" href="css/base/base.css">
 <link rel="stylesheet" type="text/css" href="css/base/resetCss.css">
-<link rel="stylesheet" type="text/css" href="jquery.poshytip/css/tip-green.css">
 <link rel="stylesheet" type="text/css" href="searchList/css/dataList.css">
 <link rel="stylesheet" type="text/css" href="css/common/commonList.css">
 <link rel="stylesheet" type="text/css" href="filterBox/css/filterBox.css">
@@ -190,21 +189,21 @@
     </div>
     <div id="dialog_assign" title="<spring:message code='itAssign.dialog.title'/>">
 	      <div>
-	          <span>*</span>
+	          <span id="not_null_flag">*</span>
 	          <label id="label_CustomerName"><spring:message code="customer"/></label>
-	          <input id="customerName" type="text" name="customerName" placeholder="<spring:message code='dialog.placeholder.customer'/>"/>
-	          <input type="hidden" id="customerCode" />
+	          <input id="customerCode"  type="text" value="" />
+              <input id="customerName" type="hidden" value="" />
 	      </div>
 	      <div>
 	          <label id="label_ProjectName"><spring:message code="project"/></label>
-	          <input id="projectName" type="text"  name="projectName" placeholder="<spring:message code='dialog.placeholder.project'/>"/>
-	          <input type="hidden" id="projectCode" />
+	          <input id="projectCode" type="text" value=""/>
+	          <input type="hidden" id="projectName" value=""/>
 	          
 	      </div>
 	      <div>
 	          <label id="label_UserName"><spring:message code="asset.user"/></label>
-	          <input id="userName" type="text" name="userName" placeholder="<spring:message code='dialog.placeholder.user'/>"/>
-	          <input type="hidden" id="userId">
+	          <input id="userId" type="text" value=""/>
+	          <input type="hidden" id="userName" value="">
 	      </div>
 	          <a id="confirm_assign" class="a_common_button green_button_thirty">
 	        	<span class="left"></span>

@@ -178,14 +178,13 @@
 	      </div>
 	      <div>
 	          <label id="label_ProjectName"><spring:message code="project"/></label>
-	          <input id="projectName" type="text"  name="projectName" placeholder="<spring:message code='dialog.placeholder.project'/>"/>
-	          <input type="hidden" id="projectCode" name="projectCode"/>
-	          
+	          <input id="projectCode" type="text" />
+	          <input type="hidden" id="projectName" />
 	      </div>
 	      <div>
 	          <label id="label_UserName"><spring:message code="asset.user"/></label>
-	          <input id="userName" type="text" name="userName" placeholder="<spring:message code='dialog.placeholder.user'/>"/>
-	          <input type="hidden" id="userId" name="userId">
+	          <input id="userId" type="text"/>
+	          <input type="hidden" id="userName"/>
 	      </div>
           <a id="confirm_assign" class="a_common_button green_button_thirty">
         	<span class="left"></span>

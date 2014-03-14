@@ -86,6 +86,12 @@ $(document).ready(function() {
 	   	 $("#label_UserName").css("margin-left", "73px");
 	   	 $("#dialog_assign div span").css("left", "60px");
     }
+    
+    var	customerMs = initDropDownMap($("#projectCode"), data.projectList, false, "label", "value", undefined, 275);
+	$("#projectCode").data("projectCode",customerMs);
+    var customerCode = $("#customer").val();
+    getProjectsByCustomer(customerCode);
+    getUsers();
 	
 	//employee operations
 	$("#takeOver").click(function(){
@@ -519,91 +525,14 @@ function getActivedAssetIds() {
 
 $("#customer").change(function(){
 	$("#projectName").val("");
-	$("#projectCode").val("");
-	$("#projectName").attr("placeholder", placeholder_project);
+	$("#projectCode").data("projectCode").clear();
 	
 	$("#userName").val("");
-	$("#userId").val("");
-	$("#userName").attr("placeholder", placeholder_user);
-});
-
-
-$("#projectName").focus(function() {
-    $(this).attr("placeholder", "");
-    var customerCode = $("#customer").val();
-    var projectName = [];
-    var projectCode = [];
-    
-    if (customerCode != "") {
-        $.ajax({
-          type : 'GET',
-          contentType : 'application/json',
-          url : 'project/getProjectByCustomerCode?customerCode=' + customerCode,
-          dataType : 'json',
-          success : function(data) {
-              var length = data.projectList.length;
-              for ( var i = 0; i < length; i++) {
-                  projectName[i] = data.projectList[i].projectName;
-                  projectCode[i] = data.projectList[i].projectCode;
-               }
-               $("#projectName").autocomplete({
-                  minLength: 0,
-                  source : projectName,
-                  select : function(e, ui) {
-                     $("#projectCode").val(projectCode[getIndexInArr(projectName, ui.item.value)]);
-                  }
-               });
-            }
-        });
-    } else {
-        return;
-    }
-});
-
-$("#projectName").blur(function() {
-    if ($(this).val() == "") {
-        $(this).attr("placeholder", placeholder_project);
-    }
-});
-
-//select all employee below customer
-$("#userName").focus(function(){
-	$(this).attr("placeholder", "");
-	customerCode = $("#customer").val();
-	userCode = "";
-      $.ajax({
-          type : 'GET',
-          contentType : 'application/json',
-          url : 'user/getEmployeeAsCustomer',
-          dataType : 'json',
-          data : {customerCode : customerCode},
-          success : function(data) {
-             employeeName = [];
-             employeeCode = [];
-             length = data.employeeInfo.length;
-             for ( var i = 0; i < length; i++) {
-                employeeName[i] = data.employeeInfo[i].label;
-                employeeCode[i] = data.employeeInfo[i].employeeCode;
-             }
-             userArray = employeeName;
-             $("#userName").autocomplete({
-               	 minLength: 0,
-                 source : employeeName,
-                 select : function(e,ui) {
-                   $("#userId").val(employeeCode[getIndexInArr(employeeName,ui.item.label)]);
-                 }
-             });
-          },
-          error : function() {
-             alert("error");
-          }
-      });
-});
-
-$("#userName").blur(function() {
-    if ($(this).val() == "") {
-        $(this).attr("placeholder", placeholder_user);
-    }
+	$("#userId").data("userId").clear();
+	
+	var customerCode = $("#customer").val();
+	getProjectsByCustomer(customerCode);
+	getUsers();
 });
 
 
@@ -616,10 +545,10 @@ $("#confirm_assign").click(function() {
         url : 'customerAsset/assginAssets',
         dataType : 'json',
         data: {
-            userId: $("#userId").val(),
+            userId: $("#userId").data("userId").getValue().join(),
             userName: $("#userName").val(),
             assetIds: getActivedAssetIds(),
-            projectCode: $("#projectCode").val(),
+            projectCode: $("#projectCode").data("projectCode").getValue().join(),
             assignCustomerCode: $("#customer").val()
         },
         success : function(data) {
@@ -629,27 +558,83 @@ $("#confirm_assign").click(function() {
         }
     });
     closeDialog();
+    $("#dialog").dialog("close");
     $("div .dataList-div-loader").show();
 });
 
 // cancel assign assets
 $("#cancel_assign").click(function() {
     closeDialog();
+    $("#dialog").dialog("close");
 });
 
 // close dialog and clean text content
 function closeDialog() {
     $("#projectName").val("");
     $("#projectCode").val("");
-    $("#projectName").attr("placeholder", placeholder_project);
     
     $("#userName").val("");
     $("#userId").val(""); 
-    $("#userName").attr("placeholder", placeholder_user);
     
     $("#customer").find("option").each(function(){
     	$(this).removeAttr("selected");
     });
-    
-    $("#dialog").dialog("close");
+}
+
+function getProjectsByCustomer(customerCode) {
+	
+	$.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'project/getProjectByCustomerCode?customerCode='+customerCode,
+        dataType : 'json',
+        success : function(data) {
+        	var	projectMs = initDropDownMap($("#projectCode"), data.projectList, false, "label", "value", undefined, 275);
+        	$("#projectCode").data("projectCode",projectMs);
+        	projectBindEvent();
+          }
+      });
+}
+
+function projectBindEvent() {
+//	var projectCode = $("#projectCode").data("projectCode").getValue().join();
+	var projectMs = $("#projectCode").data("projectCode");
+	$(projectMs).on('selectionchange', function(event, combo, selection){
+        var selectedItems = $("#projectCode").data("projectCode").getSelectedItems();
+        
+        if(0 < selectedItems.length){
+        	var projectName = selectedItems[0].label;
+    		$("#projectName").val(projectName);
+        }else{
+        	$("#projectName").val("");
+        }
+    });
+}
+
+function getUsers(){
+    $.ajax({
+        type : 'GET',
+        contentType : 'application/json',
+        url : 'user/getEmployeeDataSource',
+        dataType : 'json',
+        success : function(data) {
+        	var employeeMs = initDropDownMap($("#userId"), data.employeeLabel, false, "label", "value", undefined, 275);
+    		$("#userId").data("userId",employeeMs);
+    		employeeBindEvent();
+        },
+        });
+}
+
+function employeeBindEvent(){
+	var employeeMs = $("#userId").data("userId");
+	$(employeeMs).on('selectionchange', function(event, combo, selection){
+		var selectedItems = $("#userId").data("userId").getSelectedItems();
+		
+		if(0 < selectedItems.length){
+			var userName = selectedItems[0].label;
+			$("#userName").val(userName);
+		}else{
+			$("#userName").val("");
+		}
+    });
 }

@@ -47,7 +47,7 @@ public class AssetVo {
     @NotBlank(message = ErrorCodeUtil.ASSET_OWNERSHIP_INVALID)
     private String ownerShip;
 
-    private Boolean fixed;
+    private boolean fixed;
     @NotBlank(message = ErrorCodeUtil.ASSET_STATUS_INVALID)
     private String status;
 
@@ -200,11 +200,11 @@ public class AssetVo {
         this.ownerShip = ownerShip;
     }
 
-    public Boolean isFixed() {
+    public boolean isFixed() {
         return fixed;
     }
 
-    public void setFixed(Boolean fixed) {
+    public void setFixed(boolean fixed) {
         this.fixed = fixed;
     }
 

@@ -92,20 +92,12 @@ public class OperationRecordUtil {
         return str;
     }
     
-    private static String compareBooleanValue(Boolean oldValue, Boolean newValue, String propertyName) {
+    private static String compareBooleanValue(boolean oldValue, boolean newValue, String propertyName) {
         
         String str = "";
-        if (null != oldValue && null != newValue) {
                 
-            if (!oldValue.equals(newValue)) {
-                str = " [" + propertyName + ": " + oldValue + SystemConstants.OPERATION_PLACEHOLDER + newValue + "]";
-            }
-        } else if (null == oldValue && null != newValue) {
-            
-            str = " [" + propertyName + ": NULL" + SystemConstants.OPERATION_PLACEHOLDER + newValue + "]";
-        } else if (null != oldValue && null == newValue) {
-            
-            str = " [" + propertyName + ": " + oldValue + SystemConstants.OPERATION_PLACEHOLDER + "NULL]";
+        if (oldValue != newValue) {
+            str = " [" + propertyName + ": " + oldValue + SystemConstants.OPERATION_PLACEHOLDER + newValue + "]";
         }
         return str;
     }
