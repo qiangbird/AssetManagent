@@ -90,8 +90,8 @@ $(document).ready(function() {
 						var flag = false;
 						flag = isAtLeastOneITAndAdmin();
 						if(true == flag){
+							parent.find(".isDelete").val("true");
 							parent.css("display", "none");
-							parent.find(".Romove .isDelete").val("true");
 						}else{
 							showMessageBarForMessage('none_IT_and_Admin');
 						}
@@ -290,20 +290,20 @@ function saveOperation(usersRoleInfo){
 			dataList.search();
 			showMessageBarForMessage("role_save_success");
 		},
-		dataType: 'json',
+//		dataType: 'json',
 		type: 'POST'
 	});
 }
 
 function getUserRoloInfo(){
 	usersRoleInfo.length = 0;
-	var employee = new Object();
 	$(".dataList-div-body").find(".row").each(function(index){
+		var employee = new Object();
 		employee.employeeId = $(this).find(".Employee-ID").text();
 		employee.employeeName = $(this).find(".Employee-Name").text();
 		employee.itRole = $(this).find(".IT .itInRow #itInRowValue").val();
 		employee.systemAdminRole = $(this).find(".System-Admin .adminInRow #adminInRowValue").val();
-		employee.isDelete = $(this).find(".Remove .isDelete").val();
+		employee.isDelete = $(this).find(".isDelete").val();
 		usersRoleInfo.push(employee);
 	});
 }

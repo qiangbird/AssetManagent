@@ -602,7 +602,7 @@ function getCustomers() {
         url : 'customer/getCustomerInfo',
         dataType : 'json',
         success : function(data) {
-	    	var customerMs = initDropDownMap($("#customerCode"), data.customerList, false, "label", "value", undefined, 275);
+	    	var customerMs = initDropDownMap($("#customerCode"), data.labelAndValueCustomer, false, "label", "value", undefined, 275);
             $("#customerCode").data("customerCode",customerMs);
             customerBindEvent();
          }

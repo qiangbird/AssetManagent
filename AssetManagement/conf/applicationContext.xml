@@ -115,7 +115,7 @@
                 /css/**=anon
                 /js/**=anon
                 /images/**=anon
-                /**=authc
+               <!--  /**=authc -->
                 /asset/listAsset/** = authc,perms[Asset:view_all]
                 /asset/assignAsset/** = authc,perms[Asset:assign_asset]
                 /asset/checkInAsset/** = authc,perms[Asset:check_in_asset]

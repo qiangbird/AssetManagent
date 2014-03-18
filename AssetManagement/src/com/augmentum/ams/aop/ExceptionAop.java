@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.augmentum.ams.exception.BaseException;
 import com.augmentum.ams.model.user.User;
+import com.augmentum.ams.util.CommonUtil;
 
 /**
  * This class is to make aop for system
@@ -27,7 +28,7 @@ public class ExceptionAop {
     private static Logger logger = Logger.getLogger(ExceptionAop.class);
 
     @Before(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)")
-    public void testDoLog(JoinPoint point) {
+    public void beforMethod(JoinPoint point) {
 
         StringBuilder logInfo = getMethodAndParams(point);
         logInfo.append(" Start...");
@@ -36,7 +37,7 @@ public class ExceptionAop {
     }
 
     @AfterReturning(value = "execution(* com.augmentum.ams..*(..)) && !within(ExceptionAop)")
-    public void doSystemLog(JoinPoint point) {
+    public void afterMethod(JoinPoint point) {
 
         logger.info(point.getSignature().getName() + "()  End...");
     }
@@ -74,7 +75,7 @@ public class ExceptionAop {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();
-        String ip = getIpAddress(request);
+        String ip = CommonUtil.getIpAddress(request);
 
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String loginName;
@@ -109,31 +110,4 @@ public class ExceptionAop {
         return logInfo;
     }
 
-    public String getIpAddress(HttpServletRequest request) {
-
-        String ip = request.getHeader("x-forwarded-for");
-
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("http_client_ip");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip != null && ip.indexOf(",") != -1) {
-            ip = ip.substring(ip.lastIndexOf(",") + 1, ip.length()).trim();
-        }
-        if ("0:0:0:0:0:0:0:1".equals(ip)) {
-            ip = "127.0.0.1";
-        }
-        return ip;
-    }
 }

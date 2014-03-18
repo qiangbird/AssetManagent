@@ -1,0 +1,32 @@
+
+---------------------------------------待完成--------------------------------------------------
+
+	1. OperationLog 只做了Delete/create/update/edit asset的操作记录
+	2. Exception 的拦截并没有成功的拦截到所有的异常，由于Spring ExceptionHandler自身的原因，不能拦截到controller层抛出的异常，需要处理
+	3. 需要对系统进行全面初始空数据检测， 防止空指针的异常
+	4. 完善权限控制的配置文件，控制URL的访问权限
+	5. 如果通过url去访问我的资产，对于不是我的资产的情况下，是否可以访问？查询我的资产的时候加上条件，asset user=sessionUser
+        6. 访问客户资产时, 增加customerCode 是否在当前用户的customerList里的判断
+	7. selfproperty update 问题， 不能修改type， 重用isEpired标志位 标志已有的的selfproperty是否显示， value值的变更不会影响已有的customizeProperty
+	8. 修改所有的placeHolder的中英文问题, 以及有些页面存储中文出现的乱码问题（提示：保证项目中所有文件的编码格式为UTF-8，应该可以解决乱码问题）
+	9. PMS 传输数据有乱码
+	9. Role list page 删除数据成功，但查询出来的数据条数不正确（实际数据库中数据也已经被删除，但是页面仍旧显示错误，考虑是否是由于index引起的原因）
+	10. 是否把Memecached改为ehcache， 如果使用Memcached需要在Linux上安装服务器           
+	11. 本地group信息 考虑做cache    
+	12. 编辑资产时，资产状态为空校验后，poshytip效果会在填写状态后一直存在（tips不能去除，会一直显示在页面上）
+	13. 编辑资产，并且资产类型为“other assets”时，详细配置属性若为空 会存在一个默认的字符串 value=" "
+	14. 如果资产所处状态为 Assigning 或 ReturningToIT, 中间状态不会在编辑资产时的显示在状态列表中
+	15. 如果资产所处状态为 Assigning 或 ReturningToIT, 编辑这条资产的状态后，该资产仍会出现在ToDo列表中(资产状态已非中间状态)
+	16. OperationLog operation中会出现类似：[Memo: ---NULL] [WarrantyTime: NULL---]，原因是OperationRecordUtil中对比属性的方法中对属性值的非空判断不完善
+	17. 编辑资产成功后跳回'All Assets'页面，应该是回到history.go(-2)页面,即跳转到View Detail之前的页面，并保存搜索条件
+	18. customer asset assign feature，customer change 不会引起project信息改变
+	19. 系统只有少部分的操作有操作后的消息提示，大部分操作都没有加，同时缺少loader页面
+	20. test case 文档没有写
+	21. 用户手册没有写
+	22. 项目最后测试阶段，可以考虑使用项目profile工具和Mysql profile工具对项目再次进行优化，以提供系统的整体性能
+	
+	
+	注意：
+		1. 初始化数据时， Location需要运行Junit test手动创建索引
+		2. 重建数据库时需要删掉以前的索引， 否则查询数据的结果会出问题
+		

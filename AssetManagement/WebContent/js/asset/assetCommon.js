@@ -469,10 +469,10 @@ function getCustomers(){
         url : 'customer/getCustomerInfo',
         dataType : 'json',
         success : function(data) {
-        	var ownerShipMS = initDropDownMap($("#ownership"), data.customerList, false, "label", "label", $("#ownership").val());
+        	var ownerShipMS = initDropDownMap($("#ownership"), data.labelAndValueCustomer, false, "label", "label", $("#ownership").val());
         	$("#ownership").data("ownership",ownerShipMS);
         	
-            var customerMs = initDropDownMap($("#customerCode"), data.customerList, false, "label", "value", $("#customerCodeDefaultValue").val());
+            var customerMs = initDropDownMap($("#customerCode"), data.labelAndValueCustomer, false, "label", "value", $("#customerCodeDefaultValue").val());
             $("#customerCode").data("customerCode",customerMs);
             
             ownerShipBindEvent();

@@ -1,0 +1,2 @@
+http://wenku.baidu.com/view/2e871bfb04a1b0717fd5dd74.html         // This is the translated reference
+http://shiro.apache.org/reference.html                            // This is the reference of shiro official document 

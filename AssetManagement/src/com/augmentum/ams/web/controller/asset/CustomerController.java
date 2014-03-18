@@ -35,8 +35,8 @@ public class CustomerController extends BaseController {
         List<LabelAndValue> labelAndValueCustomer = customerService
                 .changeCustomerToLabelAndValue(customerList);
 
-        modelAndView.addObject("customerList", labelAndValueCustomer);
-        modelAndView.addObject("customers", customerList);
+        modelAndView.addObject("labelAndValueCustomer", labelAndValueCustomer);
+        modelAndView.addObject("customerList", customerList);
 
         return modelAndView;
     }

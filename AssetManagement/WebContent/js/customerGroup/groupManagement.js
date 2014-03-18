@@ -104,12 +104,12 @@ $(document).ready(function(){
     	    url : 'customer/getCustomerInfo',
     	    dataType : 'json',
     	    success : function(data) {
-    	    	length = data.customers.length;
+    	    	length = data.customerList.length;
     	    	var customers = [];
         	    for ( var i = 0; i < length; i++) {
         	        customers.push({
-        	        	label:data.customers[i].customerName,
-        	        	value:data.customers[i].customerCode
+        	        	label:data.customerList[i].customerName,
+        	        	value:data.customerList[i].customerCode
         	        });
         	    }
         	   $("#customers").autoComplete({

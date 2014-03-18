@@ -58,10 +58,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SpecialRoleService specialRoleService;
-    
+
     @Autowired
     protected SessionFactory sessionFactory;
-    
+
     @Autowired
     private BaseHibernateDao<User> baseHibernateDao;
 
@@ -292,37 +292,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<User> findUserBySearchCondition(SearchCondition searchCondition) {
-        
+
         Session session = sessionFactory.openSession();
         FullTextSession fullTextSession = Search.getFullTextSession(session);
-        QueryBuilder qb = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity(User.class).get();
+        QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder()
+                .forEntity(User.class).get();
 
         // create ordinary query, it contains search by keyword
-        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(
-                User.class, qb, searchCondition.getKeyWord(),
-                searchCondition.getSearchFields());
-        
-        BooleanQuery filterQuery = new BooleanQuery();;
-        
+        BooleanQuery keyWordQuery = CommonSearchUtil.searchByKeyWord(User.class, qb,
+                searchCondition.getKeyWord(), searchCondition.getSearchFields());
+
+        BooleanQuery filterQuery = new BooleanQuery();
+
         if (!searchCondition.getIsITRole() && !searchCondition.getIsSystemAdminRole()) {
-            
+
             BooleanQuery defaultFilterQuery = new BooleanQuery();
             defaultFilterQuery.add(new TermQuery(new Term("roles.role_name", "it")), Occur.SHOULD);
-            defaultFilterQuery.add(new TermQuery(new Term("roles.role_name", "system_admin")), Occur.SHOULD);
-            
+            defaultFilterQuery.add(new TermQuery(new Term("roles.role_name", "system_admin")),
+                    Occur.SHOULD);
+
             filterQuery.add(defaultFilterQuery, Occur.MUST);
         }
 
         if (searchCondition.getIsITRole()) {
-            
+
             filterQuery.add(new TermQuery(new Term("roles.role_name", "it")), Occur.MUST);
         }
-        
+
         if (searchCondition.getIsSystemAdminRole()) {
             filterQuery.add(new TermQuery(new Term("roles.role_name", "system_admin")), Occur.MUST);
         }
-        
+
         QueryWrapperFilter filter = new QueryWrapperFilter(filterQuery);
 
         // add entity associate
@@ -338,8 +338,8 @@ public class UserServiceImpl implements UserService {
         page.setSortOrder(searchCondition.getSortSign());
         page.setSortColumn(searchCondition.getSortName());
 
-        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(
-                keyWordQuery, User.class).setCriteriaQuery(criteria);
+        FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(keyWordQuery, User.class)
+                .setCriteriaQuery(criteria);
 
         page = baseHibernateDao.findByIndex(fullTextQuery, filter, page);
         fullTextSession.close();

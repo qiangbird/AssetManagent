@@ -34,49 +34,47 @@ import com.augmentum.ams.util.ErrorCodeUtil;
 @Table(name = "customer")
 @Indexed(index = "customer")
 @Analyzer(impl = IKAnalyzer.class)
-@JsonIgnoreProperties(value={"assets"})    
+@JsonIgnoreProperties(value = { "assets" })
 public class Customer extends BaseModel implements Serializable {
 
-	private static final long serialVersionUID = -1485320091445990928L;
+    private static final long serialVersionUID = -1485320091445990928L;
 
-	@Column(name = "customer_name", length = 128, nullable = false)
-	@Field(name = "customerName", index = Index.TOKENIZED, store = Store.YES)
-	@NotBlank(message=ErrorCodeUtil.ASSET_CUSTOMER_VALIDATOR_FAILED)
-	private String customerName;
+    @Column(name = "customer_name", length = 128, nullable = false)
+    @Field(name = "customerName", index = Index.TOKENIZED, store = Store.YES)
+    @NotBlank(message = ErrorCodeUtil.ASSET_CUSTOMER_VALIDATOR_FAILED)
+    private String customerName;
 
-	@Column(name = "customer_code", length = 32)
-	@Field(name = "customerCode", index = Index.UN_TOKENIZED, store = Store.YES)
-	private String customerCode;
-	
+    @Column(name = "customer_code", length = 32)
+    @Field(name = "customerCode", index = Index.UN_TOKENIZED, store = Store.YES)
+    private String customerCode;
+
     /**
-     *  The group code of the group which the customer in
-     *  If the groupCode is null, the default process is 
-     *  not_share
+     * The group code of the group which the customer in If the groupCode is
+     * null, the default process is not_share
      */
-	@ManyToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "groupId")
-	@IndexedEmbedded(depth = 1)
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "groupId")
+    @IndexedEmbedded(depth = 1)
     private CustomerGroup customerGroup;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
+    private List<Asset> assets = new ArrayList<Asset>();
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.PERSIST)
-	private List<Asset> assets = new ArrayList<Asset>();
+    public String getCustomerName() {
+        return customerName;
+    }
 
-	public String getCustomerName() {
-		return customerName;
-	}
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
-	}
+    public String getCustomerCode() {
+        return customerCode;
+    }
 
-	public String getCustomerCode() {
-		return customerCode;
-	}
-
-	public void setCustomerCode(String customerCode) {
-		this.customerCode = customerCode;
-	}
+    public void setCustomerCode(String customerCode) {
+        this.customerCode = customerCode;
+    }
 
     public CustomerGroup getCustomerGroup() {
         return customerGroup;
@@ -86,19 +84,18 @@ public class Customer extends BaseModel implements Serializable {
         this.customerGroup = customerGroup;
     }
 
-	public List<Asset> getAssets() {
-		return assets;
-	}
+    public List<Asset> getAssets() {
+        return assets;
+    }
 
-	public void setAssets(List<Asset> assets) {
-		this.assets = assets;
-	}
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
+    }
 
-	@Override
-	public String toString() {
-		return "Customer [customerName=" + customerName + ", customerCode="
-				+ customerCode + "]";
-	}
+    @Override
+    public String toString() {
+        return "Customer [customerName=" + customerName + ", customerCode=" + customerCode + "]";
+    }
 
     @Override
     public int hashCode() {
@@ -130,5 +127,5 @@ public class Customer extends BaseModel implements Serializable {
             return false;
         return true;
     }
-	
+
 }

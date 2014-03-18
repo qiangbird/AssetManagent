@@ -1,0 +1,59 @@
+1、 StopAnalyzer
+
+StopAnalyzer能过滤词汇中的特定字符串和词汇，并且完成大写转小写的功能。
+
+2、 StandardAnalyzer
+
+StandardAnalyzer根据空格和符号来完成分词，还可以完成数字、字母、E-mail地址、IP地址以及中文字符的分析处理，还可以支持过滤词表，用来代替StopAnalyzer能够实现的过滤功能。
+
+3、 SimpleAnalyzer
+
+SimpleAnalyzer具备基本西文字符词汇分析的分词器，处理词汇单元时，以非字母字符作为分割符号。分词器不能做词汇的过滤，之进行词汇的分析和分割。输出地词汇单元完成小写字符转换，去掉标点符号等分割符。
+
+在全文检索系统开发中，通常用来支持西文符号的处理，不支持中文。由于不完成单词过滤功能，所以不需要过滤词库支持。词汇分割策略上简单，使用非英文字符作为分割符，不需要分词词库的支持。
+
+4、 WhitespaceAnalyzer
+
+WhitespaceAnalyzer使用空格作为间隔符的词汇分割分词器。处理词汇单元的时候，以空格字符作为分割符号。分词器不做词汇过滤，也不进行小写字符转换。
+
+实际中可以用来支持特定环境下的西文符号的处理。由于不完成单词过滤和小写字符转换功能，也不需要过滤词库支持。词汇分割策略上简单使用非英文字符作为分割符，不需要分词词库支持。
+
+5、 KeywordAnalyzer
+
+KeywordAnalyzer把整个输入作为一个单独词汇单元，方便特殊类型的文本进行索引和检索。针对邮政编码，地址等文本信息使用关键词分词器进行索引项建立非常方便。
+
+6、 CJKAnalyzer
+
+CJKAnalyzer内部调用CJKTokenizer分词器，对中文进行分词，同时使用StopFilter过滤器完成过滤功能，可以实现中文的多元切分和停用词过滤。在Lucene3.0版本中已经弃用。
+
+7、 ChineseAnalyzer
+
+ChineseAnalyzer功能与StandardAnalyzer分析器在处理中文是基本一致，都是切分成单个的双字节中文字符。在Lucene3.0版本中已经弃用。
+
+8、 PerFieldAnalyzerWrapper
+
+PerFieldAnalyzerWrapper功能主要用在针对不同的Field采用不同的Analyzer的场合。比如对于文件名，需要使用KeywordAnalyzer，而对于文件内容只使用StandardAnalyzer就可以了。通过addAnalyzer()可以添加分类器。
+
+9、 IKAnalyzer
+
+实现了以词典为基础的正反向全切分，以及正反向最大匹配切分两种方法。IKAnalyzer是第三方实现的分词器，继承自Lucene的Analyzer类，针对中文文本进行处理。
+
+10、JE-Analysis
+
+JE-Analysis是Lucene的中文分词组件，需要下载。
+
+11、 ICTCLAS4J
+
+ictclas4j中文分词系统是sinboy在中科院张华平和刘群老师的研制的FreeICTCLAS的基础上完成的一个java开源分词项目，简化了原分词程序的复杂度，旨在为广大的中文分词爱好者一个更好的学习机会。
+
+12、 Imdict-Chinese-Analyzer
+
+imdict-chinese-analyzer 是 imdict智能词典 的智能中文分词模块，算法基于隐马尔科夫模型(Hidden Markov Model, HMM)，是中国科学院计算技术研究所的ictclas中文分词程序的重新实现（基于Java），可以直接为lucene搜索引擎提供简体中文分词支持。
+
+13、 Paoding Analysis
+
+Paoding Analysis中文分词具有极 高效率 和 高扩展性。引入隐喻，采用完全的面向对象设计，构思先进。其效率比较高，在PIII 1G内存个人机器上，1秒可准确分词100万汉字。采用基于不限制个数的词典文件对文章进行有效切分，使能够将对词汇分类定义。能够对未知的词汇进行合理解析。
+
+14、 MMSeg4J
+
+mmseg4j 用 Chih-Hao Tsai 的 MMSeg 算法(http://technology.chtsai.org/mmseg/ )实现的中文分词器，并实现 lucene 的 analyzer 和 solr 的TokenizerFactory 以方便在Lucene和Solr中使用。 MMSeg 算法有两种分词方法：Simple和Complex，都是基于正向最大匹配。Complex 加了四个规则过虑。官方说：词语的正确识别率达到了 98.41%。mmseg4j 已经实现了这两种分词算法
